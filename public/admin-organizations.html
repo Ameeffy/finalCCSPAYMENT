@@ -1261,13 +1261,7 @@
                             timer: 1500,
                             showConfirmButton: false,
                         }).then(() => {
-                            // Update button and status cell dynamically
-                            button.textContent = newStatus === 'Activated' ? 'Not Activated' : 'Activated';
-                            button.setAttribute('data-status', newStatus);
-    
-                            const row = button.closest('tr');
-                            const statusCell = row.querySelector('td:nth-child(4)');
-                            statusCell.textContent = newStatus;
+                            window.location.reload();
                         });
                     } else {
                         Swal.fire({
