@@ -355,7 +355,7 @@
     }
 }
         $(document).ready(function() {
-            fetch('http://localhost:5000/api/auth/all-organization-logs')
+            fetch('https://finalccspayment.onrender.com/api/auth/all-organization-logs')
                 .then(response => response.json())
                 .then(data => {
                     let logsData = data.logs.map(log => [
