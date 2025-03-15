@@ -1226,7 +1226,9 @@ async function loadPayments() {
                     <td>
                         ${payment.adviser_status === 'Pending' 
                             ? `
-                                <button class="btn btn-info btn-sm" onclick="openFeesModal(${payment.id})">Update Fees</button>
+                                <button class="btn btn-info btn-sm" onclick="openFeesModal(${payment.id})">
+            <i class="fas fa-edit"></i> <!-- Edit Icon -->
+        </button>
                                 <button class="btn btn-danger" onclick="deletePayment('${payment.id}')">
                                     <i class="fas fa-trash"></i>
                                 </button>
@@ -1251,7 +1253,14 @@ async function loadPayments() {
                             onmouseout="this.style.backgroundColor='#007bff'">
                             <i class="fas fa-file-alt"></i>
                         </button>
-                        <button class="btn btn-primary btn-sm" onclick="openProofOfPaymentModal(${payment.id})">Update Proof of Payment</button>
+                        ${payment.status === 'Accepted' 
+    ? `
+        <button class="btn btn-primary btn-sm" onclick="openProofOfPaymentModal(${payment.id})">
+            <i class="fas fa-file-upload"></i> <!-- Upload Icon -->
+        </button>
+    `
+    : ''
+}
                     </td>
                 `;
                 tableBody.appendChild(row);
