@@ -7,7 +7,7 @@
         <link rel="icon" type="x-icon" href="img/logo.png">
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Admin Payment</title>
+        <title>ADMIN - REGISTRATION</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -165,7 +165,7 @@
                 }
     
                 try {
-                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin/details', {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -621,7 +621,7 @@ document.getElementById('registerForm').addEventListener('submit', function (e) 
     }).then((result) => {
         if (result.isConfirmed) {
             // Submit to backend
-            fetch('http://localhost:5000/api/auth/register', {
+            fetch('https://finalccspayment.onrender.com/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
@@ -723,7 +723,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             
                             
                             function fetchAllOrganizations() {
-                                fetch('http://localhost:5000/api/auth/organizations')
+                                fetch('https://finalccspayment.onrender.com/api/auth/organizations')
                                     .then(response => response.json())
                                     .then(data => {
                                         const container = document.getElementById('allOrganizationsContainer');
