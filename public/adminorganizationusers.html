@@ -197,7 +197,7 @@
                 }
     
                 try {
-                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin/details', {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -458,7 +458,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Fetch the organization's name
-    fetch(`http://localhost:5000/api/auth/organizations/${organizationId}`, {
+    fetch(`https://finalccspayment.onrender.com/api/auth/organizations/${organizationId}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`, // Use your auth token if needed
@@ -495,7 +495,7 @@ function fetchUsers(query) {
         return;
     }
 
-    fetch(`http://localhost:5000/api/auth/userspaymentorg?search=${query}`, {
+    fetch(`https://finalccspayment.onrender.com/api/auth/userspaymentorg?search=${query}`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -594,7 +594,7 @@ document.getElementById('organizationUserForm').addEventListener('submit', funct
             });
 
             // Proceed with the fetch request if the user confirms
-            fetch(`http://localhost:5000/api/auth/register/organizationuser/${organizationId}`, {
+            fetch(`https://finalccspayment.onrender.com/api/auth/register/organizationuser/${organizationId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
