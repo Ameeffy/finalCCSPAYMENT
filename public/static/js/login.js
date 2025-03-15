@@ -5,7 +5,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     const password = document.getElementById('password').value;
 
     try {
-        const response = await fetch('http://localhost:5000/api/auth/logincollab', {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/logincollab', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
