@@ -229,7 +229,7 @@
                 return;
             }
         
-            fetch('http://localhost:5000/api/auth/adviser/details', {
+            fetch('https://finalccspayment.onrender.com/api/auth/adviser/details', {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             .then(response => response.json())
@@ -259,7 +259,7 @@
             return;
         }
 
-        fetch('http://localhost:5000/api/auth/adviser/details', {
+        fetch('https://finalccspayment.onrender.com/api/auth/adviser/details', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -308,7 +308,7 @@
                 return;
             }
 
-            fetch('http://localhost:5000/api/auth/selectAdmin', {
+            fetch('https://finalccspayment.onrender.com/api/auth/selectAdmin', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
