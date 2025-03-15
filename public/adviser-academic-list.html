@@ -150,7 +150,7 @@
         let organizationsData = [];
 
         document.addEventListener("DOMContentLoaded", function () {
-            fetch("http://localhost:5000/api/auth/adviser/organization-users", {
+            fetch("https://finalccspayment.onrender.com/api/auth/adviser/organization-users", {
                 headers: {
                     "Authorization": "Bearer " + localStorage.getItem("token")
                 }
