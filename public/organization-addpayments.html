@@ -7,7 +7,7 @@
         <link rel="icon" type="x-icon" href="img/logo.png">
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Admin Payment</title>
+        <title>Organization Add Payment</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -568,7 +568,48 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         document.getElementById('profile-item').innerHTML = '<a href="#">Error loading profile</a>';
     });
 }
+function checkPresidentAccess() {
+    const token = localStorage.getItem('token'); // Retrieve token from localStorage
 
+    if (!token) {
+        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        return;
+    }
+
+    fetch('https://finalccspayment.onrender.com/api/auth/organization-user/president', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(error => {
+                throw new Error(error.msg);
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log(data.msg); // Access granted message
+    })
+    .catch(error => {
+        console.error('Access denied:', error);
+        
+        // Display SweetAlert when access is denied
+        Swal.fire({
+            icon: 'error',
+            title: 'Access Denied',
+            text: 'Only Presidents can view this page!',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'Go Back'
+        }).then(() => {
+            window.history.back(); // Redirect back after user clicks "Go Back"
+        });
+    });
+}
+
+// Call the function when the page loads
+document.addEventListener('DOMContentLoaded', checkPresidentAccess);
 // Call the function when the DOM is loaded
 document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
     
