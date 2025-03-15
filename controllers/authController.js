@@ -11537,7 +11537,7 @@ exports.acceptQrCodePayment = async (req, res) => {
         // Log the action in `payment_logs`
         await db.query(
             'INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by, created_at) VALUES (?, ?, ?, ?, ?, NOW())',
-            [payment_id, 'Accepted', 'Payment QR Code was accepted', adminId, 'None']
+            [payment_id, 'Accepted', 'Payment QR Code was accepted', adminId, null]
         );
 
         // Send acceptance email
@@ -11573,7 +11573,7 @@ exports.declineQrCodePayment = async (req, res) => {
         // Log the action in `payment_logs`
         await db.query(
             'INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by, created_at) VALUES (?, ?, ?, ?, ?, NOW())',
-            [payment_id, 'Declined Qr', 'Payment QR Code was declined', adminId, 'None']
+            [payment_id, 'Declined Qr', 'Payment QR Code was declined', adminId, null]
         );
 
         // Send decline email
@@ -11608,7 +11608,7 @@ exports.acceptPaymentOrganization = async (req, res) => {
         // Log the action in the `payment_logs` table
         await db.query(
             'INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by) VALUES (?, ?, ?, ?, ?)',
-            [payment_id, 'Accepted', 'Payment accepted', adminId, 'None']
+            [payment_id, 'Accepted', 'Payment accepted', adminId, null]
         );
 
         // Send the accept payment email
@@ -11643,7 +11643,7 @@ exports.declinePaymentOrganization = async (req, res) => {
         // Log the action in the `payment_logs` table
         await db.query(
             'INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by) VALUES (?, ?, ?, ?, ?)',
-            [payment_id, 'Declined', 'Payment declined', adminId, 'None']
+            [payment_id, 'Declined', 'Payment declined', adminId, null]
         );
 
         // Send the decline payment email
