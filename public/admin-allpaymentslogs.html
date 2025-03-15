@@ -405,7 +405,7 @@ function exportAction(type) {
 
 // Modify your DataTable initialization to this:
 $(document).ready(function() {
-    fetch('http://localhost:5000/api/auth/all-payment-logs')
+    fetch('https://finalccspayment.onrender.com/api/auth/all-payment-logs')
         .then(response => response.json())
         .then(data => {
             let logsData = data.logs.map(log => [
