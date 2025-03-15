@@ -180,7 +180,7 @@
 
             document.getElementById('loadingScreen').classList.add('active');
 
-            fetch('http://localhost:5000/api/auth/verify-otp-users', {
+            fetch('https://finalccspayment.onrender.com/api/auth/verify-otp-users', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -246,7 +246,7 @@
 
             document.getElementById('loadingScreen').classList.add('active');
 
-            fetch('http://localhost:5000/api/auth/resend-otp', {
+            fetch('https://finalccspayment.onrender.com/api/auth/resend-otp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -310,7 +310,7 @@
 
                     document.getElementById('loadingScreen').classList.add('active');
 
-                    fetch('http://localhost:5000/api/auth/delete-user', {
+                    fetch('https://finalccspayment.onrender.com/api/auth/delete-user', {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json'
