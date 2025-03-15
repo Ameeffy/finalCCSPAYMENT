@@ -271,7 +271,7 @@
                 }
     
                 try {
-                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin/details', {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -537,7 +537,7 @@
                                                 return; // If no token is found, do nothing
                                             }
                                 
-                                            const response = await fetch('http://localhost:5000/api/auth/checkRole', {
+                                            const response = await fetch('https://finalccspayment.onrender.com/api/auth/checkRole', {
                                                 method: 'GET',
                                                 headers: {
                                                     'Authorization': `Bearer ${token}`
@@ -578,7 +578,7 @@
 // Fetch all admins
 async function fetchAllAdmins() {
   try {
-    const response = await fetch('http://localhost:5000/api/auth/alladmins');
+    const response = await fetch('https://finalccspayment.onrender.com/api/auth/alladmins');
     if (response.ok) {
       const admins = await response.json();
       populateAdminsTable(admins);
@@ -679,7 +679,7 @@ async function confirmToggleStatus(id, button) {
             const token = localStorage.getItem('token'); // Retrieve the token from localStorage
 
             try {
-                const response = await fetch(`http://localhost:5000/api/auth/admin/${id}/status`, {
+                const response = await fetch(`https://finalccspayment.onrender.com/api/auth/admin/${id}/status`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -757,7 +757,7 @@ async function updateAdminRole() {
     });
 
     try {
-        const response = await fetch(`http://localhost:5000/api/auth/admin/${currentAdminId}/role`, {
+        const response = await fetch(`https://finalccspayment.onrender.com/api/auth/admin/${currentAdminId}/role`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
