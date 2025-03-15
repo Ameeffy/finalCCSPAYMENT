@@ -15153,11 +15153,14 @@ exports.adviserPaymentReports = async (req, res) => {
 
         const adviserFullName = `${adviserResult[0].firstname} ${adviserResult[0].middlename || ''} ${adviserResult[0].lastname}`;
 
+        // Convert 'None' to NULL for admin_report_by
+        const adminReportByValue = null; // Since it's not an admin report, set NULL
+
         // Insert into payment_reports with the description
         await db.query(
             `INSERT INTO payment_reports (payment_id, admin_report_by, adviser_report_by, reason, description) 
-             VALUES (?, 'None', ?, ?, ?)`,
-            [paymentId, adviserId, reason, description || null]
+             VALUES (?, ?, ?, ?, ?)`,
+            [paymentId, adminReportByValue, adviserId, reason, description || null]
         );
 
         // Log the report in payment_logs
@@ -15184,6 +15187,7 @@ exports.adviserPaymentReports = async (req, res) => {
         res.status(500).json({ success: false, message: 'Failed to report payment.' });
     }
 };
+
 
 
 exports.updateAdviserFeesPriceFees = async (req, res) => {
