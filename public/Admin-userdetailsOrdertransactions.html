@@ -292,7 +292,7 @@
 
         // Fetch and display user details
         function fetchUserDetails(userId) {
-            fetch(`http://localhost:5000/api/auth/user/${userId}`)
+            fetch(`https://finalccspayment.onrender.com/api/auth/user/${userId}`)
                 .then(response => response.json())
                 .then(data => {
                     const userName = document.getElementById('userName');
@@ -316,7 +316,7 @@
         }
 
         function fetchOrderTransactions(userId) {
-            fetch(`http://localhost:5000/api/auth/order-transactions/user/${userId}`)
+            fetch(`https://finalccspayment.onrender.com/api/auth/order-transactions/user/${userId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
