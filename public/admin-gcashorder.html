@@ -467,7 +467,7 @@
                 }
     
                 try {
-                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin/details', {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -755,7 +755,7 @@ function exportAction(type) {
             break;
     }
 }
-                            const apiUrl = 'http://localhost:5000/api/auth'; // Update with your API base URL
+                            const apiUrl = 'https://finalccspayment.onrender.com/api/auth'; // Update with your API base URL
                     const token = localStorage.getItem('token'); // Retrieve token from localStorage
                     
                     if (!token) {
