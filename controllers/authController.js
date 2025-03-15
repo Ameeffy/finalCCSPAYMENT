@@ -3588,7 +3588,7 @@ exports.getPaymentComments = async (req, res) => {
 
 exports.updateOrganizationFeesPriceFees = async (req, res) => {
     const orgUserId = req.orgIduser; // Extracted from the token
-    const { paymentId, fees } = req.body;
+    const { paymentId, fees, adviser_by } = req.body; // Ensure adviser_by is extracted
 
     if (!paymentId || !fees || !Array.isArray(fees)) {
         return res.status(400).json({ success: false, message: 'Invalid payment ID or fees data.' });
@@ -3628,13 +3628,14 @@ exports.updateOrganizationFeesPriceFees = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Failed to update fees or payment not found.' });
         }
 
-        const adviserByValue = adviser_by && adviser_by !== 'None' ? `'${adviser_by}'` : 'NULL';
-        
+        // Handle `adviser_by` properly
+        const adviserByValue = adviser_by && adviser_by !== 'None' ? adviser_by : null;
+
         const action = `Fees and prices were updated by Organization`;
         await db.query(
             `INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by, organization_by)
-            VALUES (?, 'Updated', ?, 'None', ${adviserByValue}, ? )`,
-            [paymentId, action, orgUserId]
+            VALUES (?, 'Updated', ?, 'None', ?, ? )`,
+            [paymentId, action, adviserByValue, orgUserId]
         );
 
         res.status(200).json({ success: true, message: 'Fees and total price updated successfully.' });
@@ -3643,6 +3644,7 @@ exports.updateOrganizationFeesPriceFees = async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal server error.' });
     }
 };
+
 
 // Mark as "Already seen" when viewing payment details
 exports.markPricesFeesAsSeen = async (req, res) => {
