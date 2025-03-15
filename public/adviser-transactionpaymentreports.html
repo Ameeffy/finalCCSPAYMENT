@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/auth/all-transaction-reports-adviser', {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/all-transaction-reports-adviser', {
             headers: { Authorization: `Bearer ${token}` },
         });
 
