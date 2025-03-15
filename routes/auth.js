@@ -4,6 +4,7 @@ const authController = require('../controllers/authController');
 const authenticateToken = require('../middleware/middleware');
 const db = require('../config/db');
 
+router.get('/organization-user/president', authenticateToken, authController.organizationsdetailsPresident);
 router.get('/switch-button', authenticateToken, authController.switchButton);
 router.get('/allsemesterlogs', authController.allsemesterlogs);
 router.get('/preorder/:preOrderId/details', authenticateToken, authController.getPreOrderDetails);
