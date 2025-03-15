@@ -3628,11 +3628,12 @@ exports.updateOrganizationFeesPriceFees = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Failed to update fees or payment not found.' });
         }
 
-        // Log the update in payment_logs
+        const adviserByValue = adviser_by && adviser_by !== 'None' ? `'${adviser_by}'` : 'NULL';
+        
         const action = `Fees and prices were updated by Organization`;
         await db.query(
             `INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by, organization_by)
-            VALUES (?, 'Updated', ?, 'None', 'None', ? )`,
+            VALUES (?, 'Updated', ?, 'None', ${adviserByValue}, ? )`,
             [paymentId, action, orgUserId]
         );
 
