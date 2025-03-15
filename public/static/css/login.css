@@ -11,7 +11,7 @@ body, html {
 
 /* Navbar Styling */
 .navbar {
-    background-color: #0b5e1d; /* Dark green */
+    background-color: #1B3A28;
     width: 100%; /* Full width */
     padding-top: 10px;
     padding-bottom: 10px;
@@ -73,7 +73,7 @@ body, html {
 
 
 .login-button {
-    background-color: #0b5e1d;
+    background-color: #1B3A28;
     color: white;
     font-weight: bold;
     border-radius: 30px;
