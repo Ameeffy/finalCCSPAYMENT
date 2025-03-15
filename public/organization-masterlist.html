@@ -7,7 +7,7 @@
         <link rel="icon" type="x-icon" href="img/logo.png">
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Admin Payment</title>
+        <title>Organization Mastetlist</title>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
         
@@ -478,7 +478,7 @@
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -521,7 +521,7 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization-user/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization-user/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -729,7 +729,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                         window.location.href = 'adminlogin.html';
                                         return;
                                       }
-                                      fetch('http://localhost:5000/api/auth/payments/by-semesterorganizationMaster', {
+                                      fetch('https://finalccspayment.onrender.com/api/auth/payments/by-semesterorganizationMaster', {
                                         headers: { 'Authorization': `Bearer ${token}` }
                                       })
                                         .then(response => {
@@ -844,7 +844,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
     return;
   }
 
-  fetch(`http://localhost:5000/api/auth/transactionsfetchmasterlist/${paymentId}`, {
+  fetch(`https://finalccspayment.onrender.com/api/auth/transactionsfetchmasterlist/${paymentId}`, {
     headers: { 'Authorization': `Bearer ${token}` }
   })
   .then(response => {
@@ -975,7 +975,7 @@ fetchPaymentsBySemester();
                                             return;
                                         }
                                     
-                                        fetch('http://localhost:5000/api/auth/organization/details', {
+                                        fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
                                             headers: {
                                                 'Authorization': `Bearer ${token}`
                                             }
