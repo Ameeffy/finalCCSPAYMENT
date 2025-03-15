@@ -212,7 +212,7 @@
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization-user/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization-user/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -469,7 +469,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                             return;
                                         }
                             
-                                        fetch('http://localhost:5000/api/auth/reports/org', {
+                                        fetch('https://finalccspayment.onrender.com/api/auth/reports/org', {
                                             headers: {
                                                 'Authorization': `Bearer ${token}`
                                             }
