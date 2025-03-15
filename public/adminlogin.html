@@ -88,7 +88,7 @@
         }
     });
 
-    fetch('http://localhost:5000/api/auth/send-otp-forgot-password', {
+    fetch('https://finalccspayment.onrender.com/api/auth/send-otp-forgot-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
