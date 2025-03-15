@@ -172,7 +172,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
         try {
-            const response = await fetch('http://localhost:5000/api/auth/switch-button', {
+            const response = await fetch('https://finalccspayment.onrender.com/api/auth/switch-button', {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('token'), // Send JWT token
@@ -459,8 +459,8 @@
                                         document.addEventListener('DOMContentLoaded', async () => {
                                             try {
                                                 const [usersResponse, gendersResponse] = await Promise.all([
-                                                    fetch('http://localhost:5000/api/auth/total-users-by-role'),
-                                                    fetch('http://localhost:5000/api/auth/total-genders-by-role')
+                                                    fetch('https://finalccspayment.onrender.com/api/auth/total-users-by-role'),
+                                                    fetch('https://finalccspayment.onrender.com/api/auth/total-genders-by-role')
                                                 ]);
                                         
                                                 if (!usersResponse.ok || !gendersResponse.ok) {
@@ -542,7 +542,7 @@
                                         
                                         <script>document.addEventListener('DOMContentLoaded', async () => {
                                             try {
-                                                const response = await fetch('http://localhost:5000/api/auth/active-users-per-semester');
+                                                const response = await fetch('https://finalccspayment.onrender.com/api/auth/active-users-per-semester');
                                                 if (!response.ok) throw new Error('Failed to fetch semester data.');
                                         
                                                 const semesters = await response.json();
@@ -623,7 +623,7 @@
                                         <script>
                                         document.addEventListener('DOMContentLoaded', async () => {
                                             try {
-                                                const response = await fetch('http://localhost:5000/api/auth/total-organizations');
+                                                const response = await fetch('https://finalccspayment.onrender.com/api/auth/total-organizations');
                                                 if (!response.ok) throw new Error('Failed to fetch organization data.');
                                         
                                                 const data = await response.json();
@@ -704,8 +704,8 @@
                                             async function fetchData() {
                                                 try {
                                                     const [paymentsResponse, ordersResponse] = await Promise.all([
-                                                        fetch('http://localhost:5000/api/auth/admin-total-payments', { headers: { Authorization: `Bearer ${token}` } }),
-                                                        fetch('http://localhost:5000/api/auth/admin-total-product-transactions', { headers: { Authorization: `Bearer ${token}` } })
+                                                        fetch('https://finalccspayment.onrender.com/api/auth/admin-total-payments', { headers: { Authorization: `Bearer ${token}` } }),
+                                                        fetch('https://finalccspayment.onrender.com/api/auth/admin-total-product-transactions', { headers: { Authorization: `Bearer ${token}` } })
                                                     ]);
                                         
                                                     if (!paymentsResponse.ok || !ordersResponse.ok) throw new Error('Failed to fetch transactions.');
@@ -800,7 +800,7 @@
         }
     
         try {
-            const response = await fetch('http://localhost:5000/api/auth/admin-monthly-totals', {
+            const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin-monthly-totals', {
                 headers: { Authorization: `Bearer ${token}` },
             });
     
@@ -893,7 +893,7 @@
     let currentSemesterIndex = 0;
 
     try {
-        const response = await fetch('http://localhost:5000/api/auth/admin-accepted-payments-total-amount', {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin-accepted-payments-total-amount', {
             headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -1065,13 +1065,13 @@
                                     try {
                                         // Fetch all data in parallel
                                         const [reportsRes, paymentsRes, productsRes] = await Promise.all([
-                                            fetch('http://localhost:5000/api/auth/admin-reports-counts', {
+                                            fetch('https://finalccspayment.onrender.com/api/auth/admin-reports-counts', {
                                                 headers: { Authorization: `Bearer ${token}` }
                                             }),
-                                            fetch('http://localhost:5000/api/auth/admin-transaction-status-counts', {
+                                            fetch('https://finalccspayment.onrender.com/api/auth/admin-transaction-status-counts', {
                                                 headers: { Authorization: `Bearer ${token}` }
                                             }),
-                                            fetch('http://localhost:5000/api/auth/admin-product-transaction-status-counts', {
+                                            fetch('https://finalccspayment.onrender.com/api/auth/admin-product-transaction-status-counts', {
                                                 headers: { Authorization: `Bearer ${token}` }
                                             })
                                         ]);
@@ -1320,7 +1320,7 @@
                                             }
                                         
                                             try {
-                                                const response = await fetch(`http://localhost:5000/api/auth/admin-all-payments-transactions-dashboard?start_date=${startDate}&end_date=${endDate}`, {
+                                                const response = await fetch(`https://finalccspayment.onrender.com/api/auth/admin-all-payments-transactions-dashboard?start_date=${startDate}&end_date=${endDate}`, {
                                                     headers: { Authorization: `Bearer ${token}` },
                                                 });
                                         
