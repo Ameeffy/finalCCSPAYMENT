@@ -409,7 +409,7 @@ function exportAction(type) {
 
 // Modify your DataTable initialization to this:
 $(document).ready(function() {
-    fetch('http://localhost:5000/api/auth/allsemesterlogs')
+    fetch('https://finalccspayment.onrender.com/api/auth/allsemesterlogs')
         .then(response => response.json())
         .then(data => {
             let tableBody = $('#semesterTableBody');
