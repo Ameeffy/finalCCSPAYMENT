@@ -565,7 +565,7 @@
 
                                     <script>
                                         $(document).ready(function() {
-                                            fetch('http://localhost:5000/api/auth/all-transaction-payment-reports')
+                                            fetch('https://finalccspayment.onrender.com/api/auth/all-transaction-payment-reports')
                                                 .then(response => response.json())
                                                 .then(data => {
                                                     let logsData = data.logs.map(log => [
