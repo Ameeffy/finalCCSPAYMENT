@@ -337,7 +337,7 @@
     // Initialize DataTable with AJAX request
     $('#historyTable').DataTable({
         "ajax": {
-            "url": "http://localhost:5000/api/auth/organizations-users-history",
+            "url": "https://finalccspayment.onrender.com/api/auth/organizations-users-history",
             "type": "GET",
             "headers": {
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
