@@ -188,7 +188,7 @@
             // Show loading screen while verifying OTP
             document.getElementById('loadingScreen').classList.add('active');
 
-            fetch('http://localhost:5000/api/auth/verify-otp', {
+            fetch('https://finalccspayment.onrender.com/api/auth/verify-otp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
