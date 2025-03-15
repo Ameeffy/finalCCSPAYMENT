@@ -7,7 +7,7 @@
         <link rel="icon" type="x-icon" href="img/logo.png">
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Admin Payment</title>
+        <title>Organization Payment</title>
        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
     
@@ -641,7 +641,7 @@
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -684,7 +684,7 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization-user/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization-user/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -1026,7 +1026,7 @@ document.addEventListener('DOMContentLoaded', () => {
     transactionHistoryModal.show();
 
     // Fetch transaction history from the API
-    fetch(`http://localhost:5000/api/auth/transaction-history/${transactionId}`)
+    fetch(`https://finalccspayment.onrender.com/api/auth/transaction-history/${transactionId}`)
         .then(response => response.json())
         .then(data => {
             const historyDetails = document.getElementById('transactionHistoryDetails');
@@ -1375,7 +1375,7 @@ function closeGcashQrModal() {
             }
         });
 
-        const response = await fetch('http://localhost:5000/api/auth/update-payment', {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/update-payment', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1462,7 +1462,7 @@ async function updatePaymentPending() {
             }
         });
 
-        const response = await fetch('http://localhost:5000/api/auth/update-paymentPending', {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/update-paymentPending', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1643,7 +1643,7 @@ function fetchFilteredPaymentsByUser() {
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/payments/filtered-by-user', {
+    fetch('https://finalccspayment.onrender.com/api/auth/payments/filtered-by-user', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -1748,7 +1748,7 @@ function fetchUsersAll(query) {
         return;
     }
 
-    fetch(`http://localhost:5000/api/auth/userspaymentorg?search=${query}`, {
+    fetch(`https://finalccspayment.onrender.com/api/auth/userspaymentorg?search=${query}`, {
         headers: { 'Authorization': `Bearer ${token}` }
     })
     .then(response => response.json())
@@ -1869,7 +1869,7 @@ document.getElementById('paymentFormAll').addEventListener('submit', function(ev
         }
       });
 
-      fetch(`http://localhost:5000/api/auth/payments/insert-multiple`, {
+      fetch(`https://finalccspayment.onrender.com/api/auth/payments/insert-multiple`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1953,7 +1953,7 @@ function closeModalAll() {
                                             return;
                                         }
                                 
-                                        fetch(`http://localhost:5000/api/auth/userspaymentorg?search=${query}`, {
+                                        fetch(`https://finalccspayment.onrender.com/api/auth/userspaymentorg?search=${query}`, {
                                             headers: {
                                                 'Authorization': `Bearer ${token}`
                                             }
@@ -2015,7 +2015,7 @@ function closeModalAll() {
                                     return;
                                 }
                             
-                                fetch('http://localhost:5000/api/auth/payments/by-semesterorganization', {
+                                fetch('https://finalccspayment.onrender.com/api/auth/payments/by-semesterorganization', {
                                     headers: {
                                         'Authorization': `Bearer ${token}`
                                     }
@@ -2199,7 +2199,7 @@ function closeModalAll() {
                             
                                 if (confirmation.isConfirmed) {
                                     try {
-                                        const response = await fetch(`http://localhost:5000/api/auth/payments/delete/${paymentId}`, {
+                                        const response = await fetch(`https://finalccspayment.onrender.com/api/auth/payments/delete/${paymentId}`, {
                                             method: 'DELETE',
                                             headers: {
                                                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -2264,7 +2264,7 @@ function closeModalAll() {
                                     return;
                                 }
                             
-                                fetch(`http://localhost:5000/api/auth/transactions/${paymentId}`, {
+                                fetch(`https://finalccspayment.onrender.com/api/auth/transactions/${paymentId}`, {
                                     headers: {
                                         'Authorization': `Bearer ${token}`
                                     }
@@ -2784,7 +2784,7 @@ document.getElementById('addAmountForm').addEventListener('submit', function (ev
                 }
             });
 
-            fetch(`http://localhost:5000/api/auth/transactions/add-amount/${transactionId}`, {
+            fetch(`https://finalccspayment.onrender.com/api/auth/transactions/add-amount/${transactionId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -2881,7 +2881,7 @@ document.getElementById('addAmountForm').addEventListener('submit', function (ev
                               // Get token from localStorage (or replace this with the appropriate method)
                               const token = localStorage.getItem('token');
                             
-                              fetch(`http://localhost:5000/api/auth/transactions/accept-paymentGcash/${transactionId}`, {
+                              fetch(`https://finalccspayment.onrender.com/api/auth/transactions/accept-paymentGcash/${transactionId}`, {
                                 method: 'POST',
                                 headers: {
                                   'Content-Type': 'application/json',
@@ -2920,7 +2920,7 @@ document.getElementById('addAmountForm').addEventListener('submit', function (ev
                                         }
                               });
                             
-                              fetch(`http://localhost:5000/api/auth/transactions/decline-paymentGcash/${transactionId}`, {
+                              fetch(`https://finalccspayment.onrender.com/api/auth/transactions/decline-paymentGcash/${transactionId}`, {
                                 method: 'POST',
                                 headers: {
                                   'Content-Type': 'application/json',
@@ -3005,7 +3005,7 @@ document.getElementById('addAmountForm').addEventListener('submit', function (ev
                                 allowOutsideClick: false,
                               });
                             
-                              fetch(`http://localhost:5000/api/auth/transactions/accept-payment/${transactionId}`, {
+                              fetch(`https://finalccspayment.onrender.com/api/auth/transactions/accept-payment/${transactionId}`, {
                                 method: 'POST',
                                 headers: {
                                   'Content-Type': 'application/json',
@@ -3047,7 +3047,7 @@ document.getElementById('addAmountForm').addEventListener('submit', function (ev
                                         }
                               });
                             
-                              fetch(`http://localhost:5000/api/auth/transactions/decline-payment/${transactionId}`, {
+                              fetch(`https://finalccspayment.onrender.com/api/auth/transactions/decline-payment/${transactionId}`, {
                                 method: 'POST',
                                 headers: {
                                   'Content-Type': 'application/json',
@@ -3116,7 +3116,7 @@ document.getElementById('addAmountForm').addEventListener('submit', function (ev
             });
 
             try {
-                const response = await fetch('http://localhost:5000/api/auth/transactions/reports', {
+                const response = await fetch('https://finalccspayment.onrender.com/api/auth/transactions/reports', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -3196,7 +3196,7 @@ document.getElementById('addAmountForm').addEventListener('submit', function (ev
                                             }
                                         });
                             
-                                        fetch(`http://localhost:5000/api/auth/payments/insert/${paymentId}`, {
+                                        fetch(`https://finalccspayment.onrender.com/api/auth/payments/insert/${paymentId}`, {
                                             method: 'POST',
                                             headers: {
                                                 'Content-Type': 'application/json',
