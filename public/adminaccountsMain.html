@@ -366,7 +366,7 @@
                 }
     
                 try {
-                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin/details', {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -653,7 +653,7 @@
                                                         return;
                                                     }
                                             
-                                                    fetch(`http://localhost:5000/api/auth/userspaymentorgWeb?search=${query}`, {
+                                                    fetch(`https://finalccspayment.onrender.com/api/auth/userspaymentorgWeb?search=${query}`, {
                                                         headers: {
                                                             'Authorization': `Bearer ${token}`
                                                         }
@@ -809,7 +809,7 @@
                 },
             });
 
-            fetch('http://localhost:5000/api/auth/update-user-statusWeb', {
+            fetch('https://finalccspayment.onrender.com/api/auth/update-user-statusWeb', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -914,7 +914,7 @@
                                                         return;
                                                     }
                                             
-                                                    fetch(`http://localhost:5000/api/auth/userspaymentorg?search=${query}`, {
+                                                    fetch(`https://finalccspayment.onrender.com/api/auth/userspaymentorg?search=${query}`, {
                                                         headers: {
                                                             'Authorization': `Bearer ${token}`
                                                         }
@@ -990,7 +990,7 @@
                                                         return;
                                                     }
                                             
-                                                    fetch('http://localhost:5000/api/auth/updateUserStatusGrad', {
+                                                    fetch('https://finalccspayment.onrender.com/api/auth/updateUserStatusGrad', {
                                                         method: 'POST',
                                                         headers: {
                                                             'Content-Type': 'application/json',
@@ -1076,7 +1076,7 @@
                                 <script>
                                     
                                   function fetchUserData() {
-                                fetch('http://localhost:5000/api/auth/getsemesters_users')
+                                fetch('https://finalccspayment.onrender.com/api/auth/getsemesters_users')
                                     .then(response => response.json())
                                     .then(data => {
                                         const tableBody = document.getElementById('accountsTable').getElementsByTagName('tbody')[0];
@@ -1250,7 +1250,7 @@ iconButton.onclick = function () {
                             // Function to check if a report already exists for the user
                             async function checkReportExists(userId) {
                                 try {
-                                    const response = await fetch('http://localhost:5000/api/auth/check-report-exists', {
+                                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/check-report-exists', {
                                         method: 'POST',
                                         headers: {
                                             'Content-Type': 'application/json',
@@ -1401,7 +1401,7 @@ function submitUserReport(userId, semesterId, id, reason, comment) {
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/report-user', {
+    fetch('https://finalccspayment.onrender.com/api/auth/report-user', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -1454,7 +1454,7 @@ function submitUserReport(userId, semesterId, id, reason, comment) {
                             
                                 const status = action === 'Accepted' ? 'Active' : 'Declined';
                             
-                                fetch('http://localhost:5000/api/auth/updateUserStatus', {
+                                fetch('https://finalccspayment.onrender.com/api/auth/updateUserStatus', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json',
