@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/auth/admin/details', { // Adjust the URL as necessary
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin/details', { // Adjust the URL as necessary
             method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`, // Adjust as needed
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     
         try {
-            const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+            const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin/details', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         try {
             // Fetch organization details to get the photo URL
-            const response = await fetch('http://localhost:5000/api/auth/organization/logo', {
+            const response = await fetch('https://finalccspayment.onrender.com/api/auth/organization/logo', {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -226,7 +226,7 @@ Swal.fire({
     }
 });
 
-const response = await fetch('http://localhost:5000/api/auth/organization/upload-logo', {
+const response = await fetch('https://finalccspayment.onrender.com/api/auth/organization/upload-logo', {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}` },
     body: formData
