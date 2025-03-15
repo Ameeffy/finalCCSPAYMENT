@@ -172,7 +172,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
         try {
-            const response = await fetch('http://localhost:5000/api/auth/switch-button', {
+            const response = await fetch('https://finalccspayment.onrender.com/api/auth/switch-button', {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('token'), // Send JWT token
@@ -468,7 +468,7 @@
                                         let totalByAcademicYear = {}; // Store total transactions by academic year
                                     
                                         try {
-                                            const response = await fetch('http://localhost:5000/api/auth/admin-payments-total', {
+                                            const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin-payments-total', {
                                                 headers: { Authorization: `Bearer ${token}` },
                                             });
                                     
@@ -637,7 +637,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let totalByProductAcademicYear = {}; // Store total transactions by academic year
 
     try {
-        const response = await fetch('http://localhost:5000/api/auth/all-product-transactions-by-semester-admin', {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/all-product-transactions-by-semester-admin', {
             headers: { Authorization: `Bearer ${token}` },
         });
 
