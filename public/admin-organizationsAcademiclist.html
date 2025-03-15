@@ -165,7 +165,7 @@
                 }
     
                 try {
-                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin/details', {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -444,7 +444,7 @@
                                         
                                         async function fetchOrganizationName() {
                                             try {
-                                                const response = await fetch(`http://localhost:5000/api/auth/organizations/${organizationId}`, {
+                                                const response = await fetch(`https://finalccspayment.onrender.com/api/auth/organizations/${organizationId}`, {
                                                     method: 'GET',
                                                     headers: {
                                                         'Content-Type': 'application/json',
@@ -474,7 +474,7 @@ const positionHierarchy = {
 // Fetch the latest academic year
 async function fetchLatestYear() {
     try {
-        const response = await fetch('http://localhost:5000/api/auth/latest-year');
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/latest-year');
         if (!response.ok) throw new Error('Failed to fetch latest academic year.');
 
         const data = await response.json();
@@ -509,7 +509,7 @@ function showPositionDetails(position) {
 // Fetch User Logs (Sorting Enabled)
 async function fetchUsersLogs() {
     const year = document.getElementById('yearFilter').value;
-    const response = await fetch(`http://localhost:5000/api/auth/organizations/${organizationId}/users-logs?year=${year}`);
+    const response = await fetch(`https://finalccspayment.onrender.com/api/auth/organizations/${organizationId}/users-logs?year=${year}`);
     const data = await response.json();
     const usersLogsTable = document.getElementById('usersLogsTable');
 
@@ -538,7 +538,7 @@ async function fetchUsersLogs() {
 // Fetch Adviser Logs (No Sorting Needed)
 async function fetchAdviserLogs() {
     const year = document.getElementById('yearFilter').value;
-    const response = await fetch(`http://localhost:5000/api/auth/organizations/${organizationId}/adviser-logs?year=${year}`);
+    const response = await fetch(`https://finalccspayment.onrender.com/api/auth/organizations/${organizationId}/adviser-logs?year=${year}`);
     const data = await response.json();
     const adviserLogsTable = document.getElementById('adviserLogsTable');
 
@@ -567,7 +567,7 @@ async function loadYearOptions() {
 
     try {
         // Fetch available years
-        const response = await fetch('http://localhost:5000/api/auth/available-years');
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/available-years');
         const data = await response.json();
         yearFilter.innerHTML = data.years.map(year => `<option value="${year}">${year}</option>`).join('');
 
@@ -610,7 +610,7 @@ async function deleteUsersLog(id) {
         });
 
         try {
-            const response = await fetch(`http://localhost:5000/api/auth/organizations/users-logs/${id}`, {
+            const response = await fetch(`https://finalccspayment.onrender.com/api/auth/organizations/users-logs/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -657,7 +657,7 @@ async function deleteAdviserLog(id) {
         });
 
         try {
-            const response = await fetch(`http://localhost:5000/api/auth/organizations/adviser-logs/${id}`, {
+            const response = await fetch(`https://finalccspayment.onrender.com/api/auth/organizations/adviser-logs/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
