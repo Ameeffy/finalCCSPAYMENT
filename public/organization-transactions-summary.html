@@ -7,7 +7,7 @@
         <link rel="icon" type="x-icon" href="img/logo.png">
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Organization Dashboard</title>
+        <title>Organization - TRANSACTION SUMMARY</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -221,7 +221,7 @@
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization-user/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization-user/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -507,7 +507,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                         let totalByAcademicYear = {}; // Store total transactions by academic year
                                     
                                         try {
-                                            const response = await fetch('http://localhost:5000/api/auth/payments/organization', {
+                                            const response = await fetch('https://finalccspayment.onrender.com/api/auth/payments/organization', {
                                                 headers: { Authorization: `Bearer ${token}` },
                                             });
                                     
@@ -676,7 +676,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let totalByProductAcademicYear = {}; // Store total transactions by academic year
 
     try {
-        const response = await fetch('http://localhost:5000/api/auth/transactions/product/organization', {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/transactions/product/organization', {
             headers: { Authorization: `Bearer ${token}` },
         });
 
