@@ -197,7 +197,7 @@
                 }
     
                 try {
-                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin/details', {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -451,7 +451,7 @@
                                 }
                             
                                 // Fetch the organization's name
-                                fetch(`http://localhost:5000/api/auth/organizations/${organizationId}`, {
+                                fetch(`https://finalccspayment.onrender.com/api/auth/organizations/${organizationId}`, {
                                     method: 'GET',
                                     headers: {
                                         'Authorization': `Bearer ${localStorage.getItem('token')}`, // Use your auth token if needed
@@ -488,7 +488,7 @@
                                     return;
                                 }
                             
-                                fetch(`http://localhost:5000/api/auth/getAdviserorg?search=${query}`, {
+                                fetch(`https://finalccspayment.onrender.com/api/auth/getAdviserorg?search=${query}`, {
                                     headers: {
                                         'Authorization': `Bearer ${token}`
                                     }
@@ -586,7 +586,7 @@
                                         });
                             
                                         // Proceed with the fetch request
-                                        fetch(`http://localhost:5000/api/auth/register/organizationuserTeacher/${organizationId}`, {
+                                        fetch(`https://finalccspayment.onrender.com/api/auth/register/organizationuserTeacher/${organizationId}`, {
                                             method: 'POST',
                                             headers: {
                                                 'Content-Type': 'application/json',
