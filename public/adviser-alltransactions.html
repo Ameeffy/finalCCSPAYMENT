@@ -116,7 +116,7 @@
 
             // Fetch adviser details
             try {
-                const response = await fetch('http://localhost:5000/api/auth/adviser/details', {
+                const response = await fetch('https://finalccspayment.onrender.com/api/auth/adviser/details', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -365,7 +365,7 @@
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/auth/all-transactions-adviser', {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/all-transactions-adviser', {
             headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -547,7 +547,7 @@ function updateFilteredTotalAmount() {
     
     document.getElementById('transactionHistoryModal').style.display = 'block';
     
-    fetch(`http://localhost:5000/api/auth/transaction-history/${transactionId}`)
+    fetch(`https://finalccspayment.onrender.com/api/auth/transaction-history/${transactionId}`)
     .then(response => response.json())
     .then(data => {
         const historyDetails = document.getElementById('transactionHistoryDetails');
