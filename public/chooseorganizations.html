@@ -260,7 +260,7 @@
             return;
         }
 
-        fetch('http://localhost:5000/api/auth/organizations-users', {
+        fetch('https://finalccspayment.onrender.com/api/auth/organizations-users', {
             method: 'GET',
             headers: { 'Authorization': `Bearer ${token}` }
         })
@@ -326,7 +326,7 @@
 
             const authHeader = `Bearer ${token}`;
 
-            fetch('http://localhost:5000/api/auth/select-organization', {
+            fetch('https://finalccspayment.onrender.com/api/auth/select-organization', {
                 method: 'POST',
                 headers: {
                     'Authorization': authHeader,
