@@ -11088,8 +11088,8 @@ exports.updateProofOfPaymentP = async (req, res) => {
             // Log the update in payment_logs
             const logAction = `Proof of payment updated and waiting for approval`;
             await db.query(
-                `INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by, organization_by)
-                VALUES (?, 'Pending Approval', ?, 'None', 'None', ? )`,
+                `INSERT INTO payment_logs (payment_id, status, action, accepted_by, organization_by)
+                VALUES (?, 'Pending Approval', ?, 'None', ? )`,
                 [payment_id, logAction, orgUserId]
             );
 
