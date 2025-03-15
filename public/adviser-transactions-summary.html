@@ -118,7 +118,7 @@
 
             // Fetch adviser details
             try {
-                const response = await fetch('http://localhost:5000/api/auth/adviser/details', {
+                const response = await fetch('https://finalccspayment.onrender.com/api/auth/adviser/details', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -319,7 +319,7 @@
                                             let totalByAcademicYear = {}; // Store total transactions by academic year
                                         
                                             try {
-                                                const response = await fetch('http://localhost:5000/api/auth/adviser-payments-total', {
+                                                const response = await fetch('https://finalccspayment.onrender.com/api/auth/adviser-payments-total', {
                                                     headers: { Authorization: `Bearer ${token}` },
                                                 });
                                         
@@ -488,7 +488,7 @@
         let totalByProductAcademicYear = {}; // Store total transactions by academic year
     
         try {
-            const response = await fetch('http://localhost:5000/api/auth/all-product-transactions-by-semester-adviser', {
+            const response = await fetch('https://finalccspayment.onrender.com/api/auth/all-product-transactions-by-semester-adviser', {
                 headers: { Authorization: `Bearer ${token}` },
             });
     
@@ -611,7 +611,7 @@
                     
                                 // Fetch adviser details
                                 try {
-                                    const response = await fetch('http://localhost:5000/api/auth/adviser/details', {
+                                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/adviser/details', {
                                         method: 'GET',
                                         headers: {
                                             'Authorization': `Bearer ${token}`,
