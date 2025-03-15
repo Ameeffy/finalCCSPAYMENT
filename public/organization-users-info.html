@@ -376,7 +376,7 @@ tr:hover td {
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization-user/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization-user/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -511,7 +511,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -555,7 +555,7 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
     <script>
         const token = localStorage.getItem('token'); // Assuming you store the token in localStorage
 
-        fetch('http://localhost:5000/api/auth/organization-user/details', {
+        fetch('https://finalccspayment.onrender.com/api/auth/organization-user/details', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
