@@ -11680,10 +11680,12 @@ exports.adminPaymentReports = async (req, res) => {
         // Log the report in payment_logs
         const action = `Reported with reason: ${reason}`;
 
-        await db.query(
-            `INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by) VALUES (?, 'Reported', ?, ?, 'None')`,
-            [paymentId, action, adminId]
-        );
+        await connection.query(
+    `INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by) 
+     VALUES (?, 'Reported', ?, ?, ?)`,
+    [paymentId, action, adminId, null] // Ensure adviser_by is NULL instead of 'None'
+);
+
 
         // Fetch admin details
         const [adminResult] = await db.query('SELECT firstname, lastname, email FROM admins WHERE id = ?', [adminId]);
