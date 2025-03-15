@@ -185,7 +185,7 @@
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization-user/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization-user/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -504,7 +504,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                                     const token = localStorage.getItem('token');
                                 
                                                     // Call to backend API to submit form
-                                                    fetch('http://localhost:5000/api/auth/register/organization', {
+                                                    fetch('https://finalccspayment.onrender.com/api/auth/register/organization', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
