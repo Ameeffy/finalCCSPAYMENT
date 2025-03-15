@@ -182,7 +182,7 @@
 
             // Fetch adviser details
             try {
-                const response = await fetch('http://localhost:5000/api/auth/adviser/details', {
+                const response = await fetch('https://finalccspayment.onrender.com/api/auth/adviser/details', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -369,7 +369,7 @@
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/auth/adviser/report/orders', {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/adviser/report/orders', {
             headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -476,7 +476,7 @@
                     
                                 // Fetch adviser details
                                 try {
-                                    const response = await fetch('http://localhost:5000/api/auth/adviser/details', {
+                                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/adviser/details', {
                                         method: 'GET',
                                         headers: {
                                             'Authorization': `Bearer ${token}`,
