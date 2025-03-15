@@ -1782,7 +1782,7 @@ exports.createPreOrder = async (req, res) => {
         }
 
         const total_pay = 0; // Always 0 initially
-        const accepted_by = 'None'; // Default
+        const accepted_by = null; // Default
         const product_name = product.name; // Fetch product name
 
         // Insert into pre_order table
@@ -3516,7 +3516,7 @@ exports.addPaymentComment = async (req, res) => {
         // Log the comment in payment_logs
         const action = `Adviser commented on payment`;
         await db.query(
-            `INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by) VALUES (?, 'Commented', ?, 'None', ?)`,
+            `INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by) VALUES (?, 'Commented', ?, null, ?)`,
             [paymentId, action, adviserId]
         );
 
@@ -3606,7 +3606,7 @@ exports.updateOrganizationFeesPriceFees = async (req, res) => {
         const action = `Fees and prices were updated by Organization`;
         await db.query(
             `INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by, organization_by)
-            VALUES (?, 'Updated', ?, 'None', 'None', ? )`,
+            VALUES (?, 'Updated', ?, , null, ? )`,
             [paymentId, action, orgUserId]
         );
 
@@ -6194,7 +6194,7 @@ exports.addOrder = async (req, res) => {
         await db.execute(productTransactionQuery, [
             userId,
             orderTransactionId,
-            'none', // Default value for `order_item`
+            null, // Default value for `order_item`
             'Paid', // Initial status
             'Cash', // Default payment method
             totalAmount,
@@ -7615,7 +7615,7 @@ if (quantity > currentProduct[0].quantity) {
                 accepted_by,
                 semester_id
             )
-            VALUES (?, ?, ?, 'Pending', ?, ?, 'None', ?)
+            VALUES (?, ?, ?, 'Pending', ?, ?, null, ?)
         `;
         const [result] = await db.query(query, [
             userId,
@@ -11060,7 +11060,7 @@ exports.updateProofOfPaymentP = async (req, res) => {
             const logAction = `Proof of payment updated and waiting for approval`;
             await db.query(
                 `INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by, organization_by)
-                VALUES (?, 'Pending Approval', ?, 'None', 'None', ? )`,
+                VALUES (?, 'Pending Approval', ?, null, null, ? )`,
                 [payment_id, logAction, orgUserId]
             );
 
@@ -11380,7 +11380,7 @@ exports.updateAdminOrderStatus = async (req, res) => {
         // Insert into gcashorder_logs
         await db.query(
             `INSERT INTO gcashorder_logs (order_id, action, status, created_by, created_by_admin, created_at) VALUES (?, ?, ?, ?, ?, NOW())`,
-            [orderId, `Admin ${status}`, status, 'None', adminId]
+            [orderId, `Admin ${status}`, status, null, adminId]
         );
 
         // Send email notification
@@ -11510,7 +11510,7 @@ exports.acceptQrCodePayment = async (req, res) => {
         // Log the action in `payment_logs`
         await db.query(
             'INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by, created_at) VALUES (?, ?, ?, ?, ?, NOW())',
-            [payment_id, 'Accepted', 'Payment QR Code was accepted', adminId, 'None']
+            [payment_id, 'Accepted', 'Payment QR Code was accepted', adminId, null]
         );
 
         // Send acceptance email
@@ -11546,7 +11546,7 @@ exports.declineQrCodePayment = async (req, res) => {
         // Log the action in `payment_logs`
         await db.query(
             'INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by, created_at) VALUES (?, ?, ?, ?, ?, NOW())',
-            [payment_id, 'Declined Qr', 'Payment QR Code was declined', adminId, 'None']
+            [payment_id, 'Declined Qr', 'Payment QR Code was declined', adminId, null]
         );
 
         // Send decline email
@@ -11581,7 +11581,7 @@ exports.acceptPaymentOrganization = async (req, res) => {
         // Log the action in the `payment_logs` table
         await db.query(
             'INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by) VALUES (?, ?, ?, ?, ?)',
-            [payment_id, 'Accepted', 'Payment accepted', adminId, 'None']
+            [payment_id, 'Accepted', 'Payment accepted', adminId, null]
         );
 
         // Send the accept payment email
@@ -11616,7 +11616,7 @@ exports.declinePaymentOrganization = async (req, res) => {
         // Log the action in the `payment_logs` table
         await db.query(
             'INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by) VALUES (?, ?, ?, ?, ?)',
-            [payment_id, 'Declined', 'Payment declined', adminId, 'None']
+            [payment_id, 'Declined', 'Payment declined', adminId, null]
         );
 
         // Send the decline payment email
@@ -11652,7 +11652,7 @@ exports.adminPaymentReports = async (req, res) => {
         const action = `Reported with reason: ${reason}`;
 
         await db.query(
-            `INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by) VALUES (?, 'Reported', ?, ?, 'None')`,
+            `INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by) VALUES (?, 'Reported', ?, ?, null)`,
             [paymentId, action, adminId]
         );
 
@@ -11732,7 +11732,7 @@ exports.updateAdviserFeesPriceFeesadmin = async (req, res) => {
         await db.query(
             `
             INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by)
-            VALUES (?, 'Updated', ?, ?, 'None')
+            VALUES (?, 'Updated', ?, ?, null)
             `,
             [paymentId, action, adminId]
         );
@@ -15053,7 +15053,7 @@ exports.updateAdviserPaymentStatus = async (req, res) => {
         await db.query(`
             INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by)
             VALUES (?, ?, ?, ?, ?)
-        `, [paymentId, adviser_status, action, 'None', adviserId]);
+        `, [paymentId, adviser_status, action, null, adviserId]);
 
         // Send email notification
         await sendAdviserPaymentStatusEmail(
@@ -15127,7 +15127,7 @@ exports.adviserPaymentReports = async (req, res) => {
         // Insert into payment_reports with the description
         await db.query(
             `INSERT INTO payment_reports (payment_id, admin_report_by, adviser_report_by, reason, description) 
-             VALUES (?, 'None', ?, ?, ?)`,
+             VALUES (?, null, ?, ?, ?)`,
             [paymentId, adviserId, reason, description || null]
         );
 
@@ -15135,7 +15135,7 @@ exports.adviserPaymentReports = async (req, res) => {
         const action = `Reported by Adviser with reason: ${reason}${description ? `, Description: ${description}` : ''}`;
         await db.query(
             `INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by) 
-             VALUES (?, 'Reported', ?, 'None', ?)`,
+             VALUES (?, 'Reported', ?, null, ?)`,
             [paymentId, action, adviserId]
         );
 
@@ -15204,7 +15204,7 @@ exports.updateAdviserFeesPriceFees = async (req, res) => {
         await db.query(
             `
             INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by)
-            VALUES (?, 'Updated', ?, 'None', ?)
+            VALUES (?, 'Updated', ?, null, ?)
             `,
             [paymentId, action, adviserId]
         );
@@ -15447,7 +15447,7 @@ exports.updateAdviserStatusOrder = async (req, res) => {
         await db.query(`
             INSERT INTO gcashorder_logs (order_id, action, status, created_by, created_by_admin, created_at)
             VALUES (?, ?, ?, ?, ?, NOW())
-        `, [orderId, `Adviser ${adviser_status}`, adviser_status, adviserId, 'None']);
+        `, [orderId, `Adviser ${adviser_status}`, adviser_status, adviserId, null]);
 
         // Send email notification
         await sendAdviserOrderStatusEmail(
@@ -15644,7 +15644,7 @@ exports.getTransactionsByUserId = async (req, res) => {
                 t.payment_method,
                 t.total_amount,
                 t.balance,
-                COALESCE(CONCAT(ou.firstname, ' ', ou.middlename, ' ', ou.lastname), 'None') AS received_by_name,
+                COALESCE(CONCAT(ou.firstname, ' ', ou.middlename, ' ', ou.lastname), null) AS received_by_name,
                 t.created_at,
                 t.updated_at
             FROM 
