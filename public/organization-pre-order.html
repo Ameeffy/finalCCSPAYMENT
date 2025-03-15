@@ -7,7 +7,7 @@
         <link rel="icon" type="x-icon" href="img/logo.png">
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Admin Payment</title>
+        <title>ORGANIZATIONS - PRE-ORDER</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -220,7 +220,7 @@
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization-user/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization-user/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -509,7 +509,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                 async function fetchPreOrders() {
                                     try {
                                         const token = localStorage.getItem("token");
-                                        const response = await fetch("http://localhost:5000/api/auth/pre-orders", {
+                                        const response = await fetch("https://finalccspayment.onrender.com/api/auth/pre-orders", {
                                             headers: { "Authorization": `Bearer ${token}` }
                                         });
                                 
@@ -679,7 +679,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                             });
                                 
                                             try {
-                                                const response = await fetch("http://localhost:5000/api/auth/pre-orders/handle-balance", {
+                                                const response = await fetch("https://finalccspayment.onrender.com/api/auth/pre-orders/handle-balance", {
                                                     method: "PUT",
                                                     headers: {
                                                         "Content-Type": "application/json",
@@ -740,7 +740,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                     });
                                 
                                     try {
-                                        const response = await fetch("http://localhost:5000/api/auth/pre-orders/pay-balance", {
+                                        const response = await fetch("https://finalccspayment.onrender.com/api/auth/pre-orders/pay-balance", {
                                             method: "PUT",
                                             headers: {
                                                 "Content-Type": "application/json",
@@ -798,7 +798,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                     });
                                 
                                     try {
-                                        const response = await fetch("http://localhost:5000/api/auth/pre-orders/add-total-pay", {
+                                        const response = await fetch("https://finalccspayment.onrender.com/api/auth/pre-orders/add-total-pay", {
                                             method: "PUT",
                                             headers: {
                                                 "Content-Type": "application/json",
@@ -841,7 +841,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                             });
                                 
                                             try {
-                                                const response = await fetch("http://localhost:5000/api/auth/pre-orders/gcash-action", {
+                                                const response = await fetch("https://finalccspayment.onrender.com/api/auth/pre-orders/gcash-action", {
                                                     method: "PUT",
                                                     headers: {
                                                         "Content-Type": "application/json",
@@ -885,7 +885,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                             });
                                 
                                             try {
-                                                const response = await fetch("http://localhost:5000/api/auth/remove-preorder", {
+                                                const response = await fetch("https://finalccspayment.onrender.com/api/auth/remove-preorder", {
                                                     method: "DELETE",
                                                     headers: {
                                                         "Content-Type": "application/json",
@@ -929,7 +929,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                             });
                                 
                                             try {
-                                                const response = await fetch("http://localhost:5000/api/auth/pre-orders/place-order", {
+                                                const response = await fetch("https://finalccspayment.onrender.com/api/auth/pre-orders/place-order", {
                                                     method: "POST",
                                                     headers: {
                                                         "Content-Type": "application/json",
@@ -981,7 +981,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                                     });
                                 
                                                     try {
-                                                        const response = await fetch("http://localhost:5000/api/auth/pre-orders/mark-paid", {
+                                                        const response = await fetch("https://finalccspayment.onrender.com/api/auth/pre-orders/mark-paid", {
                                                             method: "PUT",
                                                             headers: {
                                                                 "Content-Type": "application/json",
@@ -1007,7 +1007,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                         async function viewPreOrderLogs(pre_order_id) {
                                     try {
                                         const token = localStorage.getItem("token");
-                                        const response = await fetch(`http://localhost:5000/api/auth/pre-orders/${pre_order_id}/logs`, {
+                                        const response = await fetch(`https://finalccspayment.onrender.com/api/auth/pre-orders/${pre_order_id}/logs`, {
                                             headers: { "Authorization": `Bearer ${token}` }
                                         });
                                 
