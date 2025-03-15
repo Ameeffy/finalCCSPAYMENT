@@ -423,7 +423,7 @@ tr:hover td {
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization-user/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization-user/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -545,7 +545,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
             }
     
             try {
-                const apiUrl = `http://localhost:5000/api/auth/product-transactions/${currentOrderTransactionId}/pay`;
+                const apiUrl = `https://finalccspayment.onrender.com/api/auth/product-transactions/${currentOrderTransactionId}/pay`;
                 const token = localStorage.getItem('token');
     
                 const response = await fetch(apiUrl, {
@@ -640,7 +640,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
             return;
         }
 
-        const apiUrl = `http://localhost:5000/api/auth/product-transactions/${currentBalanceTransactionId}/paybalance`;
+        const apiUrl = `https://finalccspayment.onrender.com/api/auth/product-transactions/${currentBalanceTransactionId}/paybalance`;
         const token = localStorage.getItem('token');
 
         fetch(apiUrl, {
@@ -705,7 +705,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
     </div>
 </div>
 <script>function showTransactionLogsModal(orderTransactionId) {
-    const apiUrl = `http://localhost:5000/api/auth/product-transaction-logs/${orderTransactionId}`;
+    const apiUrl = `https://finalccspayment.onrender.com/api/auth/product-transaction-logs/${orderTransactionId}`;
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -867,7 +867,7 @@ function closeModal() {
     orderData.totalAmount = totalAmount;
 
     // Send the order data to the backend
-    fetch('http://localhost:5000/api/auth/addorder', {
+    fetch('https://finalccspayment.onrender.com/api/auth/addorder', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -898,7 +898,7 @@ function closeModal() {
             return;
         }
 
-        fetch('http://localhost:5000/api/auth/products', {
+        fetch('https://finalccspayment.onrender.com/api/auth/products', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -997,7 +997,7 @@ function closeModal() {
             return;
         }
 
-        fetch(`http://localhost:5000/api/auth/userspaymentorg?search=${query}`, {
+        fetch(`https://finalccspayment.onrender.com/api/auth/userspaymentorg?search=${query}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -1130,7 +1130,7 @@ function acceptOrder(orderTransactionId) {
         return;
     }
 
-    fetch(`http://localhost:5000/api/auth/accept-order/${orderTransactionId}`, {
+    fetch(`https://finalccspayment.onrender.com/api/auth/accept-order/${orderTransactionId}`, {
         method: 'PUT',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -1156,7 +1156,7 @@ function declineOrder(orderTransactionId) {
         return;
     }
 
-    fetch(`http://localhost:5000/api/auth/decline-order/${orderTransactionId}`, {
+    fetch(`https://finalccspayment.onrender.com/api/auth/decline-order/${orderTransactionId}`, {
         method: 'PUT',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -1175,7 +1175,7 @@ function declineOrder(orderTransactionId) {
 }
 
 function fetchProductTransactions() {
-    const apiUrl = 'http://localhost:5000/api/auth/product-transactions';
+    const apiUrl = 'https://finalccspayment.onrender.com/api/auth/product-transactions';
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -1295,7 +1295,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
