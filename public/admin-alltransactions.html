@@ -691,7 +691,7 @@ function exportAction(type) {
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/auth/transactions/all', {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/transactions/all', {
             headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -877,7 +877,7 @@ function updateFilteredTotalAmount() {
     
     document.getElementById('transactionHistoryModal').style.display = 'block';
     
-    fetch(`http://localhost:5000/api/auth/transaction-history/${transactionId}`)
+    fetch(`https://finalccspayment.onrender.com/api/auth/transaction-history/${transactionId}`)
     .then(response => response.json())
     .then(data => {
         const historyDetails = document.getElementById('transactionHistoryDetails');
