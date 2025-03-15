@@ -486,7 +486,7 @@
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -529,7 +529,7 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization-user/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization-user/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -1103,7 +1103,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                         cancelButtonText: 'No, cancel!',
                                     }).then((result) => {
                                         if (result.isConfirmed) {
-                                            fetch(`http://localhost:5000/api/auth/products/${productId}/quantity`, {
+                                            fetch(`https://finalccspayment.onrender.com/api/auth/products/${productId}/quantity`, {
                                                 method: 'PATCH',
                                                 headers: {
                                                     'Content-Type': 'application/json',
@@ -1223,7 +1223,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                     cancelButtonText: 'No, cancel!',
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        fetch(`http://localhost:5000/api/auth/products/${productId}/update-small`, {
+                                        fetch(`https://finalccspayment.onrender.com/api/auth/products/${productId}/update-small`, {
                                             method: 'PATCH',
                                             headers: {
                                                 'Content-Type': 'application/json',
@@ -1328,7 +1328,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                     cancelButtonText: 'No, cancel!',
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        fetch(`http://localhost:5000/api/auth/products/${productId}/medium`, {
+                                        fetch(`https://finalccspayment.onrender.com/api/auth/products/${productId}/medium`, {
                                             method: 'PATCH',
                                             headers: {
                                                 'Content-Type': 'application/json',
@@ -1374,7 +1374,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                     cancelButtonText: 'No, cancel!',
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        fetch(`http://localhost:5000/api/auth/products/${productId}/large`, {
+                                        fetch(`https://finalccspayment.onrender.com/api/auth/products/${productId}/large`, {
                                             method: 'PATCH',
                                             headers: {
                                                 'Content-Type': 'application/json',
@@ -1420,7 +1420,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                     cancelButtonText: 'No, cancel!',
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        fetch(`http://localhost:5000/api/auth/products/${productId}/xl`, { // Updated endpoint
+                                        fetch(`https://finalccspayment.onrender.com/api/auth/products/${productId}/xl`, { // Updated endpoint
                                             method: 'PATCH',
                                             headers: {
                                                 'Content-Type': 'application/json',
@@ -1466,7 +1466,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                     cancelButtonText: 'No, cancel!',
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        fetch(`http://localhost:5000/api/auth/products/${productId}/xxl`, { // Updated endpoint
+                                        fetch(`https://finalccspayment.onrender.com/api/auth/products/${productId}/xxl`, { // Updated endpoint
                                             method: 'PATCH',
                                             headers: {
                                                 'Content-Type': 'application/json',
@@ -1512,7 +1512,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                     cancelButtonText: 'No, cancel!',
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        fetch(`http://localhost:5000/api/auth/products/${productId}/xxxl`, { // Updated endpoint
+                                        fetch(`https://finalccspayment.onrender.com/api/auth/products/${productId}/xxxl`, { // Updated endpoint
                                             method: 'PATCH',
                                             headers: {
                                                 'Content-Type': 'application/json',
@@ -1570,7 +1570,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                     cancelButtonText: 'No, cancel!',
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        fetch(`http://localhost:5000/api/auth/products/${productId}/update-xsmall`, {
+                                        fetch(`https://finalccspayment.onrender.com/api/auth/products/${productId}/update-xsmall`, {
                                             method: 'PATCH',
                                             headers: {
                                                 'Content-Type': 'application/json',
@@ -1644,7 +1644,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                     return;
                                 }
                             
-                                fetch('http://localhost:5000/api/auth/organization/details', {
+                                fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
                                     headers: {
                                         'Authorization': `Bearer ${token}`
                                     }
@@ -1706,7 +1706,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                     return;
                                 }
                             
-                                fetch('http://localhost:5000/api/auth/products', {
+                                fetch('https://finalccspayment.onrender.com/api/auth/products', {
                                     headers: {
                                         'Authorization': `Bearer ${token}`
                                     }
@@ -1940,7 +1940,7 @@ function updatePreOrderLimit(product_id, product_name) {
     }
 
     // Fetch current pre_order_limit before updating
-    fetch(`http://localhost:5000/api/auth/products/${product_id}`, {
+    fetch(`https://finalccspayment.onrender.com/api/auth/products/${product_id}`, {
         method: 'GET',
         headers: { 'Authorization': `Bearer ${token}` }
     })
@@ -1963,7 +1963,7 @@ function updatePreOrderLimit(product_id, product_name) {
                     didOpen: () => Swal.showLoading(),
                 });
 
-                fetch('http://localhost:5000/api/auth/products/pre-order-limit', {
+                fetch('https://finalccspayment.onrender.com/api/auth/products/pre-order-limit', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -2007,7 +2007,7 @@ function removePreOrder(product_id, product_name) {
                 didOpen: () => Swal.showLoading(),
             });
 
-            fetch('http://localhost:5000/api/auth/products/pre-order', {
+            fetch('https://finalccspayment.onrender.com/api/auth/products/pre-order', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -2088,7 +2088,7 @@ function submitPreOrder() {
         }
     });
 
-    fetch('http://localhost:5000/api/auth/products/pre-orderSet', {
+    fetch('https://finalccspayment.onrender.com/api/auth/products/pre-orderSet', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -2121,10 +2121,10 @@ function submitPreOrder() {
 
 
                             function updateProductStatus() {
-    fetch('http://localhost:5000/api/auth/products/update-status', { method: 'PUT' })
+    fetch('https://finalccspayment.onrender.com/api/auth/products/update-status', { method: 'PUT' })
     .then(response => response.json())
     .then(() => {
-        return fetch('http://localhost:5000/api/auth/products');
+        return fetch('https://finalccspayment.onrender.com/api/auth/products');
     })
     .then(response => response.json())
     .then(products => {
@@ -2156,7 +2156,7 @@ function fetchProductLogs(productId) {
         return;
     }
 
-    fetch(`http://localhost:5000/api/auth/product-logs/${productId}`, {
+    fetch(`https://finalccspayment.onrender.com/api/auth/product-logs/${productId}`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -2235,7 +2235,7 @@ function displayProductLogs(logs) {
                             
                             function openUpdateModal(productId) {
                                 // Fetch the current product details
-                                fetch(`http://localhost:5000/api/auth/products/${productId}`, {
+                                fetch(`https://finalccspayment.onrender.com/api/auth/products/${productId}`, {
                                     headers: {
                                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                                     }
@@ -2317,7 +2317,7 @@ function displayProductLogs(logs) {
                                             confirmButtonText: 'Yes, delete it!'
                                         }).then((result) => {
                                             if (result.isConfirmed) {
-                                                fetch(`http://localhost:5000/api/auth/products/${productId}`, {
+                                                fetch(`https://finalccspayment.onrender.com/api/auth/products/${productId}`, {
                                                     method: 'DELETE',
                                                     headers: {
                                                         'Authorization': `Bearer ${localStorage.getItem('token')}`
