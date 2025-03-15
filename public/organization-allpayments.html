@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Admin Payment</title>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"> 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    
+
+      
+        
+        
+    </head>
+<style>
+      .export-container {
+    position: absolute;
+    left: 270px;
+    top: 20px;
+    z-index: 1;
+}
+
+.export-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.export-btn {
+    background-color: #1B3A28;
+    color: #ffffff;
+    padding: 4px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 100px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+}
+
+.export-btn:hover {
+    background-color: #3e865c;
+}
+
+.export-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 83px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.export-content a {
+    color: #333;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+.export-content a:hover {
+    background-color: #f8f9fa;
+}
+
+.export-dropdown:hover .export-content {
+    display: block;
+}
+@media print {
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+    }
+
+    .export-container, .dataTables_wrapper .top, .dataTables_wrapper .bottom {
+        display: none;
+    }
+
+    .custom-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .custom-table th, .custom-table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    .custom-table thead {
+        background-color: #f1f1f1;
+    }
+}
+        .table-container{
+            width: auto;
+            background-color: white;
+            padding-top: 20px;
+            padding-left: 10px;
+            padding-right: 10px;   
+            border-radius: 3px;
+            padding-bottom: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+.dataTables_scroll {
+    border-radius: 5px 5px 0 0; /* 5px top border radius */
+}
+
+.dataTables_scrollBody {
+    border-radius: 0; /* Ensure no bottom border radius */
+}
+
+
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px; /* Adjusted to 5px */
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px; /* Adjusted to 5px */
+}
+
+/* Ensure no bottom border-radius */
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important; /* Light gray border */
+    padding: 12px 16px; /* Comfortable spacing */
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important; /* Remove border from last row */
+}
+
+/* Optional hover effect */
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important; /* Very subtle hover background */
+    border-bottom-color: #d0d0d0 !important; /* Slightly darker border on hover */
+}
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        justify-self: flex-end;
+    }
+
+    /* Optional: Adjust spacing between elements */
+    .dataTables_wrapper .dataTables_length {
+        margin-right: 15px;
+    }
+   
+    .dataTables_wrapper .dataTables_info {
+        margin: 0 15px;
+    }
+    .dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    text-decoration: none;
+    color: #555;
+    background-color: #f9f9f9;
+}
+
+.dataTables_wrapper .dataTables_paginate a:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Styling the search box */
+.dataTables_wrapper .dataTables_filter {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Custom table design */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
+    border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
+    margin-bottom: 50px;
+    border-bottom: 1px solid #e0e0e0; /* Soft gray border on the right */
+
+}
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 12px 16px;
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important;
+    border-bottom-color: #d0d0d0 !important;
+}
+
+.no-payment-message {
+        text-align: center;  /* Centers the text */
+        background-color: #F5FFFA;  /* Set the background color */
+          /* Set the text color */
+        padding: 10px;  /* Optional padding for better readability */
+        border-radius: 5px;  /* Optional rounded corners */
+        font-size: 18px;  /* Optional font size */
+        margin: 20px auto;  /* Optional margin for centering */
+          /* Makes the div fit the content */
+    }
+.ellipsis-btn {
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    color: #007bff;
+    transition: color 0.2s;
+}
+
+.ellipsis-btn:hover {
+    color: #0056b3;
+}
+
+.details-container {
+    text-align: center;
+    margin-top: 10px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+    .qrcode-img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 5px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: block;
+    margin: 10px auto;
+    transition: transform 0.3s ease;
+}
+
+.qrcode-img:hover {
+    transform: scale(1.1);
+    border-color: #007bff;
+}
+.status-balance {
+        color: rgb(255, 0, 255);
+        font-weight: bold;
+    }
+
+    .status-pending {
+        color: orange;
+        font-weight: bold;
+    }
+    .status-Decline{
+        color: rgb(212, 7, 7);
+        font-weight: bold;
+    }
+
+    .status-paid {
+        color: green;
+        font-weight: bold;
+    }
+
+    @keyframes colorAnimation {
+    0% {
+        color: rgb(0, 128, 255); /* Start with a blue color */
+    }
+    50% {
+        color: rgb(0, 204, 255); /* Transition to an orange color */
+    }
+    100% {
+        color: rgb(0, 128, 255); /* Transition back to blue */
+    }
+}
+
+.status-processing {
+    font-weight: light;
+    animation: colorAnimation 2s infinite; /* Run the animation infinitely with a duration of 2 seconds */
+}
+
+        .error {
+            color: red;
+        }
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1045; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px;
+        }
+  
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }/* Styles for the payment form */
+#paymentForm {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 500px; /* Adjust as needed */
+    margin: 0 auto; /* Center the form */
+    padding: 20px;
+    background-color: rgb(221, 231, 221);
+    border-radius: 8px;
+    padding-top: 10px;   
+}
+
+#paymentForm label {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+#paymentForm input[type="text"],
+#paymentForm input[type="number"] {
+    font-size: 16px;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+}
+
+#paymentForm input[type="text"] {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#paymentForm input[type="number"] {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+#paymentForm button {
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 30%;
+    justify-content: center;
+}
+
+#paymentForm button:hover {
+    background-color: #0056b3;
+}
+
+
+#userResults {
+    max-height: 125px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    margin-top: 8px;
+    padding: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+.user-item {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.user-item:hover {
+    background-color: #f0f0f0;
+}
+
+
+#errorMessages {
+    color: red;
+    margin-top: 10px;
+}
+#transactions-container {
+    max-height: 100px; /* Adjust the height as needed */
+    overflow-y: auto;
+        border: 1px solid #ddd;
+        padding: 10px;
+    }
+
+  
+/* Modal styles */
+#transactionHistoryModal {
+    position: fixed;
+    z-index: 1045;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: rgb(221, 231, 221);
+    margin: 15% auto;
+    padding: 20px;
+    width: 100%;
+    
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1045;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5); /* Black background with transparency */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal content box */
+.modal-content {
+    background-color: rgb(221, 231, 221);
+    margin-top: 40px;
+    padding: 20px;
+    width: 10   0%;
+    position: relative;
+    max-width: 1100px;
+    border-radius: 10px;
+}
+.modal-content-history {
+    background-color: rgb(221, 231, 221);
+    margin-top: 40px;
+    padding: 20px;
+    width: 10   0%;
+    position: relative;
+    max-width: 1100px;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
+
+.modal-content-gcash {
+    background-color: rgb(221, 231, 221);
+    margin-top: 40px;
+    padding: 20px;
+    width: auto; 
+    max-width: 550px; 
+    position: relative;
+    border-radius: 10px;
+    margin: auto;
+}
+.responsive-image {
+    width: 100%;     
+    height: auto;     
+    max-width: 500px; 
+}
+
+
+.modal-content-payment {
+    background-color: rgb(221, 231, 221);
+    margin-top: 40px;
+    padding: 20px;
+    width: 30%;
+    position: relative;
+    max-width: 1100px;
+    border-radius: 10px;
+    margin: auto;
+}
+.modal-content-balance {
+    background-color: rgb(221, 231, 221);
+    margin-top: 40px;
+    padding: 20px;
+    width: 30%;
+    position: relative;
+    max-width: 1100px;
+    border-radius: 10px;
+    margin: auto;
+}
+.modal-content-promissory {
+    background-color: rgb(221, 231, 221);
+    margin-top: 40px;
+    padding: 20px;
+    width: 30%;
+    position: relative;
+    max-width: 500px;
+    border-radius: 10px;
+    height: auto;
+    margin: auto;
+}
+</style>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center justify-content-between px-3">
+            <!-- Left Section -->
+            <div class="d-flex align-items-center">
+                <!-- Sidebar Toggle -->
+                <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                    <i class="fas fa-bars" style="color: black;"></i>
+                </button>
+        
+                <!-- Logo -->
+                
+                <div class="logo me-2">
+                    <label for="logoUpload">
+                        <div id="loadingIconLogo" class="logo-loading-container1">
+                            <div class="spinnerlogo1"></div>
+                        </div>
+                        <img id="organizationLogo" src="" alt="Logo" height="40" style="cursor: pointer;">
+                    </label>
+                    <input type="file" id="logoUpload" style="display: none;" accept="image/*">
+                    <div id="uploadingMessage">Uploading logo...</div>
+                </div>
+        
+                <!-- Organization Info -->
+                <div id="organizationInfo" class="d-flex flex-grow-1">
+                    <!-- Organization Name will be inserted here -->
+                </div>
+            
+           
+            </div>
+        
+            <!-- Right Section -->
+            <div class="d-flex align-items-center">
+              
+                <i id="profile-item" class="dropdown-item me-3">
+                    <a href="#" style="color: #25330f; text-decoration: none;">Loading...</a>
+                </i>
+        
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x" style="color: #ffffff;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: #ffffff;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                        width: 110px !important; 
+                        min-width: 110px !important; 
+                        background-color: #ffffff; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        height: auto;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                        padding: 0;">
+                        <li>
+                            <a class="dropdown-item" href="#" id="logout" style="
+                                display: flex; 
+                                align-items: center; 
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                height: auto;
+                                border-bottom: 1px solid #ddd; 
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-sign-out-alt" style="margin-right: 8px; color: inherit;"></i> Sign Out
+                            </a>
+                            <a class="dropdown-item" href="#" id="logouts" style="
+                                display: flex; 
+                                align-items: center; 
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                height: auto;
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-exchange-alt" style="margin-right: 8px; color: inherit;"></i> Switch
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+                <script>
+                   document.getElementById('logouts').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default link behavior
+        
+            // SweetAlert confirmation
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to switch account?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745', // Green confirm button
+                cancelButtonColor: '#dc3545', // Red cancel button
+                confirmButtonText: 'Yes, Switch Account!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Switch Account',
+                        text: 'Choose your organization',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = 'chooseorganizations.html'; // Redirect to choose organizations page
+                    });
+                }
+            });
+        });
+        function fetchOrganizationData() {
+    const token = localStorage.getItem('token'); // Retrieve token from storage
+    if (!token) {
+        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        return;
+    }
+
+    fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.name) {
+            
+            const infoDiv = document.getElementById('organizationInfo');
+            infoDiv.innerHTML = `
+              <div class="custom-heading">${data.name}</div>
+
+       
+              
+            `;
+        } else {
+            document.getElementById('organizationInfo').innerText = 'No organization data found.';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('errorMessages').innerText = 'An error occurred. Please try again.';
+    });
+}
+
+
+document.addEventListener('DOMContentLoaded', fetchOrganizationData);
+
+
+   function fetchLoggedInUserDetails() {
+    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+
+    if (!token) {
+        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        return;
+    }
+
+    fetch('https://finalccspayment.onrender.com/api/auth/organization-user/details', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(user => {
+        if (!user) {
+            throw new Error('User not found');
+        }
+        
+        
+        const fullName = `${user.firstname} ${user.lastname}`; 
+
+        document.getElementById('profile-item').innerHTML = `
+           <a style="color: white; text-decoration: none; " href="organization-users-info.html">
+   
+   <h3 style="color: white; text-decoration: none; font-size: 18px; margin-top:10px;">${user.firstname} ${user.lastname}</h3>
+</a>
+
+
+        `;
+    })
+    .catch(error => {
+        console.error('Error fetching organization user details:', error);
+        document.getElementById('profile-item').innerHTML = '<a href="#">Error loading profile</a>';
+    });
+}
+
+// Call the function when the DOM is loaded
+document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
+    
+            document.getElementById('logout').addEventListener('click', function(event) {
+                event.preventDefault();
+    
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to log out?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, log out!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem('token');
+                        Swal.fire({
+                            title: 'Logged Out!',
+                            text: 'You have been logged out successfully.',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = 'adminlogin.html';
+                        });
+                    }
+                });
+            });
+        </script>
+   
+    
+
+
+   <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">Overview</div>
+                    <a class="nav-link" href="organization-dashboard.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+
+                    <div class="sb-sidenav-menu-heading">Payment Management</div>
+                    <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                           
+                            <a class="nav-link" href="organization-allpayments.html">Overview</a>
+                            <a class="nav-link" href="organization-active-payment.html">Active Payment</a> 
+                            <a class="nav-link" href="organization-addpayments.html">Add Payment</a>
+                            <a class="nav-link" href="organization-reports.html">Reports</a> 
+                        </nav>
+                    </div>
+
+                   
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTransactions" aria-expanded="false" aria-controls="collapseTransactions">
+                        <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
+                        Transactions
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseTransactions" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-alltransactions.html">Overview</a>
+                            <a class="nav-link" href="organization-payment.html">Management</a>
+                            <a class="nav-link" href="organization-masterlist.html">Masterlist</a>
+                            <a class="nav-link" href="organization-transactionsreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+
+                    <div class="sb-sidenav-menu-heading">Organization Overview</div>
+                    <a class="nav-link" href="organization-academic-list.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Academic List
+                    </a>
+                    <div class="sb-sidenav-menu-heading">Product Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseProducts" aria-expanded="false" aria-controls="collapseProducts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
+                        Products
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseProducts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-products.html">Management</a>
+                            <a class="nav-link" href="organization-pre-order.html">Pre-Order</a>
+                            <a class="nav-link" href="organization-gcashorder.html">Manage QR-Code</a>
+                            <a class="nav-link" href="organization-allorderreports.html">QR-Code Reports</a>
+                            <a class="nav-link" href="organization-addproduct.html">Add Product</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Order Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrders" aria-expanded="false" aria-controls="collapseOrders">
+                        <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>
+                        Orders
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrders" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-orders.html">Transactions</a>
+                            <a class="nav-link" href="organization-ordersManage.html">Paid Orders Handling</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrderTransactions" aria-expanded="false" aria-controls="collapseOrderTransactions">
+                        <div class="sb-nav-link-icon"><i class="fas fa-receipt"></i></div>
+                        Transactions
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrderTransactions" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-order-transaction.html">Overview</a>
+                            <a class="nav-link" href="organization-order-transaction-reports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Transaction Summary</div>
+                    <a class="nav-link" href="organization-transactions-summary.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Overview
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-5"></h1>
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4" style="padding: 20px;">
+                                    <ol class="breadcrumb mb-4">
+                                        <li class="breadcrumb-item" style="font-style: italic;">Payment</li>
+                                        <li class="breadcrumb-item active" style="font-style: italic;">Overview</li>
+                                    </ol>
+                                    <div class="position-relative">
+                                        <!-- Ellipsis icon that triggers dropdown with animation -->
+                                        <i class="bi bi-three-dots-vertical position-absolute top-0 end-0 fs-4" style="cursor: pointer;" id="ellipsisIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                        
+                                        <!-- Dropdown menu -->
+                                        <ul class="dropdown-menu dropdown-menu-end" style="padding: 10px;">
+                                            
+                                          
+                                            <li>
+                                              <a href="organization-paymentlogs.html" class="dropdown-item d-flex align-items-center" style="font-size: 14px;">
+                                                <i class="fas fa-file-alt me-2" style="font-size: 18px; width: 20px;"></i> Open QR-Code Logs
+                                              </a>
+                                            </li>
+                                          </ul>
+                                          
+                                          
+                                        
+                                        <!-- Heading -->
+                                        <h3 class="text-center mb-4" style="font-weight: 600; color: #333;">Payment Overview</h3>
+                                      </div>
+                                      
+                                    <table id="paymentsTable" class="custom-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Price</th>
+                                                <th>Payment Type</th> 
+                                                <th>Comments Status</th> 
+                                                <th>Date</th>         
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Table rows will be dynamically generated -->
+                                        </tbody>
+                                    </table>
+                                    
+                                </div>
+                                <div class="export-container">
+                                    <div class="export-dropdown">
+                                        <button class="export-btn">
+                                            Export <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                        <div class="export-content">
+                                            <a href="#" onclick="exportAction('copy')">Copy</a>
+                                            <a href="#" onclick="exportAction('print')">Print</a>
+                                            <a href="#" onclick="exportAction('pdf')">PDF</a>
+                                            <a href="#" onclick="exportAction('csv')">CSV</a>
+                                            <a href="#" onclick="exportAction('excel')">Excel</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="logsModal" tabindex="-1" aria-labelledby="logsModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="logsModalLabel">Payment Logs</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Action</th>
+                                                            <th>Performed by</th>
+                                                            <th>Created At</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="logsTableBody">
+                                                        <!-- Logs will be dynamically generated -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- View More Modal -->
+                                <div class="modal fade" id="viewMoreModal" tabindex="-1" aria-labelledby="viewMoreModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="viewMoreModalLabel">Payment Details</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body" id="paymentDetails">
+                                                <!-- Payment details will be dynamically generated -->
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade" id="updateFeesModal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5>Update Fees and Prices</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="feesForm">
+                                                <div id="feesSection"></div>
+                                                
+                                                <p>Total Price: <span id="totalPrice">0.00</span></p>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button id="submitFeesUpdate">Update Fees</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="modal fade" id="commentModal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Payment Comments</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="refreshTable()" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body" id="commentContent">
+                                                <!-- Comments will be dynamically inserted here -->
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="refreshTable()">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <script>
+
+let dataTable;
+
+function exportAction(type) {
+    var table = $('#paymentsTable').DataTable();
+    switch (type) {
+        case 'copy':
+            table.button('.buttons-copy').trigger();
+            break;
+        case 'print':
+            table.button('.buttons-print').trigger();
+            break;
+        case 'pdf':
+            table.button('.buttons-pdf').trigger();
+            break;
+        case 'csv':
+            table.button('.buttons-csv').trigger();
+            break;
+        case 'excel':
+            table.button('.buttons-excel').trigger();
+            break;
+    }
+}
+
+async function loadPayments() {
+    const token = localStorage.getItem('token');
+    const table = $('#paymentsTable'); // Use jQuery to select the table
+    const tableBody = document.querySelector('#paymentsTable tbody');
+
+    if (!token) {
+        alert('Unauthorized access. Please log in.');
+        return;
+    }
+
+    try {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/payments/by-organization', {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch payments.');
+
+        const { payments } = await response.json();
+
+        // 🔥 Check if DataTable is already initialized, then destroy it
+        if ($.fn.DataTable.isDataTable('#paymentsTable')) {
+            table.DataTable().clear().destroy();
+        }
+
+        // 🔥 Clear the table body to prevent duplicates
+        tableBody.innerHTML = '';
+
+        if (payments.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No payments found.</td></tr>';
+        } else {
+            payments.forEach(payment => {
+                const commentStatusDisplay = payment.comment_status || 'No comments';
+
+                const commentTd = payment.comment_status === 'New comments'
+                    ? `<td style="background-color: #ffecb3; font-weight: bold;">${commentStatusDisplay}</td>`
+                    : `<td>${commentStatusDisplay}</td>`;
+
+                const viewCommentsButton = payment.comment_status === 'New comments'
+                    ? `<button 
+                            class="btn btn-info btn-sm" 
+                            onclick="viewComments(${payment.id})" 
+                            style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 5px 8px; cursor: pointer; transition: background-color 0.3s;" 
+                            onmouseover="this.style.backgroundColor='#0056b3'" 
+                            onmouseout="this.style.backgroundColor='#007bff'">
+                            <i class="fas fa-comments"></i> View Comments 
+                            <span style="color:red; font-size:0.75em; margin-left:5px;">!new</span>
+                       </button>`
+                    : `<button 
+                            class="btn btn-info btn-sm" 
+                            onclick="viewComments(${payment.id})" 
+                            style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 5px 8px; cursor: pointer; transition: background-color 0.3s;" 
+                            onmouseover="this.style.backgroundColor='#0056b3'" 
+                            onmouseout="this.style.backgroundColor='#007bff'">
+                            <i class="fas fa-comments"></i>
+                       </button>`;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${payment.name}</td>
+                    <td>₱${payment.price}</td>
+                    <td>${payment.payment_type}</td>
+                    ${commentTd}
+                   <td>${new Date(payment.created_at).toLocaleDateString('en-PH', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                })}</td>
+                    <td>
+                        ${payment.adviser_status === 'Pending' 
+                            ? `
+                                <button class="btn btn-info btn-sm" onclick="openFeesModal(${payment.id})">Update Fees</button>
+                                <button class="btn btn-danger" onclick="deletePayment('${payment.id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            `
+                            : ''
+                        }
+                        ${viewCommentsButton}
+                        <button 
+                            class="btn btn-info btn-sm" 
+                            onclick="viewMore('${JSON.stringify(payment).replace(/"/g, '&quot;')}')" 
+                            style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 5px 8px; cursor: pointer; transition: background-color 0.3s;" 
+                            onmouseover="this.style.backgroundColor='#0056b3'" 
+                            onmouseout="this.style.backgroundColor='#007bff'">
+                            <i class="fas fa-eye"></i>
+                        </button>
+
+                        <button 
+                            class="btn btn-info btn-sm" 
+                            onclick="showLogs(${payment.id})" 
+                            style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; transition: background-color 0.3s;" 
+                            onmouseover="this.style.backgroundColor='#0056b3'" 
+                            onmouseout="this.style.backgroundColor='#007bff'">
+                            <i class="fas fa-file-alt"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // 🔥 Reinitialize DataTable after populating new data
+        table.DataTable({
+            destroy: true,
+            dom: '<"top"f>rt<"bottom"lip>',
+            buttons: [
+                { extend: 'copy', text: 'Copy' },
+                { extend: 'excelHtml5', text: 'Excel' },
+                { extend: 'csvHtml5', text: 'CSV' },
+                { extend: 'pdfHtml5', text: 'PDF' },
+                { extend: 'print', text: 'Print' }
+            ],order: [[4, 'desc']]
+        });
+
+    } catch (error) {
+        console.error('Error fetching payments:', error);
+        tableBody.innerHTML = '<tr><td colspan="5" class="text-center">Failed to load payments.</td></tr>';
+    }
+}
+
+// Ensuring DataTable doesn't reinitialize every time
+function refreshTable() {
+    loadPayments();
+}
+
+document.addEventListener('DOMContentLoaded', loadPayments);
+
+        async function viewComments(paymentId) {
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`https://finalccspayment.onrender.com/api/auth/payments/${paymentId}/comments`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (!response.ok) throw new Error('Failed to fetch comments.');
+
+                const { comments } = await response.json();
+                const commentContent = document.getElementById('commentContent');
+                
+                if (comments.length === 0) {
+                    commentContent.innerHTML = '<p>No comments by the Adviser.</p>';
+                } else {
+                    commentContent.innerHTML = comments.map(comment => `
+                        <div class="comment">
+                            <p><strong>${comment.adviser_name}:</strong> ${comment.comment}</p>
+                            <p class="text-muted">${new Date(comment.created_at).toLocaleString()}</p>
+                        </div>
+                        <hr>
+                    `).join('');
+                }
+
+                // Show the modal
+                const commentModal = new bootstrap.Modal(document.getElementById('commentModal'));
+                commentModal.show();
+            } catch (error) {
+                console.error('Error fetching comments:', error);
+                Swal.fire('Error', 'Failed to load comments.', 'error');
+            }
+        }
+
+        function viewMore(paymentData) {
+            const payment = JSON.parse(paymentData);
+            const feesAndPrices = payment.fees_and_prices ? payment.fees_and_prices.split(', ') : [];
+            const feesHtml = feesAndPrices.map(fee => `<li>${fee}</li>`).join('');
+
+            const modalBody = `
+<div class="container-fluid">
+    <div class="row g-3">
+        <!-- Left Column -->
+        <div class="col-md-6">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Name</h6>
+                    <p class="text-success fw-bold mb-0">${payment.name}</p>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Payment Type</h6>
+                    <p class="mb-0 text-danger fw-bold">${payment.payment_type}</p>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Scope</h6>
+                    <p class="mb-0 text-secondary">
+                        ${payment.year ? `Academic Year ${payment.year}` : `Semester ${payment.semester_name}`}
+                    </p>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Created By</h6>
+                    <p class="mb-0 text-secondary">
+                        ${payment.created_by_name}<br>
+                        <small class="text-muted">${payment.organization_name}</small>
+                    </p>
+                </div>
+            </div>
+
+            <!-- QR Code Section -->
+            <div class="row mt-2 position-relative">
+                <div class="col-12">
+                    <h6 class="text-muted">QR Code</h6>
+                    ${payment.qrcode_picture ? `
+                    <a href="#" class="qr-preview-icon position-relative"
+                        onmouseover="document.getElementById('qrCodeImage').style.display = 'block'"
+                        onmouseout="document.getElementById('qrCodeImage').style.display = 'none'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-qr-code" viewBox="0 0 16 16">
+                            <path d="M2 2h2v2H2V2Z"/>
+                            <path d="M6 0v6H0V0h6ZM5 1H1v4h4V1ZM4 12H2v2h2v-2Z"/>
+                            <path d="M6 10v6H0v-6h6Zm-5 1v4h4v-4H1Zm11-9h2v2h-2V2Z"/>
+                            <path d="M10 0v6h6V0h-6Zm5 1v4h-4V1h4ZM8 1V0h1v2H8v2H7V1h1Zm0 5V4h1v2H8ZM6 8V7h1V6h1v2h1V7h5v1h-4v1H7V8H6Zm0 0v1H2V8H1v1H0V7h3v1h3Zm10 1h-1V7h1v2Zm-1 0h-1v2h2v-1h-1V9Zm-4 0h2v1h-1v1h-1V9Zm2 3v-1h-1v1h-1v1H9v1h3v-2h1Zm0 0h3v1h-2v1h-1v-2Zm-4-1v1h1v-2H7v1h2Z"/>
+                            <path d="M7 12h1v3h4v1H7v-4Zm9 2v2h-3v-1h2v-1h1Z"/>
+                        </svg>
+                    </a>
+                    <img id="qrCodeImage" src="${payment.qrcode_picture}" alt="QR Code" class="img-fluid mt-3"
+                        style="position: absolute; top: 50%; right: 50px; transform: translateY(-50%); display: none; width: 150px; height: auto; border: 1px solid #ddd; border-radius: 5px; padding: 5px; background: white; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" />
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-md-6">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Adviser Status</h6>
+                    <span class="${payment.adviser_status === 'Accepted' ? 'text-success fw-bold' : 
+                                payment.adviser_status === 'Declined' ? 'text-danger fw-bold' : 'text-warning fw-bold'}">
+                        ${payment.adviser_status} 
+                        ${payment.adviser_name ? `<small class="text-muted">by ${payment.adviser_name}</small>` : ''}
+                    </span>
+                </div>
+            </div>
+
+            ${payment.adviser_status !== 'Declined' ? `
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Admin Status</h6>
+                    <span class="${payment.status === 'Accepted' ? 'text-success fw-bold' : 
+                                payment.status === 'Declined' ? 'text-danger fw-bold' : 'text-warning fw-bold'}">
+                        ${payment.status} 
+                        ${payment.accepted_by_name ? `<small class="text-muted">by ${payment.accepted_by_name}</small>` : ''}
+                    </span>
+                </div>
+            </div>` : ''}
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Price</h6>
+                    <p class="text-success fw-bold mb-0">₱${payment.price}</p>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Description</h6>
+                    <p class="mb-0 small text-muted">${payment.description || 'No description provided'}</p>
+                </div>
+            </div>
+
+            <!-- Fees Breakdown Section -->
+            <div class="row mt-2">
+                <div class="col-12">
+                    <h6 class="text-muted">Fees Breakdown</h6>
+                    <ul class="list-group list-group-flush" style="max-height: 150px; overflow-y: auto;">
+                        ${feesHtml || '<li class="text-muted small">No fees available</li>'}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+`;
+
+            document.getElementById('paymentDetails').innerHTML = modalBody;
+            const viewMoreModal = new bootstrap.Modal(document.getElementById('viewMoreModal'));
+            viewMoreModal.show();
+        }
+        async function showLogs(paymentId) {
+    const token = localStorage.getItem('token');
+
+    try {
+        // Fetch logs and payment name
+        const response = await fetch(`https://finalccspayment.onrender.com/api/auth/payments/${paymentId}/logs`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch logs.');
+
+        const { paymentName, logs } = await response.json();
+
+        // Set payment name at the top of the modal
+        document.getElementById('logsModalLabel').textContent = `Payment Logs for: ${paymentName}`;
+
+        // Populate logs table
+        const logsTableBody = document.getElementById('logsTableBody');
+        logsTableBody.innerHTML = '';
+
+        logs.forEach(log => {
+            const combinedName = [
+                log.accepted_by_name ? `${log.accepted_by_name}` : '',
+                log.adviser_name ? `${log.adviser_name}` : '',
+                log.organization_by_name ? `${log.organization_by_name}` : ''
+            ]
+                .filter(name => name) // Filter out empty strings
+                .join('<br>'); // Join with line breaks
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${log.action}</td>
+                <td>${combinedName || ''}</td>
+                <td>${new Date(log.created_at).toLocaleString()}</td>
+            `;
+            logsTableBody.appendChild(row);
+        });
+
+        // Show the modal
+        const logsModal = new bootstrap.Modal(document.getElementById('logsModal'));
+        logsModal.show();
+    } catch (error) {
+        console.error('Error fetching logs:', error);
+        Swal.fire('Error', 'Failed to load payment logs.', 'error');
+    }
+}
+let feeCount = 0;
+
+        function openFeesModal(paymentId) {
+            const modal = document.getElementById('updateFeesModal');
+            modal.setAttribute('data-payment-id', paymentId);
+            const bootstrapModal = new bootstrap.Modal(modal);
+            bootstrapModal.show();
+        
+            fetch(`https://finalccspayment.onrender.com/api/auth/adviser/payment/${paymentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const feesSection = document.getElementById('feesSection');
+                    feesSection.innerHTML = ''; // Clear previous content
+                    feeCount = 0;
+        
+                    if (data.success && data.fees.length > 0) {
+                        data.fees.forEach((fee) => {
+                            feeCount++;
+                            addFeeField(feeCount, fee.name, fee.price);
+                        });
+                    } else {
+                        feesSection.innerHTML = '<p>No fees available for this payment.</p>';
+                    }
+        
+                    updateTotalPrice(); // Calculate total price from fetched data
+                })
+                .catch(err => {
+                    Swal.fire('Error', 'Failed to fetch payment details.', 'error');
+                    console.error('Error fetching payment details:', err);
+                });
+        }
+        
+        function closeFeesModal() {
+            document.getElementById('updateFeesModal').style.display = 'none';
+        }
+        
+        function addFeeField(index, feeName = '', feePrice = '') {
+            const feesSection = document.getElementById('feesSection');
+            const feeDiv = document.createElement('div');
+            feeDiv.setAttribute('id', `fee${index}`);
+        
+            feeDiv.innerHTML = `
+                <label>Fee ${index}:</label>
+                <input type="text" id="fees${index}" value="${feeName}" placeholder="Fee Name">
+                <label>Price for Fee ${index}:</label>
+                <input type="number" id="pricefees${index}" value="${feePrice}" step="0.01" placeholder="Fee Price" 
+                       oninput="updateTotalPrice()">
+                
+            `;
+        
+            feesSection.appendChild(feeDiv);
+        }
+        
+        function removeFeeField(index) {
+            const feeDiv = document.getElementById(`fee${index}`);
+            if (feeDiv) feeDiv.remove();
+            updateTotalPrice();
+        }
+        
+        function updateTotalPrice() {
+            let total = 0;
+            for (let i = 1; i <= feeCount; i++) {
+                const priceField = document.getElementById(`pricefees${i}`);
+                if (priceField && priceField.value) {
+                    total += parseFloat(priceField.value);
+                }
+            }
+            document.getElementById('totalPrice').textContent = total.toFixed(2);
+        }
+        
+        document.getElementById('submitFeesUpdate').addEventListener('click', async () => {
+    const paymentId = document.getElementById('updateFeesModal').getAttribute('data-payment-id');
+    const fees = [];
+
+    for (let i = 1; i <= feeCount; i++) {
+        const feeName = document.getElementById(`fees${i}`)?.value;
+        const feePrice = document.getElementById(`pricefees${i}`)?.value;
+        if (feeName && feePrice) {
+            fees.push({ name: feeName, price: parseFloat(feePrice) }); // Ensure proper structure
+        }
+    }
+
+    if (!fees.length) {
+        return Swal.fire('Error', 'Please add at least one fee.', 'error');
+    }
+
+    // Show a confirmation dialog
+    const confirmation = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you want to update the fees?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, update it!',
+        cancelButtonText: 'No, cancel!',
+        confirmButtonColor: '#28a745', // Green for confirm
+        cancelButtonColor: '#dc3545', // Red for cancel
+    });
+
+    if (!confirmation.isConfirmed) {
+        return; // Exit if the user cancels the confirmation dialog
+    }
+
+    // Show loading screen
+    Swal.fire({
+        title: 'Updating Fees',
+        text: 'Please wait while we update the fees.',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: Swal.showLoading,
+    });
+
+    try {
+        const response = await fetch(`https://finalccspayment.onrender.com/api/auth/organization/payment/fees/update`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ paymentId, fees }),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            Swal.fire('Success', result.message || 'Fees updated successfully.', 'success').then(() => {
+                closeFeesModal();
+                location.reload();
+            });
+        } else {
+            const error = await response.json();
+            Swal.fire('Error', error.message || 'Failed to update fees.', 'error');
+        }
+    } catch (err) {
+        Swal.fire('Error', 'An error occurred while updating fees.', 'error');
+    }
+});
+async function deletePayment(paymentId) {
+                                const confirmation = await Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: 'Do you want to delete this payment?',
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Yes, delete it!',
+                                    cancelButtonText: 'No, cancel!'
+                                });
+                            
+                                if (confirmation.isConfirmed) {
+                                    try {
+                                        const response = await fetch(`https://finalccspayment.onrender.com/api/auth/payments/delete/${paymentId}`, {
+                                            method: 'DELETE',
+                                            headers: {
+                                                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                            }
+                                        });
+                            
+                                        const result = await response.json();
+                            
+                                        if (response.ok) {
+                                            Swal.fire('Deleted!', result.message, 'success').then(() => {
+                                                window.location.reload(); // Reload to reflect the deletion
+                                            });
+                                        } else {
+                                            Swal.fire('Error!', result.error || 'Failed to delete payment.', 'error');
+                                        }
+                                    } catch (error) {
+                                        Swal.fire('Error!', 'An error occurred while deleting the payment.', 'error');
+                                    }
+                                }
+                            }
+                                </script>
+                                </div>  
+                            </div>
+                        </div>   
+                    </div>  
+                </main>      
+            </div>
+        </div>
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>
