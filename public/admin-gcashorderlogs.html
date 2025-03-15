@@ -385,7 +385,7 @@
         }
 
         $(document).ready(function() {
-            fetch('http://localhost:5000/api/auth/all-gcashorder-logs')
+            fetch('https://finalccspayment.onrender.com/api/auth/all-gcashorder-logs')
                 .then(response => response.json())
                 .then(data => {
                     const logsData = data.logs.map(log => ({
