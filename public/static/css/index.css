@@ -11,7 +11,7 @@ body, html {
 
 /* Navbar Styling */
 .navbar {
-    background-color: #0b5e1d; /* Dark brown */
+    background-color: #1B3A28; /* Dark brown */
     width: 100%; /* Full width */
     padding-top: 10px;
     padding-bottom: 10px;
@@ -142,9 +142,9 @@ html {
 /* CSS */
 .button-20 {
 appearance: button;
-background-color: #0577C9;
+background-color: #0b5e1d;
 background-image: linear-gradient(180deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, 0));
-border: 1px solid #4D4AE8;
+
 border-radius: 1rem;
 box-shadow: rgba(255, 255, 255, 0.15) 0 1px 0 inset,rgba(46, 54, 80, 0.075) 0 1px 1px;
 box-sizing: border-box;
@@ -173,8 +173,7 @@ outline: 0;
 }
 
 .button-20:hover {
-background-color: #3733E5;
-border-color: #3733E5;
+background-color: #0d7c25;
 color: white;
 }
 
