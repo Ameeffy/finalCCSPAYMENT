@@ -359,7 +359,7 @@ tr:hover td {
 
         // Fetch and display user details
         function fetchUserDetails(userId) {
-            fetch(`http://localhost:5000/api/auth/user/${userId}`)
+            fetch(`https://finalccspayment.onrender.com/api/auth/user/${userId}`)
                 .then(response => response.json())
                 .then(data => {
                     // Update user name display
@@ -400,7 +400,7 @@ tr:hover td {
             }
         });
         function fetchTransactions(userId) {
-    fetch(`http://localhost:5000/api/auth/transactions/user/${userId}`)
+    fetch(`https://finalccspayment.onrender.com/api/auth/transactions/user/${userId}`)
         .then(response => response.json())
         .then(data => {
             const tableBody = document.getElementById('transactionsTable').getElementsByTagName('tbody')[0];
@@ -504,7 +504,7 @@ function viewOrderTransactions(userId) {
     }
     // Fetch and display transaction summary
 function fetchTransactionSummary(userId) {
-    fetch(`http://localhost:5000/api/auth/transactions/summary/${userId}`)
+    fetch(`https://finalccspayment.onrender.com/api/auth/transactions/summary/${userId}`)
         .then(response => response.json())
         .then(summary => {
             document.getElementById('totalTransactions').textContent = summary.totalTransactions;
