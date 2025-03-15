@@ -361,7 +361,7 @@
                 }
     
                 try {
-                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin/details', {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -661,7 +661,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/auth/payments/by-organization/all', {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/payments/by-organization/all', {
             headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -908,7 +908,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             
                                 try {
                                     // Fetch logs and payment name
-                                    const response = await fetch(`http://localhost:5000/api/auth/payments/${paymentId}/logs`, {
+                                    const response = await fetch(`https://finalccspayment.onrender.com/api/auth/payments/${paymentId}/logs`, {
                                         headers: {
                                             Authorization: `Bearer ${token}`,
                                         },
