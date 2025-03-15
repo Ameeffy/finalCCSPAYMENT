@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="author" content="" />
+        <title>Admin Accounts</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>  
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">  
+    </head>
+
+    <style>
+        .table-container{
+            width: auto;
+            
+            padding-top: 20px;
+            padding-left: 10px;
+            padding-right: 10px;   
+            border-radius: 3px;
+            padding-bottom: 0;
+        }
+.dataTables_scroll {
+    border-radius: 5px 5px 0 0; /* 5px top border radius */
+}
+
+.dataTables_scrollBody {
+    border-radius: 0; /* Ensure no bottom border radius */
+}
+
+
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px; /* Adjusted to 5px */
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px; /* Adjusted to 5px */
+}
+
+/* Ensure no bottom border-radius */
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important; /* Light gray border */
+    padding: 12px 16px; /* Comfortable spacing */
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important; /* Remove border from last row */
+}
+
+/* Optional hover effect */
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important; /* Very subtle hover background */
+    border-bottom-color: #d0d0d0 !important; /* Slightly darker border on hover */
+}
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        justify-self: flex-end;
+    }
+
+    /* Optional: Adjust spacing between elements */
+    .dataTables_wrapper .dataTables_length {
+        margin-right: 15px;
+    }
+   
+    .dataTables_wrapper .dataTables_info {
+        margin: 0 15px;
+    }
+    .dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-top: 50px;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    text-decoration: none;
+    color: #555;
+    background-color: #f9f9f9;
+}
+
+.dataTables_wrapper .dataTables_paginate a:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Styling the search box */
+.dataTables_wrapper .dataTables_filter {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Custom table design */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
+    border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
+    margin-bottom: 50px;
+}
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 12px 16px;
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important;
+    border-bottom-color: #d0d0d0 !important;
+}
+.export-container {
+  position: absolute;
+  right: 20px;
+  top:50px;
+  z-index: 1;
+}
+
+.export-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.export-btn {
+  background-color: #1B3A28;
+  color: #ffffff;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 60px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+}
+
+.export-btn:hover {
+  background-color: #3e865c;
+}
+
+.export-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 83px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.export-content a {
+  color: #333;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.export-content a:hover {
+  background-color: #f8f9fa;
+}
+
+.export-dropdown:hover .export-content {
+  display: block;
+}
+@media print {
+  body {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+  }
+
+  .export-container, .dataTables_wrapper .top, .dataTables_wrapper .bottom {
+      display: none;
+  }
+
+  .custom-table {
+      border-collapse: collapse;
+      width: 100%;
+  }
+
+  .custom-table th, .custom-table td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+  }
+
+  .custom-table thead {
+      background-color: #f1f1f1;
+  }
+}
+    </style>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center">
+            <!-- Left Section -->
+            <div class="d-flex align-items-center">
+                <!-- Sidebar Toggle -->
+                <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                    <i class="fas fa-bars" style="color: rgb(255, 255, 255);"></i>
+                </button>
+                
+                <!-- Logo -->
+                <div class="logo me-2">
+                    <img src="img/logo.png" alt="Logo" height="40">
+                </div>
+                
+                <!-- College Title -->
+                <h2 class="college-title mb-0" style="color: black; font-size: 20px;">COLLEGE OF COMPUTING STUDIES</h2>
+            </div>
+    
+            <!-- Right Section -->
+            <div class="ms-auto d-flex align-items-center">
+                <li id="profile-item" class="dropdown-item me-3">
+                    <a href="#" style="color: #25330f; text-decoration: none;">Loading...</a>
+                </li>
+    
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x" style="color: #ffffff;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: #ffffff;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                        width: 110px; 
+                        min-width: 110px; 
+                        background-color: #ffffff; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                        padding: 0;">
+                        <li>
+                            <a class="dropdown-item text-center" href="#" id="logout" style="
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                border-bottom: 1px solid #ddd; 
+                                border-radius: 8px;
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-sign-out-alt me-2" style="color: inherit;"></i> Sign Out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    
+        <!-- Scripts -->
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                const token = localStorage.getItem('token');
+    
+                if (!token) {
+                    window.location.href = 'adminlogin.html';
+                    return;
+                }
+    
+                try {
+                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+    
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch user data');
+                    }
+    
+                    const userData = await response.json();
+                    document.getElementById("profile-item").innerHTML = 
+                        `<a style="color: #25330f; text-decoration: none;" href="admin-info.html">${userData.username} (${userData.email})</a>`;
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    document.getElementById("profile-item").innerHTML = `<a href="#">Error loading profile</a>`;
+                }
+            });
+    
+            document.getElementById('logout').addEventListener('click', function(event) {
+                event.preventDefault();
+    
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to log out?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, log out!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem('token');
+                        Swal.fire({
+                            title: 'Logged Out!',
+                            text: 'You have been logged out successfully.',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = 'adminlogin.html';
+                        });
+                    }
+                });
+            });
+        </script>
+   
+    
+
+
+   <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                   
+                    <div class="sb-sidenav-menu-heading">Overview</div>
+                    <a class="nav-link" href="admindashboard.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+                    
+                    <div class="sb-sidenav-menu-heading">System Controls</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Semester
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+
+                            <a class="nav-link" href="admincontrol.html">Management</a>
+                            <a class="nav-link" href="admincontrolOrganizationUsers.html">Payments</a>
+                            <a class="nav-link" href="adminallsemesterlogs.html">History</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-allpayments.html">Overview</a>
+                            <a class="nav-link" href="admin-payment.html">Management</a>
+                            <a class="nav-link" href="admin-organization-active-payments.html">Active Payment</a>
+                            <a class="nav-link" href="admin-payment-reports.html">Reports</a>
+                            <a class="nav-link" href="admin-allpaymentslogs.html">History</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseGcash" aria-expanded="false" aria-controls="collapseGcash">
+                        <div class="sb-nav-link-icon"><i class="fas fa-qrcode"></i></div>
+                        QR-Codes
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseGcash" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-gcashorder.html">Overview</a>
+                            <a class="nav-link" href="admin-order.html">Management</a>
+                            <a class="nav-link" href="admin-gcashorder-reports.html">Reports</a>
+                            <a class="nav-link" href="admin-gcashorderlogs.html">History</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Transaction Overview</div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseNew" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-alltransactions.html">Overview</a>
+                            <a class="nav-link" href="admin-transactionpaymentreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew1" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Orders
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseNew1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-allordertransactions.html">Overview</a>
+                            <a class="nav-link" href="admin-allordertransactionsreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">User Management</div>
+                    <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                        Accounts
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+
+                   
+
+                    <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                Student
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-student.html">Overview</a>
+                                    <a class="nav-link" href="adminaccountsMain.html">Enrollment Status</a>
+                                    <a class="nav-link" href="adminaccountsReportsuser.html">Reports</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                Adviser
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-adviser.html">Overview</a>
+                                    
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAdmin" aria-expanded="false" aria-controls="pagesCollapseAdmin">
+                                Admin
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAdmin" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-admin.html">Overview</a>
+                                    <a class="nav-link" href="adminaccounts-adminlogs.html">History</a>     
+                                </nav>
+                            </div>                
+                        </nav>
+                    </div> 
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRegister" aria-expanded="false" aria-controls="collapseRegister">
+                        <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
+                        Register 
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseRegister" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="register.html">Student/Adviser</a>
+                            <a class="nav-link" href="adminaccregister.html">Admin</a>
+                        </nav>
+                    </div>
+                        
+                    <div class="sb-sidenav-menu-heading">Organization Management</div>
+                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrg" aria-expanded="false" aria-controls="collapseOrg">
+                        <div class="sb-nav-link-icon"><i class="fas fa-building"></i></div>
+                        Organization
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrg" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admincontrolOrganization.html">Overview</a>
+                            <a class="nav-link" href="Admin-organizationsYear.html">Active List</a>
+                            <a class="nav-link" href="admin-organization-all-logs.html">History</a>
+                        </nav>
+                    </div>
+                    <div class="sb-sidenav-menu-heading">transaction Summary</div>
+                    <a class="nav-link" href="admin-transactions-summary.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Overview
+                    </a>
+                </div>
+            </div> 
+        </nav>
+    </div>
+
+
+
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-5"></h1>
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4" style="padding: 20px;">
+                                    
+                                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                        <!-- Left Side: Accounts -->
+                                        <ol class="breadcrumb mb-4">
+                                            <li class="breadcrumb-item" style="font-style: italic;">Accounts</li>
+                                            <li class="breadcrumb-item" style="font-style: italic;">Student</li>
+                                            <li class="breadcrumb-item active" style="font-style: italic;">Enrollment Status</li>
+                                        </ol>
+                                        
+                                        <div class="position-relative">
+                                            <!-- Ellipsis icon that triggers dropdown with animation -->
+                                            <i class="bi bi-three-dots-vertical position-absolute top-0 end-0 fs-4" style="cursor: pointer;" id="ellipsisIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                            
+                                            <!-- Dropdown menu -->
+                                            <ul class="dropdown-menu dropdown-menu-end" style="padding: 10px;">
+                                                <li>
+                                                    <a href="#" class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#UsersModal" style="font-size: 14px;">
+                                                      <i class="fas fa-pen-to-square fa-fw me-2 fs-5"></i> Enroll Student
+                                                    </a>
+                                                  </li>
+                                                 
+                                              </ul>
+                                              
+                                              
+                                              
+                                            
+                                            <!-- Heading -->
+                                          </div>
+                                    
+                                        <!-- Right Side: Button -->
+                                      
+
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', function () {
+                                                const openModalButton = document.getElementById('openModalButton');
+                                                const closeModalButton = document.getElementById('closeModalButton');
+                                                const usersModal = document.getElementById('UsersModal');
+                                                const userSearchInput = document.getElementById('userSearch');
+                                                const userResults = document.getElementById('userResults');
+                                            
+                                                // Function to show the modal
+                                                openModalButton?.addEventListener('click', function () {
+                                                    usersModal.style.display = 'flex'; // Show modal
+                                                });
+                                            
+                                                // Function to close the modal
+                                                closeModalButton?.addEventListener('click', function () {
+                                                    usersModal.style.display = 'none'; // Hide modal
+                                                });
+                                            
+                                                // Close modal when clicking outside the content
+                                                window.addEventListener('click', function (event) {
+                                                    if (event.target === usersModal) {
+                                                        usersModal.style.display = 'none';
+                                                    }
+                                                });
+                                            
+                                                // Fetch and display users based on the search query
+                                                function fetchUsers(query) {
+                                                    const token = localStorage.getItem('token');
+                                                    if (!token) {
+                                                        window.location.href = 'adminlogin.html';
+                                                        return;
+                                                    }
+                                            
+                                                    fetch(`http://localhost:5000/api/auth/userspaymentorgWeb?search=${query}`, {
+                                                        headers: {
+                                                            'Authorization': `Bearer ${token}`
+                                                        }
+                                                    })
+                                                        .then(response => {
+                                                            if (!response.ok) {
+                                                                throw new Error('Failed to fetch users');
+                                                            }
+                                                            return response.json();
+                                                        })
+                                                        .then(data => {
+                                                            userResults.innerHTML = ''; // Clear previous results
+                                            
+                                                            if (data.length === 0) {
+                                                                userResults.innerHTML = '<p>No users found</p>';
+                                                                return;
+                                                            }
+                                            
+                                                            data.forEach(user => {
+                                                                if (
+                                                                    user.username.toLowerCase().startsWith(query.toLowerCase()) ||
+                                                                    user.idnumber.toLowerCase().startsWith(query.toLowerCase()) ||
+                                                                    user.firstname.toLowerCase().startsWith(query.toLowerCase()) ||
+                                                                    user.lastname.toLowerCase().startsWith(query.toLowerCase()) ||
+                                                                    user.email.toLowerCase().startsWith(query.toLowerCase())
+                                                                ) {
+                                                                    const userDiv = document.createElement('div');
+                                                                    userDiv.classList.add('user-item');
+                                                                    userDiv.innerHTML = `<p>${user.lastname} ${user.firstname} (${user.idnumber})</p>`;
+                                                                    userDiv.addEventListener('click', () => selectUser(user.id, user.lastname, user.firstname));
+                                                                    userResults.appendChild(userDiv);
+                                                                }
+                                                            });
+                                                        })
+                                                        .catch(error => {
+                                                            console.error('Error fetching users:', error);
+                                                            userResults.innerHTML = '<p>Failed to load users. Try again later.</p>';
+                                                        });
+                                                }
+                                            
+                                                // Handle search input changes
+                                                userSearchInput?.addEventListener('input', function () {
+                                                    const query = this.value.trim();
+                                                    if (query.length > 0) {
+                                                        fetchUsers(query);
+                                                    } else {
+                                                        userResults.innerHTML = ''; // Clear results if query is empty
+                                                    }
+                                                });
+                                            
+                                                // Select a user from the search results
+                                                function selectUser(userId, lastname, firstname) {
+                                                    document.getElementById('userId').value = userId; // Set hidden input
+                                                    userSearchInput.value = `${lastname} ${firstname}`; // Set input value
+                                                    userResults.innerHTML = ''; // Clear search results
+                                                }
+                                            });
+                                            
+                                            </script>
+                                            <div id="UsersModal" class="modal fade" tabindex="-1" aria-labelledby="UsersModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                  <div class="modal-content">
+                                                    <form id="UsersForm">
+                                                      <!-- Modal Header -->
+                                                      <div class="modal-header">
+                                                        <h5 class="modal-title" id="UsersModalLabel">User Information</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                      </div>
+                                              
+                                                      <!-- Modal Body -->
+                                                      <div class="modal-body">
+                                                        <!-- User Search Section -->
+                                                        <div class="mb-3">
+                                                          <label for="userSearch" class="form-label">User:</label>
+                                                          <input type="text" id="userSearch" name="userSearch" class="form-control" placeholder="Search user by name or ID number" required>
+                                                          <div id="userResults" class="mt-3 text-center" style="font-size: 20px;"></div>
+                                                        </div>
+                                              
+                                                        <!-- Section Dropdown -->
+                                                        <div class="mb-3">
+                                                          <label for="section" class="form-label">Section:</label>
+                                                          <select id="section" class="form-select" name="section" required>
+                                                            <option value="" disabled selected>Select Section</option>
+                                                            <option value="1A">1A</option>
+                                                            <option value="1B">1B</option>
+                                                            <option value="1C">1C</option>
+                                                            <option value="2A">2A</option>
+                                                            <option value="2B">2B</option>
+                                                            <option value="2C">2C</option>
+                                                            <option value="3A">3A</option>
+                                                            <option value="3B">3B</option>
+                                                            <option value="3C">3C</option>
+                                                            <option value="4A">4A</option>
+                                                            <option value="4B">4B</option>
+                                                            <option value="4C">4C</option>
+                                                          </select>
+                                                        </div>
+                                              
+                                                        <!-- Hidden User ID -->
+                                                        <input type="hidden" id="userId" name="userId">
+                                              
+                                                      </div>
+                                              
+                                                      <!-- Modal Footer -->
+                                                      <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                                      </div>
+                                                    </form>
+                                                    <div id="formError" class="error"></div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              
+                                            
+                                            
+                                            
+                                            <script>
+                                                document.getElementById('UsersForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const userId = document.getElementById('userId').value;
+    const section = document.getElementById('section').value;
+
+    if (!userId || !section) {
+        Swal.fire(
+            'Error!',
+            'Please select a user and a section.',
+            'error'
+        );
+        return;
+    }
+
+    // Show confirmation prompt before making the request
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you want to enroll the user this semester??',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Enrool!',
+        cancelButtonText: 'Cancel',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            
+            // Show loading message while processing
+            Swal.fire({
+                title: 'Processing...',
+                text: 'Please wait while updating the user status and section.',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+
+            fetch('http://localhost:5000/api/auth/update-user-statusWeb', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({ user_id: userId, section })
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    Swal.fire(
+                        'Success!',
+                        'User status and section updated successfully!',
+                        'success'
+                    ).then(() => {
+                        document.getElementById('UsersModal').style.display = 'none'; // Close the modal
+                        window.location.reload(); // Reload the page after success
+                    });
+                } else {
+                    Swal.fire(
+                        'Error!',
+                        data.msg || 'Failed to update user status and section.',
+                        'error'
+                    );
+                }
+            })
+            .catch((error) => {
+                console.error('Error updating user status:', error);
+                Swal.fire(
+                    'Error!',
+                    'An error occurred while updating the user.',
+                    'error'
+                );
+            });
+        }
+    });
+});
+
+                                            
+                                            </script>
+                                            
+                                            <div id="UsersModalGrad" class="modal-grad" style="display: none; position: fixed; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center;">
+                                                <div class="modal-content-payment" style="background: white; padding: 20px; border-radius: 10px; width: 50%; max-width: 500px; position: relative;">
+                                                    <form id="UsersFormGrad">
+                                                        <span style="position: absolute; right: 20px; top: 20px; cursor: pointer;" class="close" id="closeModalButtonGrad">
+                                                            <i class="fas fa-times-circle"></i>
+                                                        </span>
+                                            
+                                                        <label style="font-weight: bold; margin-top: 20px;">User:</label>
+                                                        <input type="text" id="userSearchGrad" name="userSearch" placeholder="Search user by name or ID number" required style="width: 100%; padding: 10px; box-sizing: border-box; margin-bottom: 10px;">
+                                            
+                                                        <div id="userResultsGrad" style="width: 100%; padding: 10px; box-sizing: border-box; margin-top: 10px; cursor: pointer; text-align: center; font-size: 20px;"></div>
+                                            
+                                                        <label for="status">Status:</label>
+                                                        <select id="status" class="form-control" name="status" required style="width: 100%; padding: 10px; box-sizing: border-box; margin-bottom: 10px;">
+                                                            <option value="" disabled selected>Select Status</option>
+                                                            <option value="Graduated">Graduated</option>
+                                                            <option value="Not Enrolled">Not Enrolled</option>
+                                                            <option value="Active">Active</option>
+                                                        </select>
+                                            
+                                                        <br><br>
+                                                        <input type="hidden" id="userId" name="userId">
+                                            
+                                                        <button type="submit" class="btn-submit">Submit</button>
+                                                    </form>
+                                                    <div id="formErrorGrad" class="error"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            
+                                            <script>
+                                            document.addEventListener('DOMContentLoaded', function () {
+                                                const openModalButtonGrad = document.getElementById('openModalButtonGrad');
+                                                const closeModalButtonGrad = document.getElementById('closeModalButtonGrad');
+                                                const usersModalGrad = document.getElementById('UsersModalGrad');
+                                                const userSearchInputGrad = document.getElementById('userSearchGrad');
+                                                const userResultsGrad = document.getElementById('userResultsGrad');
+                                            
+                                                // Function to show the modal
+                                                openModalButtonGrad?.addEventListener('click', function () {
+                                                    usersModalGrad.style.display = 'flex'; // Show modal
+                                                });
+                                            
+                                                // Function to close the modal
+                                                closeModalButtonGrad?.addEventListener('click', function () {
+                                                    usersModalGrad.style.display = 'none'; // Hide modal
+                                                });
+                                            
+                                                // Close modal when clicking outside the content
+                                                window.addEventListener('click', function (event) {
+                                                    if (event.target === usersModalGrad) {
+                                                        usersModalGrad.style.display = 'none';
+                                                    }
+                                                });
+                                            
+                                                // Function to fetch users based on the search query
+                                                function fetchUsersGrad(query) {
+                                                    const token = localStorage.getItem('token');
+                                                    if (!token) {
+                                                        window.location.href = 'adminlogin.html';
+                                                        return;
+                                                    }
+                                            
+                                                    fetch(`http://localhost:5000/api/auth/userspaymentorg?search=${query}`, {
+                                                        headers: {
+                                                            'Authorization': `Bearer ${token}`
+                                                        }
+                                                    })
+                                                    .then(response => {
+                                                        if (!response.ok) {
+                                                            throw new Error('Failed to fetch users');
+                                                        }
+                                                        return response.json();
+                                                    })
+                                                    .then(data => {
+                                                        userResultsGrad.innerHTML = ''; // Clear previous results
+                                            
+                                                        if (data.length === 0) {
+                                                            userResultsGrad.innerHTML = '<p>No users found</p>';
+                                                            return;
+                                                        }
+                                            
+                                                        data.forEach(user => {
+                                                            if (
+                                                                user.username.toLowerCase().startsWith(query.toLowerCase()) ||
+                                                                user.idnumber.toLowerCase().startsWith(query.toLowerCase()) ||
+                                                                user.firstname.toLowerCase().startsWith(query.toLowerCase()) ||
+                                                                user.lastname.toLowerCase().startsWith(query.toLowerCase()) ||
+                                                                user.email.toLowerCase().startsWith(query.toLowerCase())
+                                                            ) {
+                                                                const userDiv = document.createElement('div');
+                                                                userDiv.classList.add('user-item');
+                                                                userDiv.innerHTML = `<p>${user.lastname} ${user.firstname} (${user.idnumber})</p>`;
+                                                                userDiv.addEventListener('click', () => selectUserGrad(user.id, user.lastname, user.firstname));
+                                                                userResultsGrad.appendChild(userDiv);
+                                                            }
+                                                        });
+                                                    })
+                                                    .catch(error => {
+                                                        console.error('Error fetching users:', error);
+                                                        userResultsGrad.innerHTML = '<p>Failed to load users. Try again later.</p>';
+                                                    });
+                                                }
+                                            
+                                                // Handle search input changes for Grad
+                                                userSearchInputGrad?.addEventListener('input', function () {
+                                                    const query = this.value.trim();
+                                                    if (query.length > 0) {
+                                                        fetchUsersGrad(query);
+                                                    } else {
+                                                        userResultsGrad.innerHTML = ''; // Clear results if query is empty
+                                                    }
+                                                });
+                                            
+                                                // Select a user from the search results
+                                                function selectUserGrad(userId, lastname, firstname) {
+                                                    document.getElementById('userId').value = userId; // Set hidden input
+                                                    document.getElementById('userSearchGrad').value = `${lastname} ${firstname}`; // Set input value
+                                                    userResultsGrad.innerHTML = ''; // Clear search results
+                                                }
+                                            
+                                                // Submit Graduate action (Handling the form submission)
+                                                document.getElementById('submitGrad')?.addEventListener('click', function (e) {
+                                                    e.preventDefault();
+                                            
+                                                    const userId = document.getElementById('userId').value;
+                                                    const status = document.getElementById('status').value;
+                                            
+                                                    if (!userId || !status) {
+                                                        alert("Please select a user and status");
+                                                        return;
+                                                    }
+                                            
+                                                    const token = localStorage.getItem('token');
+                                                    if (!token) {
+                                                        window.location.href = 'adminlogin.html';
+                                                        return;
+                                                    }
+                                            
+                                                    fetch('http://localhost:5000/api/auth/updateUserStatusGrad', {
+                                                        method: 'POST',
+                                                        headers: {
+                                                            'Content-Type': 'application/json',
+                                                            'Authorization': `Bearer ${token}`
+                                                        },
+                                                        body: JSON.stringify({
+                                                            user_id: userId,
+                                                            status: status
+                                                        })
+                                                    })
+                                                    .then(response => response.json())
+                                                    .then(data => {
+                                                        if (data.success) {
+                                                            Swal.fire(
+                                                                'Success!',
+                                                                'User has been successfully updated to Graduate!',
+                                                                'success'
+                                                            ).then(() => {
+                                                                usersModalGrad.style.display = 'none'; // Close modal
+                                                                window.location.reload(); // Reload the page
+                                                            });
+                                                        } else {
+                                                            Swal.fire(
+                                                                'Error!',
+                                                                'There was an issue updating the status.',
+                                                                'error'
+                                                            );
+                                                        }
+                                                    })
+                                                    .catch(error => {
+                                                        console.error('Error updating status:', error);
+                                                        Swal.fire(
+                                                            'Error!',
+                                                            'There was an error processing the request.',
+                                                            'error'
+                                                        );
+                                                    });
+                                                });
+                                            });       
+                                                </script>
+                                        
+                                    </div>
+                            <body>
+                                <table id="accountsTable" class="custom-table">
+                                    <thead>
+                                        <tr>     
+                                            <th>Student Name</th>
+                                            <th>Upload Certificate</th>
+                                            <th>Semester</th>
+                                            <th>Status</th>
+                                            <th>Section</th>
+                                            <th>Action</th>
+                                            <th>Date</th>
+                                            <th>COR #</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                                <div class="export-container">
+                                    <div class="export-dropdown">
+                                        <button class="export-btn">
+                                            Export <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                        <div class="export-content">
+                                            <a href="#" onclick="exportAction('print')">Print</a>
+                                            <a href="#" onclick="exportAction('pdf')">PDF</a>
+                                            <a href="#" onclick="exportAction('csv')">CSV</a>
+                                            <a href="#" onclick="exportAction('excel')">Excel</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 9999; justify-content: center; align-items: center;">
+                                    <div style="background: rgba(0, 0, 0, 0); padding: 20px; border-radius: 10px; max-width: 100%; max-height: 100%; overflow: auto; position: relative;">
+                                        <span style="position: absolute; right: 30px; top: 40px; cursor: pointer;" class="close" id="closeModal">
+                                            <i class="fas fa-times-circle"></i>
+                                        </span>
+                                        <div style="text-align: center; margin-top: 10px; max-width: 100%; overflow: hidden;">
+                                            <img id="modalImage" src="" alt="Certificate Image" style="max-width: 100%; max-height:100vh; object-fit: contain;"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                    
+                                  function fetchUserData() {
+                                fetch('http://localhost:5000/api/auth/getsemesters_users')
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const tableBody = document.getElementById('accountsTable').getElementsByTagName('tbody')[0];
+                                        tableBody.innerHTML = ''; // Clear the table before populating it
+                            
+                                        // Loop through each user and insert a row in the table
+                                        const pendingUsers = data.filter(user => 
+                                            user.status === 'Pending' || user.status === 'Declined' || user.status === 'Active'
+                                        );
+                            
+                                        pendingUsers.forEach(user => {
+                                            const row = tableBody.insertRow();
+                                            
+                                            row.insertCell(0).textContent = `${user.lastname} ${user.firstname} ${user.middlename}`;
+                            
+                                            const uploadCell = row.insertCell(1);
+                                            if (user.uploadcertificate) {
+// Create the button element
+const iconButton = document.createElement('button');
+
+// Add Bootstrap & custom styles
+iconButton.className = 'btn btn-primary view-btn';
+iconButton.innerHTML = '<i class="fas fa-eye"></i>';  // Add eye icon
+
+// Apply styling
+iconButton.style.cursor = 'pointer';
+iconButton.style.padding = '10px 10px';
+iconButton.style.display = 'flex';
+iconButton.style.alignItems = 'center';
+iconButton.style.gap = '6px'; // Space between icon and text
+iconButton.style.border = 'none';
+iconButton.style.borderRadius = '6px';
+iconButton.style.transition = '0.3s ease-in-out';
+
+// Hover effect
+iconButton.onmouseover = function () {
+    iconButton.style.backgroundColor = '#0056b3';
+};
+iconButton.onmouseout = function () {
+    iconButton.style.backgroundColor = '#007bff';
+};
+
+// Event listener to open the modal when the button is clicked
+iconButton.onclick = function () {
+    openModal(user.uploadcertificate);
+};
+
+                            
+                                                uploadCell.appendChild(iconButton);
+                                            } else {
+                                                uploadCell.textContent = 'Face to face verification';
+                                            }
+                            
+                                            row.insertCell(2).textContent = user.semester_name;
+                                            row.insertCell(3).textContent = user.status;
+                                            row.insertCell(4).textContent = user.section;
+                            
+                                            if (user.status === 'Pending') {
+    const actionCell = row.insertCell(5);
+
+    // Accept Button
+    const acceptButton = document.createElement('button');
+    acceptButton.innerHTML = '<i class="fas fa-check"></i>'; // FontAwesome check icon
+    acceptButton.style.cursor = 'pointer';
+    acceptButton.style.padding = '10px 10px';
+    acceptButton.style.background = '#28a745';
+    acceptButton.style.color = 'white';
+    acceptButton.style.border = 'none';
+    acceptButton.style.borderRadius = '5px';
+    acceptButton.style.marginRight = '5px'; // Adds spacing between buttons
+    acceptButton.onclick = function() {
+        // Show confirmation dialog including section
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You are about to accept this user from Section: ${user.section}`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, accept it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If user confirms, proceed with the action
+                handleAction(user.user_id, user.id, 'Accepted', user.section);
+            }
+        });
+    };
+    actionCell.appendChild(acceptButton);
+
+    // Decline Button
+    const declineButton = document.createElement('button');
+    declineButton.innerHTML = '<i class="fas fa-times"></i>'; // FontAwesome "X" icon
+    declineButton.style.cursor = 'pointer';
+    declineButton.style.padding = '10px 10px';
+    declineButton.style.background = '#dc3545';
+    declineButton.style.color = 'white';
+    declineButton.style.border = 'none';
+    declineButton.style.borderRadius = '5px';
+    declineButton.onclick = function() {
+        // Show confirmation dialog including section
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You are about to decline this user from Section: ${user.section}`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, decline it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If user confirms, proceed with the action
+                handleAction(user.user_id, user.id, 'Declined', user.section);
+            }
+        });
+    };
+    actionCell.appendChild(declineButton);
+}
+ else if (user.status === 'Active') {
+                                const actionCell = row.insertCell(5);
+                                // Add italic text "Officially enrolled"
+                                const enrolledText = document.createElement('span');
+                                enrolledText.style.fontStyle = 'italic';
+                                enrolledText.textContent = 'Officially enrolled';
+                                actionCell.appendChild(enrolledText);
+                            } else if (user.status === 'Declined') {
+                                const actionCell = row.insertCell(5);
+                            
+                                // Add icon for report
+                                const reportIcon = document.createElement('i');
+                            
+                                const reportButton = document.createElement('button');
+                                reportButton.textContent = 'Report';
+                                reportButton.style.cursor = 'pointer';
+                                reportButton.style.padding = '5px 10px';
+                                reportButton.style.background = '#ffc107';
+                                reportButton.style.color = 'white';
+                                reportButton.style.border = 'none';
+                                reportButton.style.borderRadius = '5px';
+                            
+                                // Check if a report exists for the user (using user.id as semester_user_id)
+                                checkReportExists(user.id).then(reportExists => {
+                                    if (reportExists) {
+                                        // If a report exists, hide the "Report" button and show the declined text
+                                        const declinedText = document.createElement('span');
+                                        declinedText.style.fontStyle = 'italic';
+                                        declinedText.textContent = 'Users declined';
+                                        actionCell.appendChild(declinedText);
+                                    } else {
+                                        // If no report exists, show the "Report" button
+                                        reportButton.onclick = function() {
+                                            Swal.fire({
+                                                title: 'Are you sure?',
+                                                text: `You are about to report ${user.firstname} ${user.lastname}`,
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#3085d6',
+                                                cancelButtonColor: '#d33',
+                                                confirmButtonText: 'Yes, report it!'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    openUserModalReport(user.user_id, user.semester_id, user.id); // Use user.id as semester_user_id
+                                                }
+                                            });
+                                        };
+                                        actionCell.appendChild(reportIcon);
+                                        actionCell.appendChild(reportButton);
+                                    }
+                                });
+                            }
+                            
+                            // Function to check if a report already exists for the user
+                            async function checkReportExists(userId) {
+                                try {
+                                    const response = await fetch('http://localhost:5000/api/auth/check-report-exists', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify({ userId }) // Pass userId as semester_user_id
+                                    });
+                                    const data = await response.json();
+                                    return data.exists;
+                                } catch (error) {
+                                    console.error('Error checking report existence:', error);
+                                    return false;
+                                }
+                            }
+                            const createdAtDate = new Date(user.created_at);
+
+// Ensure created_at is a valid date before formatting
+const formattedDate = !isNaN(createdAtDate.getTime()) 
+    ? createdAtDate.toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' }) 
+    : 'Invalid Date';
+
+// Insert formatted date into the table
+row.insertCell(6).textContent = formattedDate;
+
+                            row.insertCell(7).textContent = user.id;
+                            
+                                        });
+                                        
+                            
+                                       
+                                        if ($.fn.DataTable.isDataTable('#accountsTable')) {
+                                            const table = $('#accountsTable').DataTable();
+                                            table.clear(); 
+                                            table.rows.add($(tableBody).find('tr')); 
+                                            table.draw();
+                                        } else {
+                                            
+                                            $('#accountsTable').DataTable({
+                                                dom: '<"top"f>rt<"bottom"lip>',
+                                                buttons: [
+                                                    {
+                                                        extend: 'copy',
+                                                        text: '<i class="fas fa-copy" style="color: #007bff;"></i>',
+                                                        titleAttr: 'Copy'
+                                                    },
+                                                    {
+                                                        extend: 'csv',
+                                                        text: '<i class="fas fa-file-csv" style="color: #28a745;"></i>',
+                                                        titleAttr: 'Export to CSV'
+                                                    },
+                                                    {
+                                                        extend: 'excel',
+                                                        text: '<i class="fas fa-file-excel" style="color: #1c7430;"></i>',
+                                                        titleAttr: 'Export to Excel'
+                                                    },
+                                                    {
+                                                        extend: 'pdf',
+                                                        text: '<i class="fas fa-file-pdf" style="color: #dc3545;"></i>',
+                                                        titleAttr: 'Export to PDF'
+                                                    },
+                                                    {
+                                                        extend: 'print',
+                                                        text: '<i class="fas fa-print" style="color: #6c757d;"></i>',
+                                                        titleAttr: 'Print'
+                                                    }
+                                                ],
+                                                order: [[6, 'desc']],
+                                                lengthMenu: [10, 25, 50, 100],
+                                                pageLength: 10,
+                                                searching: true,
+                                                ordering: true,
+                                                language: {
+                                                    lengthMenu: "Show _MENU_ entries",
+                                                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                                                    paginate: {
+                                                        first: "First",
+                                                        last: "Last",
+                                                        next: "Next",
+                                                        previous: "Previous"
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error fetching user data:', error);
+                                        document.getElementById('errorMessages').textContent = 'Failed to load user data.';
+                                    });
+                            }
+                            
+                            $(document).ready(function() {
+                                fetchUserData();
+                            });
+                           
+                            setInterval(fetchUserData, 15000);
+                            
+                            function openUserModalReport(userId, semesterId, id) {
+    const declineReasons = [
+        'Not latest Certificate of Registration',
+        'Inappropriate image',
+        'Malicious content'
+    ];
+
+    Swal.fire({
+        title: 'Report User Decline',
+        html: `
+            <label for="reason">Select reason for decline:</label><br>
+            <select id="reason" class="swal2-input">
+                ${declineReasons.map(reason => `<option value="${reason}">${reason}</option>`).join('')}
+            </select>
+            <label for="comment">Additional Comments:</label><br>
+            <textarea id="comment" class="swal2-input" rows="3"></textarea>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Submit Report',
+        cancelButtonText: 'Cancel',
+        preConfirm: () => {
+            const reason = document.getElementById('reason').value;
+            const comment = document.getElementById('comment').value.trim(); // Get the comment correctly
+            if (!reason) {
+                Swal.showValidationMessage('Please select a reason');
+            }
+            return { reason, comment };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const { reason, comment } = result.value;
+            submitUserReport(userId, semesterId, id, reason, comment); 
+        }
+    });
+}
+
+function submitUserReport(userId, semesterId, id, reason, comment) {
+    Swal.fire({
+        title: 'Submitting Report',
+        text: 'Please wait while the report is being submitted...',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+            Swal.showLoading();
+        },
+    });
+
+    // Retrieve token from localStorage or sessionStorage
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+
+    if (!token) {
+        Swal.fire('Error', 'User is not authenticated. Please log in again.', 'error');
+        return;
+    }
+
+    fetch('http://localhost:5000/api/auth/report-user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the request
+        },
+        body: JSON.stringify({
+            userId,
+            semesterId,
+            id,                                      
+            reason,
+            comment, // Now the comment is correctly passed
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire('Report Submitted', 'The report has been successfully submitted.', 'success')
+                .then(() => {
+                    fetchUserData(); 
+                });
+        } else {
+            Swal.fire('Error', data.message || 'There was an error submitting the report.', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error submitting report:', error);
+        Swal.fire('Error', 'There was an error submitting the report.', 'error');
+    });
+}
+
+
+                            function handleAction(userId, id, action, section) {
+                                const token = localStorage.getItem('token'); 
+                            
+                                if (!token) {
+                                    window.location.href = 'adminlogin.html';
+                                    return;
+                                }
+                            
+                                Swal.fire({
+                                    title: 'Processing...',
+                                    text: `Please wait while we ${action.toLowerCase()} the user.`,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    didOpen: () => {
+                                        Swal.showLoading();
+                                    },
+                                });
+                            
+                            
+                                const status = action === 'Accepted' ? 'Active' : 'Declined';
+                            
+                                fetch('http://localhost:5000/api/auth/updateUserStatus', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': `Bearer ${token}`, 
+                                    },
+                                    body: JSON.stringify({
+                                        user_id: userId,
+                                        id: id,
+                                        status: status, 
+                                        action: action,
+                                        section: section, 
+                                    }),
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        Swal.fire(
+                                            'Success!',
+                                            `User has been ${action.toLowerCase()} from Section: ${section} successfully!`,
+                                            'success'
+                                        ).then(() => {
+                                            fetchUserData();
+                                        });
+                                    } else {
+                                        console.error('Error updating user status:', data.error);
+                                        Swal.fire(
+                                            'Error!',
+                                            'There was an issue updating the status.',
+                                            'error'
+                                        );
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error updating status:', error);
+                                    Swal.fire(
+                                        'Error!',
+                                        'There was an error processing the request.',
+                                        'error'
+                                    );
+                                });
+                            }
+                                                function openModal(imageSrc) {
+                                        const modal = document.getElementById('imageModal');
+                                        const modalImage = document.getElementById('modalImage');
+                                        modalImage.src = imageSrc;  // Set the image source to the passed URL
+                                        modal.style.display = 'flex';  // Show the modal
+                                    }
+                                    function closeModal() {
+                                        const modal = document.getElementById('imageModal');
+                                        modal.style.display = 'none';
+                                    }
+                                    document.getElementById('closeModal').onclick = closeModal;
+                                    document.addEventListener('DOMContentLoaded', fetchUserData);
+                                        </script>
+                                    </body>
+                                </html>
+                            </div>
+                        </div>
+                            
+                        
+                         
+                </main>      
+            </div>
+        </div>
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+      

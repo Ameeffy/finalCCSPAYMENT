@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Admin Payment</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>  
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> 
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    </head>
+<style>
+.custom-heading {
+    color: #25330f;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 30px;
+    text-transform: uppercase;
+}
+</style>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center justify-content-between px-3">
+            <!-- Left Section -->
+            <div class="d-flex align-items-center">
+                <!-- Sidebar Toggle -->
+                <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                    <i class="fas fa-bars" style="color: rgb(255, 255, 255);"></i>
+                </button>
+              
+                <div class="logo me-2">
+                    <img src="img/logo.png" alt="Logo" height="40">
+                </div>
+        
+                <!-- Organization Info -->
+                <div id="organizationInfo" class="d-flex flex-grow-1">
+                    <!-- Organization Name will be inserted here -->
+                </div>
+                <h2 class="college-title mb-0" style="color: rgb(255, 255, 255); font-size: 20px;">COLLEGE OF COMPUTING STUDIES</h2>
+
+            </div>
+        
+            <!-- Right Section -->
+            <div class="d-flex align-items-center">
+              
+                <div class="flex-grow-1 p-4 d-flex align-items-center">
+                    <div class="d-flex justify-content-between w-100">
+                        <h1 style="color: #ffffff; text-decoration: none; font-size: 20px; margin-top: 0 !important; margin-bottom: 0 !important;">Welcome, <span id="adviserName"></span></h1>
+                    </div>
+                </div>
+
+                
+        
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x" style="color: #ffffff;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: #25330f;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                        width: 110px !important; 
+                        min-width: 110px !important; 
+                        background-color: #ffffff; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        height: auto;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                        padding: 0;">
+                        <li>
+                            <a class="dropdown-item" href="#" id="logout" style="
+                                display: flex; 
+                                align-items: center; 
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                height: auto;
+                                border-bottom: 1px solid #ddd; 
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-sign-out-alt" style="margin-right: 8px; color: inherit;"></i> Sign Out
+                            </a>
+                           
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+                <script>
+  document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                window.location.href = 'adminlogin.html';
+                return;
+            }
+
+            // Fetch adviser details
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/adviser/details', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch adviser details');
+                }
+
+                const adviser = await response.json();
+                document.getElementById('adviserName').textContent = `${adviser.firstname} ${adviser.middlename} ${adviser.lastname}`;
+            } catch (error) {
+                console.error('Error fetching adviser details:', error);
+                Swal.fire('Error', 'Unable to load adviser details.', 'error');
+            }
+        });
+
+        // Logout
+        document.getElementById('logout').addEventListener('click', () => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to logout?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Yes, Logout',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('token');
+                    window.location.href = 'adminlogin.html';
+                }
+            });
+        });
+        </script>
+   
+    
+
+
+   <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+
+                    <!-- Overview -->
+                    <div class="sb-sidenav-menu-heading">Overview</div>
+                    <a class="nav-link" href="adviser-home.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+
+                    <!-- Payment Management -->
+                    <div class="sb-sidenav-menu-heading">Payment Management</div>
+                    <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="adviser-payments.html">Review and Approval</a>
+                            <a class="nav-link" href="adviser-allpayments.html">Management Record</a>
+                            <a class="nav-link" href="adviser-payments-reports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <!-- QR-Code Management -->
+                    <div class="sb-sidenav-menu-heading">QR-Code Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseQrCode" aria-expanded="false" aria-controls="collapseQrCode">
+                        <div class="sb-nav-link-icon"><i class="fas fa-qrcode"></i></div>
+                        QR-Code
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseQrCode" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="adviser-order.html">Review and Approval</a>
+                            <a class="nav-link" href="adviser-allorders.html">Management Record</a>
+                            <a class="nav-link" href="adviser-order-reports.html">Reports</a>
+                        </nav>
+                    </div>
+                    <div class="sb-sidenav-menu-heading">Transaction Overview</div>
+        
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                                Collection
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseNew" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adviser-alltransactions.html">Overview</a>
+                                    <a class="nav-link" href="adviser-transactionpaymentreports.html">Reports</a>
+                                </nav>
+                            </div>
+        
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew1" aria-expanded="false" aria-controls="collapsePayments">
+                                <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>
+                                Orders
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseNew1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adviser-allordertransactions.html">Overview</a>
+                                    <a class="nav-link" href="adviser-allordertransactionsreports.html">Reports</a>
+                                </nav>
+                            </div>
+                    <div class="sb-sidenav-menu-heading">Organization Overview</div>
+                    <a class="nav-link" href="adviser-academic-list.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Academic List
+                    </a>
+                    <div class="sb-sidenav-menu-heading">transaction Summary</div>
+                    <a class="nav-link" href="adviser-transactions-summary.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Overview
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-5"></h1>
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4" style="padding: 20px;">
+                                    <ol class="breadcrumb mb-4">
+                                        <li class="breadcrumb-item" style="font-style: italic;">Payment</li>
+                                        <li class="breadcrumb-item active" style="font-style: italic;">Review And Approval</li>
+                                    </ol>  
+                                    <table class="custom-table" style="  border-bottom: 1px solid #e0e0e0 !important;">
+                                        <thead>
+                                            <tr>
+                                                <th>Organization</th>
+                                                <th>Name</th>
+                                                <th>Price</th>
+                                                <th>Status</th>
+                                            <th>Date</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="paymentTableBody">
+                                            <!-- Payments will be dynamically inserted here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="customReportModal" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5>Report Payment</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="reportForm">
+                                            <p>Select a reason for reporting:</p>
+                                            <div>
+                                                <label><input type="radio" name="reason" value="Payment is too high"> Payment is too high</label><br>
+                                                <label><input type="radio" name="reason" value="Invalid payment details"> Invalid payment details</label><br>
+                                                <label><input type="radio" name="reason" value="Suspicious activity"> Suspicious activity</label><br>
+                                                <label><input type="radio" name="reason" value="Other"> Other</label>
+                                            </div>
+                                            <textarea id="description" rows="3" placeholder="Additional description (optional)"></textarea>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button id="submitReport">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="modal fade" id="updateFeesModal" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5>Update Fees and Prices</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="feesForm">
+                                            <div id="feesSection"></div>
+                                            <button type="button" id="addFeeButton">Add More Fees</button>
+                                            <p>Total Price: <span id="totalPrice">0.00</span></p>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button id="submitFeesUpdate">Update Fees</button>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="modal fade" id="viewMoreModal" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 70%;">
+                                    <div class="modal-content">
+                                        <!-- Dark-themed Header -->
+                                        <div class="modal-header">
+                                            <h5 class="modal-title d-flex align-items-center">
+                                                <i class="bi bi-info-circle me-2 fs-2"></i> 
+                                                <span>Payment Details</span>
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="refreshTable()"></button>
+                                        </div>
+                            
+                                        <!-- Body Section -->
+                                        <div class="modal-body p-4" id="viewMoreContent">
+                                            <!-- Payment details will be dynamically populated here -->
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="modal fade" id="commentModal" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Comment on Payment</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="hidden" id="commentPaymentId">
+                                            <textarea id="paymentComment" class="form-control" rows="4" placeholder="Enter your comment..."></textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button id="submitComment" class="btn btn-primary">Submit Comment</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                            
+                            
+                            
+                            let feeCount = 0;
+                        
+                                function openFeesModal(paymentId) {
+                                    const modal = document.getElementById('updateFeesModal');
+                                    modal.setAttribute('data-payment-id', paymentId);
+                                    const bootstrapModal = new bootstrap.Modal(modal);
+                                    bootstrapModal.show();
+                                
+                                    fetch(`http://localhost:5000/api/auth/adviser/payment/${paymentId}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            const feesSection = document.getElementById('feesSection');
+                                            feesSection.innerHTML = ''; // Clear previous content
+                                            feeCount = 0;
+                                
+                                            if (data.success && data.fees.length > 0) {
+                                                data.fees.forEach((fee) => {
+                                                    feeCount++;
+                                                    addFeeField(feeCount, fee.name, fee.price);
+                                                });
+                                            } else {
+                                                feesSection.innerHTML = '<p>No fees available for this payment.</p>';
+                                            }
+                                
+                                            updateTotalPrice(); // Calculate total price from fetched data
+                                        })
+                                        .catch(err => {
+                                            Swal.fire('Error', 'Failed to fetch payment details.', 'error');
+                                            console.error('Error fetching payment details:', err);
+                                        });
+                                }
+                                
+                                function closeFeesModal() {
+                                    document.getElementById('updateFeesModal').style.display = 'none';
+                                }
+                                
+                                function addFeeField(index, feeName = '', feePrice = '') {
+                                    const feesSection = document.getElementById('feesSection');
+                                    const feeDiv = document.createElement('div');
+                                    feeDiv.setAttribute('id', `fee${index}`);
+                                
+                                    feeDiv.innerHTML = `
+                                        <label>Fee ${index}:</label>
+                                        <input type="text" id="fees${index}" value="${feeName}" placeholder="Fee Name">
+                                        <label>Price for Fee ${index}:</label>
+                                        <input type="number" id="pricefees${index}" value="${feePrice}" step="0.01" placeholder="Fee Price" 
+                                               oninput="updateTotalPrice()">
+                                        <button type="button" onclick="removeFeeField(${index})">Remove</button>
+                                    `;
+                                
+                                    feesSection.appendChild(feeDiv);
+                                }
+                                
+                                function removeFeeField(index) {
+                                    const feeDiv = document.getElementById(`fee${index}`);
+                                    if (feeDiv) feeDiv.remove();
+                                    updateTotalPrice();
+                                }
+                                
+                                function updateTotalPrice() {
+                                    let total = 0;
+                                    for (let i = 1; i <= feeCount; i++) {
+                                        const priceField = document.getElementById(`pricefees${i}`);
+                                        if (priceField && priceField.value) {
+                                            total += parseFloat(priceField.value);
+                                        }
+                                    }
+                                    document.getElementById('totalPrice').textContent = total.toFixed(2);
+                                }
+                                
+                                document.getElementById('submitFeesUpdate').addEventListener('click', async () => {
+                            const paymentId = document.getElementById('updateFeesModal').getAttribute('data-payment-id');
+                            const fees = [];
+                        
+                            for (let i = 1; i <= feeCount; i++) {
+                                const feeName = document.getElementById(`fees${i}`)?.value;
+                                const feePrice = document.getElementById(`pricefees${i}`)?.value;
+                                if (feeName && feePrice) {
+                                    fees.push({ name: feeName, price: parseFloat(feePrice) }); // Ensure proper structure
+                                }
+                            }
+                        
+                            if (!fees.length) {
+                                return Swal.fire('Error', 'Please add at least one fee.', 'error');
+                            }
+                        
+                            // Show a confirmation dialog
+                            const confirmation = await Swal.fire({
+                                title: 'Are you sure?',
+                                text: 'Do you want to update the fees?',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Yes, update it!',
+                                cancelButtonText: 'No, cancel!',
+                                confirmButtonColor: '#28a745', // Green for confirm
+                                cancelButtonColor: '#dc3545', // Red for cancel
+                            });
+                        
+                            if (!confirmation.isConfirmed) {
+                                return; // Exit if the user cancels the confirmation dialog
+                            }
+                        
+                            // Show loading screen
+                            Swal.fire({
+                                title: 'Updating Fees',
+                                text: 'Please wait while we update the fees.',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                didOpen: Swal.showLoading,
+                            });
+                        
+                            try {
+                                const response = await fetch(`http://localhost:5000/api/auth/adviser/payment/fees/update`, {
+                                    method: 'PUT',
+                                    headers: {
+                                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({ paymentId, fees }),
+                                });
+                        
+                                if (response.ok) {
+                                    const result = await response.json();
+                                    Swal.fire('Success', result.message || 'Fees updated successfully.', 'success').then(() => {
+                                        closeFeesModal();
+                                        location.reload();
+                                    });
+                                } else {
+                                    const error = await response.json();
+                                    Swal.fire('Error', error.message || 'Failed to update fees.', 'error');
+                                }
+                            } catch (err) {
+                                Swal.fire('Error', 'An error occurred while updating fees.', 'error');
+                            }
+                        });
+                        
+                        async function fetchPayments()  {
+                            const token = localStorage.getItem('token');
+                            const paymentTableBody = document.getElementById('paymentTableBody');
+                            paymentTableBody.innerHTML = '';
+                        
+                            if (!token) return (window.location.href = 'adminlogin.html');
+                        
+                            try {
+                                const response = await fetch('http://localhost:5000/api/auth/adviser/payments', {
+                                    headers: { Authorization: `Bearer ${token}` },
+                                });
+                        
+                                const { payments } = await response.json();
+                                
+                                payments.forEach(payment => {
+                                    // Build the "View More" button with a conditional "new!" indicator
+                                    const viewMoreButton = `
+                                       <button 
+    class="button-view-more" 
+    onclick="viewMore('${payment.id}', '${JSON.stringify(payment).replace(/"/g, '&quot;').replace(/'/g, "\\'")}')" 
+    style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 5px 8px; cursor: pointer; transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#0056b3'" 
+    onmouseout="this.style.backgroundColor='#007bff'">
+    <i class="fas fa-eye"></i>
+    ${payment.priceandfees_status === "New prices and fees" 
+        ? '<span style="color:red; font-size:0.75em; margin-left:5px;">new!</span>' 
+        : ''}
+</button>
+
+                                    `;
+                        
+                                    const row = document.createElement('tr');
+                                    row.innerHTML = `
+                                        <td>${payment.organization_name}</td>
+                                        <td>${payment.name || 'N/A'}</td>
+                                        <td>₱${payment.price || '0.00'}</td>
+                                        <td>${payment.adviser_status || 'N/A'}</td>
+                                       <td>${new Date(payment.created_at).toLocaleDateString('en-PH', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                })}</td>
+                                        
+                                        <td>
+                                            ${
+                                                payment.adviser_status === 'Pending'
+                                                    ? `
+                                                        <button 
+    class="btn btn-success btn-sm" 
+    onclick="updatePaymentStatus(${payment.id}, 'Accepted')" 
+    style="background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#218838'" 
+    onmouseout="this.style.backgroundColor='#28a745'">
+    <i class="fas fa-check-circle"></i>
+</button>
+
+<button 
+    class="btn btn-danger btn-sm" 
+    onclick="updatePaymentStatus(${payment.id}, 'Declined')" 
+    style="background-color: #dc3545; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#c82333'" 
+    onmouseout="this.style.backgroundColor='#dc3545'">
+    <i class="fas fa-times-circle"></i>
+</button>
+
+<button 
+    class="btn btn-info btn-sm" 
+    onclick="openCommentModal(${payment.id})" 
+    style="background-color: #17a2b8; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#138496'" 
+    onmouseout="this.style.backgroundColor='#17a2b8'">
+    <i class="fas fa-comment-alt"></i>
+</button>
+
+                                                      `
+                                                    : ''
+                                            }
+                                            ${
+                                                payment.adviser_status === 'Declined' && !payment.is_reported
+                                                    ? `<button class="btn btn-warning btn-sm" onclick="openModal(${payment.id})">Report</button>`
+                                                    : payment.adviser_status === 'Declined' && payment.is_reported
+                                                    ? `<i>Payment Reported</i>`
+                                                    : ''
+                                            }
+                                            ${viewMoreButton}
+                                        </td>
+                                    `;
+                                    paymentTableBody.appendChild(row);
+                                });
+                            } catch (error) {
+                                console.error('Error fetching payments:', error);
+                                paymentTableBody.innerHTML = '<tr><td colspan="6" class="text-center">Failed to load payments.</td></tr>';
+                            }
+                        }
+                        function openCommentModal(paymentId) {
+                            document.getElementById('commentPaymentId').value = paymentId;
+                            const modal = new bootstrap.Modal(document.getElementById('commentModal'));
+                            modal.show();
+                        }
+                        
+                        document.getElementById('submitComment').addEventListener('click', async () => {
+                            const paymentId = document.getElementById('commentPaymentId').value;
+                            const comment = document.getElementById('paymentComment').value;
+                        
+                            if (!comment) {
+                                Swal.fire('Error', 'Please enter a comment.', 'error');
+                                return;
+                            }
+                        
+                            // Insert confirmation message before submitting
+                            Swal.fire({
+                                title: 'Confirm Submission',
+                                text: 'Are you sure you want to submit this comment?',
+                                icon: 'question',
+                                showCancelButton: true,
+                                confirmButtonText: 'Yes, submit it!',
+                                cancelButtonText: 'Cancel'
+                            }).then(async (result) => {
+                                if (result.isConfirmed) {
+                                    // Show loading message
+                                    Swal.fire({
+                                        title: 'Submitting...',
+                                        html: 'Please wait...',
+                                        allowOutsideClick: false,
+                                        didOpen: () => {
+                                            Swal.showLoading();
+                                        }
+                                    });
+                        
+                                    try {
+                                        const response = await fetch(`http://localhost:5000/api/auth/payments/${paymentId}/comments`, {
+                                            method: 'POST',
+                                            headers: {
+                                                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                                                'Content-Type': 'application/json',
+                                            },
+                                            body: JSON.stringify({ paymentId, comment }),
+                                        });
+                        
+                                        if (!response.ok) throw new Error('Failed to submit comment.');
+                        
+                                        Swal.fire('Success', 'Comment added successfully.', 'success').then(() => location.reload());
+                                    } catch (err) {
+                                        Swal.fire('Error', 'Failed to submit comment.', 'error');
+                                    }
+                                }
+                            });
+                        });
+                        
+                                async function viewMore(paymentId, paymentData) {
+                                    try {
+                                        const payment = JSON.parse(paymentData);
+    const feesAndPrices = payment.fees_and_prices
+    ? `<ul class="list-group list-group-flush" style="padding: 0;">` + 
+        payment.fees_and_prices.split(', ').map(fee => 
+            `<li class="list-group-item" style="font-size: 14px; border: none;">${fee}</li>`
+        ).join('') + 
+      `</ul>`
+    : `<ul class="list-group list-group-flush" style="padding: 0;">
+          <li class="list-group-item text-muted" style="font-size: 14px; border: none;">No fees available</li>
+        </ul>`;
+
+            const modalContent = `
+<div class="container-fluid">
+    <div class="row g-3">
+        <!-- Left Column -->
+        <div class="col-md-4 border-end">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Name</h6>
+                    <p class="text-success fw-bold mb-0">${payment.name}</p>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Payment Type</h6>
+                    <p class="text-danger fw-bold mb-0">${payment.payment_type}</p>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Scope</h6>
+                    <p class="text-secondary mb-0">${payment.year ? `Academic Year ${payment.year}` : payment.semester_name}</p>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Created By</h6>
+                    <p class="text-secondary mb-0">${payment.created_by_name}<br>
+                    <small class="text-muted">${payment.organization_name}</small></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Column -->
+        <div class="col-md-4 border-end">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Adviser Status</h6>
+                    <span class="${payment.adviser_status === 'Accepted' ? 'text-success fw-bold' : 
+                                payment.adviser_status === 'Declined' ? 'text-danger fw-bold' : 'text-warning fw-bold'}">
+                        ${payment.adviser_status} 
+                        ${payment.adviser_name ? `<small class="text-muted">by ${payment.adviser_name}</small>` : ''}
+                    </span>
+                </div>
+            </div>
+
+            ${payment.adviser_status !== 'Declined' ? `
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Admin Status</h6>
+                    <span class="${payment.status === 'Accepted' ? 'text-success fw-bold' : 
+                                payment.status === 'Declined' ? 'text-danger fw-bold' : 'text-warning fw-bold'}">
+                        ${payment.status} 
+                        ${payment.accepted_by_name ? `<small class="text-muted">by ${payment.accepted_by_name}</small>` : ''}
+                    </span>
+                </div>
+            </div>` : ''}
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Price</h6>
+                    <p class="text-success fw-bold mb-0">₱${payment.price}</p>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Description</h6>
+                    <p class="mb-0 small text-muted">${payment.description || 'No description provided'}</p>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-12">
+                    <h6 class="text-muted">Fees Breakdown</h6>
+                    <ul class="list-group list-group-numbered list-group-flush" style="max-height: 150px; overflow-y: auto;">
+                        ${feesAndPrices}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column (QR Code) -->
+        <div class="col-md-4">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">QR Code</h6>
+                    ${payment.qrcode_picture ? `
+                    <div class="mt-1">
+                        <img src="${payment.qrcode_picture}" 
+                             alt="QR Code" 
+                             class="img-fluid w-100 p-2"
+                             style="border: 1px solid #ddd; 
+                                    border-radius: 5px;">
+                    </div>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+`;        
+                        
+                                        document.getElementById('viewMoreContent').innerHTML = modalContent;
+                                        const viewMoreModal = new bootstrap.Modal(document.getElementById('viewMoreModal'));
+                                        viewMoreModal.show();
+                                        
+                                        // Mark prices and fees as seen
+                                        await fetch('http://localhost:5000/api/auth/payments/mark-seen', {
+                                            method: 'POST',
+                                            headers: {
+                                                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                                                'Content-Type': 'application/json',
+                                            },
+                                            body: JSON.stringify({ paymentId })
+                                        });
+                                    } catch (error) {
+                                        console.error('Error displaying modal:', error);
+                                        Swal.fire('Error', 'Failed to display payment details.', 'error');
+                                    }
+                                }
+                                
+                        
+                        
+                        
+                        
+                        
+                                // Logout logic
+                                document.getElementById('logout').addEventListener('click', () => {
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: 'Do you want to logout?',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#28a745',
+                                        cancelButtonColor: '#dc3545',
+                                        confirmButtonText: 'Yes, Logout',
+                                        cancelButtonText: 'Cancel',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            localStorage.removeItem('token');
+                                            window.location.href = 'adminlogin.html';
+                                        }
+                                    });
+                                });
+                        
+                                
+                        
+                                function updatePaymentStatus(paymentId, status) {
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: `Do you want to ${status.toLowerCase()} this payment?`,
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#28a745', // Green for confirm
+                                cancelButtonColor: '#dc3545', // Red for cancel
+                                confirmButtonText: 'Yes',
+                                cancelButtonText: 'No',
+                            }).then(async (result) => {
+                                if (result.isConfirmed) {
+                                    const token = localStorage.getItem('token');
+                                    if (!token) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Unauthorized',
+                                            text: 'You are not logged in. Redirecting to login...',
+                                        }).then(() => {
+                                            window.location.href = 'adminlogin.html';
+                                        });
+                                        return;
+                                    }
+                        
+                                    try {
+                                        // Show loading screen
+                                        Swal.fire({
+                                            title: 'Processing...',
+                                            html: 'Please wait while we update the payment status.',
+                                            allowOutsideClick: false,
+                                            allowEscapeKey: false,
+                                            didOpen: () => {
+                                                Swal.showLoading();
+                                            },
+                                        });
+                        
+                                        const response = await fetch(`http://localhost:5000/api/auth/adviser/payment/${paymentId}/status`, {
+                                            method: 'PUT',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': `Bearer ${token}`,
+                                            },
+                                            body: JSON.stringify({ adviser_status: status }),
+                                        });
+                        
+                                        Swal.close(); // Close the loading screen
+                        
+                                        if (!response.ok) {
+                                            const errorData = await response.json();
+                                            throw new Error(errorData.message || 'Failed to update payment status');
+                                        }
+                        
+                                        const data = await response.json();
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Success',
+                                            text: data.message,
+                                        }).then(() => {
+                                            window.location.reload(); // Reload the page to reflect changes
+                                        });
+                                    } catch (error) {
+                                        console.error('Error updating payment status:', error);
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: error.message || 'Failed to update payment status.',
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                        function openModal(paymentId) {
+                            const modal = document.getElementById('customReportModal');
+                            modal.setAttribute('data-payment-id', paymentId);
+                            const bootstrapModal = new bootstrap.Modal(modal); // Initialize Bootstrap modal
+                            bootstrapModal.show();
+                        }
+                        
+                        
+                        function closeModal() {
+                            const modal = document.getElementById('customReportModal');
+                            modal.style.display = 'none';
+                        }
+                        
+                        document.getElementById('submitReport').addEventListener('click', async () => {
+                            const paymentId = document.getElementById('customReportModal').getAttribute('data-payment-id');
+                            const reason = document.querySelector('input[name="reason"]:checked')?.value;
+                            const description = document.getElementById('description').value.trim();
+                        
+                            if (!reason) {
+                                Swal.fire('Error', 'Reason is required.', 'error');
+                                return;
+                            }
+                        
+                            // Show confirmation dialog
+                            const confirmation = await Swal.fire({
+                                title: 'Are you sure?',
+                                text: 'Do you want to submit this report?',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#28a745',
+                                cancelButtonColor: '#dc3545',
+                                confirmButtonText: 'Yes, submit it!',
+                                cancelButtonText: 'No, cancel!',
+                            });
+                        
+                            if (confirmation.isConfirmed) {
+                                // Show loading overlay
+                                Swal.fire({
+                                    title: 'Submitting Report...',
+                                    html: 'Please wait while your report is being submitted.',
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    didOpen: () => Swal.showLoading(),
+                                });
+                        
+                                try {
+                                    const response = await fetch('http://localhost:5000/api/auth/adviser/payments/report', {
+                                        method: 'POST',
+                                        headers: {
+                                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify({ paymentId, reason, description }),
+                                    });
+                        
+                                    const result = await response.json();
+                                    if (response.ok) {
+                                        Swal.fire({
+                                            title: 'Success',
+                                            text: result.message,
+                                            icon: 'success',
+                                            confirmButtonText: 'OK',
+                                        }).then(() => {
+                                            closeModal(); // Close the modal
+                                            location.reload(); // Reload the page to reflect changes
+                                        });
+                                    } else {
+                                        Swal.fire('Error', result.message || 'Failed to submit the report.', 'error');
+                                    }
+                                } catch (error) {
+                                    console.error('Error submitting report:', error);
+                                    Swal.fire('Error', 'An error occurred while submitting the report.', 'error');
+                                }
+                            }
+                        });
+                        function refreshTable() {
+                                    fetchPayments();
+                                }
+                        
+                                document.addEventListener('DOMContentLoaded', fetchPayments);
+                            </script>
+                        
+                                </div>
+                                </div>
+                    
+                        <script>
+                            document.addEventListener('DOMContentLoaded', async () => {
+                                const token = localStorage.getItem('token');
+                    
+                                if (!token) {
+                                    window.location.href = 'adminlogin.html';
+                                    return;
+                                }
+                    
+                                // Fetch adviser details
+                                try {
+                                    const response = await fetch('http://localhost:5000/api/auth/adviser/details', {
+                                        method: 'GET',
+                                        headers: {
+                                            'Authorization': `Bearer ${token}`,
+                                        },
+                                    });
+                    
+                                    if (!response.ok) {
+                                        throw new Error('Failed to fetch adviser details');
+                                    }
+                    
+                                    const adviser = await response.json();
+                                    document.getElementById('adviserName').textContent = `${adviser.firstname} ${adviser.middlename} ${adviser.lastname}`;
+                                } catch (error) {
+                                    console.error('Error fetching adviser details:', error);
+                                    Swal.fire('Error', 'Unable to load adviser details.', 'error');
+                                }
+                            });
+                    
+                            // Logout
+                            document.getElementById('logout').addEventListener('click', () => {
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: 'Do you want to logout?',
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#28a745',
+                                    cancelButtonColor: '#dc3545',
+                                    confirmButtonText: 'Yes, Logout',
+                                    cancelButtonText: 'Cancel',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        localStorage.removeItem('token');
+                                        window.location.href = 'adminlogin.html';
+                                    }
+                                });
+                            });
+                        </script>   
+                                </div>  
+                            </div>
+                        </div>   
+                    </div>  
+                </main>      
+            </div>
+        </div>
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>

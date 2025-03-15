@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Admin Payment</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>   
+    </head>
+<style>
+.form-container {
+    margin: 10px auto;
+    width: 500px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid #e0e0e0; /* Soft, light border color */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Soft shadow effect */
+
+}
+    
+
+
+.form-section {
+    display: none;
+}
+
+.form-section.active {
+    display: block;
+}
+
+.step-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.step-indicator span {
+    width: 30px;
+    height: 30px;
+    background-color: #ccc;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+.active-step {
+    background-color: #034b03;
+    color: #fff;
+}
+.btn-submit {
+  padding: 5px 15px;
+  background-color: #1B3A28;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+.btn-submit:hover {
+  background-color: #027b02; 
+}
+
+.btn-next, .btn-back, .btn-submit {
+    padding: 5px 15px;
+  background-color: #1B3A28;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+   
+}
+
+.btn-next:hover, .btn-back:hover, .btn-submit:hover {
+    background-color: #027b02;
+}
+
+</style>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center">
+            <!-- Left Section -->
+            <div class="d-flex align-items-center">
+                <!-- Sidebar Toggle -->
+                <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                    <i class="fas fa-bars" style="color: rgb(255, 255, 255);"></i>
+                </button>
+                
+                <!-- Logo -->
+                <div class="logo me-2">
+                    <img src="img/logo.png" alt="Logo" height="40">
+                </div>
+                
+                <!-- College Title -->
+                <h2 class="college-title mb-0" style="color: black; font-size: 20px;">COLLEGE OF COMPUTING STUDIES</h2>
+            </div>
+    
+            <!-- Right Section -->
+            <div class="ms-auto d-flex align-items-center">
+                <li id="profile-item" class="dropdown-item me-3">
+                    <a href="#" style="color: #25330f; text-decoration: none;">Loading...</a>
+                </li>
+    
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x" style="color: #ffffff;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: #ffffff;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                        width: 110px; 
+                        min-width: 110px; 
+                        background-color: #ffffff; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                        padding: 0;">
+                        <li>
+                            <a class="dropdown-item text-center" href="#" id="logout" style="
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                border-bottom: 1px solid #ddd; 
+                                border-radius: 8px;
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-sign-out-alt me-2" style="color: inherit;"></i> Sign Out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    
+        <!-- Scripts -->
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                const token = localStorage.getItem('token');
+    
+                if (!token) {
+                    window.location.href = 'adminlogin.html';
+                    return;
+                }
+    
+                try {
+                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+    
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch user data');
+                    }
+    
+                    const userData = await response.json();
+                    document.getElementById("profile-item").innerHTML = 
+                        `<a style="color: #25330f; text-decoration: none;" href="admin-info.html">${userData.username} (${userData.email})</a>`;
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    document.getElementById("profile-item").innerHTML = `<a href="#">Error loading profile</a>`;
+                }
+            });
+    
+            document.getElementById('logout').addEventListener('click', function(event) {
+                event.preventDefault();
+    
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to log out?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, log out!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem('token');
+                        Swal.fire({
+                            title: 'Logged Out!',
+                            text: 'You have been logged out successfully.',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = 'adminlogin.html';
+                        });
+                    }
+                });
+            });
+        </script>
+   
+    
+
+
+   <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                   
+                    <div class="sb-sidenav-menu-heading">Overview</div>
+                    <a class="nav-link" href="admindashboard.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+                    
+                    <div class="sb-sidenav-menu-heading">System Controls</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Semester
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+
+                            <a class="nav-link" href="admincontrol.html">Management</a>
+                            <a class="nav-link" href="admincontrolOrganizationUsers.html">Payments</a>
+                            <a class="nav-link" href="adminallsemesterlogs.html">History</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-allpayments.html">Overview</a>
+                            <a class="nav-link" href="admin-payment.html">Management</a>
+                            <a class="nav-link" href="admin-organization-active-payments.html">Active Payment</a>
+                            <a class="nav-link" href="admin-payment-reports.html">Reports</a>
+                            <a class="nav-link" href="admin-allpaymentslogs.html">History</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseGcash" aria-expanded="false" aria-controls="collapseGcash">
+                        <div class="sb-nav-link-icon"><i class="fas fa-qrcode"></i></div>
+                        QR-Codes
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseGcash" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-gcashorder.html">Overview</a>
+                            <a class="nav-link" href="admin-order.html">Management</a>
+                            <a class="nav-link" href="admin-gcashorder-reports.html">Reports</a>
+                            <a class="nav-link" href="admin-gcashorderlogs.html">History</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Transaction Overview</div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseNew" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-alltransactions.html">Overview</a>
+                            <a class="nav-link" href="admin-transactionpaymentreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew1" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Orders
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseNew1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-allordertransactions.html">Overview</a>
+                            <a class="nav-link" href="admin-allordertransactionsreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">User Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                        Accounts
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+
+                   
+
+                    <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                Student
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-student.html">Overview</a>
+                                    <a class="nav-link" href="adminaccountsMain.html">Enrollment Status</a>
+                                    <a class="nav-link" href="adminaccountsReportsuser.html">Reports</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                Adviser
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-adviser.html">Overview</a>
+                                    
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAdmin" aria-expanded="false" aria-controls="pagesCollapseAdmin">
+                                Admin
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAdmin" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-admin.html">Overview</a>
+                                    <a class="nav-link" href="adminaccounts-adminlogs.html">History</a>     
+                                </nav>
+                            </div>                
+                        </nav>
+                    </div> 
+                    <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRegister" aria-expanded="false" aria-controls="collapseRegister">
+                        <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
+                        Register 
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseRegister" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="register.html">Student/Adviser</a>
+                            <a class="nav-link" href="adminaccregister.html">Admin</a>
+                        </nav>
+                    </div>
+                        
+                    <div class="sb-sidenav-menu-heading">Organization Management</div>
+                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrg" aria-expanded="false" aria-controls="collapseOrg">
+                        <div class="sb-nav-link-icon"><i class="fas fa-building"></i></div>
+                        Organization
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrg" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admincontrolOrganization.html">Overview</a>
+                            <a class="nav-link" href="Admin-organizationsYear.html">Active List</a>
+                            <a class="nav-link" href="admin-organization-all-logs.html">History</a>
+                        </nav>
+                    </div>
+                    <div class="sb-sidenav-menu-heading">transaction Summary</div>
+                    <a class="nav-link" href="admin-transactions-summary.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Overview
+                    </a>
+                </div>
+            </div> 
+        </nav>
+    </div>
+
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-5"></h1>
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4" style="padding: 20px;">
+                                    <ol class="breadcrumb mb-4">
+                                        <li class="breadcrumb-item" style="font-style: italic;">Register</li>
+                                        
+                                        <li class="breadcrumb-item active" style="font-style: italic;">Student & Adviser</li>
+                                    </ol>
+                                    
+                                    <form id="registerForm">
+                                        <div class="form-container">
+                                            <!-- Step indicators -->
+                                            <div class="step-indicator">
+                                                <span id="step1" class="active-step">1</span>
+                                                <span id="step2">2</span>
+                                                <span id="step3">3</span>
+                                            </div>
+                                        
+                                            <!-- Account Information (Step 1) -->
+                                            <div class="form-section" id="step1Form">
+                                                <h4>Account Information</h4>
+                                                <div class="form-group">
+                                                    <label for="username">Username:</label>
+                                                    <input type="text" id="username" class="form-control" name="username" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="email">Email:</label>
+                                                    <input type="email" id="email" class="form-control" name="email" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="password">Password:</label>
+                                                    <input type="password" id="password" class="form-control" name="password" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="confirmPassword">Confirm Password:</label>
+                                                    <input type="password" id="confirmPassword" class="form-control" name="confirmPassword" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="role">Role:</label>
+                                                    <select id="role" class="form-control" name="role" required>
+                                                        <option value="Student">Student</option>
+                                                        <option value="Teacher">Teacher</option>
+                                                    </select>
+                                                </div>
+                                                <br>
+                                                
+                                               
+                                                <!-- Step 1 Next Button -->
+                                                <button type="button" class="btn-next" onclick="showNextStep(2)">Next</button>
+                                            </div>
+                                        
+                                            <!-- Personal Information (Step 2) -->
+                                            <div class="form-section" id="step2Form" style="display:none;">
+                                                <h4>Additional Information</h4>
+                                                <div class="form-group">
+                                                    <label for="course" id="course-label">Course:</label>
+                                                    <select id="course" class="form-control" name="course" required>
+                                                        <option value="BSCS">Bachelor of Science in Computer Science</option>
+                                                        <option value="BSIT">Bachelor of Science in Information Technology</option>
+                                                        <option value="ACT">Associate in Computer Technology</option>
+                                                        <option value="MIT">Master in Information Technology</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group" id="position-container" style="display: none;">
+                                                    <label for="position">Position:</label>
+                                                    <select id="position" class="form-control" name="position">
+                                                        <option value="College Instructor">College Instructor</option>                                                       
+                                                        <option value="Assistant Professor">Assistant Professor</option>
+                                                        <option value="Associate Professor">Associate Professor</option>
+                                                        <option value="Professor">Professor</option>
+                                                    </select>
+                                                </div>
+                                                
+                                                <div class="form-group" id="section-container">
+                                                    <label for="section">Section:</label>
+                                                    <select id="section" class="form-control" name="section" required>
+                                                        <option value="1A">1A</option>
+                                                        <option value="1B">1B</option>
+                                                        <option value="1C">1C</option>
+                                                        <option value="2A">2A</option>
+                                                        <option value="2B">2B</option>
+                                                        <option value="2C">2C</option>
+                                                        <option value="3A">3A</option>
+                                                        <option value="3B">3B</option>
+                                                        <option value="3C">3C</option>
+                                                        <option value="4A">4A</option>
+                                                        <option value="4B">4B</option>
+                                                        <option value="4C">4C</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="idnumber">ID Number:</label>
+                                                    <input type="text" id="idnumber" class="form-control" name="idnumber" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="gender">Gender:</label>
+                                                    <select id="gender" class="form-control" name="gender" required>
+                                                        <option value="Male">Male</option>
+                                                        <option value="Female">Female</option>
+                                                    </select>
+                                                </div>
+                                               <br>
+                                                <!-- Step 2 Back Button -->
+                                                <button type="button" class="btn-back" onclick="showBackStep(1)">Back</button>
+
+                                                <!-- Step 2 Next Button -->
+                                                <button type="button" class="btn-next" onclick="showNextStep(3)">Next</button>
+                                            </div>
+                                        
+                                            <!-- Additional Information (Step 3) -->
+                                            <div class="form-section" id="step3Form" style="display:none;">
+                                                <h4>Personal Information</h4>
+                                                <div class="form-group">
+                                                    <label for="firstname">First Name:</label>
+                                                    <input type="text" id="firstname" class="form-control" name="firstname" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="lastname">Last Name:</label>
+                                                    <input type="text" id="lastname" class="form-control" name="lastname" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="middlename">Middle Name:</label>
+                                                    <input type="text" id="middlename" class="form-control" name="middlename">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="contactnumber">Contact Number:</label>
+                                                    <input type="text" id="contactnumber" class="form-control" name="contactnumber" required>
+                                                </div>
+                                                <!-- Step 3 Back Button -->
+                                                <button type="button" class="btn-back" onclick="showBackStep(2)">Back</button>
+                                                <button type="submit" class="btn-submit">Submit</button>
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
+                            
+                                </div>
+                            
+                            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+                            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                            
+                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                <script>
+    let isNavigatingBack = false;
+
+function showNextStep(step) {
+  // Hide all sections and show the target step
+  document.querySelectorAll('.form-section').forEach(section => {
+    section.style.display = 'none';
+  });
+  document.getElementById(`step${step}Form`).style.display = 'block';
+
+  // Update step indicators
+  document.querySelectorAll('.step-indicator span').forEach(span => {
+    span.classList.remove('active-step');
+  });
+  document.getElementById(`step${step}`).classList.add('active-step');
+
+  // Reset flag for forward navigation
+  isNavigatingBack = false;
+}
+
+function showBackStep(step) {
+  // Hide all sections and show the previous step
+  document.querySelectorAll('.form-section').forEach(section => {
+    section.style.display = 'none';
+  });
+  document.getElementById(`step${step}Form`).style.display = 'block';
+
+  // Update step indicators
+  document.querySelectorAll('.step-indicator span').forEach(span => {
+    span.classList.remove('active-step');
+  });
+  document.getElementById(`step${step}`).classList.add('active-step');
+
+  // Set flag for back navigation
+  isNavigatingBack = true;
+}
+
+document.getElementById('registerForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  // Skip submission if navigating back
+  if (isNavigatingBack) return;
+    // Collect form data
+    const formData = {
+        username: document.getElementById('username').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        password: document.getElementById('password').value.trim(),
+        confirmPassword: document.getElementById('confirmPassword').value.trim(),
+        idnumber: document.getElementById('idnumber').value.trim(),
+        course: document.getElementById('course').value,
+        section: document.getElementById('section').value,
+        firstname: document.getElementById('firstname').value.trim(),
+        lastname: document.getElementById('lastname').value.trim(),
+        middlename: document.getElementById('middlename').value.trim(),
+        contactnumber: document.getElementById('contactnumber').value.trim(),
+        gender: document.getElementById('gender').value,
+        role: document.getElementById('role').value,
+        position: document.getElementById('role').value === 'Teacher' 
+            ? document.getElementById('position').value 
+            : null
+    };
+
+    // Validation checks
+    const errorMessages = [];
+    if (formData.password !== formData.confirmPassword) {
+        errorMessages.push("Passwords do not match.");
+    }
+    if (!/^\d+$/.test(formData.idnumber)) {
+        errorMessages.push("ID Number must contain only numbers.");
+    }
+    if (!/^\d{11}$/.test(formData.contactnumber)) {
+        errorMessages.push("Contact Number must be 11 digits.");
+    }
+
+    // Show errors if any
+    if (errorMessages.length > 0) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Validation Error',
+            html: errorMessages.join('<br>')
+        });
+        return;
+    }
+
+    // Show confirmation dialog
+    Swal.fire({
+        title: 'Confirm Submission',
+        text: "Are you sure you want to submit the form?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#dc3545',
+        confirmButtonText: 'Yes, submit!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Submit to backend
+            fetch('http://localhost:5000/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Store email and role for OTP verification
+                    localStorage.setItem('userEmail', formData.email);
+                    localStorage.setItem('userRole', formData.role);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registration Successful!',
+                        text: 'Redirecting to email verification...'
+                    }).then(() => {
+                        window.location.href = "otpuserverification.html";
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Registration Failed',
+                        text: data.msg || 'An error occurred'
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to connect to the server'
+                });
+                console.error('API Error:', error);
+            });
+        }
+    });
+});
+
+// Initialize form on page load
+document.addEventListener('DOMContentLoaded', () => {
+    showNextStep(1); // Start at step 1
+
+    // Show/hide position field based on role selection
+    document.getElementById('role').addEventListener('change', function() {
+        document.getElementById('position-container').style.display = 
+            this.value === 'Teacher' ? 'block' : 'none';
+    });
+});
+                                    document.getElementById('role').addEventListener('change', function () {
+                                const role = this.value;
+                                const sectionContainer = document.getElementById('section-container');
+                                const courseLabel = document.getElementById('course-label');
+                                const positionContainer = document.getElementById('position-container');
+                            
+                                if (role === 'Teacher') {
+                                    // Show position dropdown and hide section
+                                    sectionContainer.style.display = 'none';
+                                    document.getElementById('section').required = false;
+                            
+                                    courseLabel.textContent = 'Department:';
+                                    positionContainer.style.display = 'block'; // Show the position dropdown
+                                } else {
+                                    // Show section and hide position dropdown
+                                    sectionContainer.style.display = 'block';
+                                    document.getElementById('section').required = true;
+                            
+                                    courseLabel.textContent = 'Course:';
+                                    positionContainer.style.display = 'none'; // Hide the position dropdown
+                                }
+                            });
+                            
+                            // Initialize visibility and label on page load
+                            document.addEventListener('DOMContentLoaded', () => {
+                                const role = document.getElementById('role').value;
+                                const sectionContainer = document.getElementById('section-container');
+                                const courseLabel = document.getElementById('course-label');
+                                const positionContainer = document.getElementById('position-container');
+                            
+                                if (role === 'Teacher') {
+                                    sectionContainer.style.display = 'none';
+                                    document.getElementById('section').required = false;
+                                    courseLabel.textContent = 'Department:';
+                                    positionContainer.style.display = 'block';
+                                } else {
+                                    sectionContainer.style.display = 'block';
+                                    document.getElementById('section').required = true;
+                                    courseLabel.textContent = 'Course:';
+                                    positionContainer.style.display = 'none';
+                                }
+                            });
+                            
+                            
+                            
+                            function goBack() {
+                                window.history.back();  // Goes to the previous page in the browser history
+                            }
+                            
+                            
+                            
+                            
+                            function fetchAllOrganizations() {
+                                fetch('http://localhost:5000/api/auth/organizations')
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const container = document.getElementById('allOrganizationsContainer');
+                                        if (data.length > 0) {
+                                            data.forEach(org => {
+                                                const row = document.createElement('tr');
+                                                row.innerHTML = `
+                                                    <td>${org.name}</td>
+                                                    <td>${org.email}</td>
+                                                    <td style="position: relative; display: flex; justify-content: space-between; align-items: center;">
+                                <!-- Register Organization User Button -->
+                                <button onclick="registerOrganizationUser(${org.id})" class="icon-button">
+                                    <i class="fas fa-user-plus"></i>
+                                </button>
+                            
+                                <!-- More Options Button -->
+                                <button onclick="toggleDropdowns(event)" class="icon-button">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            
+                                <!-- Dropdown Menu -->
+                                <div class="dropdowns" style="display: none; position: absolute; top: 0px; left: 240px; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); z-index: 10;">
+                                    <button onclick="showDetails(${org.id}, '${org.name}', '${org.email}', '${org.created_at}', '${org.created_by_firstname}', '${org.created_by_lastname}')" class="dropdown-item">
+                                        Details
+                                    </button>
+                                    <button onclick="manageUserAccount(${org.id})" class="dropdown-item">
+                                        Organization User Account
+                                    </button>
+                                </div>
+                            </td>
+                            
+                            
+                                                `;
+                                                container.appendChild(row);
+                                            });
+                                        } else {
+                                            container.innerHTML = '<tr><td colspan="3">No organizations available.</td></tr>';
+                                        }
+                                    })
+                                    .catch(error => console.error('Error:', error));
+                            }
+                            
+                            function toggleDropdowns(event) {
+                                const dropdown = event.target.nextElementSibling;
+                                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                                event.stopPropagation();
+                            }
+                            
+                            document.addEventListener('click', () => {
+                                const dropdowns = document.querySelectorAll('.dropdowns');
+                                dropdowns.forEach(dropdown => {
+                                    dropdown.style.display = 'none';
+                                });
+                            });
+                            
+                            
+                            
+                            
+                            
+                            
+                              
+                            
+                            
+                            
+                            
+                            
+                                </script>
+                            </body>
+                            </html>    
+                  
+                                  
+                                </div>  
+                            </div>
+                        </div>   
+                    </div>  
+                </main>      
+            </div>
+        </div>
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+      

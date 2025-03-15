@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="author" content="" />
+        <title>Admin Semester Payments</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">     
+    </head>
+
+    <style>
+          .export-container {
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    z-index: 1;
+}
+
+.export-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.export-btn {
+    background-color: #1B3A28;
+    color: #ffffff;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 60px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+}
+
+.export-btn:hover {
+    background-color: #3e865c;
+}
+
+.export-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 83px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.export-content a {
+    color: #333;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+.export-content a:hover {
+    background-color: #f8f9fa;
+}
+
+.export-dropdown:hover .export-content {
+    display: block;
+}
+@media print {
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+    }
+
+    .export-container, .dataTables_wrapper .top, .dataTables_wrapper .bottom {
+        display: none;
+    }
+
+    .custom-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .custom-table th, .custom-table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    .custom-table thead {
+        background-color: #f1f1f1;
+    }
+}
+        .table-container{
+            width: auto;
+            background-color: white;
+            padding-top: 20px;
+            padding-left: 10px;
+            padding-right: 10px;   
+            border-radius: 3px;
+            padding-bottom: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+.dataTables_scroll {
+    border-radius: 5px 5px 0 0; /* 5px top border radius */
+}
+
+.dataTables_scrollBody {
+    border-radius: 0; /* Ensure no bottom border radius */
+}
+
+
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px; /* Adjusted to 5px */
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px; /* Adjusted to 5px */
+}
+
+/* Ensure no bottom border-radius */
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important; /* Light gray border */
+    padding: 12px 16px; /* Comfortable spacing */
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important; /* Remove border from last row */
+}
+
+/* Optional hover effect */
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important; /* Very subtle hover background */
+    border-bottom-color: #d0d0d0 !important; /* Slightly darker border on hover */
+}
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        justify-self: flex-end;
+    }
+
+    /* Optional: Adjust spacing between elements */
+    .dataTables_wrapper .dataTables_length {
+        margin-right: 15px;
+    }
+   
+    .dataTables_wrapper .dataTables_info {
+        margin: 0 15px;
+    }
+    .dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    text-decoration: none;
+    color: #555;
+    background-color: #f9f9f9;
+}
+
+.dataTables_wrapper .dataTables_paginate a:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Styling the search box */
+.dataTables_wrapper .dataTables_filter {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Custom table design */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
+    border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
+    margin-bottom: 50px;
+}
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 12px 16px;
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important;
+    border-bottom-color: #d0d0d0 !important;
+}
+           .semester {
+            width: 97%;
+    max-width: 100%; 
+            margin: 15px 0;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .semester h2 {
+            margin: 0 0 10px;
+            font-size: 1.5rem;
+            color: #04172c;
+        } .payment {
+            margin-left: 10px;
+            padding: 10px;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .organization p {
+    color: rgb(3, 49, 3); /* Light green for organization name */
+    font-size: 1.2em; /* Slightly larger font size */
+    margin-bottom: 5px; /* Spacing below organization name */
+}
+
+/* Payment name and price style */
+.payment p {
+    color: darkgreen; /* Dark green for payment name and price */
+    font-size: 1em; /* Normal font size */
+    margin: 0; /* No margin for payment items */
+}
+
+        .no-payments {
+            color: #dc3545;
+            font-style: italic;
+        }
+
+    </style>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center">
+            <!-- Left Section -->
+            <div class="d-flex align-items-center">
+                <!-- Sidebar Toggle -->
+                <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                    <i class="fas fa-bars" style="color: rgb(255, 255, 255);"></i>
+                </button>
+                
+                <!-- Logo -->
+                <div class="logo me-2">
+                    <img src="img/logo.png" alt="Logo" height="40">
+                </div>
+                
+                <!-- College Title -->
+                <h2 class="college-title mb-0" style="color: black; font-size: 20px;">COLLEGE OF COMPUTING STUDIES</h2>
+            </div>
+    
+            <!-- Right Section -->
+            <div class="ms-auto d-flex align-items-center">
+                <li id="profile-item" class="dropdown-item me-3">
+                    <a href="#" style="color: #25330f; text-decoration: none;">Loading...</a>
+                </li>
+    
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x" style="color: #ffffff;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: #ffffff;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                        width: 110px; 
+                        min-width: 110px; 
+                        background-color: #ffffff; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                        padding: 0;">
+                        <li>
+                            <a class="dropdown-item text-center" href="#" id="logout" style="
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                border-bottom: 1px solid #ddd; 
+                                border-radius: 8px;
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-sign-out-alt me-2" style="color: inherit;"></i> Sign Out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    
+        <!-- Scripts -->
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                const token = localStorage.getItem('token');
+    
+                if (!token) {
+                    window.location.href = 'adminlogin.html';
+                    return;
+                }
+    
+                try {
+                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+    
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch user data');
+                    }
+    
+                    const userData = await response.json();
+                    document.getElementById("profile-item").innerHTML = 
+                        `<a style="color: #25330f; text-decoration: none;" href="admin-info.html">${userData.username} (${userData.email})</a>`;
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    document.getElementById("profile-item").innerHTML = `<a href="#">Error loading profile</a>`;
+                }
+            });
+    
+            document.getElementById('logout').addEventListener('click', function(event) {
+                event.preventDefault();
+    
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to log out?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, log out!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem('token');
+                        Swal.fire({
+                            title: 'Logged Out!',
+                            text: 'You have been logged out successfully.',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = 'adminlogin.html';
+                        });
+                    }
+                });
+            });
+        </script>
+   
+    
+
+
+   <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                   
+                    <div class="sb-sidenav-menu-heading">Overview</div>
+                    <a class="nav-link" href="admindashboard.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+                    
+                    <div class="sb-sidenav-menu-heading">System Controls</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Semester
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+
+                            <a class="nav-link" href="admincontrol.html">Management</a>
+                            <a class="nav-link" href="admincontrolOrganizationUsers.html">Payments</a>
+                            <a class="nav-link" href="adminallsemesterlogs.html">History</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-allpayments.html">Overview</a>
+                            <a class="nav-link" href="admin-payment.html">Management</a>
+                            <a class="nav-link" href="admin-organization-active-payments.html">Active Payment</a>
+                            <a class="nav-link" href="admin-payment-reports.html">Reports</a>
+                            <a class="nav-link" href="admin-allpaymentslogs.html">History</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseGcash" aria-expanded="false" aria-controls="collapseGcash">
+                        <div class="sb-nav-link-icon"><i class="fas fa-qrcode"></i></div>
+                        QR-Codes
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseGcash" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-gcashorder.html">Overview</a>
+                            <a class="nav-link" href="admin-order.html">Management</a>
+                            <a class="nav-link" href="admin-gcashorder-reports.html">Reports</a>
+                            <a class="nav-link" href="admin-gcashorderlogs.html">History</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Transaction Overview</div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseNew" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-alltransactions.html">Overview</a>
+                            <a class="nav-link" href="admin-transactionpaymentreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew1" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Orders
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseNew1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-allordertransactions.html">Overview</a>
+                            <a class="nav-link" href="admin-allordertransactionsreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">User Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                        Accounts
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+
+                   
+
+                    <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                Student
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-student.html">Overview</a>
+                                    <a class="nav-link" href="adminaccountsMain.html">Enrollment Status</a>
+                                    <a class="nav-link" href="adminaccountsReportsuser.html">Reports</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                Adviser
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-adviser.html">Overview</a>
+                                    
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAdmin" aria-expanded="false" aria-controls="pagesCollapseAdmin">
+                                Admin
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAdmin" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-admin.html">Overview</a>
+                                    <a class="nav-link" href="adminaccounts-adminlogs.html">History</a>     
+                                </nav>
+                            </div>                
+                        </nav>
+                    </div> 
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRegister" aria-expanded="false" aria-controls="collapseRegister">
+                        <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
+                        Register 
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseRegister" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="register.html">Student/Adviser</a>
+                            <a class="nav-link" href="adminaccregister.html">Admin</a>
+                        </nav>
+                    </div>
+                        
+                    <div class="sb-sidenav-menu-heading">Organization Management</div>
+                     <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrg" aria-expanded="false" aria-controls="collapseOrg">
+                        <div class="sb-nav-link-icon"><i class="fas fa-building"></i></div>
+                        Organization
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrg" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admincontrolOrganization.html">Overview</a>
+                            <a class="nav-link" href="Admin-organizationsYear.html">Active List</a>
+                            <a class="nav-link" href="admin-organization-all-logs.html">History</a>
+                        </nav>
+                    </div>
+                    <div class="sb-sidenav-menu-heading">transaction Summary</div>
+                    <a class="nav-link" href="admin-transactions-summary.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Overview
+                    </a>
+                </div>
+            </div> 
+        </nav>
+    </div>
+
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-5"></h1>
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4" style="padding: 20px;">
+                                    <ol class="breadcrumb mb-4">
+                                        <li class="breadcrumb-item" style="font-style: italic;">Organization</li>
+                                        <li class="breadcrumb-item active" style="font-style: italic;">Overview</li>
+                                    </ol>
+                                    <div class="position-relative">
+                                        <!-- Ellipsis icon that triggers dropdown with animation -->
+                                        <i class="bi bi-three-dots-vertical position-absolute top-0 end-0 fs-4" style="cursor: pointer;" id="ellipsisIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                        
+                                        <!-- Dropdown menu -->
+                                        <ul class="dropdown-menu dropdown-menu-end" style="padding: 10px;">
+                                            <li>
+                                              <a href="#" class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#organizationModal" style="font-size: 14px;">
+                                                <i class="fas fa-pen-to-square fa-fw me-2 fs-5"></i> Register Organization
+                                              </a>
+                                            </li>
+                                          
+                                            <li>
+                                              <a href="admin-organization-all-logs.html" class="dropdown-item d-flex align-items-center" style="font-size: 14px;">
+                                                <i class="fas fa-file-alt fa-fw me-2 fs-5"></i> Officer and Adviser Logs
+                                              </a>
+                                            </li>
+                                          
+                                          
+                                          </ul>
+                                          
+                                          
+                                          
+                                        
+                                        <!-- Heading -->
+                                        <h3 class="text-center mb-4" style="font-weight: 600; color: #333;">Organization Overview</h3>
+                                      </div>
+
+
+
+
+                                   
+                                      
+                                      <!-- CSS for rotation animation -->
+                                   
+                                        
+                                        
+                                     
+
+<!-- Organization Modal -->
+<div class="modal fade" id="organizationModal" tabindex="-1" aria-labelledby="organizationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="organizationModalLabel">Organization Registration</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="registerForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Organization Name</label>
+                        <input type="text" class="form-control" id="name" name="name" 
+                               placeholder="Enter organization name" maxlength="50" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" 
+                               placeholder="Enter email" maxlength="100" required>
+                    </div>
+                </div>
+                <div class="modal-footer" style="padding: 10px;">
+                    <button type="submit" class="btn btn-submit" style="background-color: #034b03;">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+                             
+        <table id="allOrganizationsTable" class="custom-table">
+            <thead>
+                <tr>
+                    <th>Photo</th>
+                    <th>Organization Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="allOrganizationsContainer">
+                <!-- All organizations data will be inserted here -->
+            </tbody>
+        </table>
+        
+        <!-- Pagination controls -->
+        <div class="pagination">
+            <button id="prevPage" onclick="prevPage()" class="disabled">Previous</button>
+            <span class="page-info">
+                Page <span id="pageNumber">1</span> of <span id="totalPages">1</span>
+            </span>
+            <button id="nextPage" onclick="nextPage()">Next</button>
+        </div>
+           
+           
+        </div>
+    </div>
+
+
+<div id="detailsModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px 30px; border-radius: 8px; box-shadow: 0 10px 15px rgba(0, 0, 0, 0.385); z-index: 100; max-width: 450px; width: 100%;">
+    
+    <div class="modal-header" style="position: relative;">
+        <h2 style="font-size: 24px; color: #333; text-align: center;">Organization Details</h2>
+        <button type="button" class="close-btn" style="position: absolute; right: 20px; cursor: pointer; background: none; border: none;" onclick="closeModal()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="font-weight: bold; padding: 10px 0; color: #333;">Name:</td>
+            <td id="modalOrgName" style="padding: 10px 0; color: #555;"></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold; padding: 10px 0; color: #333;">Email:</td>
+            <td id="modalOrgEmail" style="padding: 10px 0; color: #555;"></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold; padding: 10px 0; color: #333;">Created By:</td>
+            <td id="modalCreatedBy" style="padding: 10px 0; color: #555;"></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold; padding: 10px 0; color: #333;">Created Date:</td>
+            <td id="modalCreatedAt" style="padding: 10px 0; color: #555;"></td>
+        </tr>
+        
+    </table>
+</div>
+<div id="organizationLogsModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 10px 15px rgba(0,0,0,0.385); border: 1px solid #ccc; z-index: 1045; width: 800px;">
+   
+    <div class="modal-header">
+    <h2 style="text-align: center; margin-bottom: 20px;">Organization Logs</h2>
+    <button type="button" class="close-btn" style="position: absolute; right: 20px; top: 20px; cursor: pointer; background: none; border: none;" onclick="closeOrganizationLogsModal()">
+        <i class="fas fa-times"></i>
+    </button>
+    </div>
+    <div id="organizationLogsContainer">
+    </div>
+   
+   
+    
+</div>
+
+
+<div id="modalOrganizationUsers" class="modal">
+    <div class="modal-content">
+    <span style="position: absolute; right: 20px; cursor: pointer; margin-top: 20px;" class="close" onclick="closeOrganizationUsersModal()">
+        <i class="fas fa-times-circle"></i>
+    </span>
+    <h2 style="text-align: center;" id="organizationNameHeader"></h2>
+    <table id="organizationUsersTable" class="custom-table responsive">
+        <thead>
+            <tr>
+                
+                <th>FullName</th>
+                <th>ID Number</th>
+                <th>Email</th>
+                <th>Position</th>
+                <th>Status</th>
+                <th>Action</th>
+                
+                <th>ID</th>
+                
+                
+               
+               
+            </tr>
+        </thead>
+        <tbody id="orgUsersTableBody">
+            <!-- User rows will be added here -->
+        </tbody>
+    </table>
+</div>
+</div>
+<style>/* Modal Styles */
+   
+    
+    .close-button {
+        background-color: #e57373; 
+        color: white; 
+        border: none; 
+        border-radius: 50%; 
+        cursor: pointer;   
+        width: 30px;
+        height: 30px;
+        float: right; 
+        transition: background-color 0.3s; 
+    }
+    
+    .close-button:hover {
+        background-color: #d32f2f; 
+    }
+    #organizationUsersTable {
+        width: 100%; 
+        border-collapse: collapse; 
+        margin-top: 20px; 
+    }   
+    #organizationUsersTable th, 
+    #organizationUsersTable td {
+        border-bottom: 1px solid #ddd; 
+        padding: 12px; 
+        text-align: left; 
+    }
+    #organizationUsersTable th {
+        background-color: #0b5e1d;
+        color: white; 
+        font-weight: bold; 
+    }  
+    #organizationUsersTable tbody tr:hover {
+        background-color: #f0f8e8; 
+    }
+    @media (max-width: 600px) {
+        .modal {
+            width: 95%; 
+        }
+    }
+    
+    .image-container {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Ensures image stays within the container */
+}
+
+.organization-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image fills the space properly */
+    border-radius: 50%; /* Optional: Adds rounded corners for better design */
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid darkgreen; /* Blue spinner color */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    position: absolute;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+    
+    </style>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+                                        event.preventDefault();
+                                
+                                        const name = document.getElementById('name').value;  // Assuming you have a field for organization name
+                                        const email = document.getElementById('email').value;
+                                
+                                
+                                            // Show confirmation dialog
+                                            Swal.fire({
+                                                title: 'Are you sure?',
+                                                text: "Do you want to proceed with the registration?",
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonText: 'Yes, submit!',
+                                                cancelButtonText: 'No, cancel',
+                                                reverseButtons: true
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    // If user clicks "Yes", proceed with form submission
+                                                    const data = {
+                                                        name: name,  // Send the correct field name
+                                                        email: email,
+                                                    };
+                                
+                                                    // Get the token from localStorage
+                                                    const token = localStorage.getItem('token');
+                                
+                                                    // Call to backend API to submit form
+                                                    fetch('http://localhost:5000/api/auth/register/organization', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer ' + token
+                                },
+                                body: JSON.stringify(data)
+                            })
+                            .then(response => response.json())
+                            .then(result => {
+                                if (result.msg === 'Successfully registered the organization! An OTP has been sent to your email.') {
+                                    // Store the email in localStorage to use it later for OTP verification
+                                    localStorage.setItem('organizationEmail', result.organization.email);
+                            
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'You will be redirect to verify your email',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    }).then(() => {
+                                        window.location.href = 'otpVerification.html'; // Redirect to OTP verification page
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: result.msg || 'Something went wrong with the registration!',
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Something went wrong with the registration!',
+                                });
+                            });
+                            
+                                                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                    Swal.fire({
+                                                        icon: 'error',
+                                                        title: 'Cancelled',
+                                                        text: 'Registration process was cancelled!',
+                                                        showConfirmButton: false,
+                                                        timer: 1500
+                                                    });
+                                                }
+                                            });
+                                    });
+        let currentPage = 1;
+        const rowsPerPage = 5;
+        let totalPages = 0;
+        let organizationsData = [];
+    
+        // Fetch data and initialize pagination
+        function fetchAllOrganizations() {
+            fetch('http://localhost:5000/api/auth/organizations')
+                .then(response => response.json())
+                .then(data => {
+                    organizationsData = data; // Save data to a global variable
+                    totalPages = Math.ceil(data.length / rowsPerPage); // Calculate total pages
+                    document.getElementById('totalPages').textContent = totalPages;
+                    displayOrganizations(currentPage); // Display the first page
+                    updatePaginationControls();
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    
+        // Display organizations for the current page
+        function displayOrganizations(page) {
+            const container = document.getElementById('allOrganizationsContainer');
+            container.innerHTML = ''; // Clear previous rows
+    
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginatedData = organizationsData.slice(start, end); // Get the data for the current page
+    
+            if (paginatedData.length > 0) {
+                paginatedData.forEach(org => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                     <td>
+    <div class="image-container">
+        <div class="spinner"></div> <!-- Spinner while loading -->
+        <img src="${org.photo}" 
+            class="organization-logo"
+            onload="this.previousElementSibling.style.display='none';" 
+            onerror="this.onerror=null; this.previousElementSibling.style.display='none'; this.src='img/logo.png';" 
+            alt="Organization Logo">
+    </div>
+</td>
+                        <td>${org.name}</td>
+                        <td>${org.email}</td>
+                         <td>${org.status}</td>
+                       <td style="position: relative; display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top:10px;">
+    ${org.status === 'Not Activated' ? `` : `
+        <!-- Register Organization User Button -->
+        <button 
+            style="background-color: #6c757d; 
+                   color: white; 
+                   border: none; 
+                   border-radius: 5px; 
+                   width: 33px; /* Fixed width */
+                   height: 35px; /* Fixed height */
+                   display: flex; 
+                   align-items: center; 
+                   justify-content: center; 
+                   cursor: pointer; 
+                   transition: background-color 0.3s;" 
+            onmouseover="this.style.backgroundColor='#5a6268'" 
+            onmouseout="this.style.backgroundColor='#6c757d'" 
+            onclick="registerOrganizationUser(${org.id})">
+            <i class="fas fa-user-plus" style="font-size: 16px;"></i>
+        </button>
+
+        <!-- Register Organization Teacher Button -->
+        <button 
+            style="background-color: #6c757d; 
+                   color: white; 
+                   border: none; 
+                   border-radius: 5px; 
+                   width: 33px; /* Fixed width */
+                   height: 35px; /* Fixed height */
+                   display: flex; 
+                   align-items: center; 
+                   justify-content: center; 
+                   cursor: pointer; 
+                   transition: background-color 0.3s;" 
+            onmouseover="this.style.backgroundColor='#5a6268'" 
+            onmouseout="this.style.backgroundColor='#6c757d'" 
+            onclick="registerOrganizationUserTeacher(${org.id})">
+            <i class="fas fa-chalkboard-teacher" style="font-size: 16px;"></i>
+        </button>
+
+        <!-- Toggle Dropdowns Button -->
+        <button 
+            style="background-color: #6c757d; 
+                   color: white; 
+                   border: none; 
+                   border-radius: 5px; 
+                   width: 33px; /* Fixed width */
+                   height: 35px; /* Fixed height */
+                   display: flex; 
+                   align-items: center; 
+                   justify-content: center; 
+                   cursor: pointer; 
+                   transition: background-color 0.3s;" 
+            onmouseover="this.style.backgroundColor='#5a6268'" 
+            onmouseout="this.style.backgroundColor='#6c757d'" 
+            onclick="toggleDropdowns(event)" class="icon-button">
+            <i class="fas fa-ellipsis-v" style="font-size: 20px;"> </i>
+        </button>
+
+        <div class="dropdowns" style="display: none; position: absolute; bottom: 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15); z-index: 1000; font-size: 14px; font-weight: 600; right: 20px; padding: 8px; min-width: 180px;">
+            <button onclick="showDetails(${org.id}, '${org.name}', '${org.email}', '${org.created_at}', '${org.created_by_firstname}', '${org.created_by_lastname}')" 
+                style="display: block; width: 100%; text-align: left; padding: 10px; border: none; background: none; cursor: pointer; color: #333; border-radius: 4px; transition: background 0.2s ease;" 
+                onmouseover="this.style.background='#eaeaea'" 
+                onmouseout="this.style.background='none'">
+                📄 Details
+            </button>
+            <button onclick="manageUserAccount(${org.id})" 
+                style="display: block; width: 100%; text-align: left; padding: 10px; border: none; background: none; cursor: pointer; color: #333; border-radius: 4px; transition: background 0.2s ease;" 
+                onmouseover="this.style.background='#eaeaea'" 
+                onmouseout="this.style.background='none'">
+                👥 Organization Accounts
+            </button>
+            <button onclick="goToAcademicList(${org.id})" 
+                style="display: block; width: 100%; text-align: left; padding: 10px; border: none; background: none; cursor: pointer; color: #333; border-radius: 4px; transition: background 0.2s ease;" 
+                onmouseover="this.style.background='#eaeaea'" 
+                onmouseout="this.style.background='none'">
+                📚 Academic List Account
+            </button>
+        </div>
+    `}
+
+    <!-- Toggle Organization Status Button -->
+    <button 
+        style="background-color: #6c757d; 
+               color: white; 
+               border: none; 
+               border-radius: 5px; 
+               width: 33px; /* Fixed width */
+               height: 35px; /* Fixed height */
+               display: flex; 
+               align-items: center; 
+               justify-content: center; 
+               cursor: pointer; 
+               transition: background-color 0.3s;" 
+        onmouseover="this.style.backgroundColor='#5a6268'" 
+        onmouseout="this.style.backgroundColor='#6c757d'" 
+        onclick="toggleOrganizationStatus(${org.id}, '${org.status}')">
+        <i class="${org.status === 'Not Activated' ? 'fas fa-check-circle' : 'fas fa-times-circle'}" style="font-size: 20px;"></i>
+    </button>
+
+    <!-- Show Organization Logs Button 
+    <button 
+        style="background-color: #6c757d; 
+               color: white; 
+               border: none; 
+               border-radius: 5px; 
+               width: 33px; /* Fixed width */
+               height: 35px; /* Fixed height */
+               display: flex; 
+               align-items: center; 
+               justify-content: center; 
+               cursor: pointer; 
+               transition: background-color 0.3s;" 
+        onmouseover="this.style.backgroundColor='#5a6268'" 
+        onmouseout="this.style.backgroundColor='#6c757d'" 
+        onclick="showOrganizationLogs(${org.id})">
+        <i class="fas fa-file-alt" style="font-size: 20px;"></i>
+    </button>-->
+</td>               
+                    `;
+                    container.appendChild(row);
+                });
+            } else {
+                container.innerHTML = '<tr><td colspan="3">No organizations available.</td></tr>';
+            }
+        }
+        
+        function showOrganizationLogs(orgId) {
+    // Fetch logs for the organization
+    fetch(`http://localhost:5000/api/auth/organization-logs/${orgId}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.logs && data.logs.length > 0) {
+            renderOrganizationLogs(data.logs);
+        } else {
+            document.getElementById('organizationLogsContainer').innerHTML = '<p>No logs available.</p>';
+        }
+        // Display the modal
+        document.getElementById('organizationLogsModal').style.display = 'block';
+    })
+    .catch(err => {
+        console.error('Error fetching organization logs:', err);
+        document.getElementById('organizationLogsContainer').innerHTML = '<p>Error loading logs.</p>';
+        document.getElementById('organizationLogsModal').style.display = 'block';
+    });
+}
+
+function renderOrganizationLogs(logs) {
+    let html = '<table id="organizationLogsTable" style="width: 100%; border-collapse: collapse;">';
+    html += '<thead><tr>';
+    html += '<th>ID</th>';
+    html += '<th>Action</th>';
+    html += '<th>Status</th>';
+    html += '<th>Created By</th>';
+    html += '<th>Created At</th>';
+    html += '</tr></thead><tbody>';
+    logs.forEach(log => {
+        html += `<tr>
+            <td>${log.id}</td>
+            <td>${log.action}</td>
+            <td>${log.status}</td>
+            <td>${log.admin_fullname || log.created_by}</td>
+            <td>${new Date(log.created_at).toLocaleString()}</td>
+        </tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById('organizationLogsContainer').innerHTML = html;
+
+    // Initialize DataTable on the newly created table
+    if ($.fn.DataTable.isDataTable('#organizationLogsTable')) {
+        $('#organizationLogsTable').DataTable().destroy();
+    }
+    $('#organizationLogsTable').DataTable({
+        paging: true,
+        pageLength: 5,
+        searching: true,
+        ordering: true,
+        info: true
+    });
+}
+
+function closeOrganizationLogsModal() {
+    document.getElementById('organizationLogsModal').style.display = 'none';
+}
+
+        async function toggleOrganizationStatus(organizationId, currentStatus) {
+    const newStatus = currentStatus === 'Not Activated' ? 'Activated' : 'Not Activated';
+
+    // Show confirmation dialog
+    const confirmation = await Swal.fire({
+        title: 'Are you sure?',
+        text: `Do you want to set the status to "${newStatus}"?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745', // Green button
+        cancelButtonColor: '#d33', // Red button
+        confirmButtonText: `Yes, ${newStatus}!`,
+        cancelButtonText: 'Cancel',
+    });
+
+    if (!confirmation.isConfirmed) {
+        return; // Exit if the user cancels
+    }
+
+    try {
+        // Show loading message
+        Swal.fire({
+            title: `Processing...`,
+            text: `Please wait while we set the status to "${newStatus}".`,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+
+        const response = await fetch('http://localhost:5000/api/auth/update-organization-status', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify({ organizationId, status: newStatus }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update status');
+        }
+
+        const result = await response.json();
+
+        // Dismiss loading and show result
+        if (result.success) {
+            Swal.fire({
+                title: 'Success!',
+                text: `The organization status has been updated to "${newStatus}".`,
+                icon: 'success',
+                timer: 1500,
+                showConfirmButton: false,
+            }).then(() => {
+                location.reload(); // Reload the page after success
+            });
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: result.message,
+                icon: 'error',
+            });
+        }
+    } catch (error) {
+        console.error('Error updating organization status:', error);
+
+        // Show error message
+        Swal.fire({
+            title: 'Error',
+            text: 'An error occurred while updating the status. Please try again.',
+            icon: 'error',
+        });
+    }
+}
+function goToAcademicList(organizationId) {
+        window.location.href = `admin-organizationsAcademiclist.html?organization_id=${organizationId}`;
+    }
+        fetchAllOrganizations();
+
+        function registerOrganizationUser(organizationId) {
+            window.location.href = `adminorganizationusers.html?organization_id=${organizationId}`;
+        }
+        function registerOrganizationUserTeacher(organizationId) {
+            window.location.href = `adminorganizationusersTeacher.html?organization_id=${organizationId}`;
+        }
+    
+        // Pagination controls logic
+        function updatePaginationControls() {
+            document.getElementById('pageNumber').textContent = currentPage;
+            document.getElementById('prevPage').classList.toggle('disabled', currentPage === 1);
+            document.getElementById('nextPage').classList.toggle('disabled', currentPage === totalPages);
+        }
+    
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayOrganizations(currentPage);
+                updatePaginationControls();
+            }
+        }
+    
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayOrganizations(currentPage);
+                updatePaginationControls();
+            }
+        }
+    
+        // Fetch the data on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchAllOrganizations();
+        });
+    
+        // Toggle dropdown menu
+        function toggleDropdowns(event) {
+    event.stopPropagation(); // Prevent event from bubbling to the document click listener
+
+    // Close all dropdowns first
+    document.querySelectorAll('.dropdowns').forEach(dropdown => {
+        dropdown.style.display = 'none';
+    });
+
+    // Find the correct dropdown
+    let button = event.target.closest('.icon-button'); // Ensure we get the button, even if clicking the icon
+    let dropdown = button ? button.nextElementSibling : null;
+
+    if (dropdown && dropdown.classList.contains('dropdowns')) {
+        dropdown.style.display = 'block'; // Open dropdown
+    }
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', function () {
+    document.querySelectorAll('.dropdowns').forEach(dropdown => {
+        dropdown.style.display = 'none';
+    });
+});
+
+
+
+    
+        // Show the modal with organization details
+        function showDetails(orgId, name, email, createdAt, createdByFirstName, createdByLastName) {
+            // Format the created_at date
+            const formattedDate = new Date(createdAt).toLocaleString('en-PH', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            });
+    
+            document.getElementById('modalOrgName').innerText = name;
+            document.getElementById('modalOrgEmail').innerText = email;
+            document.getElementById('modalCreatedBy').innerText = `${createdByFirstName} ${createdByLastName}`;
+            document.getElementById('modalCreatedAt').innerText = formattedDate;
+    
+            // Show the modal
+            document.getElementById('detailsModal').style.display = 'block';
+        }
+    
+        // Close the modal
+        function closeModal() {
+            document.getElementById('detailsModal').style.display = 'none';
+        }
+    
+        function manageUserAccount(organizationId) {
+    window.location.href = `admin-organizations.html?organization_id=${organizationId}`;
+}
+        fetchAllOrganizations();
+    </script>
+                                </div>  
+                            </div>
+                        </div>   
+                    </div>  
+                </main>      
+            </div>
+        </div>
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>
+                                   
+              
+
+
+
+
+
+
+
+
+      

@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Admin Payments</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">  
+ 
+    </head>
+    <style>
+        /* Modal Styling */
+.modal-content {
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* Body Styling */
+.modal-body {
+    padding: 20px;
+}
+
+/* QR Code Styling */
+.modal-body img {
+    max-width: 100%;
+    height: 400px;
+    display: block;
+    margin: 10px auto;
+    border-radius: 5px;
+}
+
+/* Strong Titles */
+.modal-body p strong {
+    color: #0b5e1d;
+}
+
+/* Fees List */
+.modal-body ul {
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+.modal-body ul li {
+    margin-bottom: 5px;
+}
+
+/* Footer Styling */
+.modal-footer {
+    border-top: 1px solid #ddd;
+}
+/* Ensure the modal body has a flexbox layout */
+.modal-body-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* Left Section: Text Details */
+.left-section {
+    width: 70%;
+}
+
+/* Right Section: QR Code */
+.right-section {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* QR Code Styling */
+.qr-img {
+    max-width: 200px;
+    height: auto;
+    border-radius: 5px;
+}
+.table-container{
+            width: auto;
+            
+            padding-top: 20px;
+            padding-left: 10px;
+            padding-right: 10px;   
+            border-radius: 3px;
+            padding-bottom: 0;
+        }
+.dataTables_scroll {
+    border-radius: 5px 5px 0 0; /* 5px top border radius */
+}
+
+.dataTables_scrollBody {
+    border-radius: 0; /* Ensure no bottom border radius */
+}
+
+
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px; /* Adjusted to 5px */
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px; /* Adjusted to 5px */
+}
+
+/* Ensure no bottom border-radius */
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important; /* Light gray border */
+    padding: 12px 16px; /* Comfortable spacing */
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important; /* Remove border from last row */
+}
+
+/* Optional hover effect */
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important; /* Very subtle hover background */
+    border-bottom-color: #d0d0d0 !important; /* Slightly darker border on hover */
+}
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        justify-self: flex-end;
+    }
+
+    /* Optional: Adjust spacing between elements */
+    .dataTables_wrapper .dataTables_length {
+        margin-right: 15px;
+    }
+   
+    .dataTables_wrapper .dataTables_info {
+        margin: 0 15px;
+    }
+    .dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    text-decoration: none;
+    color: #555;
+    background-color: #f9f9f9;
+}
+
+.dataTables_wrapper .dataTables_paginate a:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Styling the search box */
+.dataTables_wrapper .dataTables_filter {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Custom table design */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
+    border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
+    margin-bottom: 50px;
+}
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 8px 10px;
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important;
+    border-bottom-color: #d0d0d0 !important;
+}
+.export-container {
+  position: absolute;
+  right: 30px;
+  top: 70px;
+  z-index: 1;
+}
+
+.export-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.export-btn {
+  background-color: #1B3A28;
+  color: #ffffff;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 60px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+}
+
+.export-btn:hover {
+  background-color: #3e865c;
+}
+
+.export-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 83px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.export-content a {
+  color: #333;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.export-content a:hover {
+  background-color: #f8f9fa;
+}
+
+.export-dropdown:hover .export-content {
+  display: block;
+}
+@media print {
+  body {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+  }
+
+  .export-container, .dataTables_wrapper .top, .dataTables_wrapper .bottom {
+      display: none;
+  }
+
+  .custom-table {
+      border-collapse: collapse;
+      width: 100%;
+  }
+
+  .custom-table th, .custom-table td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+  }
+
+  .custom-table thead {
+      background-color: #f1f1f1;
+  }
+}
+    
+
+
+
+    </style>
+
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center">
+            <!-- Left Section -->
+            <div class="d-flex align-items-center">
+                <!-- Sidebar Toggle -->
+                <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                    <i class="fas fa-bars" style="color: black;"></i>
+                </button>
+                
+                <!-- Logo -->
+                <div class="logo me-2">
+                    <img src="img/logo.png" alt="Logo" height="40">
+                </div>
+                
+                <!-- College Title -->
+                <h2 class="college-title mb-0" style="color: black; font-size: 20px;">COLLEGE OF COMPUTING STUDIES</h2>
+            </div>
+    
+            <!-- Right Section -->
+            <div class="ms-auto d-flex align-items-center">
+                <li id="profile-item" class="dropdown-item me-3">
+                    <a href="#" style="color: #25330f; text-decoration: none;">Loading...</a>
+                </li>
+    
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x" style="color: #ffffff;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: #ffffff;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                        width: 110px; 
+                        min-width: 110px; 
+                        background-color: #ffffff; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                        padding: 0;">
+                        <li>
+                            <a class="dropdown-item text-center" href="#" id="logout" style="
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                border-bottom: 1px solid #ddd; 
+                                border-radius: 8px;
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-sign-out-alt me-2" style="color: inherit;"></i> Sign Out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    
+        <!-- Scripts -->
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                const token = localStorage.getItem('token');
+    
+                if (!token) {
+                    window.location.href = 'adminlogin.html';
+                    return;
+                }
+    
+                try {
+                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+    
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch user data');
+                    }
+    
+                    const userData = await response.json();
+                    document.getElementById("profile-item").innerHTML = 
+                        `<a style="color: #25330f; text-decoration: none;" href="admin-info.html">${userData.username} (${userData.email})</a>`;
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    document.getElementById("profile-item").innerHTML = `<a href="#">Error loading profile</a>`;
+                }
+            });
+    
+            document.getElementById('logout').addEventListener('click', function(event) {
+                event.preventDefault();
+    
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to log out?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, log out!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem('token');
+                        Swal.fire({
+                            title: 'Logged Out!',
+                            text: 'You have been logged out successfully.',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = 'adminlogin.html';
+                        });
+                    }
+                });
+            });
+        </script>
+   
+    
+
+
+   <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                   
+                    <div class="sb-sidenav-menu-heading">Overview</div>
+                    <a class="nav-link" href="admindashboard.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+                    
+                    <div class="sb-sidenav-menu-heading">System Controls</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Semester
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+
+                            <a class="nav-link" href="admincontrol.html">Management</a>
+                            <a class="nav-link" href="admincontrolOrganizationUsers.html">Payments</a>
+                            <a class="nav-link" href="adminallsemesterlogs.html">History</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-allpayments.html">Overview</a>
+                            <a class="nav-link" href="admin-payment.html">Management</a>
+                            <a class="nav-link" href="admin-organization-active-payments.html">Active Payment</a>
+                            <a class="nav-link" href="admin-payment-reports.html">Reports</a>
+                            <a class="nav-link" href="admin-allpaymentslogs.html">History</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseGcash" aria-expanded="false" aria-controls="collapseGcash">
+                        <div class="sb-nav-link-icon"><i class="fas fa-qrcode"></i></div>
+                        QR-Codes
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseGcash" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-gcashorder.html">Overview</a>
+                            <a class="nav-link" href="admin-order.html">Management</a>
+                            <a class="nav-link" href="admin-gcashorder-reports.html">Reports</a>
+                            <a class="nav-link" href="admin-gcashorderlogs.html">History</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Transaction Overview</div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseNew" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-alltransactions.html">Overview</a>
+                            <a class="nav-link" href="admin-transactionpaymentreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew1" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Orders
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseNew1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-allordertransactions.html">Overview</a>
+                            <a class="nav-link" href="admin-allordertransactionsreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">User Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                        Accounts
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+
+                   
+
+                    <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                Student
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-student.html">Overview</a>
+                                    <a class="nav-link" href="adminaccountsMain.html">Enrollment Status</a>
+                                    <a class="nav-link" href="adminaccountsReportsuser.html">Reports</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                Adviser
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-adviser.html">Overview</a>
+                                    
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAdmin" aria-expanded="false" aria-controls="pagesCollapseAdmin">
+                                Admin
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAdmin" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-admin.html">Overview</a>
+                                    <a class="nav-link" href="adminaccounts-adminlogs.html">History</a>     
+                                </nav>
+                            </div>                
+                        </nav>
+                    </div> 
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRegister" aria-expanded="false" aria-controls="collapseRegister">
+                        <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
+                        Register 
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseRegister" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="register.html">Student/Adviser</a>
+                            <a class="nav-link" href="adminaccregister.html">Admin</a>
+                        </nav>
+                    </div>
+                        
+                    <div class="sb-sidenav-menu-heading">Organization Management</div>
+                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrg" aria-expanded="false" aria-controls="collapseOrg">
+                        <div class="sb-nav-link-icon"><i class="fas fa-building"></i></div>
+                        Organization
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrg" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admincontrolOrganization.html">Overview</a>
+                            <a class="nav-link" href="Admin-organizationsYear.html">Active List</a>
+                            <a class="nav-link" href="admin-organization-all-logs.html">History</a>
+                        </nav>
+                    </div>
+                    <div class="sb-sidenav-menu-heading">transaction Summary</div>
+                    <a class="nav-link" href="admin-transactions-summary.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Overview
+                    </a>
+                </div>
+            </div> 
+        </nav>
+    </div>
+
+
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-5"></h1>
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4" style="padding: 20px;">
+                                    <ol class="breadcrumb mb-4">
+                                        <li class="breadcrumb-item" style="font-style: italic;">Payments</li>
+                                        <li class="breadcrumb-item active" style="font-style: italic;">Management</li>
+                                    </ol>
+                                    <div class="table-container">
+                                        <h2 style="text-align: center;">Payment Management</h2>
+                                        <div class="display nowrap">
+                                            <table id="paymentsTable" class="custom-table" style="width:100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Price</th>
+                                                        <th>Payment Type</th>
+                                                        <th>Organization</th>
+                                                        <th>Status</th>
+                                                        <th>Date</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="paymentsTableBody">
+                                                    <!-- Dynamic rows will be inserted here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="export-container">
+                                        <div class="export-dropdown">
+                                            <button class="export-btn">
+                                                Export <i class="fas fa-chevron-down"></i>
+                                            </button>
+                                            <div class="export-content">
+                                                <a href="#" onclick="exportAction('print')">Print</a>
+                                                <a href="#" onclick="exportAction('pdf')">PDF</a>
+                                                <a href="#" onclick="exportAction('csv')">CSV</a>
+                                                <a href="#" onclick="exportAction('excel')">Excel</a>
+                                                <a href="#" onclick="exportAction('copy')">Copy</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+                                    <script>
+                               document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Unauthorized');
+        window.location.href = 'adminlogin.html';
+        return;
+    }
+
+    const tableBody = document.querySelector('#paymentsTable tbody');
+    try {
+        const response = await fetch('http://localhost:5000/api/auth/payments/all', {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch payments.');
+
+        const { payments } = await response.json();
+        if (!payments.length) {
+            tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No payments found.</td></tr>';
+            return;
+        }
+
+        payments.forEach(payment => {
+            const isFullyDeclinedReported = payment.is_fully_declined_reported;  // Check if "Declined" has a report
+            const isQrCodeDeclinedReported = payment.is_qr_code_declined_reported; // Check if "Qr-Code Declined" has a report
+
+            let reportButton = `<button class="btn btn-warning btn-sm" onclick="reportPayment('${payment.id}')">Report</button>`;
+
+            // ❌ If payment is "Declined" and already reported, hide the report button
+            if (payment.status === 'Declined' && isFullyDeclinedReported) {
+                reportButton = ''; 
+            }
+
+            // ✅ If payment is "Qr-Code Declined", always show the report button
+            if (payment.status === 'Qr-Code Declined') {
+                reportButton = `<button class="btn btn-warning btn-sm" onclick="reportPayment('${payment.id}')">Report</button>`; 
+            }
+
+            tableBody.innerHTML += `
+                <tr>
+                    <td>${payment.name}</td>
+                    <td>₱${payment.price}</td>
+                    <td>${payment.payment_type}</td>
+                    <td>${payment.organization_name}</td>
+                    <td>${payment.status}</td>
+                    <td>${new Date(payment.created_at).toLocaleDateString('en-PH', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                })}</td>
+                   <td>
+    <div style="display: flex; align-items: center; gap: 5px;"> <!-- Flex container with gap for spacing -->
+        
+        <!-- Accept and Decline Payment Buttons for 'Pending' status -->
+        ${payment.status === 'Pending' ? `
+            <button 
+                class="btn btn-success btn-sm" 
+                onclick="acceptPayment('${payment.id}')"
+                style="background-color: #28a745; 
+                       color: white; 
+                       border: none; 
+                       border-radius: 5px; /* Rounded corners */
+                       width: 35px; /* Adjusted for a comfortable width */
+                       height: 35px; /* Fixed height */
+                       display: flex; 
+                       align-items: center; 
+                       justify-content: center; 
+                       cursor: pointer; 
+                       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+                       transition: background-color 0.3s;" 
+                onmouseover="this.style.backgroundColor='#218838';" 
+                onmouseout="this.style.backgroundColor='#28a745';">
+                <i class="fas fa-check-circle" style="font-size: 20px;"></i>
+            </button>
+
+            <button 
+                class="btn btn-danger btn-sm" 
+                onclick="declinePayment('${payment.id}')"
+                style="background-color: #dc3545; 
+                       color: white; 
+                       border: none; 
+                       border-radius: 5px; /* Rounded corners */
+                       width: 35px; /* Adjusted for a comfortable width */
+                       height: 35px; /* Fixed height */
+                       display: flex; 
+                       align-items: center; 
+                       justify-content: center; 
+                       cursor: pointer; 
+                       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+                       transition: background-color 0.3s;" 
+                onmouseover="this.style.backgroundColor='#c82333';" 
+                onmouseout="this.style.backgroundColor='#dc3545';">
+                <i class="fas fa-times-circle" style="font-size: 20px;"></i>
+            </button>
+        ` : ''}
+
+        <!-- Accept and Decline QR Buttons for 'Qr code Pending' status -->
+        ${payment.status === 'Qr code Pending' ? `
+            <button 
+                class="btn btn-primary btn-sm" 
+                onclick="acceptQr('${payment.id}')"
+                style="background-color: #007bff; 
+                       color: white; 
+                       border: none; 
+                       border-radius: 5px; /* Rounded corners */
+                       width: 35px; /* Adjusted for a comfortable width */
+                       height: 35px; /* Fixed height */
+                       display: flex; 
+                       align-items: center; 
+                       justify-content: center; 
+                       cursor: pointer; 
+                       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+                       transition: background-color 0.3s;" 
+                onmouseover="this.style.backgroundColor='#0069d9';" 
+                onmouseout="this.style.backgroundColor='#007bff';">
+                <i class="fas fa-check-circle" style="font-size: 20px;"></i>
+            </button>
+
+            <button 
+                class="btn btn-danger btn-sm" 
+                onclick="declineQr('${payment.id}')"
+                style="background-color: #dc3545; 
+                       color: white; 
+                       border: none; 
+                       border-radius: 5px; /* Rounded corners */
+                       width: 35px; /* Adjusted for a comfortable width */
+                       height: 35px; /* Fixed height */
+                       display: flex; 
+                       align-items: center; 
+                       justify-content: center; 
+                       cursor: pointer; 
+                       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+                       transition: background-color 0.3s;" 
+                onmouseover="this.style.backgroundColor='#c82333';" 
+                onmouseout="this.style.backgroundColor='#dc3545';">
+                <i class="fas fa-times-circle" style="font-size: 20px;"></i>
+            </button>
+        ` : ''}
+
+        <!-- Report button for 'Qr-Code Declined' status -->
+        ${payment.status === 'Qr-Code Declined' ? `
+            ${reportButton}
+        ` : ''}
+
+        <!-- Report button for 'Declined' status -->
+        ${payment.status === 'Declined' ? `
+            ${isFullyDeclinedReported ? '' : reportButton}
+        ` : ''}
+
+        <!-- View More button -->
+        <button 
+            class="btn btn-info btn-sm" 
+            onclick="viewMore(this)" 
+            data-payment='${JSON.stringify(payment).replace(/"/g, '&quot;')}'
+            style="background-color: #007bff; 
+                   color: white; 
+                   border: none; 
+                   border-radius: 5px; 
+                   width: 33px; 
+                   height: 35px; 
+                   display: flex; 
+                   align-items: center; 
+                   justify-content: center; 
+                   cursor: pointer; 
+                   transition: background-color 0.3s;" 
+            onmouseover="this.style.backgroundColor='#0056b3'" 
+            onmouseout="this.style.backgroundColor='#007bff'">
+            <i class="fas fa-eye" style="font-size: 20px;"></i>
+        </button>
+
+    </div>
+</td>
+
+                </tr>`;
+        });
+
+        // Initialize DataTable after the table has been populated
+        dataTable = $('#paymentsTable').DataTable({
+    dom: '<"top"f>rt<"bottom"lip>',
+    pageLength: 10,
+    order: [[5, 'desc']], 
+    buttons: [
+        {
+            extend: 'copyHtml5',
+            text: 'Copy',
+            action: function (e, dt, button, config) {
+                dt.buttons.copyHtml5.action.call(this, e, dt, button, config);
+                
+                Swal.fire({
+                    title: "Copied!",
+                    text: "Data has been copied to the clipboard.",
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }
+        },
+        'csvHtml5',
+        'excelHtml5',
+        {
+            extend: 'pdfHtml5',
+            orientation: 'landscape'
+        },
+        'print'
+    ]
+});
+
+        
+
+    } catch (error) {
+        console.error(error);
+        tableBody.innerHTML = `<tr><td colspan="7" class="text-center">No payments found.</td></tr>`;
+    }
+});
+
+function exportAction(type) {
+    const dataTable = $('#paymentsTable').DataTable();
+    switch(type) {
+       
+        case 'csv':
+            dataTable.button('1').trigger();
+            break;
+        case 'excel':
+            dataTable.button('2').trigger();
+            break;
+        case 'pdf':
+            dataTable.button('3').trigger();
+            break;
+        case 'print':
+            dataTable.button('4').trigger();
+            break;
+    }
+}
+async function acceptQr(paymentId) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to accept this QR code payment?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, accept it!",
+        cancelButtonText: "No, cancel"
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Processing...",
+                html: "Please wait while we accept the payment.",
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/payments/accept-qr', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ payment_id: paymentId })
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    Swal.fire("Success", "QR Code Payment Accepted!", "success").then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire("Error", result.error || "Failed to accept payment.", "error");
+                }
+            } catch (error) {
+                Swal.fire("Error", "A server error occurred while accepting payment.", "error");
+            }
+        }
+    });
+}
+
+// ❌ Decline QR Code Payment
+async function declineQr(paymentId) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to decline this QR code payment?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, decline it!",
+        cancelButtonText: "No, cancel"
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Processing...",
+                html: "Please wait while we decline the payment.",
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/payments/decline-qr', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ payment_id: paymentId })
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    Swal.fire("Success", "QR Code Payment Declined!", "success").then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire("Error", result.error || "Failed to decline payment.", "error");
+                }
+            } catch (error) {
+                Swal.fire("Error", "A server error occurred while declining payment.", "error");
+            }
+        }
+    });
+}
+
+                                    </script>
+                                    
+                            
+                                    <!-- Modal for Viewing Payment Details -->
+                                    <div class="modal fade" id="viewMoreModal" tabindex="-1" aria-labelledby="viewMoreModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 70%;">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <i class="bi bi-info-circle me-2 fs-2"></i> 
+                                                    <h5 class="modal-title" id="viewMoreModalLabel">Payment Details</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body" id="modalContent">
+                                                    <!-- Payment details will be dynamically generated -->
+                                                    <div class="container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <!-- Your content here -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="modal fade" id="reportModal" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content-payment">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Report Payment</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Select a reason for reporting this payment:</p>
+                                            <form id="reportForm">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="reason" id="reason1" value="Payment is too high">
+                                                    <label class="form-check-label" for="reason1">Payment is too high</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="reason" id="reason2" value="Invalid payment details">
+                                                    <label class="form-check-label" for="reason2">Invalid payment details</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="reason" id="reason3" value="Suspicious payment activity">
+                                                    <label class="form-check-label" for="reason3">Suspicious payment activity</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="reason" id="reason4" value="Other">
+                                                    <label class="form-check-label" for="reason4">Other</label>
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <label for="description">Additional Description (Optional):</label>
+                                                    <textarea id="description" class="form-control" rows="3"></textarea>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="button" class="btn btn-danger" id="submitReport">Submit Report</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="updateFeesModal" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5>Update Fees and Prices</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="feesForm">
+                                            <div id="feesSection"></div>
+                                            <button type="button" id="addFeeButton">Add More Fees</button>
+                                            <p>Total Price: <span id="totalPrice">0.00</span></p>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button id="submitFeesUpdate">Update Fees</button>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            
+                            
+                        
+                        
+                        
+                      
+                            <script>
+                            document.querySelector('#submitReport').addEventListener('click', async () => {
+                                const reason = document.querySelector('input[name="reason"]:checked')?.value;
+                                const description = document.querySelector('#description').value.trim();
+                                const paymentId = document.querySelector('#reportModal').getAttribute('data-payment-id');
+                            
+                                if (!reason) {
+                                    Swal.fire('Error', 'Please select a reason for reporting.', 'error');
+                                    return;
+                                }
+                            
+                                // Show confirmation dialog
+                                const confirmation = await Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: 'Do you want to submit this report?',
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Yes, submit it!',
+                                    cancelButtonText: 'No, cancel!',
+                                });
+                            
+                                if (confirmation.isConfirmed) {
+                                    // Show loading overlay
+                                    Swal.fire({
+                                        title: 'Submitting Report',
+                                        text: 'Please wait while your report is being submitted...',
+                                        allowOutsideClick: false,
+                                        allowEscapeKey: false,
+                                        didOpen: () => {
+                                            Swal.showLoading();
+                                        },
+                                    });
+                            
+                                    try {
+                                        const response = await fetch('http://localhost:5000/api/auth/payments/report', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                                            },
+                                            body: JSON.stringify({ paymentId, reason, description }),
+                                        });
+                            
+                                        const result = await response.json();
+                                        if (response.ok) {
+                                            Swal.fire('Success', result.message, 'success').then(() => location.reload());
+                                        } else {
+                                            Swal.fire('Error', result.message || 'Failed to submit the report.', 'error');
+                                        }
+                                    } catch (error) {
+                                        console.error('Error reporting payment:', error);
+                                        Swal.fire('Error', 'An error occurred while submitting the report.', 'error');
+                                    }
+                                }
+                            });
+                            
+                            
+                            function reportPayment(paymentId) {
+                                const reportModal = new bootstrap.Modal(document.getElementById('reportModal'));
+                                document.querySelector('#reportModal').setAttribute('data-payment-id', paymentId);
+                                reportModal.show();
+                            }
+                         
+                                 
+
+                            
+                            
+                            let feeCount = 0;
+                            
+                            function openFeesModal(paymentId) {
+                                        const modal = document.getElementById('updateFeesModal');
+                                        modal.setAttribute('data-payment-id', paymentId);
+                                        const bootstrapModal = new bootstrap.Modal(modal);
+                                        bootstrapModal.show();
+                                    
+                                        fetch(`http://localhost:5000/api/auth/adviser/payment/${paymentId}`)
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                const feesSection = document.getElementById('feesSection');
+                                                feesSection.innerHTML = ''; // Clear previous content
+                                                feeCount = 0;
+                                    
+                                                if (data.success && data.fees.length > 0) {
+                                                    data.fees.forEach((fee) => {
+                                                        feeCount++;
+                                                        addFeeField(feeCount, fee.name, fee.price);
+                                                    });
+                                                } else {
+                                                    feesSection.innerHTML = '<p>No fees available for this payment.</p>';
+                                                }
+                                    
+                                                updateTotalPrice(); // Calculate total price from fetched data
+                                            })
+                                            .catch(err => {
+                                                Swal.fire('Error', 'Failed to fetch payment details.', 'error');
+                                                console.error('Error fetching payment details:', err);
+                                            });
+                                    }
+                                    
+                                    function closeFeesModal() {
+                                        document.getElementById('updateFeesModal').style.display = 'none';
+                                    }
+                                    
+                                    function addFeeField(index, feeName = '', feePrice = '') {
+                                        const feesSection = document.getElementById('feesSection');
+                                        const feeDiv = document.createElement('div');
+                                        feeDiv.setAttribute('id', `fee${index}`);
+                                    
+                                        feeDiv.innerHTML = `
+                                            <label>Fee ${index}:</label>
+                                            <input type="text" id="fees${index}" value="${feeName}" placeholder="Fee Name">
+                                            <label>Price for Fee ${index}:</label>
+                                            <input type="number" id="pricefees${index}" value="${feePrice}" step="0.01" placeholder="Fee Price" 
+                                                   oninput="updateTotalPrice()">
+                                            <button type="button" onclick="removeFeeField(${index})">Remove</button>
+                                        `;
+                                    
+                                        feesSection.appendChild(feeDiv);
+                                    }
+                                    
+                                    function removeFeeField(index) {
+                                        const feeDiv = document.getElementById(`fee${index}`);
+                                        if (feeDiv) feeDiv.remove();
+                                        updateTotalPrice();
+                                    }
+                                    
+                                    function updateTotalPrice() {
+                                        let total = 0;
+                                        for (let i = 1; i <= feeCount; i++) {
+                                            const priceField = document.getElementById(`pricefees${i}`);
+                                            if (priceField && priceField.value) {
+                                                total += parseFloat(priceField.value);
+                                            }
+                                        }
+                                        document.getElementById('totalPrice').textContent = total.toFixed(2);
+                                    }
+                            
+                                    document.getElementById('submitFeesUpdate').addEventListener('click', async () => {
+                                const modal = document.getElementById('updateFeesModal');
+                                const paymentId = modal.getAttribute('data-payment-id'); // Correctly retrieve the payment ID
+                            
+                                if (!paymentId) {
+                                    return Swal.fire('Error', 'Payment ID not found. Please try again.', 'error');
+                                }
+                            
+                                const fees = [];
+                            
+                                for (let i = 1; i <= feeCount; i++) {
+                                    const feeName = document.getElementById(`fees${i}`)?.value;
+                                    const feePrice = document.getElementById(`pricefees${i}`)?.value;
+                                    if (feeName && feePrice) {
+                                        fees.push({ name: feeName, price: parseFloat(feePrice) });
+                                    }
+                                }
+                            
+                                if (!fees.length) {
+                                    return Swal.fire('Error', 'Please add at least one fee.', 'error');
+                                }
+                            
+                                // Show a confirmation dialog
+                                const confirmation = await Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: 'Do you want to update the fees?',
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Yes, update it!',
+                                    cancelButtonText: 'No, cancel!',
+                                });
+                            
+                                if (!confirmation.isConfirmed) {
+                                    return;
+                                }
+                            
+                                // Show loading screen
+                                Swal.fire({
+                                    title: 'Updating Fees',
+                                    text: 'Please wait while we update the fees.',
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    didOpen: Swal.showLoading,
+                                });
+                            
+                                try {
+                                    const response = await fetch(`http://localhost:5000/api/auth/admin/payment/fees/update`, {
+                                        method: 'PUT',
+                                        headers: {
+                                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify({ paymentId, fees }),
+                                    });
+                            
+                                    if (response.ok) {
+                                        const result = await response.json();
+                                        Swal.fire('Success', result.message || 'Fees updated successfully.', 'success').then(() => {
+                                            const bootstrapModal = bootstrap.Modal.getInstance(modal);
+                                            bootstrapModal.hide(); // Close the modal
+                                            location.reload(); // Reload the page
+                                        });
+                                    } else {
+                                        const error = await response.json();
+                                        Swal.fire('Error', error.message || 'Failed to update fees.', 'error');
+                                    }
+                                } catch (err) {
+                                    console.error('Error updating fees:', err);
+                                    Swal.fire('Error', 'An error occurred while updating fees.', 'error');
+                                }
+                            });
+                            
+                            async function acceptPayment(paymentId) {
+                                const confirmation = await Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: 'Do you want to accept this payment?',
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Yes, accept it!',
+                                    cancelButtonText: 'No, cancel!'
+                                });
+                            
+                                if (confirmation.isConfirmed) {
+                                    // Show loading overlay
+                                    Swal.fire({
+                                        title: 'Processing...',
+                                        text: 'Please wait while the payment is being accepted.',
+                                        allowOutsideClick: false,
+                                        allowEscapeKey: false,
+                                        didOpen: () => {
+                                            Swal.showLoading();
+                                        },
+                                         // Green overlay
+                                    });
+                            
+                                    try {
+                                        const response = await fetch('http://localhost:5000/api/auth/payments/accept', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                Authorization: `Bearer ${localStorage.getItem('token')}`
+                                            },
+                                            body: JSON.stringify({ payment_id: paymentId })
+                                        });
+                            
+                                        const result = await response.json();
+                                        if (response.ok) {
+                                            Swal.fire('Success', result.message, 'success').then(() => {
+                                                location.reload();
+                                            });
+                                        } else {
+                                            Swal.fire('Error', result.error || 'Failed to accept payment.', 'error');
+                                        }
+                                    } catch (error) {
+                                        console.error('Error accepting payment:', error);
+                                        Swal.fire('Error', 'An error occurred while accepting the payment.', 'error');
+                                    }
+                                }
+                            }
+                            
+                            // Decline Payment
+                            async function declinePayment(paymentId) {
+                                const confirmation = await Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: 'Do you want to decline this payment?',
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Yes, decline it!',
+                                    cancelButtonText: 'No, cancel!'
+                                });
+                            
+                                if (confirmation.isConfirmed) {
+                                    // Show loading overlay
+                                    Swal.fire({
+                                        title: 'Processing...',
+                                        text: 'Please wait while the payment is being declined.',
+                                        allowOutsideClick: false,
+                                        allowEscapeKey: false,
+                                        didOpen: () => {
+                                            Swal.showLoading();
+                                        }, // Green overlay
+                                    });
+                            
+                                    try {
+                                        const response = await fetch('http://localhost:5000/api/auth/payments/decline', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                Authorization: `Bearer ${localStorage.getItem('token')}`
+                                            },
+                                            body: JSON.stringify({ payment_id: paymentId })
+                                        });
+                            
+                                        const result = await response.json();
+                                        if (response.ok) {
+                                            Swal.fire('Success', result.message, 'success').then(() => {
+                                                location.reload();
+                                            });
+                                        } else {
+                                            Swal.fire('Error', result.error || 'Failed to decline payment.', 'error');
+                                        }
+                                    } catch (error) {
+                                        console.error('Error declining payment:', error);
+                                        Swal.fire('Error', 'An error occurred while declining the payment.', 'error');
+                                    }
+                                }
+                            }
+                            
+                            
+                            
+                            // Display the modal with embedded payment details
+                            function viewMore(button) {
+    const payment = JSON.parse(button.getAttribute('data-payment'));
+
+    const feesAndPrices = payment.fees_and_prices 
+        ? payment.fees_and_prices.split(', ').map(fee => `<li>${fee}</li>`).join('') 
+        : '<li>None</li>';
+
+        const modalContent = `
+<div class="container-fluid">
+    <div class="row g-3">
+        <!-- Left Column -->
+        <div class="col-md-4 border-end">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Name</h6>
+                    <p class="text-success fw-bold mb-0">${payment.name}</p>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Payment Type</h6>
+                    <p class="text-danger fw-bold mb-0">${payment.payment_type}</p>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Scope</h6>
+                    <p class="text-secondary mb-0">${payment.year ? `Academic Year ${payment.year}` : payment.semester_name}</p>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Created By</h6>
+                    <p class="text-secondary mb-0">${payment.created_by_name}<br>
+                    <small class="text-muted">${payment.organization_name}</small></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Column -->
+        <div class="col-md-4 border-end">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Adviser Status</h6>
+                    <span class="${payment.adviser_status === 'Accepted' ? 'text-success fw-bold' : 
+                                payment.adviser_status === 'Declined' ? 'text-danger fw-bold' : 'text-warning fw-bold'}">
+                        ${payment.adviser_status} 
+                        ${payment.adviser_name ? `<small class="text-muted">by ${payment.adviser_name}</small>` : ''}
+                    </span>
+                </div>
+            </div>
+
+            ${payment.adviser_status !== 'Declined' ? `
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Admin Status</h6>
+                    <span class="${payment.status === 'Accepted' ? 'text-success fw-bold' : 
+                                payment.status === 'Declined' ? 'text-danger fw-bold' : 'text-warning fw-bold'}">
+                        ${payment.status} 
+                        ${payment.accepted_by_name ? `<small class="text-muted">by ${payment.accepted_by_name}</small>` : ''}
+                    </span>
+                </div>
+            </div>` : ''}
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Price</h6>
+                    <p class="text-success fw-bold mb-0">₱${payment.price}</p>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">Description</h6>
+                    <p class="mb-0 small text-muted">${payment.description || 'No description provided'}</p>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-12">
+                    <h6 class="text-muted">Fees Breakdown</h6>
+                    <ul class="list-group list-group-numbered list-group-flush" style="max-height: 150px; overflow-y: auto;">
+                        ${feesAndPrices}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column (QR Code) -->
+        <div class="col-md-4">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="text-muted mb-0">QR Code</h6>
+                    ${payment.qrcode_picture ? `
+                    <div class="mt-1">
+                        <img src="${payment.qrcode_picture}" 
+                             alt="QR Code" 
+                             class="img-fluid w-100 p-2"
+                             style="border: 1px solid #ddd; 
+                                    border-radius: 5px;">
+                    </div>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+`;         
+
+    document.getElementById('modalContent').innerHTML = modalContent;
+    const viewMoreModal = new bootstrap.Modal(document.getElementById('viewMoreModal'));
+    viewMoreModal.show();
+}
+
+
+                                </script>
+                                </div>  
+                            </div>
+                        </div>   
+                    </div>  
+                </main>      
+            </div>
+        </div>
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+      

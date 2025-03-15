@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Organization Dashboard</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>  
+        
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> 
+        
+        
+        
+    </head>
+<style>
+    .image-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Ensures image stays within the container */
+}
+
+.organization-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image fills the space properly */
+    border-radius: 8px; /* Optional: Adds rounded corners for better design */
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid rgb(255, 255, 255); /* Blue spinner color */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    position: absolute;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+    .text-white table tbody td {
+    color: black !important;
+}.dataTables_length,
+.dataTables_filter,
+.dataTables_info,
+.dataTables_paginate {
+    color: rgb(255, 255, 255) !important; /* Makes DataTables UI elements black */
+}
+.btn-copy {
+        background-color: #007bff; /* Blue background */
+    }
+    .btn-csv {
+        background-color: #28a745; /* Green background */
+    }
+    .btn-excel {
+        background-color: #1c7430; /* Dark Green background */
+    }
+    .btn-pdf {
+        background-color: #dc3545; /* Red background */
+    }
+    .btn-print {
+        background-color: #6c757d; /* Gray background */
+    }
+
+    /* Optional: Change background on hover */
+    .btn-copy:hover, .btn-csv:hover, .btn-excel:hover, .btn-pdf:hover, .btn-print:hover {
+        opacity: 0.8;
+    }
+
+</style>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center justify-content-between px-3">
+            <!-- Left Section -->
+            <div class="d-flex align-items-center">
+                <!-- Sidebar Toggle -->
+                <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                    <i class="fas fa-bars" style="color: rgb(255, 255, 255);"></i>
+                </button>
+        
+               
+                
+                
+                
+                <div class="logo me-2">
+                    <label for="logoUpload">
+                        <div id="loadingIconLogo" class="logo-loading-container1">
+                            <div class="spinnerlogo1"></div>
+                        </div>
+                        <img id="organizationLogo" src="" alt="Logo" height="40" style="cursor: pointer; border-radius: 50%;">
+                    </label>
+                    <input type="file" id="logoUpload" style="display: none;" accept="image/*">
+                    <div id="uploadingMessage">Uploading logo...</div>
+                </div>
+                
+                
+                
+                
+                
+                
+        
+                <!-- Organization Info -->
+                <div id="organizationInfo" class="d-flex flex-grow-1">
+                    <!-- Organization Name will be inserted here -->
+                </div>
+            </div>
+        
+            <!-- Right Section -->
+            <div class="d-flex align-items-center">
+
+                <i id="profile-item" class="dropdown-item me-3">
+                    <a href="#" style="color: #ffffff; text-decoration: none;">Loading...</a>
+                </i>
+        
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x" style="color: #ffffff;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: #ffffff;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                        width: 110px !important; 
+                        min-width: 110px !important; 
+                        background-color: #ffffff; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        height: auto;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                        padding: 0;">
+                        <li>
+                            <a class="dropdown-item" href="#" id="logout" style="
+                                display: flex; 
+                                align-items: center; 
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                height: auto;
+                                border-bottom: 1px solid #ddd; 
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-sign-out-alt" style="margin-right: 8px; color: inherit;"></i> Sign Out
+                            </a>
+                            <a class="dropdown-item" href="#" id="logouts" style="
+                                display: flex; 
+                                align-items: center; 
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                height: auto;
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-exchange-alt" style="margin-right: 8px; color: inherit;"></i> Switch
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+                <script>
+                   document.getElementById('logouts').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default link behavior
+        
+            // SweetAlert confirmation
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to switch account?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745', // Green confirm button
+                cancelButtonColor: '#dc3545', // Red cancel button
+                confirmButtonText: 'Yes, Switch Account!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Switch Account',
+                        text: 'Choose your organization',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = 'chooseorganizations.html'; // Redirect to choose organizations page
+                    });
+                }
+            });
+        });
+        function fetchOrganizationData() {
+    const token = localStorage.getItem('token'); // Retrieve token from storage
+    if (!token) {
+        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        return;
+    }
+
+    fetch('http://localhost:5000/api/auth/organization/details', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.name) {
+            
+            const infoDiv = document.getElementById('organizationInfo');
+            infoDiv.innerHTML = `
+              <div class="custom-heading">${data.name}</div>
+
+       
+              
+            `;
+        } else {
+            document.getElementById('organizationInfo').innerText = 'No organization data found.';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('errorMessages').innerText = 'An error occurred. Please try again.';
+    });
+}
+
+
+document.addEventListener('DOMContentLoaded', fetchOrganizationData);
+
+
+   function fetchLoggedInUserDetails() {
+    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+
+    if (!token) {
+        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        return;
+    }
+
+    fetch('http://localhost:5000/api/auth/organization-user/details', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(user => {
+        if (!user) {
+            throw new Error('User not found');
+        }
+        
+        
+        const fullName = `${user.firstname} ${user.lastname}`; 
+
+        document.getElementById('profile-item').innerHTML = `
+           <a style="color: white; text-decoration: none; " href="organization-users-info.html">
+   
+   <h3 style="color: white; text-decoration: none; font-size: 18px; margin-top:10px;">${user.firstname} ${user.lastname}</h3>
+</a>
+
+
+        `;
+    })
+    .catch(error => {
+        console.error('Error fetching organization user details:', error);
+        document.getElementById('profile-item').innerHTML = '<a href="#">Error loading profile</a>';
+    });
+}
+
+// Call the function when the DOM is loaded
+document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
+    
+            document.getElementById('logout').addEventListener('click', function(event) {
+                event.preventDefault();
+    
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to log out?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, log out!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem('token');
+                        Swal.fire({
+                            title: 'Logged Out!',
+                            text: 'You have been logged out successfully.',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = 'adminlogin.html';
+                        });
+                    }
+                });
+            });
+        </script>
+   
+    
+
+
+   <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">Overview</div>
+                    <a class="nav-link active" href="organization-dashboard.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+
+                    <div class="sb-sidenav-menu-heading">Payment Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                           
+                            <a class="nav-link" href="organization-allpayments.html">Overview</a>
+                            <a class="nav-link" href="organization-active-payment.html">Active Payment</a> 
+                            <a class="nav-link" href="organization-addpayments.html">Add Payment</a>
+                            <a class="nav-link" href="organization-reports.html">Reports</a> 
+                        </nav>
+                    </div>
+
+                   
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTransactions" aria-expanded="false" aria-controls="collapseTransactions">
+                        <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
+                        Transactions
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseTransactions" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-alltransactions.html">Overview</a>
+                            <a class="nav-link" href="organization-payment.html">Management</a>
+                            <a class="nav-link" href="organization-masterlist.html">Masterlist</a>
+                            <a class="nav-link" href="organization-transactionsreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+
+                    <div class="sb-sidenav-menu-heading">Organization Overview</div>
+                    <a class="nav-link" href="organization-academic-list.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Academic List
+                    </a>
+                    <div class="sb-sidenav-menu-heading">Product Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseProducts" aria-expanded="false" aria-controls="collapseProducts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
+                        Products
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseProducts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-products.html">Management</a>
+                            <a class="nav-link" href="organization-pre-order.html">Pre-Order</a>
+                            <a class="nav-link" href="organization-gcashorder.html">Manage QR-Code</a>
+                            <a class="nav-link" href="organization-allorderreports.html">QR-Code Reports</a>
+                            <a class="nav-link" href="organization-addproduct.html">Add Product</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Order Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrders" aria-expanded="false" aria-controls="collapseOrders">
+                        <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>
+                        Orders
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrders" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-orders.html">Transactions</a>
+                            <a class="nav-link" href="organization-ordersManage.html">Paid Orders Handling</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrderTransactions" aria-expanded="false" aria-controls="collapseOrderTransactions">
+                        <div class="sb-nav-link-icon"><i class="fas fa-receipt"></i></div>
+                        Transactions
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrderTransactions" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-order-transaction.html">Overview</a>
+                            <a class="nav-link" href="organization-order-transaction-reports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Transaction Summary</div>
+                    <a class="nav-link" href="organization-transactions-summary.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Overview
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-5"></h1>
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4" style="padding: 20px;">
+                                    <ol class="breadcrumb mb-4">
+                                        <li class="breadcrumb-item active" style="font-style: italic;">Overview</li>
+                                    </ol>
+
+                                    
+
+
+                                    <div class="row d-flex align-items-stretch">
+                                        
+                                        <div class="col-lg-3 col-md-6 mb-3">
+                                            <div class="card text-white bg-success h-100">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="fas fa-dollar-sign fa-3x me-3"></i>
+                                                        <div>
+                                                            <h6 class="card-title">Payments transaction</h6>
+                                                            <p class="card-text" id="totalAmount" style="font-size: 25px;">₱0.00</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-3">
+                                                        <div class="d-flex justify-content-between">
+                                                            <span>
+                                                                <span class="circle-icon" style="background-color: #ff0080;">
+                                                               
+                                                                    <i class="fas fa-money-bill"></i>
+                                                                </span>
+                                                                <strong>Cash:</strong> <span id="totalCash">₱0.00</span>
+                                                            </span>
+                                                            <span>
+                                                                <span class="circle-icon" style="background-color: #017cff;">
+                                                                    <i class="fas fa-wallet"></i>
+                                                                </span>
+                                                                <strong>Gcash:</strong> <span id="totalGcash">₱0.00</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', async () => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            alert('Unauthorized access. Please log in.');
+            window.location.href = 'login.html';
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:5000/api/auth/total-amount-payment-organization', {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (!response.ok) throw new Error('Failed to fetch total payments.');
+
+            const data = await response.json();
+            document.getElementById('totalAmount').textContent = `₱${parseFloat(data.total_transactions).toFixed(2)}`;
+            document.getElementById('totalCash').textContent = `₱${parseFloat(data.total_cash).toFixed(2)}`;
+            document.getElementById('totalGcash').textContent = `₱${parseFloat(data.total_gcash).toFixed(2)}`;
+        } catch (error) {
+            console.error('Error fetching total payments:', error);
+        }
+    });
+                                        </script>
+                                        <!-- Total Amount Card -->
+                                        <div class="col-lg-3 col-md-6 mb-3">
+                                            <div class="card text-white bg-success h-100">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="fas fa-dollar-sign fa-3x me-3"></i>
+                                                        <div>
+                                                            <h6 class="card-title">Order Transaction</h6>
+                                                            <p class="card-text" id="totalPay" style="font-size: 25px;">₱0.00</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-3">
+                                                        <div class="d-flex justify-content-between">
+                                                            <span>
+                                                                <span class="circle-icon" style="background-color: #ff0080;">
+                                                                    <i class="fas fa-money-bill"></i>
+                                                                </span>
+                                                                <strong>Cash:</strong> <span id="totalCashOrder">₱0.00</span>
+                                                            </span>
+                                                            <span>
+                                                                <span class="circle-icon" style="background-color: #017cff;">
+                                                                    <i class="fas fa-wallet"></i>
+                                                                </span>
+                                                                <strong>Gcash:</strong> <span id="totalGcashOrder">₱0.00</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <script>document.addEventListener('DOMContentLoaded', async () => {
+                                        const token = localStorage.getItem('token');
+                                
+                                        if (!token) {
+                                            alert('Unauthorized access. Please log in.');
+                                            window.location.href = 'login.html';
+                                            return;
+                                        }
+                                
+                                        try {
+                                            const response = await fetch('http://localhost:5000/api/auth/total-pay-organization', {
+                                                headers: { Authorization: `Bearer ${token}` },
+                                            });
+                                
+                                            if (!response.ok) throw new Error('Failed to fetch total product transactions.');
+                                
+                                            const data = await response.json();
+                                            document.getElementById('totalPay').textContent = `₱${parseFloat(data.total_transactions)}`;
+                                            document.getElementById('totalCashOrder').textContent = `₱${parseFloat(data.total_cash)}`;
+                                            document.getElementById('totalGcashOrder').textContent = `₱${parseFloat(data.total_gcash)}`;
+                                        } catch (error) {
+                                            console.error('Error fetching product transactions:', error);
+                                        }
+                                    });</script>
+                                    
+
+
+                                      
+                                    <div class="col-lg-3 col-md-6 mb-3">
+                                        <div class="card text-white bg-success h-100">
+                                            <div class="card-body d-flex flex-column justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-box fa-3x me-3"></i>
+                                                    <div>
+                                                        <h6 class="card-title">Product Quantities</h6>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-3 text-center">
+                                                    <p class="card-text" style="font-size: 14px;">
+                                                        <span id="productNameOrg">Product</span> - <span id="productQuantity">0</span>
+                                                    </p>
+                                                </div>
+                                                <!-- Centered Dropdown at Bottom -->
+                                                <div class="mt-auto d-flex justify-content-center">
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-light dropdown-toggle p-2" type="button" id="productDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fas fa-shopping-cart text-dark"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu text-center" id="productDropdown">
+                                                            <!-- Options will be added dynamically -->
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <script>
+                                    document.addEventListener('DOMContentLoaded', async () => {
+                                        const token = localStorage.getItem('token');
+                                    
+                                        if (!token) {
+                                            alert('Unauthorized access. Please log in.');
+                                            window.location.href = 'adminlogin.html';
+                                            return;
+                                        }
+                                    
+                                        try {
+                                            const response = await fetch('http://localhost:5000/api/auth/product-quantities-organization', {
+                                                headers: { Authorization: `Bearer ${token}` },
+                                            });
+                                    
+                                            if (!response.ok) throw new Error('Failed to fetch product quantities.');
+                                    
+                                            const data = await response.json();
+                                    
+                                            const productDropdown = document.getElementById('productDropdown');
+                                            const productNameOrg = document.getElementById('productNameOrg');
+                                            const productQuantity = document.getElementById('productQuantity');
+                                    
+                                            // Populate the dropdown and set default selection
+                                            if (data.products.length > 0) {
+                                                data.products.forEach((product) => {
+                                                    let option = document.createElement('li');
+                                                    let link = document.createElement('a');
+                                                    link.className = "dropdown-item";
+                                                    link.href = "#";
+                                                    link.textContent = product.product_name;
+                                                    link.dataset.productId = product.product_id;
+                                                    option.appendChild(link);
+                                                    productDropdown.appendChild(option);
+                                                });
+                                    
+                                                // Set the first product as default
+                                                const defaultProduct = data.products[0];
+                                                updateProductView(defaultProduct.product_id);
+                                            } else {
+                                                productNameOrg.textContent = "No products available";
+                                                productQuantity.textContent = "";
+                                            }
+                                    
+                                            // Function to update product quantity display
+                                            function updateProductView(productId) {
+                                                const selectedProduct = data.products.find(product => product.product_id == productId);
+                                                if (selectedProduct) {
+                                                    productNameOrg.textContent = selectedProduct.product_name;
+                                                    productQuantity.textContent = `Total Quantity: ${selectedProduct.total_quantity}`;
+                                                }
+                                            }
+                                    
+                                            // Handle dropdown item click event
+                                            productDropdown.addEventListener('click', (event) => {
+                                                if (event.target.tagName === 'A') {
+                                                    updateProductView(event.target.dataset.productId);
+                                                }
+                                            });
+                                    
+                                        } catch (error) {
+                                            console.error('Error fetching product quantities:', error);
+                                        }
+                                    });
+                                    </script>
+                                    
+                                       
+                                    <div class="col-lg-3 col-md-6 mb-3">
+                                        <div class="card text-white bg-success h-100">
+                                            <div class="card-body d-flex flex-column justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-box fa-3x me-3"></i>
+                                                    <div>
+                                                        <h6 class="card-title" id="productCategoryTitle">Most Sold Product</h6>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-3 text-center d-flex flex-column align-items-center">
+                                                    <p class="card-text d-flex align-items-center" style="font-size: 13px;">
+                                                        <span id="productName">Product</span> - <span id="productOrders"> 0</span>
+                                                    </p>
+                                                </div>
+                                                <!-- Centered Dropdown at Bottom -->
+                                                <div class="mt-auto d-flex justify-content-center">
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-light dropdown-toggle p-2" type="button" id="productCategoryDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fas fa-chart-line text-dark"></i> <!-- Money graph icon -->
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end" id="productCategoryDropdown">
+                                                            <li><a class="dropdown-item" href="#" data-value="highest">Highest Sale</a></li>
+                                                            <li><a class="dropdown-item" href="#" data-value="average">Average Sale</a></li>
+                                                            <li><a class="dropdown-item" href="#" data-value="lowest">Lowest Sale</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <script>
+                                    document.addEventListener('DOMContentLoaded', async () => {
+                                        const token = localStorage.getItem('token');
+                                    
+                                        if (!token) {
+                                            alert('Unauthorized access. Please log in.');
+                                            window.location.href = 'login.html';
+                                            return;
+                                        }
+                                    
+                                        try {
+                                            const response = await fetch('http://localhost:5000/api/auth/product-review-stats', {
+                                                headers: { Authorization: `Bearer ${token}` },
+                                            });
+                                    
+                                            if (!response.ok) throw new Error('Failed to fetch product review stats.');
+                                    
+                                            const data = await response.json();
+                                    
+                                            // Store fetched data
+                                            const productData = {
+                                                highest: data.highestSold,
+                                                lowest: data.lowestSold,
+                                                average: data.averageSoldProducts.length > 0 ? data.averageSoldProducts : [{ product_name: 'No data', total_quantity: 0 }]
+                                            };
+                                    
+                                            // Function to update UI based on selection
+                                            function updateProductView(category) {
+                                                const productCategoryTitle = document.getElementById('productCategoryTitle');
+                                                const productNameElement = document.getElementById('productName');
+                                                const productOrdersElement = document.getElementById('productOrders');
+                                    
+                                                if (category === "average") {
+                                                    // Display all average sold products
+                                                    productCategoryTitle.textContent = "Average Sold Products";
+                                                    productNameElement.innerHTML = ""; // Clear previous content
+                                                    productOrdersElement.innerHTML = ""; // Clear previous content
+                                                    
+                                                    productData.average.forEach(product => {
+                                                        let productInfo = document.createElement('p');
+                                                        productInfo.textContent = `${product.product_name} - Total Sold: ${product.total_quantity}`;
+                                                        productNameElement.appendChild(productInfo);
+                                                    });
+                                                } else {
+                                                    // Display highest or lowest sold product
+                                                    const productInfo = productData[category];
+                                                    productCategoryTitle.textContent =
+                                                        category === "highest" ? "Most Sold Product" :
+                                                        "Least Sold Product";
+                                    
+                                                    productNameElement.textContent = productInfo.product_name;
+                                                    productOrdersElement.textContent = `Total Sold: ${productInfo.total_quantity}`;
+                                                }
+                                            }
+                                    
+                                            // Default to highest sold product
+                                            updateProductView("highest");
+                                    
+                                            // Change product view on dropdown selection
+                                            document.querySelectorAll('#productCategoryDropdown .dropdown-item').forEach(item => {
+                                                item.addEventListener('click', (event) => {
+                                                    event.preventDefault();
+                                                    updateProductView(event.target.getAttribute('data-value'));
+                                                });
+                                            });
+                                    
+                                        } catch (error) {
+                                            console.error('Error fetching product review stats:', error);
+                                        }
+                                    });
+                                    </script>
+                                    
+                                    
+                                    
+                                    </script>
+                                    <style>
+                                        .circle-icon {
+                                            display: inline-flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            width: 30px;
+                                            height: 30px;
+                                            border-radius: 50%;
+                                            color: white;
+                                            margin-right: 5px;
+                                        }
+                                    </style>
+                                    
+                                
+                                
+                                <!-- Charts Section -->
+                               
+                                    <div class="col-xl-12">
+                                        
+                                        <div class="row">
+                                            <div class="col-xl-6 col-md-12 mb-4">
+                                                <div class="card text-white bg-success h-100">
+                                                    <div class="card-header" style="background-color: #1B3A28; color: white;">
+                                                        <i class="fas fa-chart-bar me-1"></i>
+                                                        <span id="semesterTitle">Payments total transaction</span>
+                                                        <button id="nextSemesterButton" class="btn btn-light btn-sm float-end">Next</button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <canvas id="myBarChart"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-6 col-md-12 mb-4">
+                                                <div class="card text-white bg-success h-100">
+                                                    <div class="card-header" style="background-color: #1B3A28; color: white;">
+                                                        <i class="fas fa-chart-area me-1"></i>
+                                                        Payments vs. Orders
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <canvas id="myAreaChart"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Bar Chart -->
+                                            
+                                        </div>
+                                        
+                                        
+                                        <!-- Include Chart.js -->
+                                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        alert('Unauthorized access. Please log in.');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:5000/api/auth/monthly-totals', {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch monthly totals.');
+
+        const data = await response.json();
+
+        // Convert "YYYY-MM" format to "Month Year" (e.g., "January 2025")
+        const formatMonth = (monthString) => {
+            const date = new Date(monthString + "-01");
+            return date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+        };
+
+        const months = [...new Set([...data.transactions.map(t => t.month), ...data.productTransactions.map(p => p.month)])].sort();
+
+        const formattedMonths = months.map(formatMonth);
+
+        const totalTransactions = months.map(month => {
+            const t = data.transactions.find(t => t.month === month);
+            return t ? t.total_transactions : 0;
+        });
+
+        const totalProductTransactions = months.map(month => {
+            const p = data.productTransactions.find(p => p.month === month);
+            return p ? p.total_product_transactions : 0;
+        });
+
+        var ctx1 = document.getElementById('myAreaChart').getContext('2d');
+        var myAreaChart = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: formattedMonths, // X-axis labels (Formatted Months)
+                datasets: [
+                    {
+                        label: 'Total Transactions (Collection Payments)',
+                        data: totalTransactions, // Y-axis data
+                        backgroundColor: 'black', // Light transparent white
+                        borderColor: 'black', // Slightly dim white border
+                        borderWidth: 2,
+                        pointBackgroundColor: 'black', // Slightly dim white
+                        pointBorderColor: 'black'
+                    },
+                    {
+                        label: 'Total Transactions (Product Payments)',
+                        data: totalProductTransactions, // Y-axis data
+                        backgroundColor: 'black', // Light transparent white
+                        borderColor: 'black', // Slightly dim white border
+                        borderWidth: 2,
+                        pointBackgroundColor: 'black', // Slightly dim white
+                        pointBorderColor: 'black'
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'black', // White but not pure white
+                            font: { size: 14 } // Make it readable
+                        }
+                    }
+                },
+                scales: {
+                    x: { 
+                        ticks: { 
+                            color: 'black', // White but slightly dim for readability
+                            font: { size: 12 }
+                        }, 
+                        grid: { color: 'black' }
+                    },
+                    y: { 
+                        ticks: { 
+                            color: 'black', // White but slightly dim
+                            font: { size: 12 }
+                        }, 
+                        grid: { color: 'black' }
+                    }
+                }
+            }
+        });
+
+    } catch (error) {
+        console.error('Error fetching monthly totals:', error);
+    }
+});
+
+
+                                        
+document.addEventListener('DOMContentLoaded', async () => { 
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Unauthorized access. Please log in.');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    let semesters = [];
+    let payments = [];
+    let currentSemesterIndex = 0;
+
+    try {
+        const response = await fetch('http://localhost:5000/api/auth/accepted-payments-total-amount-payment-method', {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch total amounts and payment methods.');
+
+        const data = await response.json();
+        semesters = data.semesters;
+        payments = data.payments;
+
+        console.log("Fetched Semesters:", semesters); // Debug
+        console.log("Fetched Payments:", payments); // Debug
+
+        if (semesters.length === 0) {
+            throw new Error('No active semesters found.');
+        }
+
+        // Display the latest semester first
+        updateChart(semesters[currentSemesterIndex].id);
+
+        document.getElementById('nextSemesterButton').addEventListener('click', () => {
+            currentSemesterIndex = (currentSemesterIndex + 1) % semesters.length;
+            updateChart(semesters[currentSemesterIndex].id);
+        });
+
+    } catch (error) {
+        console.error('Error fetching total amounts and payment methods:', error);
+    }
+
+    function updateChart(semesterId) {
+    console.log("Selected Semester ID:", semesterId); // Debug: Check selected semester
+    const filteredPayments = payments.filter(p => parseInt(p.semester_id) === parseInt(semesterId));
+
+    console.log("Filtered Payments:", filteredPayments); // Debug: Check payments for selected semester
+
+    if (filteredPayments.length === 0) {
+        document.getElementById('semesterTitle').textContent = `No payments found for Semester: ${semesters.find(s => s.id === semesterId).name}`;
+        
+        // **Fix: Destroy only if `window.myBarChart` is already defined**
+        if (window.myBarChart && typeof window.myBarChart.destroy === "function") {
+            window.myBarChart.destroy();
+        }
+
+        return;
+    }
+
+    const semesterName = semesters.find(s => s.id === semesterId).name;
+    document.getElementById('semesterTitle').textContent = `Payments for Semester: ${semesterName}`;
+
+    const paymentNames = filteredPayments.map(payment => payment.payment_name);
+    const totalAmounts = filteredPayments.map(payment => payment.total_amount);
+    const cashCounts = filteredPayments.map(payment => payment.total_cash_amount);
+    const gcashCounts = filteredPayments.map(payment => payment.total_gcash_amount);
+    const transactionCounts = filteredPayments.map(payment => payment.transaction_count);
+
+    var ctx2 = document.getElementById('myBarChart').getContext('2d');
+
+    // **Fix: Ensure `window.myBarChart` is properly initialized**
+    if (window.myBarChart instanceof Chart) {
+        window.myBarChart.destroy();
+    }
+
+    window.myBarChart = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+        labels: paymentNames,
+        datasets: [
+            {
+                label: 'Total Amount Collected',
+                data: totalAmounts,
+                backgroundColor: '#1B3A28',      // Dark green
+                borderColor: 'rgba(0, 80, 0, 1)',             // Darker green border
+                borderWidth: 2
+            },
+            {
+                label: 'Cash Transactions',
+                data: cashCounts,
+                backgroundColor: 'rgba(255, 99, 132, 0.8)',   // Red remains
+                borderColor: 'rgba(200, 50, 80, 1)',
+                borderWidth: 2
+            },
+            {
+                label: 'Gcash Transactions',
+                data: gcashCounts,
+                backgroundColor: 'rgba(0, 123, 255, 0.8)',    // Blue for GCash
+                borderColor: 'rgba(0, 80, 200, 1)',          // Darker blue border
+                borderWidth: 2
+            },
+            {
+                label: 'Total Transactions',
+                data: transactionCounts,
+                backgroundColor: 'rgba(255, 165, 0, 0.8)',    // Orange remains
+                borderColor: 'rgba(200, 100, 0, 1)',
+                borderWidth: 2
+            }
+        ]
+    },
+    options: {
+        plugins: {
+            legend: { 
+                labels: { 
+                    color: '#333',
+                    font: { weight: 'bold' } 
+                }
+            }
+        },
+        scales: {
+            x: { 
+                ticks: { 
+                    color: '#333',
+                    font: { weight: '500' }
+                }, 
+                grid: { 
+                    color: 'rgba(0, 0, 0, 0.1)'
+                } 
+            },
+            y: { 
+                ticks: { 
+                    color: '#333',
+                    font: { weight: '500' }
+                }, 
+                grid: { 
+                    color: 'rgba(0, 0, 0, 0.1)'
+                } 
+            }
+        }
+        }
+
+    });
+}
+
+});
+
+
+                                        </script>
+                                                    <!-- Insert Pie Chart and Donut Chart -->
+<div class="row">
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card text-white bg-success h-100">
+            <div class="card-body">
+                <h5 class="card-title text-center" id="semesterPaymentsTitle">Payments Transactions - Semester</h5>
+                <p class="card-text text-center" id="semesterPaymentsAmount" style="font-size: 25px;">₱0.00</p>
+                <button id="nextSemesterPayments" class="btn btn-light btn-sm float-end">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Transactions Per Semester -->
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card text-white bg-success h-100">
+            <div class="card-body">
+                <h5 class="card-title text-center" id="semesterOrdersTitle">Order Transactions - Semester</h5>
+                <p class="card-text text-center" id="semesterOrdersAmount" style="font-size: 25px;">₱0.00</p>
+                <button id="nextSemesterOrders" class="btn btn-light btn-sm float-end">Next</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Unauthorized access. Please log in.');
+                window.location.href = 'adminlogin.html';
+                return;
+            }
+        
+            let semesters = [];
+            let semesterPayments = [];
+            let semesterOrders = [];
+            let currentSemesterIndexPayments = 0; // Track for payments separately
+            let currentSemesterIndexOrders = 0; // Track for orders separately
+        
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/payments-transactions-by-semester', {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+        
+                if (!response.ok) throw new Error('Failed to fetch semester-wise payments.');
+        
+                const data = await response.json();
+                semesters = data.semesters;
+                semesterPayments = data.payments;
+                semesterOrders = data.orders;
+        
+                if (semesters.length === 0) {
+                    throw new Error('No semester data available.');
+                }
+        
+                // Display the first semester for both sections
+                updateSemesterPaymentsView(currentSemesterIndexPayments);
+                updateSemesterOrdersView(currentSemesterIndexOrders);
+        
+                // Button click event for Payments Transactions (Independent)
+                document.getElementById('nextSemesterPayments').addEventListener('click', () => {
+                    currentSemesterIndexPayments = (currentSemesterIndexPayments + 1) % semesters.length;
+                    updateSemesterPaymentsView(currentSemesterIndexPayments);
+                });
+        
+                // Button click event for Orders Transactions (Independent)
+                document.getElementById('nextSemesterOrders').addEventListener('click', () => {
+                    currentSemesterIndexOrders = (currentSemesterIndexOrders + 1) % semesters.length;
+                    updateSemesterOrdersView(currentSemesterIndexOrders);
+                });
+        
+            } catch (error) {
+                console.error('Error fetching semester-wise transactions:', error);
+            }
+        
+            // Function to update UI for Payments Transactions
+            function updateSemesterPaymentsView(index) {
+                const semester = semesters[index];
+                if (!semester) return;
+        
+                const semesterPaymentsTotal = semesterPayments
+                    .filter(p => parseInt(p.semester_id) === parseInt(semester.id))
+                    .reduce((sum, p) => sum + parseFloat(p.total_amount || 0), 0);
+        
+                document.getElementById('semesterPaymentsTitle').textContent = `Payments Transactions - ${semester.name}`;
+                document.getElementById('semesterPaymentsAmount').textContent = `₱${semesterPaymentsTotal.toFixed(2)}`;
+            }
+        
+            // Function to update UI for Orders Transactions
+            function updateSemesterOrdersView(index) {
+                const semester = semesters[index];
+                if (!semester) return;
+        
+                const semesterOrdersTotal = semesterOrders
+                    .filter(o => parseInt(o.semester_id) === parseInt(semester.id))
+                    .reduce((sum, o) => sum + parseFloat(o.total_pay || 0), 0);
+        
+                document.getElementById('semesterOrdersTitle').textContent = `Order Transactions - ${semester.name}`;
+                document.getElementById('semesterOrdersAmount').textContent = `₱${semesterOrdersTotal.toFixed(2)}`;
+            }
+        });</script>
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card text-white bg-success h-100">
+            <div class="card-header" style="background-color: #1B3A28; color: white;">
+                <h7 class="card-title text-center">Payments Transactions Distribution</h7>
+            </div>
+            <div class="card-body">
+               
+                <canvas id="paymentsPieChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card text-white bg-success h-100">
+            <div class="card-header" style="background-color: #1B3A28; color: white;">
+                <h7 class="card-title text-center">Product Transactions Distribution</h7>
+            </div>
+            <div class="card-body">
+               
+                <canvas id="productsDonutChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        alert('Unauthorized access. Please log in.');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    try {
+        // Fetch Payments Transactions Data
+        const paymentsResponse = await fetch('http://localhost:5000/api/auth/transaction-status-counts', {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        // Fetch Product Transactions Data
+        const productsResponse = await fetch('http://localhost:5000/api/auth/product-transaction-status-counts', {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!paymentsResponse.ok || !productsResponse.ok) throw new Error('Failed to fetch transactions data.');
+
+        const paymentsData = await paymentsResponse.json();
+        const productsData = await productsResponse.json();
+
+        // Extract Data for Charts
+        const paymentsCounts = [
+            paymentsData.pending_count,
+            paymentsData.paid_count,
+            paymentsData.balance_count,
+            paymentsData.declined_count
+        ];
+        const productsCounts = [
+            productsData.pending_count,
+            productsData.paid_count,
+            productsData.balance_count,
+            productsData.declined_count
+        ];
+
+        // Payment Transactions Pie Chart
+        var ctx1 = document.getElementById('paymentsPieChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'pie',
+            data: {
+                labels: ['Pending', 'Paid', 'Balance', 'Declined'],
+                datasets: [{
+                    data: paymentsCounts,
+                    backgroundColor: ['#ffc107', '#28a745', '#007bff', '#dc3545'],
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: { color: 'black' }
+                    }
+                }
+            }
+        });
+
+        // Product Transactions Donut Chart
+        var ctx2 = document.getElementById('productsDonutChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pending', 'Paid', 'Balance', 'Declined'],
+                datasets: [{
+                    data: productsCounts,
+                    backgroundColor: ['#ffc107', '#28a745', '#007bff', '#dc3545'],
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: { color: 'black' }
+                    }
+                },
+                cutout: '50%' // Make it a donut chart
+            }
+        });
+
+    } catch (error) {
+        console.error('Error fetching transaction data:', error);
+    }
+});
+</script>
+
+                                                        <script>document.addEventListener('DOMContentLoaded', async () => {
+                                                            const token = localStorage.getItem('token');
+                                                    
+                                                            if (!token) {
+                                                                alert('Unauthorized access. Please log in.');
+                                                                window.location.href = 'login.html';
+                                                                return;
+                                                            }
+                                                    
+                                                            try {
+                                                                const response = await fetch('http://localhost:5000/api/auth/product-transaction-status-counts', {
+                                                                    headers: { Authorization: `Bearer ${token}` },
+                                                                });
+                                                    
+                                                                if (!response.ok) throw new Error('Failed to fetch product transaction status counts.');
+                                                    
+                                                                const data = await response.json();
+                                                    
+                                                                // Update UI with transaction counts
+                                                                document.getElementById('pendingCounta').textContent = data.pending_count;
+                                                                document.getElementById('paidCounta').textContent = data.paid_count;
+                                                                document.getElementById('balanceCounta').textContent = data.balance_count;
+                                                                document.getElementById('declinedCounta').textContent = data.declined_count;
+                                                    
+                                                            } catch (error) {
+                                                                console.error('Error fetching product transaction status counts:', error);
+                                                            }
+                                                        });</script>
+                                                        <div class="container mt-5">
+                                                            <h3 class="text-center">Transaction Dashboard</h3>
+                                                        
+                                                            <!-- Date Filter -->
+                                                            <div class="row mb-3">
+                                                                <div class="col-md-5">
+                                                                    <label for="start_date">Start Date:</label>
+                                                                    <input type="date" id="start_date" class="form-control">
+                                                                </div>
+                                                                <div class="col-md-5">
+                                                                    <label for="end_date">End Date:</label>
+                                                                    <input type="date" id="end_date" class="form-control">
+                                                                </div>
+                                                                <div class="col-md-2 mt-4">
+                                                                    <button class="btn btn-primary" onclick="fetchTransactions()">Filter</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        
+                                                            <!-- Payment Transactions -->
+                                                            <div class="row">
+                                                                <div class="col-lg-6 col-md-6 mb-3">
+                                                                    <div class="card text-white bg-success h-100">
+                                                                        <div class="card-body">
+                                                                            <h5 class="card-title text-center" id="paymentHeader">Payment Transactions Today</h5>
+                                                                            <table class="table text-white" id="paymentTable">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>Student Name</th>
+                                                                                        <th>Payment Name</th>
+                                                                                        <th>Transaction ID</th>
+                                                                                        <th>Status</th>
+                                                                                        <th>Received by</th>
+                                                                                        <th>Date</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody></tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                        
+                                                                <!-- Order Transactions -->
+                                                                <div class="col-lg-6 col-md-6 mb-3">
+                                                                    <div class="card text-white bg-success h-100">
+                                                                        <div class="card-body">
+                                                                            <h5 class="card-title text-center" id="orderHeader">Order Transactions Today</h5>
+                                                                            <table class="table text-white" id="orderTable">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>Student Name</th>
+                                                                                        <th>Order ID</th>
+                                                                                        <th>Status</th>
+                                                                                        <th>Order Status</th>
+                                                                                        <th>Received by</th>
+                                                                                        <th>Date</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody></tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>  
+                                                   
+                                                        
+                                                        <script> // Function to get today's date in Manila timezone
+                                                            function getManilaDate() {
+                                                                const now = new Date();
+                                                                const manilaTime = new Intl.DateTimeFormat('en-CA', { 
+                                                                    timeZone: 'Asia/Manila', 
+                                                                    year: 'numeric', 
+                                                                    month: '2-digit', 
+                                                                    day: '2-digit' 
+                                                                }).format(now);
+                                                                
+                                                                return manilaTime.replace(/\//g, '-'); // Convert "YYYY/MM/DD" to "YYYY-MM-DD"
+                                                            }
+                                                            
+                                                            async function fetchTransactions(defaultLoad = false) {
+                                                                const token = localStorage.getItem('token');
+                                                            
+                                                                if (!token) {
+                                                                    alert('Unauthorized access. Please log in.');
+                                                                    window.location.href = 'login.html';
+                                                                    return;
+                                                                }
+                                                            
+                                                                // Get today's date in Manila timezone
+                                                                const today = getManilaDate();
+                                                            
+                                                                let startDate = document.getElementById('start_date').value;
+                                                                let endDate = document.getElementById('end_date').value;
+                                                            
+                                                                // If defaultLoad is true (first page load), set the date range to today
+                                                                if (defaultLoad) {
+                                                                    document.getElementById('start_date').value = today;
+                                                                    document.getElementById('end_date').value = today;
+                                                                    startDate = today;
+                                                                    endDate = today;
+                                                                }
+                                                            
+                                                                try {
+                                                                    const response = await fetch(`http://localhost:5000/api/auth/all-payments-transactions-dashboard?start_date=${startDate}&end_date=${endDate}`, {
+                                                                        headers: { Authorization: `Bearer ${token}` },
+                                                                    });
+                                                            
+                                                                    if (!response.ok) throw new Error('Failed to fetch transactions.');
+                                                            
+                                                                    const data = await response.json();
+                                                            
+                                                                    // Update the headers dynamically
+                                                                    document.getElementById('paymentHeader').textContent = 
+                                                                        startDate === endDate ? `Payment Transactions Today (${formatDate(startDate)})` : `Payment Transactions (${formatDate(startDate)} to ${formatDate(endDate)})`;
+                                                            
+                                                                    document.getElementById('orderHeader').textContent = 
+                                                                        startDate === endDate ? `Order Transactions Today (${formatDate(startDate)})` : `Order Transactions (${formatDate(startDate)} to ${formatDate(endDate)})`;
+                                                            
+                                                                    // Populate Payment Transactions Table
+                                                                    $('#paymentTable').DataTable().clear().destroy();
+                                                                    $('#paymentTable tbody').empty();
+                                                                    data.payments.forEach(transaction => {
+                                                                        const receivedBy = transaction.received_by_firstname || transaction.received_by_middlename || transaction.received_by_lastname
+                                                                            ? `${transaction.received_by_firstname || ''} ${transaction.received_by_middlename || ''} ${transaction.received_by_lastname || ''}`.trim()
+                                                                            : 'There is no receiver yet';
+                                                            
+                                                                        $('#paymentTable tbody').append(`
+                                                                            <tr>
+                                                                                <td>${transaction.user_firstname || ''} ${transaction.user_middlename || ''} ${transaction.user_lastname || ''}</td>
+                                                                                <td>${transaction.payment_name}</td>
+                                                                                <td>${transaction.transaction_id}</td>
+                                                                                <td>${transaction.payment_status}</td>
+                                                                                <td>${receivedBy}</td>
+                                                                                <td>${formatDate(transaction.created_at)}</td>
+                                                                            </tr>
+                                                                        `);
+                                                                    });
+                                                            
+                                                                    $('#paymentTable').DataTable({
+                                                                        buttons: [
+        {
+            extend: 'copy',
+            text: '<i class="fas fa-copy" style="color: #ffffff;"></i>',
+            titleAttr: 'Copy',
+            className: 'btn-copy'  // Add a custom class to style the background color
+        },
+        {
+            extend: 'csv',
+            text: '<i class="fas fa-file-csv" style="color: #ffffff;"></i>',
+            titleAttr: 'Export to CSV',
+            className: 'btn-csv'  // Add a custom class to style the background color
+        },
+        {
+            extend: 'excel',
+            text: '<i class="fas fa-file-excel" style="color: #ffffff;"></i>',
+            titleAttr: 'Export to Excel',
+            className: 'btn-excel'  // Add a custom class to style the background color
+        },
+        {
+            extend: 'pdf',
+            text: '<i class="fas fa-file-pdf" style="color: #ffffff;"></i>',
+            titleAttr: 'Export to PDF',
+            className: 'btn-pdf'  // Add a custom class to style the background color
+        },
+        {
+            extend: 'print',
+            text: '<i class="fas fa-print" style="color: #ffffff;"></i>',
+            titleAttr: 'Print',
+            className: 'btn-print'  // Add a custom class to style the background color
+        }
+    ],
+    dom: 'lBfrtip',
+    lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+});
+                                                            
+                                                                    // Populate Order Transactions Table
+                                                                    $('#orderTable').DataTable().clear().destroy();
+                                                                    $('#orderTable tbody').empty();
+                                                                    data.orders.forEach(transaction => {
+                                                                        const acceptedBy = transaction.accepted_by_firstname || transaction.accepted_by_middlename || transaction.accepted_by_lastname
+                                                                            ? `${transaction.accepted_by_firstname || ''} ${transaction.accepted_by_middlename || ''} ${transaction.accepted_by_lastname || ''}`.trim()
+                                                                            : 'There is no receiver yet';
+                                                            
+                                                                        $('#orderTable tbody').append(`
+                                                                            <tr>
+                                                                                <td>${transaction.user_firstname || ''} ${transaction.user_middlename || ''} ${transaction.user_lastname || ''}</td>
+                                                                                <td>${transaction.order_transaction_id}</td>
+                                                                                <td>${transaction.status}</td>
+                                                                                <td>${transaction.order_status}</td>
+                                                                                <td>${acceptedBy}</td>
+                                                                                <td>${formatDate(transaction.created_at)}</td>
+                                                                            </tr>
+                                                                        `);
+                                                                    });
+                                                            
+                                                                    $('#orderTable').DataTable({
+                                                                        buttons: [
+        {
+            extend: 'copy',
+            text: '<i class="fas fa-copy" style="color: #ffffff;"></i>',
+            titleAttr: 'Copy',
+            className: 'btn-copy'  // Add a custom class to style the background color
+        },
+        {
+            extend: 'csv',
+            text: '<i class="fas fa-file-csv" style="color: #ffffff;"></i>',
+            titleAttr: 'Export to CSV',
+            className: 'btn-csv'  // Add a custom class to style the background color
+        },
+        {
+            extend: 'excel',
+            text: '<i class="fas fa-file-excel" style="color: #ffffff;"></i>',
+            titleAttr: 'Export to Excel',
+            className: 'btn-excel'  // Add a custom class to style the background color
+        },
+        {
+            extend: 'pdf',
+            text: '<i class="fas fa-file-pdf" style="color: #ffffff;"></i>',
+            titleAttr: 'Export to PDF',
+            className: 'btn-pdf'  // Add a custom class to style the background color
+        },
+        {
+            extend: 'print',
+            text: '<i class="fas fa-print" style="color: #ffffff;"></i>',
+            titleAttr: 'Print',
+            className: 'btn-print'  // Add a custom class to style the background color
+        }
+    ],
+    dom: 'lBfrtip',
+    lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+});
+                                                            
+                                                                } catch (error) {
+                                                                    console.error('Error fetching transactions:', error);
+                                                                }
+                                                            }
+                                                            
+                                                            // Function to format date as "Feb 6, 2024"
+                                                            function formatDate(dateString) {
+                                                                const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                                                                return new Date(dateString).toLocaleDateString('en-US', options);
+                                                            }
+                                                            
+                                                            // Load today's transactions by default when the page loads
+                                                            document.addEventListener('DOMContentLoaded', () => fetchTransactions(true));
+                                                                                                           
+                                                        </script>
+                                        </div>  
+                                    </div>
+                                
+                                </div>  
+                            </div>
+                        </div>   
+                    </div>  
+                </main>      
+            </div>
+        </div>
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+      

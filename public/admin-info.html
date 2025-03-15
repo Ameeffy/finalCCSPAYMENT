@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="icon" type="x-icon" href="img/logo.png"> <!-- Ensure img/logo.png exists -->
+    <title>ORGANIZATION</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #F5FFFA;
+        }
+
+        
+        .top {
+            background-color: #F5FFFA;
+            position: fixed;
+            width: 100%;
+            z-index: 0;
+            display: flex;
+            justify-content: end;
+            align-items: center;
+            padding-right: 20px;
+            z-index: 2;
+        }
+
+        .sidebar {
+            width: 11vw;
+            background-color: #F5FFFA; 
+            color: rgb(0, 0, 0);
+            display: flex;
+            flex-direction: column;            
+            z-index: 3;            
+        }
+        .main-content {
+            width: 85vw;
+            background-color: rgb(221, 231, 221);
+            margin-left: 30px;
+            height: 600px;
+            position: relative; 
+            border-radius: 10px;
+            height: 630px;
+            z-index: 1;
+        }
+        .sidebar .logo {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .sidebar .logo img {
+            max-width: 110px;
+            height: auto;
+        }
+
+        .sidebar .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .nav-item .icon {
+            margin-right: 15px;
+        }
+
+        .sidebar .nav-item .text {
+            font-size: 16px;
+        }
+
+        .sidebar .nav-item.active {
+            font-weight: bold;
+            color: #f1f1f1; /* Light color for contrast */
+        }
+
+
+        .full-container {
+            display: flex;
+            flex-direction: column;
+            margin-top: 80px;
+            border-radius: 10px;
+        }
+
+
+.dropdown-item:hover {
+    background-color: rgba(3, 75, 3, 0.1); 
+}
+
+
+.icon-button:hover + .dropdowns {
+    display: block; 
+}
+
+  
+
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <!-- Logo -->
+    <div class="logo">
+        <img src="img/logo.png" alt="Logo">
+    </div>
+    <!-- Navigation Items -->
+    <a href="admindashboard.html" class="nav-item" id="dashboard-link">
+        <div class="icon">
+            <i class="bi bi-house-door"></i>
+        </div>
+        <div class="text">Dashboard</div>
+    </a>
+    <a href="adminaccounts.html" class="nav-item" id="accounts-link">
+        <div class="icon">
+            <i class="bi bi-person"></i>
+        </div>
+        <div class="text">Accounts</div>
+    </a>
+    <a href="admincontrol.html" class="nav-item" id="control-link">
+        <div class="icon">
+            <i class="bi bi-gear"></i>
+        </div>
+        <div class="text">Control</div>
+    </a>
+
+    <a href="admincontrolOrganization.html" class="nav-item" id="control-link">
+        <div class="icon">
+            <i class="bi bi-gear"></i>
+        </div>
+        <div class="text">Organization</div>
+    </a>
+</div>
+
+
+
+<div class="top d-flex justify-content-end align-items-center p-2">
+
+    <h2 class="d-flex flex-grow-1" style="margin-left: 190px; color: #25330f;">COLLEGE OF COMPUTING STUDIES</h2>
+    
+    <i style="margin-right: 20px;">
+        <li id="profile-item" class="dropdown-item">
+            <a href="#">Loading...</a>
+        </li>
+    </i>
+    
+    
+        <div class="dropdownsss" style="margin-right: 25px ;">
+        <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            
+            <i class="fas fa-user-circle fa-2x" style="color: #25330f;"></i>
+           
+            <i class="fas fa-caret-down ms-2" style="color: #25330f;"></i>
+
+            
+
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            
+
+            <li><a class="dropdown-item" href="#" id="logout">Sign Out</a></li>
+        </ul>
+    </div>
+</div>
+<script>document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('token'); // Adjust according to your token storage method
+
+    if (!token) {
+        
+        window.location.href = 'adminlogin.html';
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:5000/api/auth/admin/details', { // Adjust the URL as necessary
+            method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // Adjust as needed
+                },
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch user data');
+            }
+            
+            const userData = await response.json();
+            const profileItem = document.getElementById("profile-item");
+
+            
+            profileItem.innerHTML = `<a style="color: #25330f; font-weight: bold;text-decoration: none;" href="admin-info.html">${userData.username} (${userData.email}) </a>`;
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            
+            profileItem.innerHTML = `<a href="#">Error loading profile</a>`;
+        }
+    });
+</script>
+<script>
+    document.getElementById('logout').addEventListener('click', function(event) {
+               event.preventDefault(); // Prevent the default link behavior
+       
+               
+               localStorage.removeItem('token');
+       
+               
+               window.location.href = 'adminlogin.html';
+           });
+  
+   document.addEventListener('DOMContentLoaded', function() {
+       const links = document.querySelectorAll('.sidebar .nav-item');
+
+       links.forEach(link => {
+           link.addEventListener('click', function() {
+              
+               links.forEach(item => item.classList.remove('active'));
+               
+               this.classList.add('active');
+           });
+       });
+   });
+</script>
+
+<div class="full-container">
+
+    <div class="main-content" style="display: flex; align-items: flex-start; padding: 20px; border-radius: 10px; gap: 20px;">
+
+        <!-- Admin Profile Photo -->
+        <div style="flex: 1; text-align: center;">
+            <div style="width: 150px; height: 150px; border-radius: 50%; background-color: #ccc; overflow: hidden; margin: 0 auto; margin-top: 80px;">
+                <img src="default-photo.jpg" alt="Admin Photo" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <p style="margin-top: 10px; font-weight: bold;">Admin Photo</p>
+        </div>
+    
+        <!-- Middle Section (Name, Email, Phone) -->
+        <div style="flex: 2; display: flex; flex-direction: column; gap: 15px;">
+            <div>
+                <label for="name" style="font-weight: bold; margin-bottom: 5px;">Name</label>
+                <input type="text" id="name" placeholder="ADMIN SAMPLE" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%;">
+            </div>
+            <div>
+                <label for="email" style="font-weight: bold; margin-bottom: 5px;">Email</label>
+                <input type="email" id="email" placeholder="ADMIN@GMAIL.COM" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%;">
+            </div>
+            <div>
+                <label for="phone" style="font-weight: bold; margin-bottom: 5px;">Phone</label>
+                <input type="text" id="phone" placeholder="091234567891" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%;">
+            </div>
+        </div>
+    
+        <!-- Right Section (Password, Change Password) -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 15px;">
+            <div>
+                <label for="password" style="font-weight: bold; margin-bottom: 5px;">Password</label>
+                <input type="password" id="password" placeholder="**********" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%;">
+            </div>
+            <div>
+                <label for="changePassword" style="font-weight: bold; margin-bottom: 5px;">Change Password</label>
+                <input type="password" id="changePassword" placeholder="**********" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%;">
+            </div>
+            <button type="submit" style="margin-top: 30px; padding: 10px; border: none; background-color: #0b5e1d; color: #fff; border-radius: 5px; cursor: pointer; font-size: 16px; width: 150px;">Save Changes</button>
+        </div>
+    
+    </div>
+    
+    
+      
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+
+
+function toggleDropdowns(event) {
+    const dropdown = event.target.nextElementSibling;
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    event.stopPropagation();
+}
+
+document.addEventListener('click', () => {
+    const dropdowns = document.querySelectorAll('.dropdowns');
+    dropdowns.forEach(dropdown => {
+        dropdown.style.display = 'none';
+    });
+});
+
+
+
+
+
+    </script>
+</body>
+</html>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`, // Adjust as needed
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch admin data');
+                }
+
+                const userData = await response.json();
+                const adminInfoDiv = document.getElementById("admin-info");
+
+                // Display the admin's username, email, and full name with icons
+                adminInfoDiv.innerHTML = `
+                    <div>
+                            <h2>Username: ${userData.username}</h2>
+                    </div>
+                    <div>
+                            <h3>Email: ${userData.email}</h3>
+                    </div>
+                    <div>
+                            <h3>Fullname: ${userData.firstname} ${userData.lastname}</h3>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error fetching admin data:', error);
+                document.getElementById("admin-info").innerHTML = `<p class="error-message">Error loading admin information.</p>`;
+            }
+
+            // Go back button functionality
+            document.getElementById("go-back").addEventListener("click", () => {
+                window.history.back(); // Navigate back to the previous page
+            });
+        });
+    </script>
+

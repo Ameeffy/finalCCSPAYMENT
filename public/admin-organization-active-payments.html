@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Active Payments Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">  
+  
+
+  <style>
+        .table-container{
+            width: auto;     
+            padding-top: 20px;
+            padding-left: 10px;
+            padding-right: 10px;   
+            border-radius: 3px;
+            padding-bottom: 0;
+        }
+.dataTables_scroll {
+    border-radius: 5px 5px 0 0; /* 5px top border radius */
+}
+
+.dataTables_scrollBody {
+    border-radius: 0; /* Ensure no bottom border radius */
+}
+
+
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px; /* Adjusted to 5px */
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px; /* Adjusted to 5px */
+}
+
+/* Ensure no bottom border-radius */
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important; /* Light gray border */
+    padding: 8px 10px; /* Comfortable spacing */
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important; /* Remove border from last row */
+}
+
+/* Optional hover effect */
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important; /* Very subtle hover background */
+    border-bottom-color: #d0d0d0 !important; /* Slightly darker border on hover */
+}
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        justify-self: flex-end;
+    }
+
+    /* Optional: Adjust spacing between elements */
+    .dataTables_wrapper .dataTables_length {
+        margin-right: 15px;
+    }
+   
+    .dataTables_wrapper .dataTables_info {
+        margin: 0 15px;
+    }
+    .dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    text-decoration: none;
+    color: #555;
+    background-color: #f9f9f9;
+}
+
+.dataTables_wrapper .dataTables_paginate a:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Styling the search box */
+.dataTables_wrapper .dataTables_filter {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Custom table design */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
+    border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
+    margin-bottom: 50px;
+}
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 8px 10px;
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important;
+    border-bottom-color: #d0d0d0 !important;
+}
+.export-container {
+  position: absolute;
+  right: 30px;
+  top: 70px;
+  z-index: 1;
+}
+
+.export-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.export-btn {
+  background-color: #1B3A28;
+  color: #ffffff;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 60px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+}
+
+.export-btn:hover {
+  background-color: #3e865c;
+}
+
+.export-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 83px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.export-content a {
+  color: #333;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.export-content a:hover {
+  background-color: #f8f9fa;
+}
+
+.export-dropdown:hover .export-content {
+  display: block;
+}
+@media print {
+  body {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+  }
+
+  .export-container, .dataTables_wrapper .top, .dataTables_wrapper .bottom {
+      display: none;
+  }
+
+  .custom-table {
+      border-collapse: collapse;
+      width: 100%;
+  }
+
+  .custom-table th, .custom-table td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+  }
+
+  .custom-table thead {
+      background-color: #f1f1f1;
+  }
+}
+  
+  </style>
+  <body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center">
+        <!-- Left Section -->
+        <div class="d-flex align-items-center">
+            <!-- Sidebar Toggle -->
+            <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                <i class="fas fa-bars" style="color: rgb(255, 255, 255);"></i>
+            </button>
+            
+            <!-- Logo -->
+            <div class="logo me-2">
+                <img src="img/logo.png" alt="Logo" height="40">
+            </div>
+            
+            <!-- College Title -->
+            <h2 class="college-title mb-0" style="color: black; font-size: 20px;">COLLEGE OF COMPUTING STUDIES</h2>
+        </div>
+
+        <!-- Right Section -->
+        <div class="ms-auto d-flex align-items-center">
+            <li id="profile-item" class="dropdown-item me-3">
+                <a href="#" style="color: #25330f; text-decoration: none;">Loading...</a>
+            </li>
+
+            <!-- User Dropdown -->
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user-circle fa-2x" style="color: #ffffff;"></i>
+                    <i class="fas fa-caret-down ms-2" style="color: #ffffff;"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                    width: 110px; 
+                    min-width: 110px; 
+                    background-color: #ffffff; 
+                    border: 1px solid #ccc; 
+                    border-radius: 8px; 
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                    padding: 0;">
+                    <li>
+                        <a class="dropdown-item text-center" href="#" id="logout" style="
+                            padding: 10px; 
+                            text-decoration: none; 
+                            font-size: 15px; 
+                            font-weight: 600; 
+                            color: #343a40; 
+                            border-bottom: 1px solid #ddd; 
+                            border-radius: 8px;
+                            transition: background-color 0.3s, color 0.3s;"
+                            onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                            onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                            <i class="fas fa-sign-out-alt me-2" style="color: inherit;"></i> Sign Out
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                window.location.href = 'adminlogin.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+
+                const userData = await response.json();
+                document.getElementById("profile-item").innerHTML = 
+                    `<a style="color: #25330f; text-decoration: none;" href="admin-info.html">${userData.username} (${userData.email})</a>`;
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                document.getElementById("profile-item").innerHTML = `<a href="#">Error loading profile</a>`;
+            }
+        });
+
+        document.getElementById('logout').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to log out?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Yes, log out!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('token');
+                    Swal.fire({
+                        title: 'Logged Out!',
+                        text: 'You have been logged out successfully.',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = 'adminlogin.html';
+                    });
+                }
+            });
+        });
+    </script>
+
+
+
+
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                   
+                    <div class="sb-sidenav-menu-heading">Overview</div>
+                    <a class="nav-link" href="admindashboard.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+                    
+                    <div class="sb-sidenav-menu-heading">System Controls</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Semester
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+
+                            <a class="nav-link" href="admincontrol.html">Management</a>
+                            <a class="nav-link" href="admincontrolOrganizationUsers.html">Payments</a>
+                            <a class="nav-link" href="adminallsemesterlogs.html">History</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-allpayments.html">Overview</a>
+                            <a class="nav-link" href="admin-payment.html">Management</a>
+                            <a class="nav-link" href="admin-organization-active-payments.html">Active Payment</a>
+                            <a class="nav-link" href="admin-payment-reports.html">Reports</a>
+                            <a class="nav-link" href="admin-allpaymentslogs.html">History</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseGcash" aria-expanded="false" aria-controls="collapseGcash">
+                        <div class="sb-nav-link-icon"><i class="fas fa-qrcode"></i></div>
+                        QR-Codes
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseGcash" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-gcashorder.html">Overview</a>
+                            <a class="nav-link" href="admin-order.html">Management</a>
+                            <a class="nav-link" href="admin-gcashorder-reports.html">Reports</a>
+                            <a class="nav-link" href="admin-gcashorderlogs.html">History</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Transaction Overview</div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseNew" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-alltransactions.html">Overview</a>
+                            <a class="nav-link" href="admin-transactionpaymentreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew1" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Orders
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseNew1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-allordertransactions.html">Overview</a>
+                            <a class="nav-link" href="admin-allordertransactionsreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">User Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                        Accounts
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+
+                   
+
+                    <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                Student
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-student.html">Overview</a>
+                                    <a class="nav-link" href="adminaccountsMain.html">Enrollment Status</a>
+                                    <a class="nav-link" href="adminaccountsReportsuser.html">Reports</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                Adviser
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-adviser.html">Overview</a>
+                                    
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAdmin" aria-expanded="false" aria-controls="pagesCollapseAdmin">
+                                Admin
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAdmin" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-admin.html">Overview</a>
+                                    <a class="nav-link" href="adminaccounts-adminlogs.html">History</a>     
+                                </nav>
+                            </div>                
+                        </nav>
+                    </div> 
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRegister" aria-expanded="false" aria-controls="collapseRegister">
+                        <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
+                        Register 
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseRegister" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="register.html">Student/Adviser</a>
+                            <a class="nav-link" href="adminaccregister.html">Admin</a>
+                        </nav>
+                    </div>
+                        
+                    <div class="sb-sidenav-menu-heading">Organization Management</div>
+                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrg" aria-expanded="false" aria-controls="collapseOrg">
+                        <div class="sb-nav-link-icon"><i class="fas fa-building"></i></div>
+                        Organization
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrg" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admincontrolOrganization.html">Overview</a>
+                            <a class="nav-link" href="Admin-organizationsYear.html">Active List</a>
+                            <a class="nav-link" href="admin-organization-all-logs.html">History</a>
+                        </nav>
+                    </div>
+                    <div class="sb-sidenav-menu-heading">transaction Summary</div>
+                    <a class="nav-link" href="admin-transactions-summary.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Overview
+                    </a>
+                </div>
+            </div> 
+        </nav>
+    </div>
+
+
+        
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-5"></h1>
+                    
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card mb-4" style="padding: 20px;">
+                                <ol class="breadcrumb mb-4">
+                                    <li class="breadcrumb-item" style="font-style: italic;">Payments</li>
+                                    <li class="breadcrumb-item active" style="font-style: italic;">Management</li>
+                                </ol>
+                              
+  
+                                <div class="table-container">
+                                    <h2 style="text-align: center;">Active Payments</h2>
+                                    <div class="display nowrap">
+                                        <div class="custom-table-container1">
+                                        <table id="paymentsTable" style="width:100%;" class="custom-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Payment Name</th>
+                                                    <th>Semester</th>
+                                                    <th>Total Amount Collections</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="paymentsTableBody">
+                                                <!-- Payment rows will be inserted here dynamically -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="export-container">
+                                    <div class="export-dropdown">
+                                        <button class="export-btn">
+                                            Export <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                        <div class="export-content">
+                                            <a href="#" onclick="exportAction('print')">Print</a>
+                                            <a href="#" onclick="exportAction('pdf')">PDF</a>
+                                            <a href="#" onclick="exportAction('csv')">CSV</a>
+                                            <a href="#" onclick="exportAction('excel')">Excel</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <script>
+                                                          // Function to fetch active payments for the organization
+                                document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('token');
+    const tableBody = document.querySelector('#paymentsTable tbody');
+
+    if (!token) {
+        alert('Unauthorized access. Please log in.');
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:5000/api/auth/payments/active/admin', {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch payments.');
+
+        const { payments } = await response.json();
+
+        if (payments.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="4" class="text-center">No active payments found.</td></tr>';
+            return;
+        }
+
+        // Clear existing table content
+        tableBody.innerHTML = '';
+
+        // Populate table with payment data
+        payments.forEach(payment => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${payment.payment_name}</td>
+                <td>${payment.semester_name}</td>
+                <td>₱${payment.total_transactions}</td>
+                <td>
+                    <button 
+                        class="button-view-more" 
+                        onclick="viewTransactions('${payment.payment_id}', '${payment.payment_name}')" 
+                        style="background-color: #007bff; color: white; border: none; border-radius: 5px; width: 33px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color 0.3s;" 
+                        onmouseover="this.style.backgroundColor='#0056b3'" 
+                        onmouseout="this.style.backgroundColor='#007bff'">
+                        <i class="fas fa-eye" style="font-size: 20px;"></i> <!-- Eye icon -->
+                    </button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+        // Initialize DataTable AFTER rows are added
+        const dataTable = $('#paymentsTable').DataTable({
+            dom: '<"top"f>rt<"bottom"lip>',
+            pageLength: 10,
+            buttons: [
+                { extend: 'copyHtml5', text: 'Copy', titleAttr: 'Copy to clipboard' },
+                { extend: 'csvHtml5', text: 'CSV', titleAttr: 'Download as CSV' },
+                { extend: 'excelHtml5', text: 'Excel', titleAttr: 'Download as Excel' },
+                { extend: 'pdfHtml5', text: 'PDF', titleAttr: 'Download as PDF', orientation: 'landscape' },
+                { extend: 'print', text: 'Print', titleAttr: 'Print Table' }
+            ]
+        });
+
+        // Function to trigger DataTable export actions
+        window.exportAction = function (type) {
+            switch (type) {
+                case 'csv': dataTable.button(1).trigger(); break;
+                case 'excel': dataTable.button(2).trigger(); break;
+                case 'pdf': dataTable.button(3).trigger(); break;
+                case 'print': dataTable.button(4).trigger(); break;
+            }
+        };
+
+    } catch (error) {
+        console.error('Error fetching payments:', error);
+        tableBody.innerHTML = '<tr><td colspan="4" class="text-center">Failed to load payments.</td></tr>';
+    }
+});
+                                </script>
+
+                              
+                              <!-- Modal for viewing payment transactions -->
+                              <div class="modal fade" id="transactionsModal" tabindex="-1" aria-labelledby="transactionsModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xl"> <!-- Extra-large modal -->
+                                    <div class="modal-content" style="max-width: 90vw;"> <!-- Ensures it takes up more space -->
+                                        <div class="modal-header">
+                                          <i class="bi bi-arrow-repeat me-2 fs-2"></i> 
+
+                                            <h5 class="modal-title" id="transactionsModalLabel">Payment Transactions</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Summary Section -->
+                                            <div id="transactionSummary" class="mb-3">
+                                                <!-- Summary information (payment name, counts, totals by method, overall total received) will be injected here -->
+                                            </div>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="me-2" style="width: auto;">
+                                                        <label for="startDate" class="form-label">Start Date</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                                            <input type="date" id="startDate" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                
+                                                    <div class="me-2" style="width: auto;">
+                                                        <label for="endDate" class="form-label">End Date</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                                            <input type="date" id="endDate" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                
+                                                    <button id="filterDateBtn" class="btn btn-secondary btn-sm align-self-end">
+                                                        <i class="fas fa-filter"></i>
+                                                    </button>
+                                                </div>
+                                                
+                                                
+                                            </div>
+                                            <div class="table-container">
+                                      
+                                                <div class="display nowrap">
+                                                    <div class="custom-table-container1">
+                                            <table class="custom-table" id="transactionsTable">
+                                                <thead> <!-- Bootstrap 5+ uses `table-*` classes -->
+                                                    <tr>
+                                                        <th>Transaction ID</th>
+                                                        <th>Total Amount</th>
+                                                        <th>Status</th>
+                                                        <th>Payment Method</th>
+                                                        <th>Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- Transaction rows will be inserted here dynamically -->
+                                                </tbody>
+                                            </table>
+                                            <div class="export-container">
+                                                <div class="export-dropdown">
+                                                    <button class="export-btn">
+                                                        Export <i class="fas fa-chevron-down"></i>
+                                                    </button>
+                                                    <div class="export-content">
+                                                        <a href="#" onclick="exportTransactionAction('print')">Print</a>
+                                                        <a href="#" onclick="exportTransactionAction('pdf')">PDF</a>
+                                                        <a href="#" onclick="exportTransactionAction('csv')">CSV</a>
+                                                        <a href="#" onclick="exportTransactionAction('excel')">Excel</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                              
+                              <script>
+          
+
+                // Function to trigger DataTable export actions
+// Update the exportAction function to explicitly use transactionsTable's DataTable
+window.exportTransactionAction = function(type) {
+    var dataTable = $('#transactionsTable').DataTable();
+    switch (type) {
+        case 'print': dataTable.button(4).trigger(); break;
+        case 'pdf': dataTable.button(3).trigger(); break;
+        case 'csv': dataTable.button(1).trigger(); break;
+        case 'excel': dataTable.button(2).trigger(); break;
+    }
+};
+
+// Function to fetch transactions and update the table with export functionality
+function viewTransactions(paymentId, paymentName) {
+    $.ajax({
+        url: 'http://localhost:5000/api/auth/payments/' + paymentId + '/transactions',
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        success: function(data) {
+            var transactions = data.transactions;
+            var tbody = $('#transactionsTable tbody');
+            tbody.empty(); // Clear old data
+
+            // Destroy existing DataTable before updating it with new data
+            if ($.fn.DataTable.isDataTable('#transactionsTable')) {
+                $('#transactionsTable').DataTable().clear().destroy();
+            }
+
+            // Compute summary statistics
+            var summary = {
+                paymentName: paymentName,
+                balanceCount: 0,
+                paidCount: 0,
+                cashCount: 0,
+                gcashCount: 0,
+                cashTotal: 0,
+                gcashTotal: 0,
+                overallTotal: 0
+            };
+
+            transactions.forEach(function(tx) {
+                var amount = parseFloat(tx.total_amount);
+                summary.overallTotal += amount;
+                if (tx.payment_status === "Balance") summary.balanceCount++;
+                if (tx.payment_status === "Paid") summary.paidCount++;
+                if (tx.payment_method === "Cash") {
+                    summary.cashCount++;
+                    summary.cashTotal += amount;
+                }
+                if (tx.payment_method === "Gcash") {
+                    summary.gcashCount++;
+                    summary.gcashTotal += amount;
+                }
+
+                // Create table row for each transaction
+                var row = $('<tr>');
+                row.append($('<td>').text(tx.transaction_id));
+                row.append($('<td>').text(tx.total_amount));
+                row.append($('<td>').text(tx.payment_status));
+                row.append($('<td>').text(tx.payment_method));
+                var date = new Date(tx.created_at).toLocaleString();
+                row.append($('<td>').text(date));
+                tbody.append(row);
+            });
+
+            // Build the summary HTML including totals for each payment method
+            var summaryHtml = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Payment Name:</strong> ${summary.paymentName}</p>
+                        <p><strong>Balance Transactions:</strong> ${summary.balanceCount}</p>
+                        <p><strong>Paid Transactions:</strong> ${summary.paidCount}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Cash Transactions:</strong> ${summary.cashCount} (Total: ₱${summary.cashTotal.toFixed(2)})</p>
+                        <p><strong>Gcash Transactions:</strong> ${summary.gcashCount} (Total: ₱${summary.gcashTotal.toFixed(2)})</p>
+                        <p><strong>Overall Received Amount:</strong> ₱${summary.overallTotal.toFixed(2)}</p>
+                    </div>
+                </div>
+            `;
+            $("#transactionSummary").html(summaryHtml);
+
+            // Reinitialize DataTable with export buttons
+            $('#transactionsTable').DataTable({
+    dom: '<"top"f>rt<"bottom"lip>', // Add 'B' to include buttons
+    buttons: [
+        { extend: 'copyHtml5', text: 'Copy', titleAttr: 'Copy to clipboard' },
+        { extend: 'csvHtml5', text: 'CSV', titleAttr: 'Download as CSV' },
+        { extend: 'excelHtml5', text: 'Excel', titleAttr: 'Download as Excel' },
+        { extend: 'pdfHtml5', text: 'PDF', titleAttr: 'Download as PDF', orientation: 'landscape' },
+        { extend: 'print', text: 'Print', titleAttr: 'Print Table' }
+    ],
+    order: [[4, "desc"]]
+});
+   
+
+                              
+                                    // Date range filter button handler
+                                    $('#filterDateBtn').off('click').on('click', function() {
+                                      var startDate = $('#startDate').val();
+                                      var endDate = $('#endDate').val();
+                                      if (startDate && endDate) {
+                                        $.fn.dataTable.ext.search.push(
+                                          function(settings, data, dataIndex) {
+                                            var date = new Date(data[4]); // The 5th column (Date)
+                                            var start = new Date(startDate);
+                                            var end = new Date(endDate);
+                                            return date >= start && date <= end;
+                                          }
+                                        );
+                                        $('#transactionsTable').DataTable().draw();
+                                        $.fn.dataTable.ext.search.pop();
+                                      } else {
+                                        alert("Please select both start and end dates.");
+                                      }
+                                    });
+                              
+                                    // Show the modal
+                                    $('#transactionsModal').modal('show');
+                                  },
+                                  error: function(err) {
+                                    alert('Error fetching transactions for this payment.');
+                                    console.error(err);
+                                  }
+                                });
+                              }
+                              
+                                $(document).ready(function() {
+                                  fetchActivePayments();
+                                });
+                              </script>
+                              
+                            </div>  
+                        </div>
+                    </div>   
+                </div>  
+            </main>      
+        </div>
+    </div>
+    <script src="/static/js/scripts.js"></script>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+</html>
+

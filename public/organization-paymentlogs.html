@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization Payment Logs</title>
+
+    <!-- DataTables & Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css" rel="stylesheet">
+
+    <!-- jQuery & DataTables Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5FFFA;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #034b03;
+            color: white;
+        }
+        tr:hover td {
+            background-color: #ddfadc;
+            transform: translateX(5px) scale(1.05);
+            transition: transform 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Organization Payment Logs</h1>
+    <table id="organizationPaymentLogsTable" class="display nowrap">
+        <thead>
+            <tr>
+                <th>Payment Name</th>
+                <th>Action</th>
+                <th>Performed By</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        $(document).ready(function() {
+            const token = localStorage.getItem('token'); // Retrieve token from localStorage
+            
+            if (!token) {
+                alert('Unauthorized access. Please log in.');
+                window.location.href = 'adminlogin.html'; // Redirect to login page if no token
+                return;
+            }
+
+            fetch('http://localhost:5000/api/auth/organization-payment-logs', {
+                headers: {
+                    'Authorization': `Bearer ${token}` // Attach token in the request headers
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch organization payment logs.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                let logsData = data.logs.map(log => [
+                    log.payment_name || 'Unknown',
+                    log.action,
+                    [
+                        log.accepted_by_name ? ` ${log.accepted_by_name} (Admin)` : '',
+                        log.adviser_name ? `${log.adviser_name} (Adviser)` : '',
+                        log.organization_by_name ? `${log.organization_by_name} (Organization)` : '',
+                    ].filter(name => name).join('<br>'), // Combine names with line breaks
+                    `<span style="display:none">${new Date(log.created_at).getTime()}</span>${new Date(log.created_at).toLocaleString()}`
+                ]);
+
+                $('#organizationPaymentLogsTable').DataTable({
+                    data: logsData,
+                    columns: [
+                        { title: "Payment Name" },
+                        { title: "Action" },
+                        { title: "Performed By" },
+                        { title: "Date", type: "num" } // Sort by timestamp
+                    ],
+                    dom: 'Bfrtip',
+                    buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                    order: [[3, 'desc']] // Sort by timestamp
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching organization payment logs:', error);
+                alert('Error loading payment logs.');
+            });
+        });
+    </script>
+
+</body>
+</html>

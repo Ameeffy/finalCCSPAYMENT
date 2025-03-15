@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Organization</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5FFFA; /* Light, soft white background */
+            color: #333; /* Dark text for contrast */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Top Navigation */
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background-color: #1B3A28; /* Dark Green */
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo h1 {
+            color: white;
+            font-size: 24px;
+            margin: 0;
+            font-weight: normal;
+            flex-grow: 1;
+        }
+
+        .logo .sign-out {
+            background-color: #2d7d4d;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            
+        }
+
+        .logo .sign-out:hover {
+            background-color: #085d15;
+        }
+
+        /* Page Titles */
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 28px;
+        }
+
+        /* User Details */
+        #user-details {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            font-size: 18px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #user-details h2 {
+            color: #1b241f;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+        }
+
+        #user-details h2 img {
+            margin-right: 10px;
+            width: 30px;
+        }
+
+        /* Organization List */
+        #organizations-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            gap: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .organization-item {
+            background-color: #1B3A28;
+            color: #ffffff;
+            width: 320px;
+            margin: 10px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+
+        .organization-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .organization-item img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .organization-item h4 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .organization-item p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        .organization-item button {
+            background-color: #2d7d4d;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .organization-item button:hover {
+            background-color: #085d15;
+            
+        }
+
+        /* Loading Screen */
+        .logo-container {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+       
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        margin: 0 auto; /* Center the logo horizontally */
+    }
+
+    /* Dark Green Spinner */
+    .spinner {
+        border: 5px solid rgba(0, 0, 0, 0.1);
+        border-left-color: #ffffff; /* Dark Green */
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        animation: spin 1s linear infinite;
+        position: absolute;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Organization Image */
+    .organization-item img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: none; /* Hide image until it's loaded */
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }#loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #085d15;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 9999;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+       
+    </style>
+</head>
+<body>
+
+    <div class="logo">
+        <img src="img/logo.png" alt="Logo">
+        <h1>College of Computing Studies</h1>
+        <button class="sign-out" onclick="confirmSignOut()"><i class="fas fa-sign-out-alt"></i>
+        </button>
+    </div>
+
+    <div id="user-details">
+        <h2><img src="https://img.icons8.com/ios-filled/50/ffffff/user.png" alt="user icon"> Welcome, <span id="fullName"></span>!</h2>
+    </div>
+
+    <div id="loadingScreen">Loading organizations...</div>
+    <h2>Choose Your Organization</h2>
+
+    <div id="organizations-list"></div> <!-- Organizations Display -->
+
+    <script>
+        function confirmSignOut() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to sign out?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d9534f',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, sign out!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('token');
+                    Swal.fire({
+                        title: 'Successfully Logged Out',
+                        text: 'You have been logged out successfully.',
+                        icon: 'success',
+                        confirmButtonColor: '#2d7d4d'
+                    }).then(() => {
+                        window.location.href = 'adminlogin.html';
+                    });
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'adminlogin.html';
+            return;
+        }
+
+        fetch('http://localhost:5000/api/auth/organizations-users', {
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('loadingScreen').style.display = "none";
+
+            if (data && data.organizations) {
+                document.getElementById('fullName').textContent = `${data.user.firstName} ${data.user.middleName} ${data.user.lastName}`;
+                const orgListContainer = document.getElementById('organizations-list');
+                orgListContainer.innerHTML = '';
+
+                data.organizations.forEach(org => {
+                    const orgElement = document.createElement('div');
+                    orgElement.classList.add('organization-item');
+
+                    // Use default logo if missing
+                    const orgPhoto = org.photo && org.photo.trim() !== "" ? org.photo : "img/logo.png";
+
+                    // Add a loading spinner initially
+                    orgElement.innerHTML = `
+                        <div class="logo-container">
+                            <div class="spinner"></div>
+                            <img src="${orgPhoto}" alt="Organization Logo" onload="hideSpinner(this)">
+                        </div>
+                        <br>
+                        <h4>${org.name}</h4>
+                        <p>Position: ${org.position}</p>
+                        <br>
+                        <button onclick="selectOrganization(${org.id})">Select</button>
+                    `;
+
+                    orgListContainer.appendChild(orgElement);
+                });
+            } else {
+                console.error('No organizations found');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching organizations:', error);
+            document.getElementById('loadingScreen').textContent = "Failed to load organizations.";
+        });
+    });
+
+    function hideSpinner(imgElement) {
+        const loadingContainer = imgElement.parentElement;
+        const spinner = loadingContainer.querySelector('.spinner');
+
+        // Hide spinner and show image
+        spinner.style.display = "none";
+        imgElement.style.display = "block";
+    }
+
+ 
+           // Function to handle the selection of an organization
+           function selectOrganization(organizationId) {
+            const token = localStorage.getItem('token'); // Get token from localStorage
+
+            if (!token) {
+                window.location.href = 'login.html'; // If there's no token, redirect to login
+                return;
+            }
+
+            const authHeader = `Bearer ${token}`;
+
+            fetch('http://localhost:5000/api/auth/select-organization', {
+                method: 'POST',
+                headers: {
+                    'Authorization': authHeader,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    orgIduseraccount: getUserIdFromToken(token), // Extract user_id from the token
+                    organizationId: organizationId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.token) {
+                    // Save the new token in localStorage and redirect to the dashboard
+                    localStorage.setItem('token', data.token);
+                    window.location.href = data.redirectTo; // Redirect to organization-dashboard.html
+                } else {
+                    console.error('Error selecting organization:', data.msg);
+                }
+            })
+            .catch(error => {
+                console.error('Error selecting organization:', error);
+            });
+        }
+
+        // Function to extract the user_id from the JWT token (using token provided)
+        function getUserIdFromToken(token) {
+            const payload = JSON.parse(atob(token.split('.')[1])); // Decode the JWT token
+            return payload.orgiduseraccount; // Return the user_id from the token payload
+        }
+    </script>
+</body>
+</html>

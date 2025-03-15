@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Admin Payment</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>  
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> 
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    </head>
+<style>
+.custom-heading {
+    color: #25330f;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 30px;
+    text-transform: uppercase;
+}
+</style>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center justify-content-between px-3">
+            <!-- Left Section -->
+            <div class="d-flex align-items-center">
+                <!-- Sidebar Toggle -->
+                <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                    <i class="fas fa-bars" style="color: black;"></i>
+                </button>
+        
+                <!-- Logo -->
+                <div class="logo me-2">
+                    <img src="img/logo.png" alt="Logo" height="40">
+                </div>
+        
+                <!-- Organization Info -->
+                <div id="organizationInfo" class="d-flex flex-grow-1">
+                    <!-- Organization Name will be inserted here -->
+                </div>
+            </div>
+        
+            <!-- Right Section -->
+            <div class="d-flex align-items-center">
+              
+                <div class="flex-grow-1 p-4">
+                    <div class="d-flex justify-content-between">
+                        <h1 style="color: #25330f; text-decoration: none; font-size: 24px;">Welcome, <span id="adviserName"></span></h1>
+                    </div>
+                </div>
+                
+        
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x" style="color: #25330f;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: #25330f;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                        width: 110px !important; 
+                        min-width: 110px !important; 
+                        background-color: #ffffff; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        height: auto;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                        padding: 0;">
+                        <li>
+                            <a class="dropdown-item" href="#" id="logout" style="
+                                display: flex; 
+                                align-items: center; 
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                height: auto;
+                                border-bottom: 1px solid #ddd; 
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-sign-out-alt" style="margin-right: 8px; color: inherit;"></i> Sign Out
+                            </a>
+                           
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+                <script>
+  document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                window.location.href = 'adminlogin.html';
+                return;
+            }
+
+            // Fetch adviser details
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/adviser/details', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch adviser details');
+                }
+
+                const adviser = await response.json();
+                document.getElementById('adviserName').textContent = `${adviser.firstname} ${adviser.middlename} ${adviser.lastname}`;
+            } catch (error) {
+                console.error('Error fetching adviser details:', error);
+                Swal.fire('Error', 'Unable to load adviser details.', 'error');
+            }
+        });
+
+        // Logout
+        document.getElementById('logout').addEventListener('click', () => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to logout?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Yes, Logout',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('token');
+                    window.location.href = 'adminlogin.html';
+                }
+            });
+        });
+        </script>
+   
+    
+
+
+   <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+
+                    <!-- Overview -->
+                    <div class="sb-sidenav-menu-heading">Overview</div>
+                    <a class="nav-link" href="adviser-home.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+
+                    <!-- Payment Management -->
+                    <div class="sb-sidenav-menu-heading">Payment Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="adviser-payments.html">Review and Approval</a>
+                            <a class="nav-link" href="adviser-allpayments.html">Management Record</a>
+                            <a class="nav-link" href="adviser-payments-reports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <!-- QR-Code Management -->
+                    <div class="sb-sidenav-menu-heading">QR-Code Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseQrCode" aria-expanded="false" aria-controls="collapseQrCode">
+                        <div class="sb-nav-link-icon"><i class="fas fa-qrcode"></i></div>
+                        QR-Code
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseQrCode" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="adviser-order.html">Review and Approval</a>
+                            <a class="nav-link" href="adviser-allorders.html">Management Record</a>
+                            <a class="nav-link" href="adviser-order-reports.html">Reports</a>
+                        </nav>
+                    </div>
+                    <div class="sb-sidenav-menu-heading">Transaction Overview</div>
+        
+                            <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                                Collection
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseNew" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adviser-alltransactions.html">Overview</a>
+                                    <a class="nav-link" href="adviser-transactionpaymentreports.html">Reports</a>
+                                </nav>
+                            </div>
+        
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew1" aria-expanded="false" aria-controls="collapsePayments">
+                                <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>
+                                Orders
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseNew1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adviser-allordertransactions.html">Overview</a>
+                                    <a class="nav-link" href="adviser-allordertransactionsreports.html">Reports</a>
+                                </nav>
+                            </div>
+                    <div class="sb-sidenav-menu-heading">Organization Overview</div>
+                    <a class="nav-link" href="adviser-academic-list.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Academic List
+                    </a>
+                    <div class="sb-sidenav-menu-heading">transaction Summary</div>
+                    <a class="nav-link" href="adviser-transactions-summary.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Overview
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-5"></h1>
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4" style="padding: 20px;">
+                                    <ol class="breadcrumb mb-4">
+                                        <li class="breadcrumb-item active" style="font-style: italic;">Overview</li>
+                                    </ol>
+                                    <div class="row">
+                                        <!-- Total Amount Card -->
+                                        <div class="col-md-3">
+                                            <div class="card shadow-sm border-primary mb-3">
+                                                <div class="card-body text-center">
+                                                    <h5 class="card-title">Total Amount</h5>
+                                                    <p id="totalAmountDisplay" class="font-weight-bold text-primary" style="font-size: 24px;">
+                                                        ₱0.00
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                        <!-- Total Cash Payments Card -->
+                                        <div class="col-md-3">
+                                            <div class="card shadow-sm border-success mb-3">
+                                                <div class="card-body text-center">
+                                                    <h5 class="card-title">Total Cash Payments</h5>
+                                                    <p id="totalCashDisplay" class="font-weight-bold text-success" style="font-size: 24px;">
+                                                        ₱0.00
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                        <!-- Total GCash Payments Card -->
+                                        <div class="col-md-3">
+                                            <div class="card shadow-sm border-info mb-3">
+                                                <div class="card-body text-center">
+                                                    <h5 class="card-title">Total GCash Payments</h5>
+                                                    <p id="totalGcashDisplay" class="font-weight-bold text-info" style="font-size: 24px;">
+                                                        ₱0.00
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                        <!-- Total Transactions Card -->
+                                        <div class="col-md-3">
+                                            <div class="card shadow-sm border-warning mb-3">
+                                                <div class="card-body text-center">
+                                                    <h5 class="card-title">Total Transactions</h5>
+                                                    <p id="totalTransactionsDisplay" class="font-weight-bold text-warning" style="font-size: 24px;">
+                                                        0
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                  
+                                    <div id="filterContainer" class="mb-3 p-3 border rounded bg-light">
+                                        <label for="minDate" class="fw-bold">Start Date:</label>
+                                        <input type="date" id="minDate" class="date-range form-control d-inline-block w-auto">
+                                        
+                                        <label for="maxDate" class="fw-bold">End Date:</label>
+                                        <input type="date" id="maxDate" class="date-range form-control d-inline-block w-auto">
+                                        
+                                        <button id="filterDateBtn" class="btn btn-primary btn-sm">Filter</button>
+                                    </div>
+                                    <div id="receivedByFilterContainer" class="mb-3 p-3 border rounded bg-light">
+    <label for="receivedByFilter" class="fw-bold">Filter by Received By:</label>
+    <select id="receivedByFilter" class="form-select d-inline-block w-auto">
+        <option value="">All</option>
+    </select>
+</div>
+                                    <table id="transactionsTable" class="display nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Student Name</th>
+                                                <th>Payment Name</th>
+                                                <th>Transaction ID</th>
+                                                <th>Status</th>
+                                                <th>Method</th>
+                                                <th>Total Amount</th>
+                                                <th>Received By</th>
+                                                <th>Created At</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Data will be dynamically populated -->
+                                        </tbody>
+                                    </table>
+                                    <div id="transactionHistoryModal" class="modal" style="display: none;">
+                                        <div class="modal-content">
+                                            <span 
+                                                style="position: absolute; right: 20px; cursor: pointer; margin-top: 20px;" 
+                                                class="close" 
+                                                onclick="closeTransactionModalHistory()">
+                                                <i class="fas fa-times-circle"></i>
+                                            </span>
+                                            <div id="transactionHistoryDetails"></div>
+                                        </div>
+                                    </div>
+                                    <script>
+                                   document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('token');
+    const tableBody = document.querySelector('#transactionsTable tbody');
+    const totalAmountDisplay = document.getElementById('totalAmountDisplay');
+    const totalCashDisplay = document.getElementById('totalCashDisplay');
+    const totalGcashDisplay = document.getElementById('totalGcashDisplay');
+    const receivedByFilter = document.getElementById('receivedByFilter');
+
+    if (!token) {
+        alert('Unauthorized access. Please log in.');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:5000/api/auth/all-transactions-adviser', {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch transactions.');
+
+        const { transactions } = await response.json();
+        let totalAmountToday = 0;
+        let totalCashToday = 0;
+        let totalGcashToday = 0;
+        const today = new Date().toISOString().split('T')[0];
+        let receivedByNames = new Set();
+
+        if (transactions.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="9" class="text-center">No transactions found.</td></tr>';
+            totalAmountDisplay.innerHTML = `₱0.00 (Today)`;
+            totalCashDisplay.innerHTML = `₱0.00`;
+            totalGcashDisplay.innerHTML = `₱0.00`;
+            return;
+        }
+
+        transactions.forEach(transaction => {
+            const transactionDate = new Date(transaction.created_at).toISOString().split('T')[0];
+
+            // Calculate today's total amounts
+            if (transactionDate === today) {
+                const amount = parseFloat(transaction.total_amount || 0);
+                totalAmountToday += amount;
+
+                if (transaction.payment_method === "Cash") {
+                    totalCashToday += amount;
+                } else if (transaction.payment_method === "Gcash") {
+                    totalGcashToday += amount;
+                }
+            }
+
+            if (transaction.received_by_name) {
+                receivedByNames.add(transaction.received_by_name);
+            }
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${transaction.user_name || 'N/A'}</td>
+                <td>${transaction.payment_name || 'N/A'}</td>
+                <td>${transaction.transaction_id}</td>
+                <td>${transaction.payment_status}</td>
+                <td>${transaction.payment_method}</td>
+                <td class="amount-cell">₱${transaction.total_amount || '0.00'}</td>
+                <td>${transaction.received_by_name || 'N/A'}</td>
+                <td>${new Date(transaction.created_at).toLocaleDateString('en-PH', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                })}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm"
+                        onclick="openTransactionModalHistory('${transaction.transaction_id}')">
+                        <i class="bi bi-clock-history"></i>
+                    </button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+        receivedByNames.forEach(name => {
+            const option = document.createElement('option');
+            option.value = name;
+            option.textContent = name;
+            receivedByFilter.appendChild(option);
+        });
+
+        // Display today's total amounts
+        totalAmountDisplay.innerHTML = `₱${totalAmountToday.toFixed(2)}`;
+        totalCashDisplay.innerHTML = `₱${totalCashToday.toFixed(2)}`;
+        totalGcashDisplay.innerHTML = `₱${totalGcashToday.toFixed(2)}`;
+
+        var table = $('#transactionsTable').DataTable({
+            dom: 'Blfrtip',
+            buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+            scrollX: true,
+            destroy: true,
+            order: [[7, 'desc']]
+        });
+
+        table.draw();
+        updateFilteredTotalAmount();
+
+        // Date and Received By filtering logic
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+            var min = $('#minDate').val();
+            var max = $('#maxDate').val();
+            var receivedBySelected = receivedByFilter.value;
+            var createdAt = data[7]; 
+            var receivedByName = data[6];
+
+            if (!min && !max && !receivedBySelected) return true;
+
+            var date = new Date(createdAt);
+            if (min && date < new Date(min + "T00:00:00")) return false;
+            if (max && date > new Date(max + "T23:59:59")) return false;
+            if (receivedBySelected && receivedByName !== receivedBySelected) return false;
+
+            return true;
+        });
+
+        $('#filterDateBtn, #receivedByFilter').on('change click', function() {
+            table.draw();
+            updateFilteredTotalAmount();
+        });
+
+    } catch (error) {
+        console.error('Error fetching transactions:', error);
+        tableBody.innerHTML = '<tr><td colspan="9" class="text-center">Failed to load transactions.</td></tr>';
+        totalAmountDisplay.innerHTML = `₱0.00 (Today)`;
+        totalCashDisplay.innerHTML = `₱0.00`;
+        totalGcashDisplay.innerHTML = `₱0.00`;
+    }
+});
+
+// Function to update total amount based on date range and received by filter
+function updateFilteredTotalAmount() {
+    let totalFilteredAmount = 0;
+    let totalFilteredCash = 0;
+    let totalFilteredGcash = 0;
+    let totalFilteredTransactions = 0; // ✅ Ensure this is initialized
+
+    const table = $('#transactionsTable').DataTable();
+    const minDate = document.getElementById('minDate').value;
+    const maxDate = document.getElementById('maxDate').value;
+    const receivedBySelected = document.getElementById('receivedByFilter').value;
+    const displayBox = document.getElementById('totalAmountDisplay');
+    const cashDisplayBox = document.getElementById('totalCashDisplay');
+    const gcashDisplayBox = document.getElementById('totalGcashDisplay');
+    const transactionsDisplayBox = document.getElementById('totalTransactionsDisplay'); // ✅ Ensure this is selected
+
+    table.rows({ search: 'applied' }).every(function() {
+        let row = this.data();
+        let amountText = row[5].replace(/[^\d.]/g, ''); // Extract numeric value
+        let paymentMethod = row[4].trim(); // Payment method is in column 4
+        let amount = parseFloat(amountText || 0);
+        let transactionId = row[2].trim(); // Ensure transaction_id is counted
+
+        totalFilteredAmount += amount;
+        totalFilteredTransactions++; // ✅ Corrected transaction count
+
+        if (paymentMethod === "Cash") {
+            totalFilteredCash += amount;
+        } else if (paymentMethod === "Gcash") {
+            totalFilteredGcash += amount;
+        }
+    });
+
+    // Display total filtered amount (all methods)
+    if (receivedBySelected) {
+        displayBox.innerHTML = `₱${totalFilteredAmount.toFixed(2)}`;
+    } else if (minDate && maxDate) {
+        const optionsShort = { year: 'numeric', month: 'short', day: 'numeric' };
+        const optionsLong = { year: 'numeric', month: 'long', day: 'numeric' };
+
+        const formattedStartDate = new Date(minDate).toLocaleDateString('en-PH', optionsShort).replace(',', '');
+        const formattedEndDate = new Date(maxDate).toLocaleDateString('en-PH', optionsLong).replace(',', '');
+
+        displayBox.innerHTML = `₱${totalFilteredAmount.toFixed(2)}`;
+    } else {
+        displayBox.innerHTML = `₱${totalFilteredAmount.toFixed(2)}`;
+    }
+
+    // ✅ Ensure transactions count updates correctly
+    transactionsDisplayBox.innerHTML = `${totalFilteredTransactions}`;
+
+    // Display total filtered Cash amount
+    cashDisplayBox.innerHTML = `₱${totalFilteredCash.toFixed(2)} `;
+
+    // Display total filtered GCash amount
+    gcashDisplayBox.innerHTML = `₱${totalFilteredGcash.toFixed(2)} `;
+}
+
+
+
+                                    
+        function openTransactionModalHistory(transactionId) {
+    
+    document.getElementById('transactionHistoryModal').style.display = 'block';
+    
+    fetch(`http://localhost:5000/api/auth/transaction-history/${transactionId}`)
+    .then(response => response.json())
+    .then(data => {
+        const historyDetails = document.getElementById('transactionHistoryDetails');
+        historyDetails.innerHTML = '';
+
+        
+        const heading = `<h2>Transaction History of ID: ${transactionId}</h2>`;
+        historyDetails.innerHTML += heading;
+
+        
+        data.forEach(tx => {
+            
+            const showPromissoryNote = tx.promissory_note && tx.promissory_note.trim() !== '';
+            
+            
+            let statusColor;
+            if (tx.payment_status === "Balance") {
+                statusColor = 'red';
+            } else if (tx.payment_status === "Balance Gcash") {
+                statusColor = 'red';
+            } else if (tx.payment_status === "Pending") {
+                statusColor = 'orange';
+            } else if (tx.payment_status === "Paid") {
+                statusColor = 'green';
+            } else {
+                statusColor = 'black'; 
+            }
+
+            const detailTable = `
+                <div style="margin-bottom: 20px;">
+                    <p style="margin-bottom: 10px;">${new Date(tx.created_at).toLocaleString()}</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                
+                                <th>Payment Method</th>
+                                <th>Total Amount</th>
+                                <th>Balance</th>
+                                <th>Status</th>
+                                <th>Received by</th>
+                                <th>Action</th>
+                                ${showPromissoryNote ? '<th>Promissory Note</th>' : ''}
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                               
+                             <td>
+    ${tx.payment_method === 'Gcash' && tx.proof_of_payment ? `
+        ${tx.payment_method} <br>
+        <button onclick="openGcashModalLogs('${tx.id}')" class="btn btn-secondary">
+            <i class="bi bi-eye"></i> <!-- Bootstrap Eye Icon for 'View' -->
+        </button>
+
+        <div id="gcash-log-modal-${tx.id}" class="modal" style="display:none;">
+            <div class="modal-content-gcash">
+               <span style="position: absolute; right: 20px; cursor: pointer; margin-top: 20px;" class="close" onclick="closeGcashModalLogs('${tx.id}')">
+    <i class="fas fa-times-circle"></i>
+</span>
+
+                <img src="${tx.proof_of_payment}" alt="Proof of Payment" class="responsive-image" />
+            </div>
+        </div>
+    ` : tx.payment_method}
+</td>
+
+
+                                <td>₱ ${tx.total_amount}</td>
+                                <td>₱ ${tx.balance}</td>
+                                 <td style="color: ${statusColor}; font-weight: light;">${tx.payment_status}</td>
+                                 <td>
+  ${tx.received_firstname && tx.received_lastname ? `${tx.received_firstname} ${tx.received_lastname}` : 'There is no receiver'}
+</td>
+                                <td>${tx.action ? tx.action : 'N/A'}</td>
+
+                              ${showPromissoryNote ? `
+    <td>
+        ${tx.promissory_note && tx.promissory_note.trim() !== '' ? `
+            <button onclick="openLogsModal('${tx.transaction_id}')" class="btn btn-secondary">
+                <i class="bi bi-eye"></i> <!-- Eye Icon -->
+            </button>
+            <div id="logsModal-${tx.transaction_id}" class="modallogs" style="display:none;">
+                <div class="modal-contentlogs">
+                 <span style="position: absolute; right: 20px; cursor: pointer; margin-top: 20px;" class="close" onclick="closeLogsModal('${tx.transaction_id}')">
+    <i class="fas fa-times-circle"></i>
+</span>
+
+                    <img src="${tx.promissory_note}" alt="Promissory Note" class="responsive-image" />
+                </div>
+            </div>
+        ` : 'N/A'}
+    </td>
+` : ''}
+
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            historyDetails.innerHTML += detailTable;
+        });
+    })
+    .catch(error => console.error('Error fetching transaction history:', error));
+}
+
+function openLogsModal(transactionId) {
+    const modal = document.getElementById(`logsModal-${transactionId}`);
+    if (modal) {
+        modal.style.display = 'block';
+    }
+}
+
+function closeLogsModal(transactionId) {
+    const modal = document.getElementById(`logsModal-${transactionId}`);
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Optional: Close modal when clicking outside the modal content
+window.onclick = function (event) {
+    const modals = document.getElementsByClassName('modallogs');
+    Array.from(modals).forEach(modal => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+};
+
+function closeTransactionModalHistory() {
+    // Hide the modal
+    document.getElementById('transactionHistoryModal').style.display = 'none';
+}
+function openGcashModalLogs(transactionId) {
+    const modal = document.getElementById(`gcash-log-modal-${transactionId}`);
+    if (modal) {
+        modal.style.display = 'block';
+    }
+}
+
+function closeGcashModalLogs(transactionId) {
+    const modal = document.getElementById(`gcash-log-modal-${transactionId}`);
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+                                </script>
+                                </div>  
+                            </div>
+                        </div>   
+                    </div>  
+                </main>      
+            </div>
+        </div>
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>

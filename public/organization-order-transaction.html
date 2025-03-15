@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Transactions</title>
+  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>  
+        
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> 
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    
+    
+    <div id="logsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLogsModal()">&times;</span>
+            <h2>Transaction Logs</h2>
+            <table id="logsTable">
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Status</th>
+                        <th>Order Status</th>
+                        <th>Payment Method</th>
+                        <th>Total Amount</th>
+                        <th>Total Pay</th>
+                        <th>Accepted By</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="logsBody">
+                    <!-- Logs Data -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Summary Boxes -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-warning mb-3">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Transactions</h5>
+                    <p id="totalTransactionsDisplay" class="font-weight-bold text-warning" style="font-size: 24px;">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-primary mb-3">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Amount Paid</h5>
+                    <p id="totalAmountPaidDisplay" class="font-weight-bold text-primary" style="font-size: 24px;">₱0.00</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-success mb-3">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Cash Payments</h5>
+                    <p id="totalCashDisplay" class="font-weight-bold text-success" style="font-size: 24px;">₱0.00</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-info mb-3">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total GCash Payments</h5>
+                    <p id="totalGcashDisplay" class="font-weight-bold text-info" style="font-size: 24px;">₱0.00</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div id="filterContainer">
+        <label for="minDate" class="fw-bold">Start Date:</label>
+        <input type="date" id="minDate" class="form-control d-inline-block w-auto">
+        <label for="maxDate" class="fw-bold">End Date:</label>
+        <input type="date" id="maxDate" class="form-control d-inline-block w-auto">
+        <button id="filterDateBtn" class="btn btn-primary btn-sm">Filter</button>
+    </div>
+
+    <div id="acceptedByFilterContainer">
+        <label for="acceptedByFilter" class="fw-bold">Filter by Accepted By:</label>
+        <select id="acceptedByFilter" class="form-select d-inline-block w-auto">
+            <option value="">All</option>
+        </select>
+    </div>
+
+    <!-- Transactions Table -->
+    <table id="transactionsTable">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>User</th>
+                <th>Status</th>
+                <th>Payment Method</th>
+                <th>Total Pay</th>
+                <th>Accepted By</th>
+                <th>Date</th>
+                <th>Logs</th>
+            </tr>
+        </thead>
+        <tbody id="transactionsBody"></tbody>
+    </table>
+
+    <script>
+        let transactionsData = [];
+        
+        async function fetchProductTransactions() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'adminlogin.html';
+                return;
+            }
+    
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/product-transactions', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+    
+                if (!response.ok) throw new Error('Failed to fetch transactions');
+    
+                transactionsData = await response.json();
+                populateTransactionsTable(transactionsData);
+            } catch (error) {
+                console.error('Error fetching transactions:', error);
+                Swal.fire('Error!', 'Failed to load product transactions.', 'error');
+            }
+        }
+    
+        function populateTransactionsTable(transactions) {
+            const transactionsBody = document.getElementById('transactionsBody');
+            transactionsBody.innerHTML = '';
+    
+            let acceptedByNames = new Set();
+    
+            transactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                const acceptedByText = transaction.accepted_by
+                    ? `${transaction.accepted_by_firstname} ${transaction.accepted_by_lastname}`
+                    : 'No receiver';
+    
+                acceptedByNames.add(acceptedByText);
+    
+                row.innerHTML = `
+                    <td>${transaction.order_transaction_id}</td>
+                    <td>${transaction.user_firstname} ${transaction.user_lastname}</td>
+                    <td>${transaction.status}</td>
+                    <td>${transaction.payment_method}</td>
+                    <td>₱${parseFloat(transaction.total_pay || 0).toFixed(2)}</td>
+                    <td>${acceptedByText}</td>
+                    <td>${transaction.created_at}</td>
+                    <td>
+                        <button onclick="fetchLogs('${transaction.order_transaction_id}')">
+                            📜
+                        </button>
+                    </td>
+                `;
+                transactionsBody.appendChild(row);
+            });
+    
+            populateAcceptedByDropdown(acceptedByNames);
+            initializeDataTable();
+            updateSummaryBoxes(transactions);
+        }
+    
+        function populateAcceptedByDropdown(acceptedByNames) {
+    const acceptedByFilter = document.getElementById('acceptedByFilter');
+    const selectedValue = acceptedByFilter.value; // Preserve selected value
+
+    // Maintain a global set of all accepted names to avoid disappearing values
+    if (!window.allAcceptedByNames) {
+        window.allAcceptedByNames = new Set();
+    }
+
+    acceptedByNames.forEach(name => window.allAcceptedByNames.add(name)); // Keep all names
+
+    acceptedByFilter.innerHTML = `<option value="">All</option>`; // Reset options
+
+    window.allAcceptedByNames.forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+
+        if (name === selectedValue) {
+            option.selected = true; // Keep selected value active
+        }
+
+        acceptedByFilter.appendChild(option);
+    });
+}
+
+
+    
+        function initializeDataTable() {
+            if ($.fn.DataTable.isDataTable('#transactionsTable')) {
+                $('#transactionsTable').DataTable().destroy();
+            }
+            $('#transactionsTable').DataTable({
+                dom: 'Blfrtip',
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                scrollX: true,
+                order: [[6, 'desc']]
+            });
+        }
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+              const min = $('#minDate').val();
+              const max = $('#maxDate').val();
+              const acceptedBySelected = document.getElementById('acceptedByFilter').value;
+              const date = data[6];
+              const acceptedBy = data[5];
+    
+              if (!min && !max && !acceptedBySelected) return true;
+              const dateObj = new Date(date);
+              if (min && dateObj < new Date(min + "T00:00:00")) return false;
+              if (max && dateObj > new Date(max + "T23:59:59")) return false;
+              if (acceptedBySelected && acceptedBy !== acceptedBySelected) return false;
+              return true;
+            });
+    
+            $('#filterDateBtn, #acceptedByFilter').on('change click', function() {
+              table.draw();
+              updateFilteredProductTransactions();
+            });
+    
+        function updateSummaryBoxes(filteredTransactions) {
+            let totalTransactions = 0;
+            let totalAmountPaid = 0;
+            let totalCash = 0;
+            let totalGcash = 0;
+    
+            filteredTransactions.forEach(transaction => {
+                const totalPay = parseFloat(transaction.total_pay || 0);
+                totalTransactions++;
+                totalAmountPaid += totalPay;
+                if (transaction.payment_method === "Cash") {
+                    totalCash += totalPay;
+                } else if (transaction.payment_method === "Gcash") {
+                    totalGcash += totalPay;
+                }
+            });
+    
+            document.getElementById('totalTransactionsDisplay').innerText = totalTransactions;
+            document.getElementById('totalAmountPaidDisplay').innerText = `₱${totalAmountPaid.toFixed(2)}`;
+            document.getElementById('totalCashDisplay').innerText = `₱${totalCash.toFixed(2)}`;
+            document.getElementById('totalGcashDisplay').innerText = `₱${totalGcash.toFixed(2)}`;
+        }
+    
+        document.getElementById('filterDateBtn').addEventListener('click', filterTransactions);
+        document.getElementById('acceptedByFilter').addEventListener('change', filterTransactions);
+    
+        function filterTransactions() {
+            const minDate = document.getElementById('minDate').value;
+            const maxDate = document.getElementById('maxDate').value;
+            const acceptedBySelected = document.getElementById('acceptedByFilter').value;
+    
+            const filteredTransactions = transactionsData.filter(transaction => {
+                return (!minDate || new Date(transaction.created_at) >= new Date(minDate)) &&
+                       (!maxDate || new Date(transaction.created_at) <= new Date(maxDate)) &&
+                       (!acceptedBySelected || transaction.accepted_by && `${transaction.accepted_by_firstname} ${transaction.accepted_by_lastname}` === acceptedBySelected);
+            });
+    
+            populateTransactionsTable(filteredTransactions);
+            initializeDataTable(); // Fix: Ensure DataTable updates with filtered data
+        }
+    
+       
+        async function fetchLogs(orderTransactionId) {
+    try {
+        const response = await fetch(`http://localhost:5000/api/auth/product-transaction-logsa/${orderTransactionId}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch logs');
+        }
+
+        const logs = await response.json();
+        const logsBody = document.getElementById('logsBody');
+        logsBody.innerHTML = '';
+
+        logs.forEach(log => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${log.action_message}</td>
+                <td>${log.status}</td>
+                <td>${log.order_status}</td>
+                <td>${log.payment_method}</td>
+                <td>₱${log.total_amount}</td>
+                <td>₱${log.total_pay}</td>
+                <td>
+                    ${log.accepted_by 
+                        ? `${log.accepted_by_firstname} ${log.accepted_by_middlename || ''} ${log.accepted_by_lastname}` 
+                        : 'No receiver'}
+                </td>
+                <td>${log.created_at}</td>
+            `;
+            logsBody.appendChild(row);
+        });
+
+        document.getElementById('logsModal').style.display = 'block';
+    } catch (error) {
+        console.error('Error fetching logs:', error);
+        Swal.fire('Error!', 'Failed to load transaction logs.', 'error');
+    }
+}
+
+
+        function closeLogsModal() {
+            document.getElementById('logsModal').style.display = 'none';
+        }
+        document.addEventListener('DOMContentLoaded', fetchProductTransactions);
+    </script>
+    
+</body>
+
+</html>

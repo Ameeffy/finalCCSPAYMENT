@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Admin Payment</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>  
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> 
+        
+        
+    </head>
+<style>
+.custom-heading {
+    color: #25330f;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 30px;
+    text-transform: uppercase;
+}
+</style>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center justify-content-between px-3">
+            <!-- Left Section -->
+            <div class="d-flex align-items-center">
+                <!-- Sidebar Toggle -->
+                <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                    <i class="fas fa-bars" style="color: rgb(255, 255, 255);"></i>
+                </button>
+              
+                <div class="logo me-2">
+                    <img src="img/logo.png" alt="Logo" height="40">
+                </div>
+        
+                <!-- Organization Info -->
+                <div id="organizationInfo" class="d-flex flex-grow-1">
+                    <!-- Organization Name will be inserted here -->
+                </div>
+                <h2 class="college-title mb-0" style="color: rgb(255, 255, 255); font-size: 20px;">COLLEGE OF COMPUTING STUDIES</h2>
+
+            </div>
+        
+            <!-- Right Section -->
+            <div class="d-flex align-items-center">
+              
+                <div class="flex-grow-1 p-4 d-flex align-items-center">
+                    <div class="d-flex justify-content-between w-100">
+                        <h1 style="color: #ffffff; text-decoration: none; font-size: 20px; margin-top: 0 !important; margin-bottom: 0 !important;">Welcome, <span id="adviserName"></span></h1>
+                    </div>
+                </div>
+
+                
+        
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x" style="color: #ffffff;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: #ffffff;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                        width: 110px !important; 
+                        min-width: 110px !important; 
+                        background-color: #ffffff; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        height: auto;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                        padding: 0;">
+                        <li>
+                            <a class="dropdown-item" href="#" id="logout" style="
+                                display: flex; 
+                                align-items: center; 
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                height: auto;
+                                border-bottom: 1px solid #ddd; 
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-sign-out-alt" style="margin-right: 8px; color: inherit;"></i> Sign Out
+                            </a>
+                           
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+                <script>
+  document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                window.location.href = 'adminlogin.html';
+                return;
+            }
+
+            // Fetch adviser details
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/adviser/details', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch adviser details');
+                }
+
+                const adviser = await response.json();
+                document.getElementById('adviserName').textContent = `${adviser.firstname} ${adviser.middlename} ${adviser.lastname}`;
+            } catch (error) {
+                console.error('Error fetching adviser details:', error);
+                Swal.fire('Error', 'Unable to load adviser details.', 'error');
+            }
+        });
+
+        // Logout
+        document.getElementById('logout').addEventListener('click', () => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to logout?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Yes, Logout',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('token');
+                    window.location.href = 'adminlogin.html';
+                }
+            });
+        });
+        </script>
+   
+    
+
+
+   <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+
+                    <!-- Overview -->
+                    <div class="sb-sidenav-menu-heading">Overview</div>
+                    <a class="nav-link" href="adviser-home.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+
+                    <!-- Payment Management -->
+                    <div class="sb-sidenav-menu-heading">Payment Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="adviser-payments.html">Review and Approval</a>
+                            <a class="nav-link" href="adviser-allpayments.html">Management Record</a>
+                            <a class="nav-link" href="adviser-payments-reports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <!-- QR-Code Management -->
+                    <div class="sb-sidenav-menu-heading">QR-Code Management</div>
+                    <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapseQrCode" aria-expanded="false" aria-controls="collapseQrCode">
+                        <div class="sb-nav-link-icon"><i class="fas fa-qrcode"></i></div>
+                        QR-Code
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseQrCode" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="adviser-order.html">Review and Approval</a>
+                            <a class="nav-link" href="adviser-allorders.html">Management Record</a>
+                            <a class="nav-link" href="adviser-order-reports.html">Reports</a>
+                        </nav>
+                    </div>
+                    <div class="sb-sidenav-menu-heading">Transaction Overview</div>
+        
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                                Collection
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseNew" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adviser-alltransactions.html">Overview</a>
+                                    <a class="nav-link" href="adviser-transactionpaymentreports.html">Reports</a>
+                                </nav>
+                            </div>
+        
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew1" aria-expanded="false" aria-controls="collapsePayments">
+                                <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>
+                                Orders
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseNew1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adviser-allordertransactions.html">Overview</a>
+                                    <a class="nav-link" href="adviser-allordertransactionsreports.html">Reports</a>
+                                </nav>
+                            </div>
+                    <div class="sb-sidenav-menu-heading">Organization Overview</div>
+                    <a class="nav-link" href="adviser-academic-list.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Academic List
+                    </a>
+                    <div class="sb-sidenav-menu-heading">transaction Summary</div>
+                    <a class="nav-link" href="adviser-transactions-summary.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Overview
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+
+
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-5"></h1>
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4" style="padding: 20px;">
+                                    <ol class="breadcrumb mb-4">
+                                        <li class="breadcrumb-item" style="font-style: italic;">QR-Code</li>
+                                        <li class="breadcrumb-item active" style="font-style: italic;">Review And Approval</li>
+                                    </ol>   
+                                    <table class="custom-table" style="  border-bottom: 1px solid #e0e0e0 !important;">
+
+                                        <thead>
+                                            <tr>
+                                                <th>Organization</th>
+                                                
+                                                <th>Status</th>
+                                                
+                                                
+                                                
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="orderTableBody">
+                                            <!-- Orders will be dynamically populated here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Modal for Reporting -->
+                        <div class="modal fade" id="gcashReportModal" tabindex="-1" aria-labelledby="gcashReportModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="gcashReportModalLabel">Report GCash Order</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="gcashReportForm">
+                                            <div class="form-group">
+                                                <label for="reportReason">Reason for Report:</label>
+                                                <div id="reportReason">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="reportReason" id="reasonInvalidQRCode" value="Invalid QR Code">
+                                                        <label class="form-check-label" for="reasonInvalidQRCode">Invalid QR Code</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="reportReason" id="reasonIncorrectDetails" value="Incorrect Details">
+                                                        <label class="form-check-label" for="reasonIncorrectDetails">Incorrect Details</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="reportReason" id="reasonFraudulentOrder" value="Fraudulent Order">
+                                                        <label class="form-check-label" for="reasonFraudulentOrder">Fraudulent Order</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="reportReason" id="reasonOther" value="Other">
+                                                        <label class="form-check-label" for="reasonOther">Other</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group mt-3">
+                                                <label for="reportDescription">Description (optional):</label>
+                                                <textarea id="reportDescription" class="form-control" rows="3"></textarea>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-danger" id="submitReport">Submit Report</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                            <script>
+                                document.addEventListener('DOMContentLoaded', () => {
+                            const token = localStorage.getItem('token');
+                            if (!token) {
+                                Swal.fire('Unauthorized', 'You are not logged in. Redirecting to login...', 'error').then(() => {
+                                    window.location.href = 'adminlogin.html';
+                                });
+                                return;
+                            }
+                        
+                            // Fetch and display orders
+                            fetch('http://localhost:5000/api/auth/adviser/orders', {
+                                method: 'GET',
+                                headers: {
+                                    'Authorization': `Bearer ${token}`,
+                                },
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    const orderTableBody = document.getElementById('orderTableBody');
+                                    orderTableBody.innerHTML = ''; // Clear previous rows
+                        
+                                    if (data.success) {
+                                        data.orders.forEach(order => {
+                                            const row = document.createElement('tr');
+                                            row.innerHTML = `
+                                             <td>${order.organization_name}</td>
+                                               
+                                                <td>${order.adviser_status || 'Pending'}</td>
+                                               
+                                                
+                                                <td>
+                                                     ${
+                                        order.adviser_status === 'Pending'
+                                            ? `
+                                                 <button class="btn btn-success btn-sm" onclick="updateOrderAdviserStatus(${order.id}, 'Accepted')">
+    <i class="fas fa-check-circle"></i>
+</button>
+<button class="btn btn-danger btn-sm" onclick="updateOrderAdviserStatus(${order.id}, 'Declined')">
+    <i class="fas fa-times-circle"></i>
+</button>
+                                              `
+                                            : ''
+                                    }
+                                  <button 
+    class="btn btn-info btn-sm" 
+    onclick="viewMore(${order.id}, '${order.qrcodepicture}', '${order.created_at}', '${order.created_by_name}')" 
+    style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 5px 8px; cursor: pointer; transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#0056b3'" 
+    onmouseout="this.style.backgroundColor='#007bff'">
+    <i class="fas fa-eye"></i> <!-- Eye icon -->
+</button>
+
+
+                                    ${
+                                        order.adviser_status === 'Declined' && !order.is_reported
+                                            ? `<button class="btn btn-warning btn-sm" onclick="openGcashReportModal(${order.id})">Reports</button>`
+                                            : order.adviser_status === 'Declined' && order.is_reported
+                                            ? `<i>Gcash Declined</i>`
+                                            : ''
+                                    }
+                                                </td>
+                                            `;
+                                            orderTableBody.appendChild(row);
+                                        });
+                                    } else {
+                                        Swal.fire('No Orders', data.message, 'info');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching orders:', error);
+                                    Swal.fire('Error', 'Failed to fetch orders.', 'error');
+                                });
+                        });
+                        
+                        
+                        function updateOrderAdviserStatus(orderId, status) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: `Do you want to ${status.toLowerCase()} this order?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#dc3545',
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+    }).then(result => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Processing...',
+                text: 'Please wait while we process your request.',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            const token = localStorage.getItem('token');
+            fetch(`http://localhost:5000/api/auth/adviser/orders/${orderId}/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ adviser_status: status }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                Swal.close(); // Close the loading message
+
+                if (data.success) {
+                    Swal.fire('Success', data.message, 'success').then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating order status:', error);
+                Swal.fire('Error', 'Failed to update order status.', 'error');
+            });
+        }
+    });
+}
+
+                                function viewMore(orderId, qrCode, createdAt, createdBy) {
+    Swal.fire({
+        title: `Order Details (ID: ${orderId})`,
+        html: `
+            <p><strong>Created At:</strong> ${new Date(createdAt).toLocaleString()}</p>
+            <p><strong>Created by:</strong> ${createdBy}</p>
+            <p><strong>QR Code:</strong></p>
+            <img src="${qrCode}" alt="QR Code" style="max-width: 100%; height: auto;">
+        `,
+        icon: 'info',
+    });
+}
+
+
+                        
+                                function openGcashReportModal(orderId) {
+                            const modalElement = document.getElementById('gcashReportModal');
+                            const modal = new bootstrap.Modal(modalElement); // Initialize Bootstrap modal
+                            document.getElementById('gcashReportForm').setAttribute('data-order-id', orderId); // Set order ID
+                            modal.show(); // Show the modal
+                        }
+                        
+                        
+                        document.getElementById('submitReport').addEventListener('click', submitGcashReport);
+                        async function submitGcashReport() {
+                            const orderId = document.getElementById('gcashReportForm').getAttribute('data-order-id');
+                            const reason = document.querySelector('input[name="reportReason"]:checked')?.value;
+                            const description = document.getElementById('reportDescription').value;
+                        
+                            if (!reason) {
+                                Swal.fire('Error', 'Please select a reason for the report.', 'error');
+                                return;
+                            }
+                        
+                            // Confirmation message
+                            const confirmation = await Swal.fire({
+                                title: 'Are you sure?',
+                                text: 'Do you want to submit this report?',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Yes, submit it!',
+                                cancelButtonText: 'No, cancel!',
+                                confirmButtonColor: '#28a745',
+                                cancelButtonColor: '#dc3545',
+                            });
+                        
+                            if (!confirmation.isConfirmed) {
+                                return; // Exit if the user cancels the confirmation dialog
+                            }
+                        
+                            // Show loading message
+                            Swal.fire({
+                                title: 'Submitting Report...',
+                                text: 'Please wait while we process your request.',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                didOpen: () => Swal.showLoading(),
+                            });
+                        
+                            try {
+                                const token = localStorage.getItem('token');
+                                const response = await fetch('http://localhost:5000/api/auth/adviser/gcashorders/reports', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        Authorization: `Bearer ${token}`,
+                                    },
+                                    body: JSON.stringify({ orderId, reason, description }),
+                                });
+                        
+                                const result = await response.json();
+                                Swal.close(); // Close the loading message
+                        
+                                if (response.ok) {
+                                    Swal.fire('Success', result.message, 'success').then(() => {
+                                        location.reload(); // Reload the page
+                                    });
+                                } else {
+                                    Swal.fire('Error', result.message || 'Failed to submit the report.', 'error');
+                                }
+                            } catch (err) {
+                                console.error('Error submitting report:', err);
+                                Swal.fire('Error', 'An error occurred while submitting the report.', 'error');
+                            }
+                        }
+                            </script>
+                        </body>
+                        </html>
+                        
+                                    </div>
+                                    </div>
+                        
+                            <script>
+                                document.addEventListener('DOMContentLoaded', async () => {
+                                    const token = localStorage.getItem('token');
+                        
+                                    if (!token) {
+                                        window.location.href = 'adminlogin.html';
+                                        return;
+                                    }
+                        
+                                    // Fetch adviser details
+                                    try {
+                                        const response = await fetch('http://localhost:5000/api/auth/adviser/details', {
+                                            method: 'GET',
+                                            headers: {
+                                                'Authorization': `Bearer ${token}`,
+                                            },
+                                        });
+                        
+                                        if (!response.ok) {
+                                            throw new Error('Failed to fetch adviser details');
+                                        }
+                        
+                                        const adviser = await response.json();
+                                        document.getElementById('adviserName').textContent = `${adviser.firstname} ${adviser.middlename} ${adviser.lastname}`;
+                                    } catch (error) {
+                                        console.error('Error fetching adviser details:', error);
+                                        Swal.fire('Error', 'Unable to load adviser details.', 'error');
+                                    }
+                                });
+                        
+                                // Logout
+                                document.getElementById('logout').addEventListener('click', () => {
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: 'Do you want to logout?',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#28a745',
+                                        cancelButtonColor: '#dc3545',
+                                        confirmButtonText: 'Yes, Logout',
+                                        cancelButtonText: 'Cancel',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            localStorage.removeItem('token');
+                                            window.location.href = 'adminlogin.html';
+                                        }
+                                    });
+                                });
+                            </script>
+                        
+                        
+                                </div>  
+                            </div>
+                        </div>   
+                    </div>  
+                </main>      
+            </div>
+        </div>
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>
+          

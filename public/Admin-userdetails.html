@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Transactions</title>
+    <link rel="icon" type="x-icon" href="img/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+     
+
+
+        /* Summary Container */
+        #summaryContainer {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            
+        }
+        .summaryBox {
+            background-color: white;
+            
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+           
+        }
+        .summaryBox p {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .summaryBox ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .summaryBox ul li {
+            font-size: 16px;
+            padding: 5px 0;
+            color: #555;
+        }
+
+        /* Filter Buttons */
+        .filter-buttons {
+            text-align: center;
+           
+        }
+        .filter-btn {
+            background-color: #17a2b8;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+           
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .filter-btn:hover {
+            background-color: #117a8b;
+        }
+
+        th, td {  
+  padding: 8px;
+  text-align: left;
+  background-color: #ffffff;
+}
+th:first-child {
+  border-top-left-radius: 8px; 
+  border-bottom-left-radius: 8px; 
+}
+th:last-child {
+  border-top-right-radius: 8px; 
+  border-bottom-right-radius: 8px; 
+}
+td:first-child {
+  border-top-left-radius: 8px; 
+  border-bottom-left-radius: 8px; 
+}
+td:last-child {
+  border-top-right-radius: 8px; 
+  border-bottom-right-radius: 8px; 
+}
+th {
+  background-color: #034b03;
+  color: white;
+  font-weight: bold;  
+  font-size: 14px;
+}
+tr:hover td {
+  background-color: #ddfadc;
+  transform: translateX(5px) scale(1.05); 
+  transition: transform 0.2s ease-in-out; 
+  color: black;
+}
+        @media (max-width: 768px) {
+            #summaryContainer {
+                flex-direction: column;
+                align-items: center;
+            }
+            .summaryBox {
+                width: 90%;
+            }
+        }
+               /* Add these new styles */
+               .user-info-container {
+            text-align: center;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .user-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #034b03;
+        }
+
+        .user-details-icon {
+            cursor: pointer;
+            color: #034b03;
+            transition: transform 0.2s;
+        }
+
+        .user-details-icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            margin-top: 50px;
+            padding: 25px;
+            width: 70%;
+            max-width: 500px;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close-modal:hover {
+            color: #000;
+        }
+
+        .modal-details {
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        .modal-details p {
+            margin: 10px 0;
+            padding: 8px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        /* Keep previous styles and add media query for modal */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 90%;
+                margin: 20% auto;
+            }
+        }
+        /* Icon Container */
+.icon-container {
+    display: inline-block;
+    cursor: pointer;
+    padding: 10px;
+   
+    color: #034b03;
+  
+    transition: background-color 0.3s, transform 0.2s;
+    margin: 10px 0;
+    
+}
+
+
+
+.icon-container i {
+    font-size: 20px;
+}
+.center-text {
+    text-align: center;
+    margin-top: 30px;
+}
+
+
+
+    </style>
+
+</head>
+<body>
+
+    
+
+  
+
+    <div class="row">
+        <div class="header-container">
+            <div class="back-icon">
+                <i class="fa fa-arrow-left" onclick="goBack()"></i>
+            </div>
+            <h2>User Order Transactions</h2>
+        </div>
+        
+        <!-- Total Transactions Summary -->
+        <div class="col-lg-4 col-md-6 col-12 mb-3">
+            <div class="card shadow-sm p-3">
+                <p class="fw-bold">Total Transactions Summary</p>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-list"></i> Total Transactions: <span id="totalTransactions">0</span></li>
+                    <li><i class="fas fa-ban"></i> No Transactions: <span id="noTransactionsCount">0</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Amount Summary -->
+        <div class="col-lg-4 col-md-6 col-12 mb-3">
+            <div class="card shadow-sm p-3">
+                <p class="fw-bold">Amount Summary</p>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-coins"></i> Total Amount: ₱<span id="totalAmount">0.00</span></li>
+                    <li><i class="fas fa-wallet"></i> Total Balance: ₱<span id="totalBalance">0.00</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Payment Methods Breakdown -->
+        <div class="col-lg-4 col-md-12 col-12 mb-3">
+            <div class="card shadow-sm p-3">
+                <p class="fw-bold">Payment Methods Breakdown</p>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-money-bill-wave"></i> Cash: <span id="cashCount">0</span></li>
+                    <li><i class="fas fa-mobile-alt"></i> GCash: <span id="gcashCount">0</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+<div class="header-container">
+    
+      
+
+    
+    <!-- User Info on the Right -->
+    <div class="user-info-container">
+       
+        <span class="user-name">Loading...</span>
+        <i class="fas fa-info-circle user-details-icon"></i>
+         <div class="icon-container" id="viewOrderTransactionsBtn" title="View Order Transactions">
+            <i class="fas fa-shopping-cart"></i>  <!-- Font Awesome receipt icon -->
+        </div>
+    </div>
+</div>
+
+    <!-- User Details Modal -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="logsModalLabel">User Information</h2>
+            <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+            <div class="modal-details" id="userModalContent">
+                <!-- User details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="filter-buttons">
+        
+        <button class="filter-btn" data-filter="All">All</button>
+        <button class="filter-btn" data-filter="Mandatory">Mandatory</button>
+        <button class="filter-btn" data-filter="Not mandatory">Not mandatory</button>
+        <button class="filter-btn" data-filter="Other fees">Other fees</button>
+        <button class="filter-btn" data-filter="No transactions">No Transactions</button>
+        
+    </div>
+
+    <div class="table-responsive">
+        <table id="transactionsTable">
+            <thead class="table-primary">
+                <tr>
+                    <th>Payment Name</th>
+                    <th>Payment Type</th>
+                    <th>Semester</th>
+                    <th>Transaction ID</th>
+                    <th>Payment Status</th>
+                    <th>Payment Method</th>
+                    <th>Total Amount</th>
+                    <th>Balance</th>
+                    <th>Received By</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
+
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script>
+        function goBack() {
+                                window.history.back();  // Goes to the previous page in the browser history
+                            }
+        // Get userId from URL
+        function getUserIdFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('userId');
+        }
+
+        // Fetch and display user details
+        function fetchUserDetails(userId) {
+            fetch(`http://localhost:5000/api/auth/user/${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update user name display
+                    document.querySelector('.user-name').textContent = 
+                        `${data.firstname} ${data.middlename} ${data.lastname}`;
+
+                    // Update modal content
+                    const modalContent = document.getElementById('userModalContent');
+                    modalContent.innerHTML = `
+    <h3 class="center-text"><strong>${data.firstname} ${data.middlename} ${data.lastname}</strong></h3>
+    <p><strong>ID Number:</strong> ${data.idnumber}</p>
+    <p><strong>Course:</strong> ${data.course}</p>
+    <p><strong>Section:</strong> ${data.section}</p>
+    <p><strong>Gender:</strong> ${data.gender}</p>
+    <p><strong>Status:</strong> ${data.status}</p>
+    <p><strong>Role:</strong> ${data.role}</p>
+`;
+
+                })
+                .catch(error => {
+                    console.error('Error fetching user details:', error);
+                });
+        }
+
+        // Modal handling
+        document.querySelector('.user-details-icon').addEventListener('click', () => {
+            document.getElementById('userModal').style.display = 'block';
+        });
+
+        document.querySelector('.close-btn').addEventListener('click', () => {
+            document.getElementById('userModal').style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            const modal = document.getElementById('userModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        function fetchTransactions(userId) {
+    fetch(`http://localhost:5000/api/auth/transactions/user/${userId}`)
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('transactionsTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; 
+
+            let totalTransactions = 0;
+            let totalAmount = 0;
+            let totalBalance = 0;
+            let cashCount = 0;
+            let gcashCount = 0;
+            let noTransactionsCount = 0;
+
+            data.transactions.forEach(transaction => {
+                // Check if it's a "No transactions" row
+                if (!transaction.transaction_id) {
+                    noTransactionsCount++;
+                } else {
+                    totalTransactions++;
+                    totalAmount += parseFloat(transaction.total_amount) || 0;
+                    totalBalance += parseFloat(transaction.balance) || 0;
+
+                    // Count payment methods
+                    if (transaction.payment_method === 'Cash') {
+                        cashCount++;
+                    } else if (transaction.payment_method === 'GCash') {
+                        gcashCount++;
+                    }
+                }
+
+                // Display all transactions, including those without transaction_id
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = transaction.payment_name;
+                row.insertCell(1).textContent = transaction.payment_type;
+                row.insertCell(2).textContent = transaction.semester_name;
+                row.insertCell(3).textContent = transaction.transaction_id || 'No transactions';
+                row.insertCell(4).textContent = transaction.payment_status || 'Unpaid';
+                row.insertCell(5).textContent = transaction.payment_method || 'None';
+                row.insertCell(6).textContent = transaction.total_amount || '0.00';
+                row.insertCell(7).textContent = transaction.balance || '0.00';
+                row.insertCell(8).textContent = transaction.received_by_name;
+                row.insertCell(9).textContent = transaction.updated_at || 'None';
+            });
+
+            // Update totals in the container
+            document.getElementById('totalTransactions').textContent = totalTransactions;
+            document.getElementById('totalAmount').textContent = totalAmount.toFixed(2);
+            document.getElementById('totalBalance').textContent = totalBalance.toFixed(2);
+            document.getElementById('cashCount').textContent = cashCount;
+            document.getElementById('gcashCount').textContent = gcashCount;
+            document.getElementById('noTransactionsCount').textContent = noTransactionsCount;
+
+            // Initialize or reinitialize DataTable
+            if ($.fn.DataTable.isDataTable('#transactionsTable')) {
+                $('#transactionsTable').DataTable().clear().destroy();
+            }
+
+            const dataTable = $('#transactionsTable').DataTable({
+                "order": [[9, 'desc']]
+            });
+
+            // Filter button functionality
+            $('.filter-btn').on('click', function() {
+                const filterValue = $(this).data('filter');
+                const filterColumn = $(this).data('column') || 1;
+
+                $('.filter-btn').removeClass('active');
+                $(this).addClass('active');
+
+                if (filterValue === 'All') {
+                    dataTable.columns().search('').draw();
+                } else if (filterValue === 'No transactions') {
+                    dataTable.columns().search('');
+                    dataTable.column(2).search(`^No transactions$`, true, false).draw();
+                } else {
+                    dataTable.column(2).search('');
+                    dataTable.column(1).search(`^${filterValue}$`, true, false).draw();
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching transactions:', error));
+}
+document.getElementById('viewOrderTransactionsBtn').addEventListener('click', function() {
+    const userId = getUserIdFromURL();
+    if (userId) {
+        viewOrderTransactions(userId);
+    } else {
+        alert('No user selected.');
+    }
+});
+
+function viewOrderTransactions(userId) {
+    window.location.href = `Admin-userdetailsOrdertransactions.html?userId=${userId}`;
+}
+
+    const userId = getUserIdFromURL();
+    if (userId) {
+        fetchUserDetails(userId);
+        fetchTransactions(userId);
+    } else {
+        alert('No user selected.');
+    }
+    // Fetch and display transaction summary
+function fetchTransactionSummary(userId) {
+    fetch(`http://localhost:5000/api/auth/transactions/summary/${userId}`)
+        .then(response => response.json())
+        .then(summary => {
+            document.getElementById('totalTransactions').textContent = summary.totalTransactions;
+            document.getElementById('totalAmount').textContent = summary.totalAmount;
+        })
+        .catch(error => console.error('Error fetching transaction summary:', error));
+}
+
+    </script>
+</body>
+</html>

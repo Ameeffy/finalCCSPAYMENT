@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details and Transactions</title>
+    <link rel="icon" type="x-icon" href="img/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+ 
+    <link rel="stylesheet" href="/static/css/styles.css">
+  
+
+
+
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+
+        /* Center the userDetails section */
+        #userDetails {
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            gap: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px 0; /* Add some margin for spacing */
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            margin-top: 50px;
+            padding: 25px;
+            width: 70%;
+            max-width: 500px;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        /* Summary Section */
+        #summaryContainer, #orderSummary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .summaryBox {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        .summaryBox h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .summaryBox p {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0b5e1d; /* Green color theme */
+        }
+
+        /* Filter Buttons */
+        .filter-buttons {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            background: #0b5e1d;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .filter-btn:hover {
+            background: #097a1a;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-top: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #0b5e1d;
+            color: white;
+        }
+
+        td {
+            color: #333;
+        }
+
+        tr:hover {
+            background: #f1f1f1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #summaryContainer, #orderSummary {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                width: 80%; /* Adjust modal width for smaller screens */
+            }
+        }
+        .modal-details {
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        .modal-details p {
+            margin: 10px 0;
+            padding: 8px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .center-text {
+    text-align: center;
+    margin-top: 30px;
+}
+.user-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #034b03;
+}
+
+.user-details-icon {
+    cursor: pointer;
+    color: #034b03;
+    transition: transform 0.2s;
+}
+
+.user-details-icon:hover {
+    transform: scale(1.1);
+}
+
+
+    </style>
+</head>
+<body>
+
+   
+
+   
+    <div class="row">
+        <div class="back-icon">
+            <i class="fa fa-arrow-left" onclick="goBack()"></i>
+        </div>
+        <h2 style="text-align: center;">User Order Transactions</h2>
+        <!-- Total Number of Orders -->
+        <div class="col-lg-4 col-md-6 col-12 mb-3">
+            <div class="card shadow-sm p-3 h-100">
+                <p class="fw-bold">Total Number of Orders</p>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-list"></i> Total Orders: <span id="totalOrders">0</span></li>
+                </ul>
+            </div>
+        </div>
+    
+        <!-- Total Pay -->
+        <div class="col-lg-4 col-md-6 col-12 mb-3">
+            <div class="card shadow-sm p-3 h-100">
+                <p class="fw-bold">Total Pay</p>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-coins"></i> Total Pay: <span id="totalPay">₱0.00</span></li>
+                </ul>
+            </div>
+        </div>
+    
+        <!-- Payment Method Breakdown -->
+        <div class="col-lg-4 col-md-12 col-12 mb-3">
+            <div class="card shadow-sm p-3 h-100">
+                <p class="fw-bold">Payment Method Breakdown</p>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-money-bill-wave"></i> Cash: <span id="cashOrders">0</span> orders</li>
+                    <li><i class="fas fa-mobile-alt"></i> GCash: <span id="GcashOrders">0</span> orders</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+        
+    
+ 
+    <!-- Centered User Details -->
+<div id="userDetails">
+    <span id="userName" class="user-name">Loading...</span>
+    <i class="fas fa-info-circle user-details-icon" id="userDetailsIcon"></i>
+</div>
+
+
+    <!-- Modal -->
+    <div id="userDetailsModal" class="modal">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h2 class="modal-title" id="userDetailsModalLabel">User Details</h2>
+                <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Body with Content -->
+            <div class="modal-details" id="modalUserDetails">
+                <!-- User details will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <table id="orderTransactionsTable" class="display">
+        <thead>
+            <tr>
+                <th>Order_ID</th>
+                <th>Payment Method</th>
+                <th>Total Amount</th>
+                <th>Total Pay</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be inserted here by JS -->
+        </tbody>
+    </table>
+    
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script>
+          function goBack() {
+                                window.history.back();  // Goes to the previous page in the browser history
+                            }
+        function getUserIdFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('userId');
+        }
+
+        // Fetch and display user details
+        function fetchUserDetails(userId) {
+            fetch(`http://localhost:5000/api/auth/user/${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const userName = document.getElementById('userName');
+                    userName.textContent = `${data.firstname} ${data.middlename} ${data.lastname}`;
+
+                    const modalUserDetails = document.getElementById('modalUserDetails');
+                    modalUserDetails.innerHTML = `
+    <h3 class="center-text"><strong>${data.firstname} ${data.middlename} ${data.lastname}</strong></h3>
+    <p><strong>ID Number:</strong> ${data.idnumber}</p>
+    <p><strong>Course:</strong> ${data.course}</p>
+    <p><strong>Section:</strong> ${data.section}</p>
+    <p><strong>Gender:</strong> ${data.gender}</p>
+    <p><strong>Status:</strong> ${data.status}</p>
+    <p><strong>Role:</strong> ${data.role}</p>
+`;
+
+                })
+                .catch(error => {
+                    console.error('Error fetching user details:', error);
+                });
+        }
+
+        function fetchOrderTransactions(userId) {
+            fetch(`http://localhost:5000/api/auth/order-transactions/user/${userId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+// Ensure the table is populated before initializing DataTable
+.then(data => {
+    const tableBody = document.getElementById('orderTransactionsTable').getElementsByTagName('tbody')[0];
+    tableBody.innerHTML = '';
+
+    let totalPay = 0;
+    let totalOrders = 0;
+    const paymentMethodCount = {};
+
+    data.orderTransactions.forEach(order => {
+        const row = tableBody.insertRow();
+        row.insertCell(0).textContent = order.order_transaction_id;
+        row.insertCell(1).textContent = order.payment_method;
+        row.insertCell(2).textContent = order.total_amount;
+        row.insertCell(3).textContent = `₱${parseFloat(order.total_pay).toFixed(2)}`;
+        row.insertCell(4).textContent = order.status;
+
+        // Calculate totals
+        totalPay += parseFloat(order.total_pay);
+        totalOrders++;
+
+        // Group by payment method
+        if (paymentMethodCount[order.payment_method]) {
+            paymentMethodCount[order.payment_method]++;
+        } else {
+            paymentMethodCount[order.payment_method] = 1;
+        }
+    });
+
+    // Update summary
+    document.getElementById('totalOrders').textContent = totalOrders;
+    document.getElementById('totalPay').textContent = totalPay.toFixed(2);
+
+    const paymentMethodBreakdown = document.getElementById('paymentMethodBreakdown');
+    paymentMethodBreakdown.innerHTML = '';
+    for (const [method, count] of Object.entries(paymentMethodCount)) {
+        const li = document.createElement('li');
+        li.textContent = `${method}: ${count} orders`;
+        paymentMethodBreakdown.appendChild(li);
+    }
+
+    // Reinitialize DataTable after populating the table
+    if ($.fn.DataTable.isDataTable('#orderTransactionsTable')) {
+        $('#orderTransactionsTable').DataTable().clear().destroy();
+    }
+
+    // Initialize the DataTable (ensure this is done after the table rows are added)
+    $('#orderTransactionsTable').DataTable({
+        "order": [[0, 'desc']]
+    });
+})
+
+                .catch(error => console.error('Error fetching order transactions:', error));
+        }
+
+        const userId = getUserIdFromURL();
+        if (userId) {
+            fetchUserDetails(userId);
+            fetchOrderTransactions(userId);
+        } else {
+            alert('No user selected.');
+        }
+
+        // Modal functionality
+        const modal = document.getElementById('userDetailsModal');
+        const userDetailsIcon = document.getElementById('userDetailsIcon');
+        const closeModal = document.getElementsByClassName('close-btn')[0];
+
+        userDetailsIcon.onclick = function() {
+            modal.style.display = 'block';
+        }
+
+        closeModal.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

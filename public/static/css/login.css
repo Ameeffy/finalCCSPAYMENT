@@ -1,0 +1,284 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e8e8e8;
+    font-family: Arial, sans-serif;
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: #0b5e1d; /* Dark green */
+    width: 100%; /* Full width */
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.navbar.fixed-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1030;
+}
+
+/* Custom styles for the brand name in the navbar */
+.navbar-brand {
+    font-size: 17px; /* Default font size */
+    color: white !important;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Navbar items */
+.navbar-nav .nav-link {
+    color: white !important;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* Form styling */
+.form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 150px; /* Space between logo and form */
+}
+
+.form-content {
+    text-align: center;
+    max-width: 400px;
+    width: 300px;
+}
+
+.form-content h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.form-group input {
+    padding: 15px;
+    font-size: 16px;
+    
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+
+.login-button {
+    background-color: #0b5e1d;
+    color: white;
+    font-weight: bold;
+    border-radius: 30px;
+    padding: 10px;
+    width: 100%;
+    border: none;
+}
+
+.logo {
+    max-width: 250px;
+    max-height: 250px;
+}
+.button-20 {
+appearance: button;
+background-color: #3733E5;
+background-image: linear-gradient(180deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, 0));
+border: 1px solid #4D4AE8;
+border-radius: 1rem;
+box-shadow: rgba(255, 255, 255, 0.15) 0 1px 0 inset,rgba(46, 54, 80, 0.075) 0 1px 1px;
+box-sizing: border-box;
+color: #FFFFFF;
+cursor: pointer;
+display: inline-block;
+font-family: Inter,sans-serif;
+font-size: 1rem;
+font-weight: 500;
+line-height: 1.5;
+margin: 0;
+padding: .5rem 1rem;
+text-align: center;
+text-transform: none;
+transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+user-select: none;
+-webkit-user-select: none;
+touch-action: manipulation;
+vertical-align: middle;
+font-size: 13px;
+}
+
+.button-20:focus:not(:focus-visible),
+.button-20:focus {
+outline: 0;
+}
+
+.button-20:hover {
+background-color: #3733E5;
+border-color: #3733E5;
+color: white;
+}
+
+.button-20:focus {
+background-color: #413FC5;
+border-color: #3E3BBA;
+box-shadow: rgba(255, 255, 255, 0.15) 0 1px 0 inset, rgba(46, 54, 80, 0.075) 0 1px 1px, rgba(104, 101, 235, 0.5) 0 0 0 .2rem;
+}
+
+.button-20:active {
+background-color: #3E3BBA;
+background-image: none;
+border-color: #3A38AE;
+box-shadow: rgba(46, 54, 80, 0.125) 0 3px 5px inset;
+}
+
+.button-20:active:focus {
+box-shadow: rgba(46, 54, 80, 0.125) 0 3px 5px inset, rgba(104, 101, 235, 0.5) 0 0 0 .2rem;
+}
+
+.button-20:disabled {
+background-image: none;
+box-shadow: none;
+opacity: .65;
+pointer-events: none;
+}
+
+.button-21 {
+appearance: button;
+background-color: #E84A4D; /* Red background */
+background-image: linear-gradient(180deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, 0));
+border: 1px solid #E84A4D; /* Red border */
+border-radius: 1rem;
+box-shadow: rgba(255, 255, 255, 0.15) 0 1px 0 inset, rgba(46, 54, 80, 0.075) 0 1px 1px;
+box-sizing: border-box;
+color: #FFFFFF;
+cursor: pointer;
+display: inline-block;
+font-family: Inter, sans-serif;
+font-size: 1rem;
+font-weight: 500;
+line-height: 1.5;
+margin: 0;
+padding: .5rem 1rem;
+text-align: center;
+text-transform: none;
+transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+user-select: none;
+-webkit-user-select: none;
+touch-action: manipulation;
+vertical-align: middle;
+font-size: 13px;
+}
+
+
+.button-21:focus:not(:focus-visible),
+.button-21:focus {
+outline: 0;
+}
+
+.button-21:hover {
+background-color: #E53733; /* Darker red on hover */
+border-color: #E53733; /* Darker red border on hover */
+color: white;
+}
+
+.button-21:focus {
+background-color: #C5413F; /* Focus state background color */
+border-color: #B83B3A; /* Focus state border color */
+box-shadow: rgba(255, 255, 255, 0.15) 0 1px 0 inset, rgba(46, 54, 80, 0.075) 0 1px 1px, rgba(235, 101, 104, 0.5) 0 0 0 .2rem; /* Red box shadow on focus */
+}
+
+.button-21:active {
+background-color: #B83B3A; /* Active state background color */
+background-image: none;
+border-color: #AE3737; /* Active state border color */
+box-shadow: rgba(46, 54, 80, 0.125) 0 3px 5px inset;
+}
+
+.button-21:active:focus {
+box-shadow: rgba(46, 54, 80, 0.125) 0 3px 5px inset, rgba(235, 101, 104, 0.5) 0 0 0 .2rem; /* Active focus box shadow */
+}
+
+.button-21:disabled {
+background-image: none;
+box-shadow: none;
+opacity: .65;
+pointer-events: none;
+}
+a.button-20, a.button-21 {
+text-decoration: none; /* Remove underline */
+}
+.logo-container img {
+max-width: 400px;
+height: auto;
+}
+
+/* Ensure that the image is responsive and aligned */
+.logo-container img {
+width: 600px; /* Make the image responsive */
+height: auto;
+}
+
+.section .row {
+display: flex; /* Ensure row content is aligned */
+flex-wrap: wrap;
+}
+
+.welcome-text {
+text-align: left;
+padding-right: 20px; /* Add some padding between text and image */
+}
+
+/* For smaller devices, stack the image and text vertically */
+@media (max-width: 768px) {
+.welcome-text {
+text-align: center;
+padding-right: 0;
+}
+
+.logo-container {
+margin-top: 20px; /* Add some spacing between text and image */
+}
+
+
+}
+.back-icon-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+font-size: 16px;
+cursor: pointer;
+color: gray;
+position: fixed; /* Fixed positioning */
+top: 100px; /* Adjust based on the height of your navbar */
+left: 15px; /* Adjust spacing from the left edge */
+z-index: 1020; /* Ensure it's below the navbar */
+}
+
+.back-icon-container a {
+text-decoration: none; /* Remove underline from link */
+}
+
+.back-icon-container i {
+font-size: 24px; /* Icon size */
+}
+
+.back-icon-container span {
+font-size: 14px; /* Text size */
+/* Space between icon and text */
+}
+.back-icon {
+    position: absolute;
+    cursor: pointer;
+    font-size: 24px;
+    color: #0b5e1d; /* Change this color to match your theme */
+}
+
+.back-icon:hover {
+    color: #046317; /* Change this hover effect color to match your theme */
+}

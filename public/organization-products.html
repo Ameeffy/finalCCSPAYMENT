@@ -1,0 +1,2415 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Admin Payment</title>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"> 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    
+
+        
+        
+    </head>
+<style>
+
+
+.export-container {
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    z-index: 1;
+}
+
+.export-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.export-btn {
+    background-color: #1B3A28;
+    color: #ffffff;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 60px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+}
+
+.export-btn:hover {
+    background-color: #3e865c;
+}
+
+.export-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 83px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.export-content a {
+    color: #333;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+.export-content a:hover {
+    background-color: #f8f9fa;
+}
+
+.export-dropdown:hover .export-content {
+    display: block;
+}
+@media print {
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+    }
+
+    .export-container, .dataTables_wrapper .top, .dataTables_wrapper .bottom {
+        display: none;
+    }
+
+    .custom-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .custom-table th, .custom-table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    .custom-table thead {
+        background-color: #f1f1f1;
+    }
+}
+        .table-container{
+            width: auto;
+            background-color: white;
+            padding-top: 20px;
+            padding-left: 10px;
+            padding-right: 10px;   
+            border-radius: 3px;
+            padding-bottom: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+.dataTables_scroll {
+    border-radius: 5px 5px 0 0; /* 5px top border radius */
+}
+
+.dataTables_scrollBody {
+    border-radius: 0; /* Ensure no bottom border radius */
+}
+
+
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px; /* Adjusted to 5px */
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px; /* Adjusted to 5px */
+}
+
+/* Ensure no bottom border-radius */
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important; /* Light gray border */
+    padding: 12px 16px; /* Comfortable spacing */
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important; /* Remove border from last row */
+}
+
+/* Optional hover effect */
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important; /* Very subtle hover background */
+    border-bottom-color: #d0d0d0 !important; /* Slightly darker border on hover */
+}
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        justify-self: flex-end;
+    }
+
+    /* Optional: Adjust spacing between elements */
+    .dataTables_wrapper .dataTables_length {
+        margin-right: 15px;
+    }
+   
+    .dataTables_wrapper .dataTables_info {
+        margin: 0 15px;
+    }
+    .dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    text-decoration: none;
+    color: #555;
+    background-color: #f9f9f9;
+}
+
+.dataTables_wrapper .dataTables_paginate a:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Styling the search box */
+.dataTables_wrapper .dataTables_filter {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Custom table design */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
+    border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
+    margin-bottom: 50px;
+}
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 12px 16px;
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important;
+    border-bottom-color: #d0d0d0 !important;
+}
+
+
+.available {
+            background-color: green;
+        }
+        .out-of-stock {
+            background-color: red;
+        }
+       
+        .custom-position{
+    position: absolute;
+    right: 80px;
+  margin-top: 20px;
+}.contents{
+    width: 100%;
+}
+.quantity-column, .quantity-cell {
+    display: none; /* Hide by default */
+}
+
+#toggleQuantityBtn {
+    cursor: pointer;
+}
+
+.pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Align items vertically */
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: none;
+            background-color: #034b03;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .pagination button.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            margin: 0 10px; /* Add margin to space out the text */
+            font-weight: bold;
+        }
+        
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+
+</style>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center justify-content-between px-3">
+            <!-- Left Section -->
+            <div class="d-flex align-items-center">
+                <!-- Sidebar Toggle -->
+                <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                    <i class="fas fa-bars" style="color: rgb(255, 255, 255);"></i>
+                </button>
+        
+                <div class="logo me-2">
+                    <label for="logoUpload">
+                        <div id="loadingIconLogo" class="logo-loading-container1">
+                            <div class="spinnerlogo1"></div>
+                        </div>
+                        <img id="organizationLogo" src="" alt="Logo" height="40" style="cursor: pointer;">
+                    </label>
+                    <input type="file" id="logoUpload" style="display: none;" accept="image/*">
+                    <div id="uploadingMessage">Uploading logo...</div>
+                </div>
+        
+        
+                <!-- Organization Info -->
+                <div id="organizationInfo" class="d-flex flex-grow-1">
+                    <!-- Organization Name will be inserted here -->
+                </div>
+            </div>
+        
+            <!-- Right Section -->
+            <div class="d-flex align-items-center">
+              
+                <i id="profile-item" class="dropdown-item me-3">
+                    <a href="#" style="color: #25330f; text-decoration: none;">Loading...</a>
+                </i>
+        
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x" style="color: #ffffff;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: #ffffff;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                        width: 110px !important; 
+                        min-width: 110px !important; 
+                        background-color: #ffffff; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        height: auto;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                        padding: 0;">
+                        <li>
+                            <a class="dropdown-item" href="#" id="logout" style="
+                                display: flex; 
+                                align-items: center; 
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                height: auto;
+                                border-bottom: 1px solid #ddd; 
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-sign-out-alt" style="margin-right: 8px; color: inherit;"></i> Sign Out
+                            </a>
+                            <a class="dropdown-item" href="#" id="logouts" style="
+                                display: flex; 
+                                align-items: center; 
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                height: auto;
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-exchange-alt" style="margin-right: 8px; color: inherit;"></i> Switch
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+                <script>
+                   document.getElementById('logouts').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default link behavior
+        
+            // SweetAlert confirmation
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to switch account?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745', // Green confirm button
+                cancelButtonColor: '#dc3545', // Red cancel button
+                confirmButtonText: 'Yes, Switch Account!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Switch Account',
+                        text: 'Choose your organization',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = 'chooseorganizations.html'; // Redirect to choose organizations page
+                    });
+                }
+            });
+        });
+        function fetchOrganizationData() {
+    const token = localStorage.getItem('token'); // Retrieve token from storage
+    if (!token) {
+        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        return;
+    }
+
+    fetch('http://localhost:5000/api/auth/organization/details', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.name) {
+            
+            const infoDiv = document.getElementById('organizationInfo');
+            infoDiv.innerHTML = `
+              <div class="custom-heading">${data.name}</div>
+
+       
+              
+            `;
+        } else {
+            document.getElementById('organizationInfo').innerText = 'No organization data found.';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('errorMessages').innerText = 'An error occurred. Please try again.';
+    });
+}
+
+
+document.addEventListener('DOMContentLoaded', fetchOrganizationData);
+
+
+   function fetchLoggedInUserDetails() {
+    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+
+    if (!token) {
+        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        return;
+    }
+
+    fetch('http://localhost:5000/api/auth/organization-user/details', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(user => {
+        if (!user) {
+            throw new Error('User not found');
+        }
+        
+        
+        const fullName = `${user.firstname} ${user.lastname}`; 
+
+        document.getElementById('profile-item').innerHTML = `
+           <a style="color: #25330f; text-decoration: none; " href="organization-users-info.html">
+   
+   <h3 style="color: #25330f; text-decoration: none; font-size: 18px; margin-top:10px;">${user.firstname} ${user.lastname}</h3>
+</a>
+
+
+        `;
+    })
+    .catch(error => {
+        console.error('Error fetching organization user details:', error);
+        document.getElementById('profile-item').innerHTML = '<a href="#">Error loading profile</a>';
+    });
+}
+
+// Call the function when the DOM is loaded
+document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
+    
+            document.getElementById('logout').addEventListener('click', function(event) {
+                event.preventDefault();
+    
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to log out?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, log out!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem('token');
+                        Swal.fire({
+                            title: 'Logged Out!',
+                            text: 'You have been logged out successfully.',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = 'adminlogin.html';
+                        });
+                    }
+                });
+            });
+        </script>
+   
+    
+
+
+   <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">Overview</div>
+                    <a class="nav-link" href="organization-dashboard.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+
+                    <div class="sb-sidenav-menu-heading">Payment Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                           
+                            <a class="nav-link" href="organization-allpayments.html">Overview</a>
+                            <a class="nav-link" href="organization-active-payment.html">Active Payment</a> 
+                            <a class="nav-link" href="organization-addpayments.html">Add Payment</a>
+                            <a class="nav-link" href="organization-reports.html">Reports</a> 
+                        </nav>
+                    </div>
+
+                   
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTransactions" aria-expanded="false" aria-controls="collapseTransactions">
+                        <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
+                        Transactions
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseTransactions" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-alltransactions.html">Overview</a>
+                            <a class="nav-link" href="organization-payment.html">Management</a>
+                            <a class="nav-link" href="organization-masterlist.html">Masterlist</a>
+                            <a class="nav-link" href="organization-transactionsreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+
+                    <div class="sb-sidenav-menu-heading">Organization Overview</div>
+                    <a class="nav-link" href="organization-academic-list.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Academic List
+                    </a>
+                    <div class="sb-sidenav-menu-heading">Product Management</div>
+                    <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapseProducts" aria-expanded="false" aria-controls="collapseProducts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
+                        Products
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseProducts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-products.html">Management</a>
+                            <a class="nav-link" href="organization-pre-order.html">Pre-Order</a>
+                            <a class="nav-link" href="organization-gcashorder.html">Manage QR-Code</a>
+                            <a class="nav-link" href="organization-allorderreports.html">QR-Code Reports</a>
+                            <a class="nav-link" href="organization-addproduct.html">Add Product</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Order Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrders" aria-expanded="false" aria-controls="collapseOrders">
+                        <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>
+                        Orders
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrders" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-orders.html">Transactions</a>
+                            <a class="nav-link" href="organization-ordersManage.html">Paid Orders Handling</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrderTransactions" aria-expanded="false" aria-controls="collapseOrderTransactions">
+                        <div class="sb-nav-link-icon"><i class="fas fa-receipt"></i></div>
+                        Transactions
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrderTransactions" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-order-transaction.html">Overview</a>
+                            <a class="nav-link" href="organization-order-transaction-reports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Transaction Summary</div>
+                    <a class="nav-link" href="organization-transactions-summary.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Overview
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-5"></h1>
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4" style="padding: 20px;">
+                                    <ol class="breadcrumb mb-4">
+                                        <li class="breadcrumb-item" style="font-style: italic;">Products</li>
+                                        <li class="breadcrumb-item active" style="font-style: italic;">Overview</li>
+                                    </ol>
+                                     <!-- <div class="d-flex justify-content-end" style="position: absolute; top: 10px; right: 10px;">
+                                        <div class="d-flex flex-column align-items-center">
+                                            <button onclick="location.href='organization-addproducts.html'"
+                                                    style="background-color: #034b03; color: white; border: 1px solid white; border-radius: 5px; padding: 5px 10px; text-decoration: none; font-size: 18px;">
+                                                +
+                                            </button>
+                                            <div style="margin-top: 5px; font-size: 10px; color: #000000; font-weight: bold; margin-right: 20px;">
+                                                Add Products
+                                            </div>
+                                            
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; align-items: center;">
+                                            <button 
+                                                onclick="window.location.href='organization-gcashorder.html';"
+                                                style="background-color: #034b03; color: white; border: 1px solid white; border-radius: 5px; padding: 5px 10px; text-decoration: none; font-size: 18px; cursor: pointer;">
+                                                +
+                                            </button>
+                                            <div style="margin-top: 5px; font-size: 10px; color: #000000; font-weight: bold;">
+                                                Manage Gcash
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <h1 style="text-align: center;">Products</h1>-->
+                                
+                                    <div class="position-relative">
+                                        <!-- Ellipsis icon that triggers dropdown with animation -->
+                                        <i class="bi bi-three-dots-vertical position-absolute top-0 end-0 fs-4" style="cursor: pointer;" id="ellipsisIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                        
+                                        <!-- Dropdown menu -->
+                                        <ul class="dropdown-menu dropdown-menu-end" style="padding: 10px;">
+                                            
+                                          
+                                            <li>
+                                              <a href="organization-productslogs.html" class="dropdown-item d-flex align-items-center" style="font-size: 14px;">
+                                                <i class="fas fa-file-alt me-2" style="font-size: 18px; width: 20px;"></i> Open QR-Code Logs
+                                              </a>
+                                            </li>
+                                          </ul>
+                                          
+                                          
+                                        
+                                        <!-- Heading -->
+                                        <h3 class="text-center mb-4" style="font-weight: 600; color: #333;">Product Management</h3>
+                                      </div>
+                                
+                                    <table class="custom-table" id="productsTable">
+                                        <thead>
+                                            <tr>
+                                                
+                                                <th>Product Image</th>
+                                                <th>Name</th>
+                                                <th>Description</th>
+                                                <th>Price</th>
+                                                <th>Status</th>
+                                                <th>
+                                                    Total Quantity
+                                                    <button id="toggleQuantityBtn" onclick="toggleQuantityColumns()">▶</button>
+                                                </th>
+                                                <th class="quantity-column">Quantity</th>
+                                                <th class="quantity-column">Small Quantity</th>
+                                                <th class="quantity-column">Medium Quantity</th>
+                                                <th class="quantity-column">Large Quantity</th>
+                                                <th class="quantity-column">XL Quantity</th>
+                                                <th>Category</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        
+                                        <tbody id="productsContainer">
+                                           
+                                        </tbody>
+                                    </table>
+                                
+                                    <div class="pagination">
+                                        <button id="prevPage" onclick="prevPage()" class="disabled">Previous</button>
+                                        <span class="page-info">
+                                            Page <span id="pageNumber">1</span> of <span id="totalPages">1</span>
+                                        </span>
+                                        <button id="nextPage" onclick="nextPage()">Next</button>
+                                    </div>
+                                </div>
+                                
+                            <script>function toggleQuantityColumns() {
+                                const quantityColumns = document.querySelectorAll('.quantity-column');
+                                const toggleBtn = document.getElementById('toggleQuantityBtn');
+                            
+                                quantityColumns.forEach(column => {
+                                    if (column.style.display === 'none' || column.style.display === '') {
+                                        column.style.display = 'table-cell';
+                                        toggleBtn.innerHTML = '◀'; // Change the button text to left arrow
+                                    } else {
+                                        column.style.display = 'none';
+                                        toggleBtn.innerHTML = '▶'; // Change the button text back to right arrow
+                                    }
+                                });
+                            
+                                // Also toggle visibility of the data in rows
+                                const quantityCells = document.querySelectorAll('.quantity-cell');
+                                quantityCells.forEach(cell => {
+                                    if (cell.style.display === 'none' || cell.style.display === '') {
+                                        cell.style.display = 'table-cell';
+                                    } else {
+                                        cell.style.display = 'none';
+                                    }
+                                });
+                            }
+                            </script>
+                           
+<!-- Product Logs Modal -->
+<div class="modal fade" id="logsModal" tabindex="-1" aria-labelledby="logsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+  
+        <div class="modal-header">
+          <h5 class="modal-title" id="logsModalLabel">Product Logs</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+  
+        <div class="modal-body">
+          <!-- Table for displaying logs -->
+          <table id="logsTable" class="display table table-striped table-bordered" style="width:100%">
+              <thead>
+                  <tr>
+                      <th>Action</th>
+                      <th>Performed by</th>
+                      <th>Timestamp</th>
+                  </tr>
+              </thead>
+              <tbody id="logsContainer">
+                  <!-- Product logs will be dynamically inserted here -->
+              </tbody>
+          </table>
+        </div>
+  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+                           
+                            <div id="zoomModal" class="modal1">
+                                <span 
+                                style="
+                                    display: none;
+                                    position: absolute; 
+                                    right: 20px; 
+                                    cursor: pointer; 
+                                    margin-top: 20px;"
+                                class="close" 
+                                id="closeModal">
+                                <i class="fas fa-times-circle"></i>
+                            </span>
+                            
+                                <img class="modal-content1" id="zoomedImage">
+                                <div id="caption"></div>
+                            </div>
+                            
+                            <div id="smallupdatemodal" class="modal" 
+                                 style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 1045;">
+                                <div class="modal-content" 
+                                     style="background-color: #ffffff; width: 90%; max-width: 400px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); padding: 20px; text-align: center;">
+                                    <form id="smallUpdateForm">
+                                       
+                                        <h2 style="margin-bottom: 20px; font-size: 24px; color: #333;">Update Small Quantity</h2>
+                                        <label for="smallquantity" style="margin-bottom: 10px; font-size: 16px; color: #555;">New Small Quantity:</label>
+                                        <input type="number" id="smallquantity" name="smallquantity" required 
+                                               style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; margin-bottom: 20px;">
+                                        <input type="hidden" id="smallProductId">
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <button type="submit" 
+                                                    style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Update</button>
+                                            <button type="button" onclick="closeSmallUpdateModal()" 
+                                                    style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            </div>
+                            <!-- Medium Update Modal -->
+                            <div id="mediumupdatemodal" class="modal" 
+                                 style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 1045;">
+                                <div class="modal-content" 
+                                     style="background-color: #ffffff; width: 90%; max-width: 400px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); text-align: center; padding: 20px;">
+                                    <!-- Form -->
+                                    <form id="mediumUpdateForm">
+                                        <h3 style="margin-bottom: 20px; font-size: 20px; color: #333; text-align: center;">Update Medium Quantity</h3>
+                                        <input type="hidden" id="mediumProductId" name="productId">
+                                        <!-- Label and Input -->
+                                        <label for="mediumquantity" style="display: block; margin-bottom: 10px; font-size: 16px; color: #555;">New Medium Quantity:</label>
+                                        <input type="number" id="mediumquantity" name="mediumquantity" min="0" required
+                                               style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; margin-bottom: 20px;">
+                                        <!-- Buttons -->
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <button type="submit" 
+                                                    style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Update</button>
+                                            <button type="button" onclick="closeMediumUpdateModal()" 
+                                                    style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <!-- Large Update Modal -->
+                            <div id="largeupdatemodal" class="modal" 
+                                 style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 1045;">
+                                <div class="modal-content" 
+                                     style="background-color: #ffffff; width: 90%; max-width: 400px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); text-align: center; padding: 20px;">
+                                    <!-- Form -->
+                                    <form id="largeUpdateForm">
+                                        <h3 style="margin-bottom: 20px; font-size: 20px; color: #333;">Update Large Quantity</h3>
+                                        <input type="hidden" id="largeProductId" name="productId">
+                                        <!-- Label and Input -->
+                                        <label for="largequantity" style="display: block; margin-bottom: 10px; font-size: 16px; color: #555;">New Large Quantity:</label>
+                                        <input type="number" id="largequantity" name="largequantity" min="0" required
+                                               style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; margin-bottom: 20px;">
+                                        <!-- Buttons -->
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <button type="submit" 
+                                                    style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Update</button>
+                                            <button type="button" onclick="closeLargeUpdateModal()" 
+                                                    style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <!-- XL Update Modal -->
+                            <div id="xlupdatemodal" class="modal" 
+                                 style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 1045;">
+                                <div class="modal-content" 
+                                     style="background-color: #ffffff; width: 90%; max-width: 400px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); text-align: center; padding: 20px;">
+                                    <!-- Form -->
+                                    <form id="xlUpdateForm">
+                                        <h3 style="margin-bottom: 20px; font-size: 20px; color: #333;">Update XL Quantity</h3>
+                                        <input type="hidden" id="xlProductId" name="productId">
+                                        <!-- Label and Input -->
+                                        <label for="xlquantity" style="display: block; margin-bottom: 10px; font-size: 16px; color: #555;">New XL Quantity:</label>
+                                        <input type="number" id="xlquantity" name="xlquantity" min="0" required
+                                               style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; margin-bottom: 20px;">
+                                        <!-- Buttons -->
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <button type="submit" 
+                                                    style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Update</button>
+                                            <button type="button" onclick="closeXLUpdateModal()" 
+                                                    style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            
+                            <div id="updateModal" class="modal" 
+                                 style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 1045;">
+                                <div class="modal-content" 
+                                     style="background-color: #ffffff; width: 90%; max-width: 500px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); position: relative; text-align: center; padding: 20px;">
+                                    <!-- Close Button -->
+                                    <span 
+                                    style="
+                                        position: absolute; 
+                                        right: 20px; 
+                                        top: 20px; 
+                                        cursor: pointer; 
+                                        color: #dc3545; 
+                                        font-size: 24px; 
+                                        display: inline-flex; 
+                                        align-items: center;" 
+                                    class="close" 
+                                    onclick="closeModal('updateModal')">
+                                    <i class="fas fa-times-circle"></i>
+                                </span>
+                                
+                                    <h2 style="margin-bottom: 20px; font-size: 24px; color: #333;">Update Product</h2>
+                                    <!-- Buttons Container -->
+                                    <div id="updateButtonsContainer" 
+                                         style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+                                        <!-- Buttons will be dynamically added here -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="quantityUpdateModal" class="modal" 
+                                 style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 1045;">
+                                <div class="modal-content" 
+                                     style="background-color: #ffffff; width: 90%; max-width: 400px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); text-align: center; padding: 20px;">
+                                    <!-- Form -->
+                                    <form id="quantityUpdateForm">
+                                        <h3 style="margin-bottom: 20px; font-size: 20px; color: #333; text-align:center;">Update Quantity</h3>
+                                        <input type="hidden" id="quantityProductId" value="">
+                                        <!-- Label and Input -->
+                                        <label for="quantity" style="display: block; margin-bottom: 10px; font-size: 16px; color: #555;">Quantity:</label>
+                                        <input type="number" id="quantity" required 
+                                               style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; margin-bottom: 20px;">
+                                        <!-- Buttons -->
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <button type="submit" 
+                                                    style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Update</button>
+                                            <button type="button" onclick="closeQuantityUpdateModal()" 
+                                                    style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- Pre-Order Modal -->
+<div id="preOrderModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1080; background: white; padding: 20px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+    <h2>Set Pre-Order Limit</h2>
+    <p id="preOrderProductName"></p>
+    <input type="hidden" id="preOrderProductId">
+    <label for="preOrderLimit">Pre-Order Limit:</label>
+    <input type="number" id="preOrderLimit" placeholder="Enter limit" min="1" style="width: 100%; margin-bottom: 10px; padding: 8px; box-sizing: border-box;" />
+    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button onclick="submitPreOrder()" style="padding: 10px 15px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Confirm</button>
+        <button onclick="closePreOrderModal()" style="padding: 10px 15px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="updateProductModal" tabindex="-1" aria-labelledby="updateProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateProductModalLabel">Update Product</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+        <form id="updateProductForm">
+          <div class="modal-body">
+            
+            <!-- Product Name Input -->
+            <div class="mb-3">
+              <label for="name" class="form-label">Product Name</label>
+              <input type="text" class="form-control" id="name" placeholder="Product Name" required>
+            </div>
+            
+            <!-- Price Input -->
+            <div class="mb-3">
+              <label for="price" class="form-label">Price</label>
+              <input type="number" class="form-control" id="price" placeholder="Price" step="0.01" required>
+            </div>
+            
+          </div>
+  
+          <!-- Modal Footer with Update Button -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Update Product</button>
+          </div>
+        </form>
+  
+      </div>
+    </div>
+  </div>
+  
+                            <script>
+                                // Open Quantity Update Modal
+                                // Open Quantity Update Modal for generic quantity
+                            function openQuantityUpdateModal(productId, currentQuantity) {
+                                document.getElementById('quantityProductId').value = productId; 
+                                document.getElementById('quantity').value = currentQuantity; 
+                                document.getElementById('quantityUpdateModal').style.display = 'block'; 
+                            }
+                            
+                            
+                                // Close Quantity Update Modal
+                                function closeQuantityUpdateModal() {
+                                    document.getElementById('quantityUpdateModal').style.display = 'none';
+                                }
+                            
+                                // Quantity Update Form Submission
+                                document.getElementById('quantityUpdateForm').addEventListener('submit', function(event) {
+                                    event.preventDefault();
+                            
+                                    const productId = document.getElementById('quantityProductId').value;
+                                    const newQuantity = document.getElementById('quantity').value;
+                            
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "Do you want to update the quantity?",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Yes, update it!',
+                                        cancelButtonText: 'No, cancel!',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            fetch(`http://localhost:5000/api/auth/products/${productId}/quantity`, {
+                                                method: 'PATCH',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                                },
+                                                body: JSON.stringify({ quantity: newQuantity })
+                                            })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                if (data.success) {
+                                                    Swal.fire('Updated!', 'Quantity updated successfully!', 'success').then(() => {
+                                                        fetchProducts(); 
+                                                        closeQuantityUpdateModal(); 
+                                                        location.reload();
+                                                    });
+                                                } else {
+                                                    Swal.fire('Failed!', 'Failed to update quantity.', 'error');
+                                                }
+                                            })
+                                            .catch(error => {
+                                                console.error('Error:', error);
+                                                Swal.fire('Error!', 'An error occurred. Please try again.', 'error');
+                                            });
+                                        }
+                                    });
+                                });
+                            </script>
+                            <style>
+                            .modal {
+                                display: none; 
+                                position: fixed; 
+                                z-index: 1045; 
+                                padding-top: 100px;
+                                left: 0;
+                                top: 0;
+                                width: 100%; 
+                                height: 100%; 
+                                overflow: auto; 
+                                background-color: rgb(0,0,0);
+                                background-color: rgba(0,0,0,0.4);
+                            }
+                            
+                            .modal-content {
+                                background-color: #fefefe;
+                                margin: auto;
+                                padding: 20px;
+                                border: 1px solid #888;
+                                width: 80%;
+                                border-radius: 10px;
+                            }
+                            .modal-content-logs {
+                                background-color: #ffffff;
+                                margin: auto;
+                                padding: 20px;
+                                border: 1px solid #888;
+                                width: 80%;
+                                border-radius: 10px;
+                            }
+                            
+                            .close {
+                                color: #aaa;
+                                float: right;
+                                font-size: 28px;
+                                font-weight: bold;
+                            }
+                            
+                            .close:hover,
+                            .close:focus {
+                                color: black;
+                                text-decoration: none;
+                                cursor: pointer;
+                            }
+                            .edit-button,
+                            .delete-button,
+                            .action-button {
+                                margin-right: 5px; /* Adds space between each icon */
+                                font-size: 15px;    /* Adjusts icon size if needed */
+                                color: #333;        /* Icon color */
+                                text-decoration: none; /* Removes any underline */
+                            }
+                            
+                            .action-button:last-child {
+                                margin-right: 0; /* Removes extra space after the last icon */
+                            }
+                            
+                            
+                            </style>
+                            
+                            <script>
+                            function openSmallUpdateModal(productId, currentSmallQuantity) {
+                                document.getElementById('smallProductId').value = productId; // Set product_id in the hidden input
+                                document.getElementById('smallquantity').value = currentSmallQuantity; // Set current smallquantity in the input field
+                                document.getElementById('smallupdatemodal').style.display = 'block'; // Show the modal
+                            }
+                            
+                            // Close Small Update Modal
+                            function closeSmallUpdateModal() {
+                                document.getElementById('smallupdatemodal').style.display = 'none';
+                            }
+                            
+                            // Small Update Form Submission
+                            document.getElementById('smallUpdateForm').addEventListener('submit', function(event) {
+                                event.preventDefault(); // Prevent form from submitting normally
+                            
+                                const productId = document.getElementById('smallProductId').value;
+                                const newSmallQuantity = document.getElementById('smallquantity').value;
+                            
+                                // SweetAlert2 confirmation dialog
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "Do you want to update the Small quantity?",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Yes, update it!',
+                                    cancelButtonText: 'No, cancel!',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        fetch(`http://localhost:5000/api/auth/products/${productId}/update-small`, {
+                                            method: 'PATCH',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                            },
+                                            body: JSON.stringify({ smallquantity: newSmallQuantity })
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                Swal.fire('Updated!', 'Small quantity updated successfully!', 'success').then(() => {
+                                                    fetchProducts(); // Refresh product list
+                                                    closeSmallUpdateModal();
+                                                    location.reload(); // Close the modal
+                                                });
+                                            } else {
+                                                Swal.fire('Failed!', 'Failed to update Small quantity.', 'error');
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            Swal.fire('Error!', 'An error occurred. Please try again.', 'error');
+                                        });
+                                    }
+                                });
+                            });
+                            
+                            
+                            
+                            function openMediumUpdateModal(productId, currentMediumQuantity) {
+                                document.getElementById('mediumProductId').value = productId; 
+                                document.getElementById('mediumquantity').value = currentMediumQuantity; 
+                                document.getElementById('mediumupdatemodal').style.display = 'block'; 
+                            }
+                            
+                            // Close Medium Update Modal
+                            function closeMediumUpdateModal() {
+                                document.getElementById('mediumupdatemodal').style.display = 'none';
+                            }
+                            
+                            // Open Large Update Modal
+                            function openLargeUpdateModal(productId, currentLargeQuantity) {
+                                document.getElementById('largeProductId').value = productId; 
+                                document.getElementById('largequantity').value = currentLargeQuantity; 
+                                document.getElementById('largeupdatemodal').style.display = 'block'; 
+                            }
+                            
+                            // Close Large Update Modal
+                            function closeLargeUpdateModal() {
+                                document.getElementById('largeupdatemodal').style.display = 'none';
+                            }
+                            
+                            // Open XL Update Modal
+                            function openXLUpdateModal(productId, currentXLQuantity) {
+                                document.getElementById('xlProductId').value = productId; 
+                                document.getElementById('xlquantity').value = currentXLQuantity; 
+                                document.getElementById('xlupdatemodal').style.display = 'block'; 
+                            }
+                            
+                            // Close XL Update Modal
+                            function closeXLUpdateModal() {
+                                document.getElementById('xlupdatemodal').style.display = 'none';
+                            }
+                            
+                            // Open XXL Update Modal
+                            function openXXLUpdateModal(productId, currentXXLQuantity) {
+                                document.getElementById('xxlProductId').value = productId; 
+                                document.getElementById('xxlquantity').value = currentXXLQuantity; 
+                                document.getElementById('xxlupdatemodal').style.display = 'block'; 
+                            }
+                            
+                            // Close XXL Update Modal
+                            function closeXXLUpdateModal() {
+                                document.getElementById('xxlupdatemodal').style.display = 'none';
+                            }
+                            
+                            // Open XXXL Update Modal
+                            function openXXXLUpdateModal(productId, currentXXXLQuantity) {
+                                document.getElementById('xxxlProductId').value = productId; 
+                                document.getElementById('xxxlquantity').value = currentXXXLQuantity; 
+                                document.getElementById('xxxlupdatemodal').style.display = 'block'; 
+                            }
+                            
+                            // Close XXXL Update Modal
+                            function closeXXXLUpdateModal() {
+                                document.getElementById('xxxlupdatemodal').style.display = 'none';
+                            }
+                            document.getElementById('mediumUpdateForm').addEventListener('submit', function(event) {
+                                event.preventDefault();
+                            
+                                const productId = document.getElementById('mediumProductId').value;
+                                const newMediumQuantity = document.getElementById('mediumquantity').value;
+                            
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "Do you want to update the Medium quantity?",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Yes, update it!',
+                                    cancelButtonText: 'No, cancel!',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        fetch(`http://localhost:5000/api/auth/products/${productId}/medium`, {
+                                            method: 'PATCH',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                            },
+                                            body: JSON.stringify({ mediumquantity: newMediumQuantity })
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                Swal.fire('Updated!', 'Medium quantity updated successfully!', 'success').then(() => {
+                                                    fetchProducts(); 
+                                                    closeMediumUpdateModal(); 
+                                                    location.reload();
+                                                });
+                                            } else {
+                                                Swal.fire('Failed!', 'Failed to update Medium quantity.', 'error');
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            Swal.fire('Error!', 'An error occurred. Please try again.', 'error');
+                                        });
+                                    }
+                                });
+                            });
+                            
+                            // Large Update Form Submission
+                            document.getElementById('largeUpdateForm').addEventListener('submit', function(event) {
+                                event.preventDefault();
+                            
+                                const productId = document.getElementById('largeProductId').value;
+                                const newLargeQuantity = document.getElementById('largequantity').value;
+                            
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "Do you want to update the Large quantity?",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Yes, update it!',
+                                    cancelButtonText: 'No, cancel!',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        fetch(`http://localhost:5000/api/auth/products/${productId}/large`, {
+                                            method: 'PATCH',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                            },
+                                            body: JSON.stringify({ largequantity: newLargeQuantity })
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                Swal.fire('Updated!', 'Large quantity updated successfully!', 'success').then(() => {
+                                                    fetchProducts(); 
+                                                    closeLargeUpdateModal(); 
+                                                    location.reload();
+                                                });
+                                            } else {
+                                                Swal.fire('Failed!', 'Failed to update Large quantity.', 'error');
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            Swal.fire('Error!', 'An error occurred. Please try again.', 'error');
+                                        });
+                                    }
+                                });
+                            });
+                            
+                            /// XL Update Form Submission 
+                            document.getElementById('xlUpdateForm').addEventListener('submit', function(event) {
+                                event.preventDefault();
+                            
+                                const productId = document.getElementById('xlProductId').value;
+                                const newXLQuantity = document.getElementById('xlquantity').value;
+                            
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "Do you want to update the XL quantity?",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Yes, update it!',
+                                    cancelButtonText: 'No, cancel!',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        fetch(`http://localhost:5000/api/auth/products/${productId}/xl`, { // Updated endpoint
+                                            method: 'PATCH',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                            },
+                                            body: JSON.stringify({ xlargequantity: newXLQuantity }) // Updated variable name
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                Swal.fire('Updated!', 'XL quantity updated successfully!', 'success').then(() => {
+                                                    fetchProducts(); 
+                                                    closeXLUpdateModal(); 
+                                                    location.reload();
+                                                });
+                                            } else {
+                                                Swal.fire('Failed!', 'Failed to update XL quantity.', 'error');
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            Swal.fire('Error!', 'An error occurred. Please try again.', 'error');
+                                        });
+                                    }
+                                });
+                            });
+                            
+                            // XXL Update Form Submission
+                            document.getElementById('xxlUpdateForm').addEventListener('submit', function(event) {
+                                event.preventDefault();
+                            
+                                const productId = document.getElementById('xxlProductId').value;
+                                const newXXLQuantity = document.getElementById('xxlquantity').value;
+                            
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "Do you want to update the XXL quantity?",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Yes, update it!',
+                                    cancelButtonText: 'No, cancel!',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        fetch(`http://localhost:5000/api/auth/products/${productId}/xxl`, { // Updated endpoint
+                                            method: 'PATCH',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                            },
+                                            body: JSON.stringify({ xxlargequantity: newXXLQuantity }) // Updated variable name
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                Swal.fire('Updated!', 'XXL quantity updated successfully!', 'success').then(() => {
+                                                    fetchProducts(); 
+                                                    closeXXLUpdateModal(); 
+                                                    location.reload();
+                                                });
+                                            } else {
+                                                Swal.fire('Failed!', 'Failed to update XXL quantity.', 'error');
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            Swal.fire('Error!', 'An error occurred. Please try again.', 'error');
+                                        });
+                                    }
+                                });
+                            });
+                            
+                            // XXXL Update Form Submission
+                            document.getElementById('xxxlUpdateForm').addEventListener('submit', function(event) {
+                                event.preventDefault();
+                            
+                                const productId = document.getElementById('xxxlProductId').value;
+                                const newXXXLQuantity = document.getElementById('xxxlquantity').value;
+                            
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "Do you want to update the XXXL quantity?",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Yes, update it!',
+                                    cancelButtonText: 'No, cancel!',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        fetch(`http://localhost:5000/api/auth/products/${productId}/xxxl`, { // Updated endpoint
+                                            method: 'PATCH',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                            },
+                                            body: JSON.stringify({ xxxlargequantity: newXXXLQuantity }) // Updated variable name
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                Swal.fire('Updated!', 'XXXL quantity updated successfully!', 'success').then(() => {
+                                                    fetchProducts(); 
+                                                    closeXXXLUpdateModal(); 
+                                                    location.reload();
+                                                });
+                                            } else {
+                                                Swal.fire('Failed!', 'Failed to update XXXL quantity.', 'error');
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            Swal.fire('Error!', 'An error occurred. Please try again.', 'error');
+                                        });
+                                    }
+                                });
+                            });
+                            
+                            function openXSmallUpdateModal(productId, currentXSmallQuantity) {
+                                document.getElementById('xsmallProductId').value = productId; // Set product_id in the hidden input
+                                document.getElementById('xsmallquantity').value = currentXSmallQuantity; // Set current xsmallquantity in the input field
+                                document.getElementById('xsmallupdatemodal').style.display = 'block'; // Show the modal
+                            }
+                            
+                            // Close X-Small Update Modal
+                            function closeXSmallUpdateModal() {
+                                document.getElementById('xsmallupdatemodal').style.display = 'none';
+                            }
+                            
+                            // X-Small Update Form Submission
+                            document.getElementById('xsmallUpdateForm').addEventListener('submit', function(event) {
+                                event.preventDefault(); // Prevent form from submitting normally
+                            
+                                const productId = document.getElementById('xsmallProductId').value;
+                                const newXSmallQuantity = document.getElementById('xsmallquantity').value;
+                            
+                                // SweetAlert2 confirmation dialog
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "Do you want to update the X-Small quantity?",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Yes, update it!',
+                                    cancelButtonText: 'No, cancel!',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        fetch(`http://localhost:5000/api/auth/products/${productId}/update-xsmall`, {
+                                            method: 'PATCH',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                            },
+                                            body: JSON.stringify({ xsmallquantity: newXSmallQuantity })
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                Swal.fire('Updated!', 'X-Small quantity updated successfully!', 'success').then(() => {
+                                                    fetchProducts(); // Refresh product list
+                                                    closeXSmallUpdateModal();
+                                                    location.reload(); // Close the modal
+                                                });
+                                            } else {
+                                                Swal.fire('Failed!', 'Failed to update X-Small quantity.', 'error');
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            Swal.fire('Error!', 'An error occurred. Please try again.', 'error');
+                                        });
+                                    }
+                                });
+                            });
+                            
+                            
+                            
+                                </script>
+                            <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+                            <script>
+                                // JavaScript to handle the active class on sidebar items
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const links = document.querySelectorAll('.sidebar .nav-item');
+                            
+                                    links.forEach(link => {
+                                        link.addEventListener('click', function() {
+                                            // Remove active class from all links
+                                            links.forEach(item => item.classList.remove('active'));
+                                            // Add active class to the clicked link
+                                            this.classList.add('active');
+                                        });
+                                    });
+                                });
+                            </script>
+                            
+                            <body>
+                            
+                                <script>
+                                    document.getElementById('logout').addEventListener('click', function(event) {
+                                        event.preventDefault(); // Prevent the default link behavior
+                                
+                                        // Remove the token from local storage
+                                        localStorage.removeItem('token');
+                                
+                                        // Redirect to the login page
+                                        window.location.href = 'adminlogin.html';
+                                    });
+                                </script>
+                                
+                            
+                               
+                               
+                                <script>
+                                   function fetchOrganizationData() {
+                                const token = localStorage.getItem('token'); // Retrieve token from storage
+                                if (!token) {
+                                    window.location.href = 'adminlogin.html'; // Redirect to login if no token
+                                    return;
+                                }
+                            
+                                fetch('http://localhost:5000/api/auth/organization/details', {
+                                    headers: {
+                                        'Authorization': `Bearer ${token}`
+                                    }
+                                })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok');
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    if (data && data.name) {
+                                        
+                                        const infoDiv = document.getElementById('organizationInfo');
+                                        infoDiv.innerHTML = `
+                            <div 
+                                style="color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size:25px; text-transform: uppercase;">
+                                ${data.name}
+                            </div>
+                                          
+                                        `;
+                                    } else {
+                                        document.getElementById('organizationInfo').innerText = 'No organization data found.';
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    document.getElementById('errorMessages').innerText = 'An error occurred. Please try again.';
+                                });
+                            }
+                            
+                            
+                            document.addEventListener('DOMContentLoaded', fetchOrganizationData);
+                            
+                                </script>
+                            
+                             
+                                <script>
+                                    document.getElementById('logout').addEventListener('click', function(event) {
+                                        event.preventDefault(); // Prevent the default link behavior
+                                
+                                        // Remove the token from local storage
+                                        localStorage.removeItem('token');
+                                
+                                        // Redirect to the login page
+                                        window.location.href = 'adminlogin.html';
+                                    });
+                                </script>
+                              
+                                <script>
+                             let currentPage = 1;
+                            const rowsPerPage = 5; // Set the number of products per page
+                            let totalPages = 1; // This will be updated based on the total data length
+                            
+                            function fetchProducts() {
+                                const token = localStorage.getItem('token');
+                                if (!token) {
+                                    window.location.href = 'adminlogin.html';
+                                    return;
+                                }
+                            
+                                fetch('http://localhost:5000/api/auth/products', {
+                                    headers: {
+                                        'Authorization': `Bearer ${token}`
+                                    }
+                                })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok');
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    if (data.length > 0) {
+                                        totalPages = Math.ceil(data.length / rowsPerPage); // Calculate total pages
+                                        displayProducts(data, currentPage);
+                                        updatePagination();
+                                    } else {
+                                        const container = document.getElementById('productsContainer');
+                                        container.innerHTML = '<tr><td colspan="7">No products available.</td></tr>';
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    document.getElementById('errorMessages').innerText = 'An error occurred. Please try again.';
+                                });
+                            }
+                            
+                            function displayProducts(data, page) {
+                                const container = document.getElementById('productsContainer');
+                                container.innerHTML = ''; // Clear existing rows
+                            
+                                const start = (page - 1) * rowsPerPage;
+                                const end = start + rowsPerPage;
+                                const paginatedData = data.slice(start, end);
+                            
+                                paginatedData.forEach(product => {
+                                    const totalQuantity = product.quantity + product.xsmallquantity + product.smallquantity + product.mediumquantity + 
+                                                          product.largequantity + product.xlargequantity + product.xxlargequantity + 
+                                                          product.xxxlargequantity;
+                            
+                                    const row = document.createElement('tr');
+                                    
+                                    row.innerHTML = `
+                                      
+                                        <td><img src="${product.product_image}" alt="Product Image" style="max-width: 200px; height: auto;"></td>
+                                        <td>${product.name}</td>
+                                        <td>${product.description}</td>
+                                        <td>₱${product.price}</td>
+                                        <td>
+  ${product.status} 
+  ${product.status === "Pre-Order" && product.pre_order_limit ? `(${product.pre_order_limit} Limit)` : ''}
+</td>
+
+
+                                        <td>${totalQuantity}</td>
+                                        <td class="quantity-cell">${product.quantity}</td>
+                                       
+                                        <td class="quantity-cell">${product.smallquantity}</td>
+                                        <td class="quantity-cell">${product.mediumquantity}</td>
+                                        <td class="quantity-cell">${product.largequantity}</td>
+                                        <td class="quantity-cell">${product.xlargequantity}</td>
+                                       
+                                        <td>${product.category}</td>
+                                        <td>
+                                        <div style="
+                                display: grid; 
+                                grid-template-columns: repeat(2, auto); 
+                                gap: 10px; 
+                                justify-content: center; 
+                                align-items: center;
+                            ">
+                             
+
+                               <a href="javascript:void(0);" 
+   class="edit-button" 
+   data-bs-toggle="modal" 
+   data-bs-target="#updateProductModal" 
+   onclick="editProduct(${product.product_id})" 
+   title="Edit" 
+   style="
+       width: 35px;
+       height: auto;
+       text-decoration: none; 
+       color: #ffc107; 
+       font-size: 18px; 
+       display: flex; 
+       justify-content: center; 
+       align-items: center;
+       border: 1px solid #ffc107; 
+       padding: 8px; 
+       border-radius: 5px;
+       transition: background-color 0.3s, color 0.3s;
+   "
+   onmouseover="this.style.backgroundColor='#ffc107';this.style.color='white';"
+   onmouseout="this.style.backgroundColor='white';this.style.color='#ffc107';">
+    <i class="fas fa-edit"></i>
+</a>
+
+                                <a href="javascript:void(0);" 
+                                   class="delete-button" 
+                                   onclick="deleteProduct(${product.product_id})" 
+                                   title="Delete" 
+                                   style="
+                                    width: 35px;
+                                        height: auto;
+                                       text-decoration: none; 
+                                       color: #f44336; 
+                                       font-size: 18px; 
+                                       display: flex; 
+                                       justify-content: center; 
+                                       align-items: center;
+                                       border: 1px solid #f44336; 
+                                       padding: 8px; 
+                                       border-radius: 5px;
+                                       transition: background-color 0.3s, color 0.3s;
+                                   "
+                                   onmouseover="this.style.backgroundColor='#f44336';this.style.color='white';"
+                                   onmouseout="this.style.backgroundColor='white';this.style.color='#f44336';">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                                <a href="javascript:void(0);" 
+                                   class="action-button" 
+                                   onclick="openUpdateModal(${product.product_id})" 
+                                   title="Update Quantity" 
+                                   style="
+                                    width: 35px;
+                                        height: auto;
+                                       text-decoration: none; 
+                                       color: #2196f3; 
+                                       font-size: 18px; 
+                                       display: flex; 
+                                       justify-content: center; 
+                                       align-items: center;
+                                       border: 1px solid #2196f3; 
+                                       text-align: center;
+                                       padding: 8px; 
+                                       border-radius: 5px;
+                                       transition: background-color 0.3s, color 0.3s;
+                                   "
+                                   onmouseover="this.style.backgroundColor='#2196f3';this.style.color='white';"
+                                   onmouseout="this.style.backgroundColor='white';this.style.color='#2196f3';">
+                                    <i class="fas fa-sync-alt"></i>
+                                </a>
+                                ${product.status === 'Out of Stock' ? `
+                        <a href="javascript:void(0);" onclick="confirmPreOrder(${product.product_id}, '${product.name}')" 
+                           class="action-button" title="Pre-Order"
+                           style="
+                                    width: 35px;
+                                        height: auto;
+                                       text-decoration: none; 
+                                       color: #2196f3; 
+                                       font-size: 18px; 
+                                       display: flex; 
+                                       justify-content: center; 
+                                       align-items: center;
+                                       border: 1px solid #2196f3; 
+                                       text-align: center;
+                                       padding: 8px; 
+                                       border-radius: 5px;
+                                       transition: background-color 0.3s, color 0.3s;
+                                   "
+                                   onmouseover="this.style.backgroundColor='#2196f3';this.style.color='white';"
+                                   onmouseout="this.style.backgroundColor='white';this.style.color='#2196f3';">
+                            <i class="fas fa-shopping-cart"></i>
+                        </a>
+                    ` : ''} ${product.status === 'Pre-Order' ? `
+    <a href="javascript:void(0);" 
+       onclick="updatePreOrderLimit(${product.product_id}, '${product.name}')" 
+       class="action-button updatepreorderlimit" 
+       title="Update Pre-Order Limit"
+       style="
+           width: 35px;
+           height: auto;
+           text-decoration: none; 
+           color: #2196F3; 
+           font-size: 18px; 
+           display: flex; 
+           justify-content: center; 
+           align-items: center;
+           border: 1px solid #2196F3; 
+           padding: 8px; 
+           border-radius: 5px;
+           transition: background-color 0.3s, color 0.3s;
+       "
+       onmouseover="this.style.backgroundColor='#2196F3';this.style.color='white';"
+       onmouseout="this.style.backgroundColor='white';this.style.color='#2196F3';">
+        <i class="fas fa-cart-plus"></i>
+    </a>
+
+    <a href="javascript:void(0);" 
+       onclick="removePreOrder(${product.product_id}, '${product.name}')" 
+       class="action-button removepreorder" 
+       title="Remove Pre-Order"
+       style="
+           width: 35px;
+           height: auto;
+           text-decoration: none; 
+           color: #f44336; 
+           font-size: 18px; 
+           display: flex; 
+           justify-content: center; 
+           align-items: center;
+           border: 1px solid #f44336; 
+           padding: 8px; 
+           border-radius: 5px;
+           transition: background-color 0.3s, color 0.3s;
+       "
+       onmouseover="this.style.backgroundColor='#f44336';this.style.color='white';"
+       onmouseout="this.style.backgroundColor='white';this.style.color='#f44336';">
+        <i class="fas fa-times"></i>
+    </a>
+` : ''}
+
+                            </div>
+                            
+                            
+                            
+                                        </td>
+                                    `;
+                                    container.appendChild(row);
+                                });
+                            }
+                            // Get authentication token
+
+
+// **Updated Function: Fetch & Display Current Pre-Order Limit Before Updating**
+function updatePreOrderLimit(product_id, product_name) {
+    const token = getToken();
+    if (!token) {
+        Swal.fire("Error", "Unauthorized: No token found.", "error");
+        return;
+    }
+
+    // Fetch current pre_order_limit before updating
+    fetch(`http://localhost:5000/api/auth/products/${product_id}`, {
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const currentLimit = data.pre_order_limit || 0; // Default to 0 if null
+
+        Swal.fire({
+            title: "Set Pre-Order Limit",
+            input: "number",
+            inputLabel: `Current limit: ${currentLimit} | New limit for "${product_name}"`,
+            inputAttributes: { min: 1 },
+            showCancelButton: true,
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire({
+                    title: "Processing...",
+                    text: "Updating Pre-Order limit, please wait...",
+                    allowOutsideClick: false,
+                    didOpen: () => Swal.showLoading(),
+                });
+
+                fetch('http://localhost:5000/api/auth/products/pre-order-limit', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ product_id, pre_order_limit: result.value })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    Swal.fire("Success", data.message, "success");
+                    fetchProducts();
+                })
+                .catch(() => Swal.fire("Error", "Failed to update Pre-Order limit", "error"));
+            }
+        });
+    })
+    .catch(() => Swal.fire("Error", "Failed to fetch current Pre-Order limit", "error"));
+}
+
+
+// Remove Pre-Order
+function removePreOrder(product_id, product_name) {
+    const token = getToken();
+    if (!token) {
+        Swal.fire("Error", "Unauthorized: No token found.", "error");
+        return;
+    }
+
+    Swal.fire({
+        title: "Remove Pre-Order",
+        text: `Are you sure you want to remove Pre-Order from "${product_name}"?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Remove",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Processing...",
+                text: "Removing Pre-Order, please wait...",
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading(),
+            });
+
+            fetch('http://localhost:5000/api/auth/products/pre-order', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ product_id }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                Swal.fire("Success", data.message, "success");
+                fetchProducts();
+            })
+            .catch(() => Swal.fire("Error", "Failed to remove Pre-Order status", "error"));
+        }
+    });
+}
+
+// Get authentication token
+function getToken() {
+    return localStorage.getItem('token'); // Assuming token is stored in localStorage
+}
+
+// Confirm setting Pre-Order
+function confirmPreOrder(product_id, product_name) {
+    Swal.fire({
+        title: "Pre-Order Confirmation",
+        text: `Do you want to enable pre-order for "${product_name}"?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Set Pre-Order",
+        cancelButtonText: "Cancel",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            openPreOrderModal(product_id, product_name);
+        }
+    });
+}
+
+// Function to open pre-order modal
+function openPreOrderModal(product_id, product_name) {
+    const modal = document.getElementById('preOrderModal');
+    document.getElementById('preOrderProductName').textContent = product_name;
+    document.getElementById('preOrderProductId').value = product_id;
+    modal.style.display = 'block';
+}
+
+// Function to close the modal
+function closePreOrderModal() {
+    document.getElementById('preOrderModal').style.display = 'none';
+}
+
+// Function to submit the pre-order limit
+function submitPreOrder() {
+    const token = getToken();
+    if (!token) {
+        Swal.fire("Error", "Unauthorized: No token found.", "error");
+        return;
+    }
+
+    const product_id = document.getElementById('preOrderProductId')?.value;
+    let pre_order_limit = document.getElementById('preOrderLimit')?.value;
+
+    // Convert to integer to avoid sending an empty or undefined value
+    pre_order_limit = pre_order_limit ? parseInt(pre_order_limit, 10) : 0;
+
+    if (!product_id || isNaN(pre_order_limit) || pre_order_limit <= 0) {
+        Swal.fire("Error", "Please enter a valid pre-order limit and select a product.", "error");
+        return;
+    }
+
+    // Show loading message before sending request
+    Swal.fire({
+        title: "Processing...",
+        text: "Please wait while we set the pre-order...",
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    fetch('http://localhost:5000/api/auth/products/pre-orderSet', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include token for authentication
+        },
+        body: JSON.stringify({ product_id, pre_order_limit }) // Ensure JSON formatting
+    })
+    .then(response => response.json())
+    .then(data => {
+        Swal.close(); // Close loading message
+
+        if (data.success) {
+            Swal.fire("Success", data.message, "success");
+            closePreOrderModal();
+            fetchProducts(); // Refresh products list
+        } else {
+            Swal.fire("Error", data.message, "error");
+        }
+    })
+    .catch(error => {
+        Swal.close(); // Close loading message if an error occurs
+        console.error('Error setting pre-order:', error);
+        Swal.fire("Error", "An unexpected error occurred. Please try again later.", "error");
+    });
+}
+
+
+
+
+
+
+                            function updateProductStatus() {
+    fetch('http://localhost:5000/api/auth/products/update-status', { method: 'PUT' })
+    .then(response => response.json())
+    .then(() => {
+        return fetch('http://localhost:5000/api/auth/products');
+    })
+    .then(response => response.json())
+    .then(products => {
+        products.forEach(product => {
+            const row = document.querySelector(`tr[data-product-id="${product.product_id}"]`);
+            if (row) {
+                const totalQuantity = product.quantity + product.xsmallquantity + product.smallquantity +
+                                      product.mediumquantity + product.largequantity + product.xlargequantity +
+                                      product.xxlargequantity + product.xxxlargequantity;
+                
+                row.querySelector('.status').textContent = product.status;
+                row.querySelector('.total-quantity').textContent = totalQuantity;
+            }
+        });
+    })
+    .catch(error => console.error('Error updating product statuses:', error));
+}
+
+// Fetch products initially and set interval for real-time updates
+document.addEventListener('DOMContentLoaded', () => {
+    fetchProducts();
+    setInterval(updateProductStatus, 500); // Update only status and total quantity every 0.5 sec
+});
+
+function fetchProductLogs(productId) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'adminlogin.html';
+        return;
+    }
+
+    fetch(`http://localhost:5000/api/auth/product-logs/${productId}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        displayProductLogs(data);
+        $('#logsModal').modal('show'); // Open the modal after data loads
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('errorMessages').innerText = 'An error occurred. Please try again.';
+    });
+}
+
+function displayProductLogs(logs) {
+    const logsContainer = document.getElementById('logsContainer');
+    logsContainer.innerHTML = ''; // Clear existing logs
+
+    logs.forEach(log => {
+        const logRow = document.createElement('tr');
+        logRow.innerHTML = `
+            <td>${log.action}</td>
+            <td>
+                ${log.created_by && !log.performed_by ? 
+                    'Organization: ' + log.created_by_firstname + ' ' + log.created_by_middlename + ' ' + log.created_by_lastname : 
+                    log.performed_by && !log.created_by ? 
+                    'Student: ' + log.performed_by_firstname + ' ' + log.performed_by_middlename + ' ' + log.performed_by_lastname : 
+                    ''}
+            </td>
+            <td>${log.created_at}</td>
+        `;
+        logsContainer.appendChild(logRow);
+    });
+
+    // Initialize or Reinitialize DataTable
+    if (!$.fn.DataTable.isDataTable('#logsTable')) {
+        $('#logsTable').DataTable();
+    } else {
+        $('#logsTable').DataTable().destroy();
+        $('#logsTable').DataTable();
+    }
+}
+
+                            function updatePagination() {
+                                document.getElementById('pageNumber').innerText = currentPage;
+                                document.getElementById('totalPages').innerText = totalPages;
+                            
+                                document.getElementById('prevPage').classList.toggle('disabled', currentPage === 1);
+                                document.getElementById('nextPage').classList.toggle('disabled', currentPage === totalPages);
+                            }
+                            
+                            function prevPage() {
+                                if (currentPage > 1) {
+                                    currentPage--;
+                                    fetchProducts();
+                                }
+                            }
+                            
+                            function nextPage() {
+                                if (currentPage < totalPages) {
+                                    currentPage++;
+                                    fetchProducts();
+                                }
+                            }
+                            
+                            // Call fetchProducts on page load
+                            fetchProducts();
+                            
+                            
+                            
+                            function openUpdateModal(productId) {
+                                // Fetch the current product details
+                                fetch(`http://localhost:5000/api/auth/products/${productId}`, {
+                                    headers: {
+                                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                    }
+                                })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok');
+                                    }
+                                    return response.json();
+                                })
+                                .then(product => {
+                                    const updateButtonsContainer = document.getElementById('updateButtonsContainer');
+                                    updateButtonsContainer.innerHTML = ''; // Clear previous buttons
+                            
+                                    
+                                    const showSizeButtons = ["T-Shirt", "Longsleeve", "Jacket", "Pants"].includes(product.category);
+                            
+                                    
+                                    const quantityTypes = showSizeButtons 
+                                        ? [
+                                            { name: 'Small', quantity: product.smallquantity, action: `openSmallUpdateModal(${productId}, ${product.smallquantity})` },
+                                            { name: 'Medium', quantity: product.mediumquantity, action: `openMediumUpdateModal(${productId}, ${product.mediumquantity})` },
+                                            { name: 'Large', quantity: product.largequantity, action: `openLargeUpdateModal(${productId}, ${product.largequantity})` },
+                                            { name: 'Extra Large', quantity: product.xlargequantity, action: `openXLUpdateModal(${productId}, ${product.xlargequantity})` },
+                                        ]
+                                        : [
+                                            { name: 'Quantity', quantity: product.quantity, action: `openQuantityUpdateModal(${productId}, ${product.quantity})` },
+                                        ];
+                            
+                                    // Apply design to each button
+                                    quantityTypes.forEach(type => {
+                                        const button = document.createElement('button');
+                                        button.textContent = `${type.name} (${type.quantity})`;
+                                        button.style.cssText = `
+                                            background-color: #007bff;
+                                            color: white;
+                                            border: none;
+                                            padding: 10px 20px;
+                                            margin: 5px;
+                                            border-radius: 5px;
+                                            font-size: 14px;
+                                            cursor: pointer;
+                                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                                            transition: transform 0.2s, box-shadow 0.2s;
+                                        `;
+                                        button.onmouseover = () => {
+                                            button.style.transform = 'scale(1.05)';
+                                            button.style.boxShadow = '0 6px 10px rgba(0, 0, 0, 0.2)';
+                                        };
+                                        button.onmouseout = () => {
+                                            button.style.transform = 'scale(1)';
+                                            button.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+                                        };
+                                        button.onclick = () => {
+                                            eval(type.action);
+                                            closeModal('updateModal'); // Close the modal after the button is clicked
+                                        };
+                                        updateButtonsContainer.appendChild(button);
+                                    });
+                            
+                                    // Display the modal
+                                    document.getElementById('updateModal').style.display = 'block';
+                                })
+                                .catch(error => console.error('Fetch error:', error));
+                            }
+                            
+                            function closeModal(modalId) {
+                                document.getElementById(modalId).style.display = 'none';
+                            }
+                            
+                                    function deleteProduct(productId) {
+                                        Swal.fire({
+                                            title: 'Are you sure?',
+                                            text: "You won't be able to revert this!",
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Yes, delete it!'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                fetch(`http://localhost:5000/api/auth/products/${productId}`, {
+                                                    method: 'DELETE',
+                                                    headers: {
+                                                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                                    }
+                                                })
+                                                .then(response => {
+                                                    if (!response.ok) {
+                                                        throw new Error('Network response was not ok');
+                                                    }
+                                                    return response.json();
+                                                })
+                                                .then(() => {
+                                                    Swal.fire(
+                                                        'Deleted!',
+                                                        'The product has been deleted.',
+                                                        'success'
+                                                    );
+                                                    document.getElementById('productsContainer').innerHTML = '';
+                                                    fetchProducts();
+                                                })
+                                                .catch(error => {
+                                                    Swal.fire(
+                                                        'Error!',
+                                                        'An error occurred while deleting the product.',
+                                                        'error'
+                                                    );
+                                                    console.error('Error:', error);
+                                                });
+                                            }
+                                        });
+                                    }
+                            
+                                    document.addEventListener('DOMContentLoaded', fetchProducts);
+                            
+                                    function toggleStatus(productId, currentStatus) {
+                                        const token = localStorage.getItem('token');
+                                        if (!token) {
+                                            window.location.href = 'organization-login.html';
+                                            return;
+                                        }
+                            
+                                        const newStatus = currentStatus === 'Available' ? 'Not Available' : 'Available';
+                            
+                                        fetch(`https://wmsuccspayment.onrender.com/api/auth/products/${productId}/status`, {
+                                            method: 'PATCH',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': `Bearer ${token}`
+                                            },
+                                            body: JSON.stringify({ status: newStatus })
+                                        })
+                                        .then(response => {
+                                            if (!response.ok) {
+                                                throw new Error('Network response was not ok');
+                                            }
+                                            return response.json();
+                                        })
+                                        .then(() => {
+                                            // Refresh the products list
+                                            document.getElementById('productsContainer').innerHTML = '';
+                                            fetchProducts();
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            document.getElementById('errorMessages').innerText = 'An error occurred. Please try again.';
+                                        });
+                                    }
+                            
+                                  
+                            
+                                    document.addEventListener('DOMContentLoaded', fetchProducts);
+                                </script>
+                                </div>  
+                            </div>
+                        </div>   
+                    </div>  
+                </main>      
+            </div>
+        </div>
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+      

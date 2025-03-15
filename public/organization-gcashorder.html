@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Admin Payment</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>  
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> 
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"> 
+
+        
+    </head>
+<style>
+
+.back-icon {
+position: absolute;
+top: 20px;
+left: 20px;
+cursor: pointer;
+font-size: 24px;
+color: #0b5e1d; /* Change this color to match your theme */
+}
+
+.back-icon:hover {
+color: #046317; /* Change this hover effect color to match your theme */
+}
+
+
+#modalBackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Low-opacity black background */
+    display: none; /* Hidden by default */
+    z-index: 1045;
+}
+
+#gcashOrderForm {
+    display: none; /* Hidden by default */
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1045; /* Above the modal background */
+}
+
+#gcashOrderForm label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+#gcashOrderForm input[type="text"],
+#gcashOrderForm input[type="file"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#gcashOrderForm button {
+    padding: 10px 20px;
+    background-color: #034b03;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#gcashOrderForm button:hover {
+    background-color: #027b02;
+}
+
+#gcashOrdersList {
+    width: 300px;
+    margin: 20px auto;
+    padding: 0;
+    list-style: none;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    z-index: 1045;
+}
+
+#gcashOrdersList li {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+#gcashOrdersList li:last-child {
+    border-bottom: none;
+}
+.close {
+color: #cf0303;
+position: absolute;
+right: 20px;
+top: 0px;
+font-size: 28px;
+font-weight: bold;
+}
+.closes {
+color: #aaa;
+right: 20px;
+top: 30px;
+font-size: 28px;
+font-weight: bold;
+}.closes:hover,
+.closes:focus {
+color: black;
+text-decoration: none;
+cursor: pointer;
+}
+.close:hover,
+.close:focus {
+color: black;
+text-decoration: none;
+cursor: pointer;
+}
+
+
+    .th {
+        color: green;
+    }
+
+.available {
+            background-color: green;
+        }
+        .out-of-stock {
+            background-color: red;
+        }
+       
+        .custom-position{
+    position: absolute;
+    right: 80px;
+  margin-top: 20px;
+}.contents{
+    width: 100%;
+}
+.quantity-column, .quantity-cell {
+    display: none; /* Hide by default */
+}
+
+#toggleQuantityBtn {
+    cursor: pointer;
+}
+
+.pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Align items vertically */
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: none;
+            background-color: #034b03;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .pagination button.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            margin: 0 10px; /* Add margin to space out the text */
+            font-weight: bold;
+        }
+        
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+</style>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center justify-content-between px-3">
+            <!-- Left Section -->
+            <div class="d-flex align-items-center">
+                <!-- Sidebar Toggle -->
+                <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                    <i class="fas fa-bars" style="color: rgb(255, 255, 255);"></i>
+                </button>
+        
+                <!-- Logo -->
+                <div class="logo me-2">
+                    <label for="logoUpload">
+                        <div id="loadingIconLogo" class="logo-loading-container1">
+                            <div class="spinnerlogo1"></div>
+                        </div>
+                        <img id="organizationLogo" src="" alt="Logo" height="40" style="cursor: pointer;">
+                    </label>
+                    <input type="file" id="logoUpload" style="display: none;" accept="image/*">
+                    <div id="uploadingMessage">Uploading logo...</div>
+                </div>
+        
+        
+                <!-- Organization Info -->
+                <div id="organizationInfo" class="d-flex flex-grow-1">
+                    <!-- Organization Name will be inserted here -->
+                </div>
+            </div>
+        
+            <!-- Right Section -->
+            <div class="d-flex align-items-center">
+              
+                <i id="profile-item" class="dropdown-item me-3">
+                    <a href="#" style="color: #25330f; text-decoration: none;">Loading...</a>
+                </i>
+        
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x" style="color: #ffffff;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: #ffffff;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                        width: 110px !important; 
+                        min-width: 110px !important; 
+                        background-color: #ffffff; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        height: auto;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                        padding: 0;">
+                        <li>
+                            <a class="dropdown-item" href="#" id="logout" style="
+                                display: flex; 
+                                align-items: center; 
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                height: auto;
+                                border-bottom: 1px solid #ddd; 
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-sign-out-alt" style="margin-right: 8px; color: inherit;"></i> Sign Out
+                            </a>
+                            <a class="dropdown-item" href="#" id="logouts" style="
+                                display: flex; 
+                                align-items: center; 
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                height: auto;
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-exchange-alt" style="margin-right: 8px; color: inherit;"></i> Switch
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+                <script>
+                   document.getElementById('logouts').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default link behavior
+        
+            // SweetAlert confirmation
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to switch account?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745', // Green confirm button
+                cancelButtonColor: '#dc3545', // Red cancel button
+                confirmButtonText: 'Yes, Switch Account!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Switch Account',
+                        text: 'Choose your organization',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = 'chooseorganizations.html'; // Redirect to choose organizations page
+                    });
+                }
+            });
+        });
+        function fetchOrganizationData() {
+    const token = localStorage.getItem('token'); // Retrieve token from storage
+    if (!token) {
+        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        return;
+    }
+
+    fetch('http://localhost:5000/api/auth/organization/details', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.name) {
+            
+            const infoDiv = document.getElementById('organizationInfo');
+            infoDiv.innerHTML = `
+              <h2 class="custom-heading">${data.name}</h2>
+
+       
+              
+            `;
+        } else {
+            document.getElementById('organizationInfo').innerText = 'No organization data found.';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('errorMessages').innerText = 'An error occurred. Please try again.';
+    });
+}
+
+
+document.addEventListener('DOMContentLoaded', fetchOrganizationData);
+
+
+   function fetchLoggedInUserDetails() {
+    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+
+    if (!token) {
+        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        return;
+    }
+
+    fetch('http://localhost:5000/api/auth/organization-user/details', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(user => {
+        if (!user) {
+            throw new Error('User not found');
+        }
+        
+        
+        const fullName = `${user.firstname} ${user.lastname}`; 
+
+        document.getElementById('profile-item').innerHTML = `
+           <a style="color: #25330f; text-decoration: none; " href="organization-users-info.html">
+   
+   <h3 style="color: #25330f; text-decoration: none; font-size: 18px; margin-top:10px;">${user.firstname} ${user.lastname}</h3>
+</a>
+
+
+        `;
+    })
+    .catch(error => {
+        console.error('Error fetching organization user details:', error);
+        document.getElementById('profile-item').innerHTML = '<a href="#">Error loading profile</a>';
+    });
+}
+
+// Call the function when the DOM is loaded
+document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
+    
+            document.getElementById('logout').addEventListener('click', function(event) {
+                event.preventDefault();
+    
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to log out?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, log out!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem('token');
+                        Swal.fire({
+                            title: 'Logged Out!',
+                            text: 'You have been logged out successfully.',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = 'adminlogin.html';
+                        });
+                    }
+                });
+            });
+        </script>
+   
+    
+
+
+   <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">Overview</div>
+                    <a class="nav-link" href="organization-dashboard.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+
+                    <div class="sb-sidenav-menu-heading">Payment Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                           
+                            <a class="nav-link" href="organization-allpayments.html">Overview</a>
+                            <a class="nav-link" href="organization-active-payment.html">Active Payment</a> 
+                            <a class="nav-link" href="organization-addpayments.html">Add Payment</a>
+                            <a class="nav-link" href="organization-reports.html">Reports</a> 
+                        </nav>
+                    </div>
+
+                   
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTransactions" aria-expanded="false" aria-controls="collapseTransactions">
+                        <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
+                        Transactions
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseTransactions" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-alltransactions.html">Overview</a>
+                            <a class="nav-link" href="organization-payment.html">Management</a>
+                            <a class="nav-link" href="organization-masterlist.html">Masterlist</a>
+                            <a class="nav-link" href="organization-transactionsreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+
+                    <div class="sb-sidenav-menu-heading">Organization Overview</div>
+                    <a class="nav-link" href="organization-academic-list.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Academic List
+                    </a>
+                    <div class="sb-sidenav-menu-heading">Product Management</div>
+                    <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapseProducts" aria-expanded="false" aria-controls="collapseProducts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
+                        Products
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseProducts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-products.html">Management</a>
+                            <a class="nav-link" href="organization-pre-order.html">Pre-Order</a>
+                            <a class="nav-link" href="organization-gcashorder.html">Manage QR-Code</a>
+                            <a class="nav-link" href="organization-allorderreports.html">QR-Code Reports</a>
+                            <a class="nav-link" href="organization-addproduct.html">Add Product</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Order Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrders" aria-expanded="false" aria-controls="collapseOrders">
+                        <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>
+                        Orders
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrders" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-orders.html">Transactions</a>
+                            <a class="nav-link" href="organization-ordersManage.html">Paid Orders Handling</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrderTransactions" aria-expanded="false" aria-controls="collapseOrderTransactions">
+                        <div class="sb-nav-link-icon"><i class="fas fa-receipt"></i></div>
+                        Transactions
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrderTransactions" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-order-transaction.html">Overview</a>
+                            <a class="nav-link" href="organization-order-transaction-reports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Transaction Summary</div>
+                    <a class="nav-link" href="organization-transactions-summary.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Overview
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-5"></h1>
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4" style="padding: 20px;">
+                                    <ol class="breadcrumb mb-4">
+                                        <li class="breadcrumb-item" style="font-style: italic;">Products</li>
+                                        <li class="breadcrumb-item active" style="font-style: italic;">Manage QR-Code</li>
+                                    </ol>
+
+       
+      
+    
+    
+      <!-- Ellipsis icon that triggers dropdown with animation -->
+<div class="position-relative">
+    <i class="bi bi-three-dots-vertical position-absolute top-0 end-0 fs-4" style="cursor: pointer;" id="ellipsisIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
+
+    <!-- Dropdown menu -->
+    <ul class="dropdown-menu dropdown-menu-end" style="padding: 10px;">
+
+        <!-- Add Info Button inside dropdown -->
+        <li>
+            <button class="dropdown-item d-flex align-items-center" style="font-size: 14px;" id="addGcashInfoBtn">
+                <i class="fas fa-pen-to-square fa-fw me-2 fs-5"></i> Add Info
+            </button>
+        </li>
+
+        <!-- Open QR-Code Logs -->
+        <li>
+            <a href="organization-orderslogs.html" class="dropdown-item d-flex align-items-center" style="font-size: 14px;">
+                <i class="fas fa-file-alt fa-fw me-2 fs-5"></i> Open QR-Code Logs
+            </a>
+        </li>
+    </ul>
+
+
+<!-- Modal for Adding Info -->
+<div id="modalBackground"></div>
+<form id="gcashOrderForm" enctype="multipart/form-data">
+    <span class="close" onclick="hideModal()">&times;</span>
+    <label for="qrcodepicture">QR Code Picture:</label>
+    <input type="file" id="qrcodepicture" name="qrcodepicture" accept="image/*" required>
+    <button type="submit">Submit</button>
+</form>
+
+            <h3 class="text-center mb-4" style="font-weight: 600; color: #333;">Gcash Information</h3>
+          </div>
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>GcashID</th>                                 
+                        <th>Adviser Status</th>
+                        <th>Adviser By</th>
+                        <th>Status</th>
+                        <th>Accepted By</th>
+                        <th>Created By</th>
+                        <th>QR Code</th>
+                    </tr>
+                </thead>
+                <tbody id="gcashOrdersTableBody">
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+    
+        <script>
+            const gcashForm = document.getElementById('gcashOrderForm');
+            const addGcashInfoBtn = document.getElementById('addGcashInfoBtn');
+        const gcashOrdersList = document.getElementById('gcashOrdersList');
+        const modalBackground = document.getElementById('modalBackground');
+
+        // Sample existing orders for demonstration purposes
+            const existingOrders = [
+            { qrCode: 'Upload your qr code' },
+            
+        ];
+
+        // Display existing info in the list
+        function populateOrders() {
+            gcashOrdersList.innerHTML = ''; // Clear the list before populating
+            existingOrders.forEach(order => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `QR Code: ${order.qrCode}`;
+                gcashOrdersList.appendChild(listItem);
+            });
+        }
+
+        // Show the form with the modal background
+        function showModal() {
+            gcashForm.style.display = 'block';
+            modalBackground.style.display = 'block';
+            addGcashInfoBtn.style.display = 'none'; // Hide the button
+        }
+
+        // Hide the form and modal background
+        function hideModal() {
+            gcashForm.style.display = 'none';
+            modalBackground.style.display = 'none';
+            addGcashInfoBtn.style.display = 'block'; // Show the button again
+        }
+
+        // Toggle form visibility on button click
+        addGcashInfoBtn.addEventListener('click', showModal);
+
+        // Hide modal if the background is clicked
+        modalBackground.addEventListener('click', hideModal);
+
+        // Example of form submission handler (can be expanded to include backend logic)
+        gcashForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent form submission
+
+            
+            const qrCodePicture = document.getElementById('qrcodepicture').files[0];
+
+            if (qrCodePicture) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const qrCodeBase64 = reader.result;
+                    existingOrders.push({ qrCode: 'Uploaded QR Code' });
+                    populateOrders();
+                    hideModal(); // Hide the modal after submission
+                    gcashForm.reset(); // Reset the form fields
+                };
+                reader.readAsDataURL(qrCodePicture);
+            }
+        });
+
+        // Populate the orders on page load
+        populateOrders();
+    </script>
+    <script>
+        const apiUrl = 'http://localhost:5000/api/auth'; // Update with your API base URL
+const token = localStorage.getItem('token'); // Retrieve token from localStorage
+
+if (!token) {
+    alert('You are not authenticated. Please log in.');
+    window.location.href = '/login.html'; // Redirect to login if no token
+}
+
+// Submit GCash Order Form
+document.getElementById('gcashOrderForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append('qrcodepicture', document.getElementById('qrcodepicture').files[0]);
+
+    Swal.fire({
+        title: 'Submitting...',
+        text: 'Please wait while your request is being processed.',
+        icon: 'info',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        willOpen: () => {
+            Swal.showLoading();
+        },
+        background: '#d4edda',
+        color: '#155724'
+    });
+
+    try {
+        const response = await fetch('http://localhost:5000/api/auth/gcashorder', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: formData
+        });
+
+        const data = await response.json();
+
+        Swal.close();
+
+        if (response.ok) {
+            Swal.fire({
+                title: 'Success!',
+                text: 'Your GCash QR code is now pending. Wait for the adviser and admin approval.',
+                icon: 'success',
+                confirmButtonText: 'Okay'
+            }).then(() => {
+                window.location.href = 'organization-products.html';
+            });
+        } else {
+            Swal.fire({
+                title: 'Error!',
+                text: data.msg,
+                icon: 'error',
+                confirmButtonText: 'Okay'
+            });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.close();
+        Swal.fire({
+            title: 'Error!',
+            text: 'Failed to create GCash order. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'Okay'
+        });
+    }
+});
+        // Fetch GCash Orders
+        async function fetchGcashOrders() {
+    try {
+        const response = await fetch(`${apiUrl}/gcashorders`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            const ordersTable = document.getElementById('gcashOrdersTableBody');
+            ordersTable.innerHTML = ''; // Clear the table body
+
+            data.forEach(order => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order.id}</td>
+                    <td>${order.adviser_status || 'Pending'}</td>
+                    <td>${order.adviser_by || 'N/A'}</td>
+                    <td>${order.status || 'Pending'}</td>
+                    <td>${order.accepted_by || 'N/A'}</td>
+                    <td>${order.created_by}</td>
+                    <td>
+                         ${order.adviser_status === 'Pending' ? `<button class="btn btn-danger btn-sm" onclick="deleteOrder(${order.id})">Delete</button>` : ''}
+                        <button class="btn btn-info btn-sm" onclick="viewMore(${order.id}, '${order.qrcodepicture}', '${order.created_at}')">View More</button>
+                    </td>
+                `;
+                ordersTable.appendChild(row);
+            });
+        } else {
+            
+        }
+    } catch (error) {
+        console.error('Error fetching GCash orders:', error);
+        alert('Failed to fetch GCash orders.');
+    }
+}
+async function deleteOrder(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This action cannot be undone.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch(`${apiUrl}/gcashorder/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        Swal.fire('Deleted!', data.msg, 'success');
+                        fetchGcashOrders();
+                    } else {
+                        Swal.fire('Error!', data.msg, 'error');
+                    }
+                } catch (error) {
+                    console.error('Error deleting order:', error);
+                    Swal.fire('Error!', 'Failed to delete order. Please try again.', 'error');
+                }
+            }
+        });
+    }
+function viewMore(id, qrCodePicture, createdAt) {
+    const modalHtml = `
+        <div class="modal fade" id="viewMoreModal" tabindex="-1" role="dialog" aria-labelledby="viewMoreModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewMoreModalLabel">QR Code details</h5>
+                       <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>ID:</strong> ${id}</p>
+                        <p><strong>Created At:</strong> ${new Date(createdAt).toLocaleString()}</p>
+                        <p><strong>QR Code:</strong></p>
+                        <img src="${qrCodePicture}" alt="QR Code" style="max-width: 100%;" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Append modal to the body and show it
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    $('#viewMoreModal').modal('show');
+
+    // Remove the modal from the DOM after it is hidden
+    $('#viewMoreModal').on('hidden.bs.modal', function () {
+        $(this).remove();
+    });
+}
+function closeModal() {
+    $('#viewMoreModal').modal('hide');
+}
+
+
+        // Initial Fetch
+        fetchGcashOrders();
+    </script>
+   
+   
+   
+
+
+
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    
+function goBack() {
+    window.history.back();  // Goes to the previous page in the browser history
+}
+    // JavaScript to handle the active class on sidebar items
+    document.addEventListener('DOMContentLoaded', function() {
+        const links = document.querySelectorAll('.sidebar .nav-item');
+
+        links.forEach(link => {
+            link.addEventListener('click', function() {
+                
+                links.forEach(item => item.classList.remove('active'));
+               
+                this.classList.add('active');
+            });
+        });
+    });
+</script>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+     
+document.getElementById('logout').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the default link behavior
+
+    // SweetAlert confirmation
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to log out?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745', // Green confirm button
+        cancelButtonColor: '#dc3545', // Red cancel button
+        confirmButtonText: 'Yes, log out!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Remove token and redirect to login page
+            localStorage.removeItem('token');
+            Swal.fire({
+                title: 'Logged Out!',
+                text: 'You have been logged out successfully.',
+                icon: 'success',
+                timer: 1500,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = 'adminlogin.html';
+            });
+        }
+    });
+});
+
+    </script>
+    
+
+   
+   
+    <script>
+        function fetchOrganizationData() {
+    const token = localStorage.getItem('token'); // Retrieve token from storage
+    if (!token) {
+        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        return;
+    }
+
+    fetch('http://localhost:5000/api/auth/organization/details', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.name) {
+            
+            const infoDiv = document.getElementById('organizationInfo');
+            infoDiv.innerHTML = `
+              <div class="custom-heading">${data.name}</div>
+
+       
+              
+            `;
+        } else {
+            document.getElementById('organizationInfo').innerText = 'No organization data found.';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('errorMessages').innerText = 'An error occurred. Please try again.';
+    });
+}
+
+
+document.addEventListener('DOMContentLoaded', fetchOrganizationData);
+
+    </script>
+                                </div>  
+                            </div>
+                        </div>   
+                    </div>  
+                </main>      
+            </div>
+        </div>
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>

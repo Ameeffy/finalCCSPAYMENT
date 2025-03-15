@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Transactions</title>
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <h1>Product Transactions</h1>
+
+    <!-- Table for DataTable -->
+    <table id="productTransactionsTable" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Transaction ID</th>
+                <th>Product Names</th>
+                <th>Quantities</th>
+                <th>Status</th>
+                <th>Payment Details</th>
+                <th>Total Amount</th>
+                <th>Total Pay</th>
+                <th>Accepted By</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Populated dynamically -->
+        </tbody>
+    </table>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+
+    <!-- Font Awesome for Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+
+    <script>
+        function fetchProductTransactions() {
+            const apiUrl = 'http://localhost:5000/api/auth/product-transactions';
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                window.location.href = 'adminlogin.html'; // Redirect to login if no token
+                return;
+            }
+
+            fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Filter and process data
+                const filteredTransactions = data.filter(transaction =>
+                    (transaction.payment_method === 'Gcash' && transaction.proof_of_payment) || transaction.payment_method === 'Cash'
+                );
+
+                // Initialize DataTable
+                const table = $('#productTransactionsTable').DataTable({
+                    data: filteredTransactions,
+                    destroy: true, // Allow reinitialization of the table
+                    columns: [
+                        { data: transaction => `${transaction.user_firstname} ${transaction.user_lastname}` },
+                        { data: 'order_transaction_id' },
+                        { data: 'product_names' },
+                        {
+                            data: transaction => {
+                                const filterQuantities = (quantities, label) => {
+                                    return quantities.split(', ').filter(q => !q.endsWith('0x'))
+                                        .map(q => `${label} ${q}`).join(', ');
+                                };
+
+                                const smallQuantities = filterQuantities(transaction.order_smallquantities, 'Small');
+                                const mediumQuantities = filterQuantities(transaction.order_mediumquantities, 'Medium');
+                                const largeQuantities = filterQuantities(transaction.order_largequantities, 'Large');
+                                const xLargeQuantities = filterQuantities(transaction.order_xlargequantities, 'X-Large');
+
+                                return `${smallQuantities} ${mediumQuantities} ${largeQuantities} ${xLargeQuantities}`;
+                            }
+                        },
+                        { data: 'status' },
+                        {
+                            data: transaction => {
+                                const baseUrl = 'http://localhost:5000';
+                                const proofOfPaymentUrl = transaction.proof_of_payment
+                                    ? `${baseUrl}/${transaction.proof_of_payment.replace(/\\/g, '/')}`
+                                    : '';
+                                return `
+                                    ${transaction.payment_method}
+                                    ${proofOfPaymentUrl ? `<a href="#" onclick="showModal('${proofOfPaymentUrl}')"><i class="fas fa-eye"></i></a>` : ''}
+                                `;
+                            }
+                        },
+                        { data: 'total_amount' },
+                        { data: 'total_pay' },
+                        {
+                            data: transaction => {
+                                return transaction.accepted_by_firstname && transaction.accepted_by_lastname
+                                    ? `${transaction.accepted_by_firstname} ${transaction.accepted_by_lastname}`
+                                    : 'No receiver yet';
+                            }
+                        },
+                        { data: 'created_at' },
+                        {
+                            data: transaction => {
+                                return `
+                                    <button onclick="acceptOrder('${transaction.order_transaction_id}')">Accept</button>
+                                    <button onclick="declineOrder('${transaction.order_transaction_id}')">Decline</button>
+                                `;
+                            }
+                        }
+                    ]
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching product transactions:', error);
+            });
+        }
+
+        $(document).ready(() => {
+            fetchProductTransactions();
+        });
+    </script>
+</body>
+</html>

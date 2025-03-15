@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Admin Payment</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>  
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> 
+        
+        
+    </head>
+<style>
+.custom-heading {
+    color: #25330f;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 30px;
+    text-transform: uppercase;
+}
+.no-payment-message {
+        text-align: center;  /* Centers the text */
+        background-color: #F5FFFA;  /* Set the background color */
+          /* Set the text color */
+        padding: 10px;  /* Optional padding for better readability */
+        border-radius: 5px;  /* Optional rounded corners */
+        font-size: 18px;  /* Optional font size */
+        margin: 20px auto;  /* Optional margin for centering */
+          /* Makes the div fit the content */
+    }
+.ellipsis-btn {
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    color: #007bff;
+    transition: color 0.2s;
+}
+
+.ellipsis-btn:hover {
+    color: #0056b3;
+}
+
+.details-container {
+    text-align: center;
+    margin-top: 10px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+    .qrcode-img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 5px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: block;
+    margin: 10px auto;
+    transition: transform 0.3s ease;
+}
+
+.qrcode-img:hover {
+    transform: scale(1.1);
+    border-color: #007bff;
+}
+.status-balance {
+        color: rgb(255, 0, 255);
+        font-weight: bold;
+    }
+
+    .status-pending {
+        color: orange;
+        font-weight: bold;
+    }
+    .status-Decline{
+        color: rgb(212, 7, 7);
+        font-weight: bold;
+    }
+
+    .status-paid {
+        color: green;
+        font-weight: bold;
+    }
+
+    @keyframes colorAnimation {
+    0% {
+        color: rgb(0, 128, 255); /* Start with a blue color */
+    }
+    50% {
+        color: rgb(0, 204, 255); /* Transition to an orange color */
+    }
+    100% {
+        color: rgb(0, 128, 255); /* Transition back to blue */
+    }
+}
+
+.status-processing {
+    font-weight: light;
+    animation: colorAnimation 2s infinite; /* Run the animation infinitely with a duration of 2 seconds */
+}
+
+        .error {
+            color: red;
+        }
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1045; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px;
+        }
+  
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }/* Styles for the payment form */
+#paymentForm {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    max-width: 500px; /* Adjust as needed */
+    margin: 0 auto; /* Center the form */
+    padding: 20px;
+    background-color: rgb(221, 231, 221);
+    border-radius: 8px;
+    padding-top: 10px;   
+}
+
+#paymentForm label {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+#paymentForm input[type="text"],
+#paymentForm input[type="number"] {
+    font-size: 16px;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+}
+
+#paymentForm input[type="text"] {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#paymentForm input[type="number"] {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+#paymentForm button {
+    padding: 10px 20px; /* Adjusts padding for the button */
+    background-color: #034b03; /* Dark green background color */
+    color: white; /* White text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Slightly rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    margin-top: 20px; /* Margin at the top */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+#paymentForm button:hover {
+    background-color: #08b908; /* Lighter green shade on hover */
+}
+
+
+#userResults {
+    max-height: 125px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    margin-top: 8px;
+    padding: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+.user-item {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.user-item:hover {
+    background-color: #f0f0f0;
+}
+
+
+#errorMessages {
+    color: red;
+    margin-top: 10px;
+}
+#transactions-container {
+    max-height: 100px; /* Adjust the height as needed */
+    overflow-y: auto;
+        border: 1px solid #ddd;
+        padding: 10px;
+    }
+
+  
+/* Modal styles */
+#transactionHistoryModal {
+    position: fixed;
+    z-index: 1045;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: rgb(221, 231, 221);
+    margin: 15% auto;
+    padding: 20px;
+    width: 100%;
+    
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1045;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5); /* Black background with transparency */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal content box */
+.modal-content {
+    background-color: rgb(221, 231, 221);
+    margin-top: 40px;
+    padding: 20px;
+    width: 10   0%;
+    position: relative;
+    max-width: 1100px;
+    border-radius: 10px;
+}
+.modal-content-history {
+    background-color: rgb(221, 231, 221);
+    margin-top: 40px;
+    padding: 20px;
+    width: 10   0%;
+    position: relative;
+    max-width: 1100px;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
+
+.modal-content-gcash {
+    background-color: rgb(221, 231, 221);
+    margin-top: 40px;
+    padding: 20px;
+    width: auto; 
+    max-width: 550px; 
+    position: relative;
+    border-radius: 10px;
+    margin: auto;
+}
+.responsive-image {
+    width: 100%;     
+    height: auto;     
+    max-width: 500px; 
+}
+
+
+.modal-content-payment {
+    background-color: rgb(221, 231, 221);
+    margin-top: 40px;
+    padding: 20px;
+    width: 30%;
+    position: relative;
+    max-width: 1100px;
+    border-radius: 10px;
+    margin: auto;
+}
+.modal-content-balance {
+    background-color: rgb(221, 231, 221);
+    margin-top: 40px;
+    padding: 20px;
+    width: 30%;
+    position: relative;
+    max-width: 1100px;
+    border-radius: 10px;
+    margin: auto;
+}
+.modal-content-promissory {
+    background-color: rgb(221, 231, 221);
+    margin-top: 40px;
+    padding: 20px;
+    width: 30%;
+    position: relative;
+    max-width: 500px;
+    border-radius: 10px;
+    height: auto;
+    margin: auto;
+}
+.btn-remove {
+    color: white; /* Makes text white */
+    background-color: red; /* Optional: Adds a background color */
+    border: none; /* Optional: Removes button border */
+    padding: 5px 10px; /* Optional: Adds some padding */
+    cursor: pointer; /* Changes cursor to pointer */
+}
+
+</style>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center justify-content-between px-3">
+            <!-- Left Section -->
+            <div class="d-flex align-items-center">
+                <!-- Sidebar Toggle -->
+                <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                    <i class="fas fa-bars" style="color: black;"></i>
+                </button>
+        
+                <!-- Logo -->
+                <div class="logo me-2">
+                    <img src="img/logo.png" alt="Logo" height="40">
+                </div>
+        
+                <!-- Organization Info -->
+                <div id="organizationInfo" class="d-flex flex-grow-1">
+                    <!-- Organization Name will be inserted here -->
+                </div>
+            </div>
+        
+            <!-- Right Section -->
+            <div class="d-flex align-items-center">
+              
+                <i id="profile-item" class="dropdown-item me-3">
+                    <a href="#" style="color: #25330f; text-decoration: none;">Loading...</a>
+                </i>
+        
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x" style="color: #25330f;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: #25330f;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                        width: 110px !important; 
+                        min-width: 110px !important; 
+                        background-color: #ffffff; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        height: auto;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                        padding: 0;">
+                        <li>
+                            <a class="dropdown-item" href="#" id="logout" style="
+                                display: flex; 
+                                align-items: center; 
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                height: auto;
+                                border-bottom: 1px solid #ddd; 
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-sign-out-alt" style="margin-right: 8px; color: inherit;"></i> Sign Out
+                            </a>
+                            <a class="dropdown-item" href="#" id="logouts" style="
+                                display: flex; 
+                                align-items: center; 
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                height: auto;
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-exchange-alt" style="margin-right: 8px; color: inherit;"></i> Switch
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+                <script>
+                   document.getElementById('logouts').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default link behavior
+        
+            // SweetAlert confirmation
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to switch account?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745', // Green confirm button
+                cancelButtonColor: '#dc3545', // Red cancel button
+                confirmButtonText: 'Yes, Switch Account!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Switch Account',
+                        text: 'Choose your organization',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = 'chooseorganizations.html'; // Redirect to choose organizations page
+                    });
+                }
+            });
+        });
+        function fetchOrganizationData() {
+    const token = localStorage.getItem('token'); // Retrieve token from storage
+    if (!token) {
+        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        return;
+    }
+
+    fetch('http://localhost:5000/api/auth/organization/details', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.name) {
+            
+            const infoDiv = document.getElementById('organizationInfo');
+            infoDiv.innerHTML = `
+              <h2 class="custom-heading">${data.name}</h2>
+
+       
+              
+            `;
+        } else {
+            document.getElementById('organizationInfo').innerText = 'No organization data found.';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('errorMessages').innerText = 'An error occurred. Please try again.';
+    });
+}
+
+
+document.addEventListener('DOMContentLoaded', fetchOrganizationData);
+
+
+   function fetchLoggedInUserDetails() {
+    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+
+    if (!token) {
+        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        return;
+    }
+
+    fetch('http://localhost:5000/api/auth/organization-user/details', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(user => {
+        if (!user) {
+            throw new Error('User not found');
+        }
+        
+        
+        const fullName = `${user.firstname} ${user.lastname}`; 
+
+        document.getElementById('profile-item').innerHTML = `
+           <a style="color: #25330f; text-decoration: none; " href="organization-users-info.html">
+   
+   <h3 style="color: #25330f; text-decoration: none; font-size: 18px; margin-top:10px;">${user.firstname} ${user.lastname}</h3>
+</a>
+
+
+        `;
+    })
+    .catch(error => {
+        console.error('Error fetching organization user details:', error);
+        document.getElementById('profile-item').innerHTML = '<a href="#">Error loading profile</a>';
+    });
+}
+
+// Call the function when the DOM is loaded
+document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
+    
+            document.getElementById('logout').addEventListener('click', function(event) {
+                event.preventDefault();
+    
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to log out?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, log out!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem('token');
+                        Swal.fire({
+                            title: 'Logged Out!',
+                            text: 'You have been logged out successfully.',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = 'adminlogin.html';
+                        });
+                    }
+                });
+            });
+        </script>
+   
+    
+
+
+   <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">Overview</div>
+                    <a class="nav-link" href="organization-dashboard.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+
+                    <div class="sb-sidenav-menu-heading">Payment Management</div>
+                    <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                           
+                            <a class="nav-link" href="organization-allpayments.html">Overview</a>
+                            <a class="nav-link" href="organization-active-payment.html">Active Payment</a> 
+                            <a class="nav-link" href="organization-addpayments.html">Add Payment</a>
+                            <a class="nav-link" href="organization-reports.html">Reports</a> 
+                        </nav>
+                    </div>
+
+                   
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTransactions" aria-expanded="false" aria-controls="collapseTransactions">
+                        <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
+                        Transactions
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseTransactions" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-alltransactions.html">Overview</a>
+                            <a class="nav-link" href="organization-payment.html">Management</a>
+                            <a class="nav-link" href="organization-masterlist.html">Masterlist</a>
+                            <a class="nav-link" href="organization-transactionsreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+
+                    <div class="sb-sidenav-menu-heading">Organization Overview</div>
+                    <a class="nav-link" href="organization-academic-list.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Academic List
+                    </a>
+                    <div class="sb-sidenav-menu-heading">Product Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseProducts" aria-expanded="false" aria-controls="collapseProducts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
+                        Products
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseProducts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-products.html">Management</a>
+                            <a class="nav-link" href="organization-pre-order.html">Pre-Order</a>
+                            <a class="nav-link" href="organization-gcashorder.html">Manage QR-Code</a>
+                            <a class="nav-link" href="organization-allorderreports.html">QR-Code Reports</a>
+                            <a class="nav-link" href="organization-addproduct.html">Add Product</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Order Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrders" aria-expanded="false" aria-controls="collapseOrders">
+                        <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>
+                        Orders
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrders" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-orders.html">Transactions</a>
+                            <a class="nav-link" href="organization-ordersManage.html">Paid Orders Handling</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrderTransactions" aria-expanded="false" aria-controls="collapseOrderTransactions">
+                        <div class="sb-nav-link-icon"><i class="fas fa-receipt"></i></div>
+                        Transactions
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrderTransactions" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-order-transaction.html">Overview</a>
+                            <a class="nav-link" href="organization-order-transaction-reports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Transaction Summary</div>
+                    <a class="nav-link" href="organization-transactions-summary.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Overview
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4" style="font-weight: normal;">Organization</h1>
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4" style="padding: 20px; background-color:#F5FFFA; padding-top: 30px;">
+                                    <ol class="breadcrumb mb-4">
+                                        <li class="breadcrumb-item" style="font-style: italic;">Payment</li>
+                                        <li class="breadcrumb-item active" style="font-style: italic;">Reports</li>
+                                    </ol>
+                                  
+        <table id="reportedPaymentsTable">
+            <thead>
+                <tr>
+                    <th>Payment Name</th>
+                    <th>Reason</th>
+                    <th>Description</th>
+                    <th>Reported By</th>
+                    <th>Reported At</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be dynamically generated -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+            const tableBody = document.querySelector('#reportedPaymentsTable tbody');
+
+            if (!token) {
+                alert('Unauthorized access. Please log in.');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/reported-payments', {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (!response.ok) throw new Error('Failed to fetch reported payments.');
+
+                const { reports } = await response.json();
+
+                if (reports.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No reported payments found.</td></tr>';
+                    return;
+                }
+
+                reports.forEach(report => {
+                    let reportedBy = '';
+                    if (report.admin_reported_by_name) {
+                        reportedBy += `<strong>Admin:</strong> ${report.admin_reported_by_name}<br>`;
+                    }
+                    if (report.adviser_reported_by_name) {
+                        reportedBy += `<strong>Adviser:</strong> ${report.adviser_reported_by_name}`;
+                    }
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${report.payment_name || 'N/A'}</td>
+                        <td>${report.reason || 'N/A'}</td>
+                        <td>${report.description || 'N/A'}</td>
+                        <td>${reportedBy || ''}</td>
+                        <td>${new Date(report.created_at).toLocaleString()}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching reported payments:', error);
+                tableBody.innerHTML = '<tr><td colspan="5" class="text-center">Failed to load reported payments.</td></tr>';
+            }
+        });
+    </script>
+
+                                </div>  
+                            </div>
+                        </div>   
+                    </div>  
+                </main>      
+            </div>
+        </div>
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>

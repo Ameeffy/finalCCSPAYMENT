@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Admin Payment</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css">
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+        <!-- jQuery (Full Version) -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    
+        <!-- Bootstrap & Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        
+        <!-- SweetAlert -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"> 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+<style>
+     .export-container {
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    z-index: 1;
+}
+
+.export-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.export-btn {
+    background-color: #1B3A28;
+    color: #ffffff;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 60px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+}
+
+.export-btn:hover {
+    background-color: #3e865c;
+}
+
+.export-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 83px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.export-content a {
+    color: #333;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+.export-content a:hover {
+    background-color: #f8f9fa;
+}
+
+.export-dropdown:hover .export-content {
+    display: block;
+}
+@media print {
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+    }
+
+    .export-container, .dataTables_wrapper .top, .dataTables_wrapper .bottom {
+        display: none;
+    }
+
+    .custom-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .custom-table th, .custom-table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    .custom-table thead {
+        background-color: #f1f1f1;
+    }
+}
+        .table-container{
+            width: auto;
+            background-color: white;
+            padding-top: 20px;
+            padding-left: 10px;
+            padding-right: 10px;   
+            border-radius: 3px;
+            padding-bottom: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+.dataTables_scroll {
+    border-radius: 5px 5px 0 0; /* 5px top border radius */
+}
+
+.dataTables_scrollBody {
+    border-radius: 0; /* Ensure no bottom border radius */
+}
+
+
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px; /* Adjusted to 5px */
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px; /* Adjusted to 5px */
+}
+
+/* Ensure no bottom border-radius */
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important; /* Light gray border */
+    padding: 12px 16px; /* Comfortable spacing */
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important; /* Remove border from last row */
+}
+
+/* Optional hover effect */
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important; /* Very subtle hover background */
+    border-bottom-color: #d0d0d0 !important; /* Slightly darker border on hover */
+}
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        justify-self: flex-end;
+    }
+
+    /* Optional: Adjust spacing between elements */
+    .dataTables_wrapper .dataTables_length {
+        margin-right: 15px;
+    }
+   
+    .dataTables_wrapper .dataTables_info {
+        margin: 0 15px;
+    }
+    .dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    text-decoration: none;
+    color: #555;
+    background-color: #f9f9f9;
+}
+
+.dataTables_wrapper .dataTables_paginate a:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Styling the search box */
+.dataTables_wrapper .dataTables_filter {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Custom table design */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
+    border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
+    margin-bottom: 50px;
+}
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 12px 16px;
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important;
+    border-bottom-color: #d0d0d0 !important;
+}
+  
+    
+.icon-button {
+    border: none;
+    background-color: transparent;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    color: #034b03;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.icon-button:hover {
+    background-color: rgba(3, 75, 3, 0.1); 
+    transform: scale(1.1); 
+}
+
+
+.dropdown-item {
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    padding: 10px;
+    text-align: left;
+    cursor: pointer;
+    color: #034b03;
+    transition: background-color 0.3s;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(3, 75, 3, 0.1); 
+}
+.icon-button:hover + .dropdowns {
+    display: block; 
+}
+
+.pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Align items vertically */
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: none;
+            background-color: #034b03;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            
+        }
+
+        .pagination button.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            margin: 0 10px; /* Add margin to space out the text */
+            font-weight: bold;
+        }
+</style>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center">
+            <!-- Left Section -->
+            <div class="d-flex align-items-center">
+                <!-- Sidebar Toggle -->
+                <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                    <i class="fas fa-bars" style="color: black;"></i>
+                </button>
+                
+                <!-- Logo -->
+                <div class="logo me-2">
+                    <img src="img/logo.png" alt="Logo" height="40">
+                </div>
+                
+                <!-- College Title -->
+                <h2 class="college-title mb-0" style="color: black; font-size: 20px;">COLLEGE OF COMPUTING STUDIES</h2>
+            </div>
+    
+            <!-- Right Section -->
+            <div class="ms-auto d-flex align-items-center">
+                <li id="profile-item" class="dropdown-item me-3">
+                    <a href="#" style="color: #25330f; text-decoration: none;">Loading...</a>
+                </li>
+    
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x" style="color: #25330f;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: #25330f;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                        width: 110px; 
+                        min-width: 110px; 
+                        background-color: #ffffff; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                        padding: 0;">
+                        <li>
+                            <a class="dropdown-item text-center" href="#" id="logout" style="
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                border-bottom: 1px solid #ddd; 
+                                border-radius: 8px;
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-sign-out-alt me-2" style="color: inherit;"></i> Sign Out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    
+        <!-- Scripts -->
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                const token = localStorage.getItem('token');
+    
+                if (!token) {
+                    window.location.href = 'adminlogin.html';
+                    return;
+                }
+    
+                try {
+                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+    
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch user data');
+                    }
+    
+                    const userData = await response.json();
+                    document.getElementById("profile-item").innerHTML = 
+                        `<a style="color: #25330f; text-decoration: none;" href="admin-info.html">${userData.username} (${userData.email})</a>`;
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    document.getElementById("profile-item").innerHTML = `<a href="#">Error loading profile</a>`;
+                }
+            });
+    
+            document.getElementById('logout').addEventListener('click', function(event) {
+                event.preventDefault();
+    
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to log out?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, log out!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem('token');
+                        Swal.fire({
+                            title: 'Logged Out!',
+                            text: 'You have been logged out successfully.',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = 'adminlogin.html';
+                        });
+                    }
+                });
+            });
+        </script>
+   
+    
+
+
+   <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                   
+                    <div class="sb-sidenav-menu-heading">Overview</div>
+                    <a class="nav-link" href="admindashboard.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+                    
+                    <div class="sb-sidenav-menu-heading">System Controls</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Semester
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admincontrol.html">Management</a>
+                            <a class="nav-link" href="admincontrolOrganizationUsers.html">Payments</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-allpayments.html">Overview</a>
+                            <a class="nav-link" href="admin-payment.html">Management</a>
+                            <a class="nav-link" href="admin-organization-active-payments.html">Active Payment</a>
+                            <a class="nav-link" href="admin-payment-reports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseGcash" aria-expanded="false" aria-controls="collapseGcash">
+                        <div class="sb-nav-link-icon"><i class="fas fa-qrcode"></i></div>
+                        QR-Codes
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseGcash" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-gcashorder.html">Overview</a>
+                            <a class="nav-link" href="admin-order.html">Management</a>
+                            <a class="nav-link" href="admin-gcashorder-reports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Transaction Overview</div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseNew" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-alltransactions.html">Overview</a>
+                            <a class="nav-link" href="admin-transactionpaymentreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew1" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Orders
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseNew1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-allordertransactions.html">Overview</a>
+                            <a class="nav-link" href="admin-allordertransactionsreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">User Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                        Accounts
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+
+                   
+
+                    <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                Student
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-student.html">Overview</a>
+                                    <a class="nav-link" href="adminaccountsMain.html">Enrollment Status</a>
+                                    <a class="nav-link" href="adminaccountsReportsuser.html">Reports</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                Adviser
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-adviser.html">Overview</a>
+                                    
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAdmin" aria-expanded="false" aria-controls="pagesCollapseAdmin">
+                                Admin
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAdmin" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-admin.html">Overview</a>     
+                                </nav>
+                            </div>                
+                        </nav>
+                    </div> 
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRegister" aria-expanded="false" aria-controls="collapseRegister">
+                        <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
+                        Register 
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseRegister" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="register.html">Student/Adviser</a>
+                            <a class="nav-link" href="adminaccregister.html">Admin</a>
+                        </nav>
+                    </div>
+                        
+                    <div class="sb-sidenav-menu-heading">Organization Management</div>
+                     <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrg" aria-expanded="false" aria-controls="collapseOrg">
+                        <div class="sb-nav-link-icon"><i class="fas fa-building"></i></div>
+                        Organization
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrg" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admincontrolOrganization.html">Overview</a>
+                            <a class="nav-link" href="Admin-organizationsYear.html">Active List</a>
+                           
+                        </nav>
+                    </div>
+                </div>
+            </div> 
+        </nav>
+    </div>
+
+
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-5"></h1>
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4" style="padding: 20px;">
+                                    <ol class="breadcrumb mb-4">
+                                        <li class="breadcrumb-item" style="font-style: italic;">Organization</li>
+                                        <li class="breadcrumb-item" style="font-style: italic;">Overview</li>
+                                        <li class="breadcrumb-item active" style="font-style: italic;">Accounts</li>
+                                    </ol>
+
+<div>
+    <h2 class="text-center mb-4">Manage Adviser</h2>
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th>Full Name</th>
+              
+                <th>Position</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="adviserTableBody">
+            <!-- Adviser rows will be dynamically inserted here -->
+        </tbody>
+    </table>
+</div>
+<br>
+<h3 class="text-center mb-4" id="organizationName">Manage Student Organization Users</h3>
+
+<table class="custom-table">
+<thead>
+    <tr>
+        <th>Full Name</th>
+        
+        <th>Position</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+</thead>
+<tbody id="orgUsersTableBody">
+    <!-- User rows will be dynamically inserted here -->
+</tbody>
+</table>
+<div id="modalPosition" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2); border: 1px solid #ccc; z-index: 1000; width: 400px;">
+    <h3 style="text-align: center;">Update Position</h3>
+    <form id="updatePositionForm">
+        <div style="margin-bottom: 15px;">
+            <label for="currentPosition" style="font-weight: bold;">Current Position</label>
+            <input type="text" id="currentPosition" disabled style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin-bottom: 10px;">
+        </div>
+        
+        <div style="margin-bottom: 15px; position: relative;">
+            <label for="searchPosition" style="font-weight: bold;">Search & Select New Position</label>
+            
+            <div style="display: flex; align-items: center; position: relative;">
+                <input type="text" id="searchPosition" placeholder="Click the icon to unlock." 
+                       class="custom-placeholder"
+                       style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;" 
+                       readonly>
+                <span id="toggleLock" style="cursor: pointer; position: absolute; right: 10px;">
+                    <i class="fas fa-lock" style="color: #555;"></i>
+                </span>
+            </div>
+        
+            <div id="dropdownContainer" style="position: absolute; width: 100%; background: white; border: 1px solid #ccc; border-radius: 5px; max-height: 200px; overflow-y: auto; display: none; z-index: 10;">
+                <ul id="positionDropdown" style="list-style: none; padding: 0; margin: 0;">
+                    <li class="dropdown-item" data-value="President">President</li>
+                    <li class="dropdown-item" data-value="Vice-President">Vice-President</li>
+                    <li class="dropdown-item" data-value="Internal Vice-President">Internal Vice-President</li>
+                    <li class="dropdown-item" data-value="External Vice-President">External Vice-President</li>
+                    <li class="dropdown-item" data-value="Secretary">Secretary</li>
+                    <li class="dropdown-item" data-value="Treasurer">Treasurer</li>
+                    <li class="dropdown-item" data-value="Auditor">Auditor</li>
+                    <li class="dropdown-item" data-value="Director of Membership">Director of Membership</li>
+                    <li class="dropdown-item" data-value="Director of Marketing">Director of Marketing</li>
+                    <li class="dropdown-item" data-value="Director of Special Projects">Director of Special Projects</li>
+                    <li class="dropdown-item" data-value="Member">Member</li>
+                </ul>
+            </div>
+        
+            <input type="hidden" id="newPosition" name="position" value="Member">
+        </div>
+        
+        
+        
+        
+        
+    
+        <button type="button" id="savePosition" style="width: 100%; padding: 10px; background-color: #034b03; color: white; border: none; border-radius: 5px;">Save</button>
+    </form>
+    
+    <button onclick="closeModal()" style="margin-top: 15px; width: 100%; padding: 10px; background-color: #dc3545; color: white; border: none; border-radius: 5px;">Cancel</button>
+    </div>
+    
+    <script>
+    
+    
+    
+    let selectedUserId = null;
+    
+    $(document).ready(function () {
+        // Toggle Lock/Unlock for Search Position
+        $('#toggleLock').on('click', function () {
+            let searchInput = $('#searchPosition');
+            let lockIcon = $(this).find('i');
+    
+            if (searchInput.prop('readonly')) {
+                // Unlock input and update placeholder
+                searchInput.prop('readonly', false).attr('placeholder', 'Select new position');
+                lockIcon.removeClass('fa-lock').addClass('fa-unlock').css('color', 'green');
+                searchInput.focus();
+            } else {
+                // Relock input and reset placeholder
+                searchInput.prop('readonly', true).attr('placeholder', 'Click the icon to unlock.');
+                lockIcon.removeClass('fa-unlock').addClass('fa-lock').css('color', '#555');
+            }
+        });
+    
+        // Search Position with Dropdown Filtering
+        $('#searchPosition').on('input', function () {
+            if ($(this).prop('readonly')) return; // Prevent input when locked
+    
+            let searchTerm = $(this).val().toLowerCase();
+            let dropdown = $('#dropdownContainer');
+            let items = $('.dropdown-item');
+    
+            let hasResults = false;
+    
+            items.each(function () {
+                if ($(this).text().toLowerCase().includes(searchTerm)) {
+                    $(this).show();
+                    hasResults = true;
+                } else {
+                    $(this).hide();
+                }
+            });
+    
+            dropdown.toggle(hasResults);
+        });
+    
+        // Dropdown Item Selection
+        $('.dropdown-item').on('click', function () {
+            let selectedValue = $(this).attr('data-value');
+            $('#searchPosition').val(selectedValue);
+            $('#newPosition').val(selectedValue);
+            $('#dropdownContainer').hide();
+    
+            // Re-lock input after selection
+            let searchInput = $('#searchPosition');
+            searchInput.prop('readonly', true).attr('placeholder', 'Click the icon to unlock.');
+            let lockIcon = $('#toggleLock i');
+            lockIcon.removeClass('fa-unlock').addClass('fa-lock').css('color', '#555');
+        });
+    
+        // Close Dropdown on Outside Click
+        $(document).on('click', function (event) {
+            if (!$(event.target).closest('#searchPosition, #dropdownContainer, #toggleLock').length) {
+                $('#dropdownContainer').hide();
+            }
+        });
+    });
+    
+    
+    
+    // Open Modal and Populate Current Position
+    function openModal(userId, currentPosition) {
+        selectedUserId = userId;
+        document.getElementById('currentPosition').value = currentPosition;
+        document.getElementById('searchPosition').value = currentPosition;
+        document.getElementById('newPosition').value = currentPosition;
+        document.getElementById('modalPosition').style.display = 'block';
+    
+        // Lock input when opening modal
+        const searchInput = document.getElementById('searchPosition');
+        searchInput.readOnly = true;
+        const lockIcon = document.getElementById('toggleLock').querySelector('i');
+        lockIcon.classList.replace('fa-unlock', 'fa-lock'); // Ensure it's locked when opening
+        lockIcon.style.color = '#555';
+    }
+    
+    // Close Modal
+    function closeModal() {
+        document.getElementById('modalPosition').style.display = 'none';
+    }
+    
+    
+    // Save Position with Confirmation and Loading Message
+    document.getElementById('savePosition').addEventListener('click', function () {
+        const newPosition = document.getElementById('newPosition').value;
+        const token = localStorage.getItem('token');
+    
+        if (!token) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Unauthorized',
+                text: 'You are not logged in. Redirecting to login...',
+            }).then(() => {
+                window.location.href = 'adminlogin.html';
+            });
+            return;
+        }
+    
+        if (!selectedUserId) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No user selected.',
+            });
+            return;
+        }
+    
+        // Confirmation dialog
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `Do you want to change the position to "${newPosition}"?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#dc3545',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Show SweetAlert loading while updating position
+                Swal.fire({
+                    title: 'Updating Position',
+                    text: 'Please wait while the position is being updated...',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+    
+                fetch(`http://localhost:5000/api/auth/organizations/users/${selectedUserId}/update-position`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ position: newPosition }),
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: data.msg || 'Position updated successfully.',
+                            timer: 1500,
+                            showConfirmButton: false,
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.msg || 'Failed to update position.',
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error updating position:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while updating the position.',
+                    });
+                });
+            }
+        });
+    });
+    
+    
+    
+    
+    
+    
+    </script>
+    <script>
+    // Get organization ID from the query string
+    const urlParams = new URLSearchParams(window.location.search);
+    const organizationId = urlParams.get('organization_id');
+    
+    if (!organizationId) {
+        alert('No organization selected');
+        window.location.href = 'admincontrolOrganization.html';
+    }
+    
+    // Fetch and display organization users
+    fetch(`http://localhost:5000/api/auth/organizations/${organizationId}/users`)
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.getElementById('orgUsersTableBody');
+            const orgNameHeader = document.getElementById('organizationName');
+            tbody.innerHTML = ''; // Clear previous rows
+    
+            if (data.length > 0) {
+                orgNameHeader.textContent = `Manage Users for ${data[0].organization_name}`;
+    
+                data.forEach(user => {
+                    const fullName = `${user.firstname} ${user.lastname}`;
+                    const id = user.id || 'N/A';
+                    const email = user.email || 'N/A';
+                    const position = user.position || 'N/A';
+                    const status = user.application_status || 'N/A';
+    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${fullName}</td>
+                       
+                        <td>${position}</td>
+                        <td>${status}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" data-id="${user.id}" data-status="${status}">
+                                ${status === 'Activated' ? 'Not Activated' : 'Activated'}
+                            </button>
+                            
+                             ${
+            status === 'Activated' 
+            ? `<button class="btn btn-primary btn-sm" onclick="openModal('${user.id}', '${user.position}')">Update Position</button>` 
+            : ''
+        }
+                        </td>
+                    `;
+    
+                    const statusButton = row.querySelector('button');
+                    statusButton.addEventListener('click', function () {
+                        const userId = this.getAttribute('data-id');
+                        const newStatus = this.getAttribute('data-status') === 'Activated' ? 'Not Activated' : 'Activated';
+                        toggleUserStatus(userId, newStatus);
+                    });
+    
+                    tbody.appendChild(row);
+                });
+            } else {
+                orgNameHeader.textContent = 'No organizations Account';
+                tbody.innerHTML = '<tr><td colspan="5">No users available.</td></tr>';
+            }
+        })
+        .catch(error => console.error('Error fetching users:', error));
+        function fetchUserHistory(userId) {
+        fetch(`http://localhost:5000/api/auth/organizations/users/${userId}/history`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.history.length === 0) {
+                document.getElementById('organizationUsersHistoryContainer').innerHTML = '<p>No history available.</p>';
+                return;
+            }
+            
+            let tableContent = '<table id="organizationUsersHistoryTable"><thead><tr>';
+            tableContent += '<th>ID</th><th>Status</th><th>Action</th><th>Admin</th><th>Created At</th>';
+            tableContent += '</tr></thead><tbody>';
+            
+            data.history.forEach(entry => {
+                tableContent += `<tr>
+                    <td>${entry.id}</td>
+                    <td>${entry.status}</td>
+                    <td>${entry.action}</td>
+                    <td>${entry.admin_firstname} ${entry.admin_middlename} ${entry.admin_lastname}</td>
+                    <td>${new Date(entry.created_at).toLocaleString()}</td>
+                </tr>`;
+            });
+            
+            tableContent += '</tbody></table>';
+            document.getElementById('organizationUsersHistoryContainer').innerHTML = tableContent;
+    
+            $('#organizationUsersHistoryTable').DataTable({
+                paging: true,
+                pageLength: 10,
+                searching: true,
+                ordering: true,
+                info: true
+            });
+        })
+        .catch(error => console.error('Error fetching user history:', error));
+    }
+    
+    // Function to Open Modal and Fetch History
+    function openUserHistoryModal(userId) {
+        document.getElementById('organizationusershistory').style.display = 'block';
+        fetchUserHistory(userId);
+    }
+    
+    // Close Modal Function
+    function closeUserHistoryModal() {
+        document.getElementById('organizationusershistory').style.display = 'none';
+    }
+    
+    // Modal HTML
+    const modalHTML = `
+    <div id="organizationusershistory" class="modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2); border: 1px solid #ccc; z-index: 1000; width: 600px;">
+        <span style="position: absolute; right: 20px; cursor: pointer; margin-top: 10px;" class="close" onclick="closeUserHistoryModal()">
+            <i class="fas fa-times-circle"></i>
+        </span>
+        <h2 style="text-align: center; margin-bottom: 20px;">User History</h2>
+        <div id="organizationUsersHistoryContainer" style="max-height: 400px; overflow-y: auto;"></div>
+    </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Button to Open Modal
+    function renderUserHistoryButton(userId) {
+        return `<button class="icon-button" onclick="openUserHistoryModal(${userId})" title="View History">
+                    <i class="fas fa-history"></i>
+                </button>`;
+    }
+    
+    function toggleUserStatus(userId, newStatus) {
+        // Check if token is available
+        const token = localStorage.getItem('token'); 
+    
+        if (!token) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Unauthorized',
+                text: 'You are not logged in. Redirecting to login...',
+            }).then(() => {
+                window.location.href = 'adminlogin.html';
+            });
+            return;
+        }
+    
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `Do you want to ${newStatus === 'Activated' ? 'Activate' : 'Deactivate'} this user?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745', // Green
+            cancelButtonColor: '#dc3545', // Red
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Show loading alert
+                Swal.fire({
+                    title: 'Processing...',
+                    text: 'Please wait while updating user status.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+    
+                // Perform the status update
+                fetch(`http://localhost:5000/api/auth/organizations/users/${userId}/update-status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ apply_status: newStatus }),
+                })
+                .then((response) => {
+                    if (!response.ok) {
+                        return response.json().then((err) => {
+                            throw new Error(err.message || 'Failed to update status');
+                        });
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: `User status updated to ${newStatus}.`,
+                        timer: 1500,
+                        showConfirmButton: false,
+                    }).then(() => {
+                        // Reload the page on success
+                        window.location.reload();
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error updating status:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error.message || 'An error occurred while updating the status.',
+                    });
+                });
+            }
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+    const organizationId = new URLSearchParams(window.location.search).get('organization_id');
+    
+    if (!organizationId) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Organization ID not found. Redirecting...',
+    }).then(() => {
+        window.location.href = 'admincontrolOrganization.html';
+    });
+    return;
+    }
+    
+    // Fetch and display advisers for the organization
+    fetch(`http://localhost:5000/api/auth/organizations/${organizationId}/advisers`, {
+    method: 'GET',
+    headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const adviserTableBody = document.getElementById('adviserTableBody');
+        const orgNameHeader = document.getElementById('organizationName');
+        adviserTableBody.innerHTML = ''; // Clear previous rows
+    
+        if (data.length > 0) {
+            orgNameHeader.textContent = `Manage Advisers for ${data[0].organization_name}`;
+    
+            data.forEach(adviser => {
+                const fullName = `${adviser.firstname} ${adviser.lastname}`;
+                const email = adviser.email || 'N/A';
+                const position = adviser.position || 'N/A';
+                const status = adviser.status || 'N/A';
+    
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${fullName}</td>
+                    <td>${position}</td>
+                    <td>${status}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" data-id="${adviser.id}" data-status="${adviser.status}">
+                            ${adviser.status === 'Activated' ? 'Not Activated' : 'Activated'}
+                        </button>
+                    </td>
+                `;
+    
+                // Add event listener for the toggle button
+                const toggleButton = row.querySelector('button');
+                toggleButton.addEventListener('click', function () {
+                    const adviserId = this.getAttribute('data-id');
+                    const currentStatus = this.getAttribute('data-status');
+                    const newStatus = currentStatus === 'Activated' ? 'Not Activated' : 'Activated';
+    
+                    toggleAdviserStatus(adviserId, newStatus, this);
+                });
+    
+                adviserTableBody.appendChild(row);
+            });
+        } else {
+            orgNameHeader.textContent = 'No Advisers Found';
+            adviserTableBody.innerHTML = '<tr><td colspan="5">No advisers available.</td></tr>';
+        }
+    })
+    .catch(error => console.error('Error fetching advisers:', error));
+    });
+    
+    // Toggle adviser status function
+    function toggleAdviserStatus(adviserId, newStatus, button) {
+        const token = localStorage.getItem('token');
+    
+        if (!token) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Unauthorized',
+                text: 'You are not logged in. Redirecting...',
+            }).then(() => {
+                window.location.href = 'adminlogin.html';
+            });
+            return;
+        }
+    
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `Do you want to ${newStatus === 'Activated' ? 'Activate' : 'Deactivate'} this adviser?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#dc3545',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Show loading message
+                Swal.fire({
+                    title: 'Processing...',
+                    text: 'Updating adviser status, please wait.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+    
+                fetch(`http://localhost:5000/api/auth/organizations/advisers/${adviserId}/update-status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ apply_status: newStatus }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: `Adviser status updated to ${newStatus}.`,
+                            timer: 1500,
+                            showConfirmButton: false,
+                        }).then(() => {
+                            // Update button and status cell dynamically
+                            button.textContent = newStatus === 'Activated' ? 'Not Activated' : 'Activated';
+                            button.setAttribute('data-status', newStatus);
+    
+                            const row = button.closest('tr');
+                            const statusCell = row.querySelector('td:nth-child(4)');
+                            statusCell.textContent = newStatus;
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message || 'Failed to update status.',
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating status:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while updating the status.',
+                    });
+                });
+            }
+        });
+    }
+    
+    
+    
+    </script>
+
+                                  
+                                </div>  
+                            </div>
+                        </div>   
+                    </div>  
+                </main>      
+            </div>
+        </div>
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>
+
+
+
+
+

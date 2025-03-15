@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"> <!-- For Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
+    <style>
+        body {
+            background-color: #0b3d2e; /* Dark Green */
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 30px;
+            background-color: #2a6d4f;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 2s ease-in-out;
+            margin-top: 100px;
+        }
+        .form-group label {
+            font-size: 1.2rem;
+        }
+        .btn-primary {
+            background-color: #2a6d4f;
+            border-color: #2a6d4f;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #1e5a42;
+            border-color: #1e5a42;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo img {
+            width: 120px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .otp-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .otp-boxes input {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            text-align: center;
+            margin: 0 5px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: #f4f4f4;
+        }
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            z-index: 9999;
+        }
+        .loading-screen.active {
+            visibility: visible;
+        }
+        .loading-screen .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .department-details {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 1rem;
+        }
+
+        .department-details h4 {
+            margin-bottom: 10px;
+        }
+
+        .department-details p {
+            margin-bottom: 15px;
+        }
+
+        .programs-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .programs-list li {
+            font-size: 1.1rem;
+            padding: 5px 0;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- OTP Form Container -->
+    <div class="container">
+        <div class="logo">
+            <img src="img/logo.png" alt="Logo">
+        </div>
+
+        <h2>Enter OTP</h2>
+
+        <form id="otpForm">
+            <div class="form-group otp-boxes">
+                <input type="text" maxlength="1" id="otp1" name="otp1" required>
+                <input type="text" maxlength="1" id="otp2" name="otp2" required>
+                <input type="text" maxlength="1" id="otp3" name="otp3" required>
+                <input type="text" maxlength="1" id="otp4" name="otp4" required>
+                <input type="text" maxlength="1" id="otp5" name="otp5" required>
+                <input type="text" maxlength="1" id="otp6" name="otp6" required>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Verify OTP</button>
+            </div>
+        </form>
+
+        <!-- Department Details -->
+    </div>
+
+    <script>
+        document.getElementById('otpForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Collect the OTP values
+            const otp = [
+                document.getElementById('otp1').value,
+                document.getElementById('otp2').value,
+                document.getElementById('otp3').value,
+                document.getElementById('otp4').value,
+                document.getElementById('otp5').value,
+                document.getElementById('otp6').value
+            ].join('');
+
+            const email = localStorage.getItem('organizationEmail'); // Get the email stored in localStorage
+
+            if (!email) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Organization email not found in localStorage',
+                });
+                return;
+            }
+
+            // Show loading screen while verifying OTP
+            document.getElementById('loadingScreen').classList.add('active');
+
+            fetch('http://localhost:5000/api/auth/verify-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, otp })
+            })
+            .then(response => response.json())
+            .then(result => {
+                // Hide loading screen after response
+                document.getElementById('loadingScreen').classList.remove('active');
+
+                if (result.msg === 'OTP verified successfully') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'OTP Verified',
+                        text: 'You have successfully verified your OTP!',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = 'admincontrolOrganization.html'; // Redirect to the organization dashboard after successful verification
+                    });
+                } else if (result.redirectTo) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed Attempts',
+                        text: 'Too many failed attempts, the organization has been deleted.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = result.redirectTo; // Redirect to admin control page
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid OTP',
+                        text: result.msg,
+                    });
+                    // Clear all OTP boxes on failure
+                    document.querySelectorAll('.otp-boxes input').forEach(input => input.value = '');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loadingScreen').classList.remove('active');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Something went wrong while verifying OTP.',
+                });
+            });
+        });
+
+        // Move to next input box automatically when typing in each field
+        document.querySelectorAll('.otp-boxes input').forEach((input, index) => {
+            input.addEventListener('input', function () {
+                if (this.value.length === 1 && index < 5) {
+                    document.querySelectorAll('.otp-boxes input')[index + 1].focus();
+                }
+            });
+        });
+    </script>
+
+    <!-- Include jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

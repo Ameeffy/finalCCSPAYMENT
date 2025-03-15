@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="author" content="" />
+        <title>Admin Semester Management - Add Semester</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>   
+    </head>
+
+    <style>
+           .semester {
+            width: 97%;
+    max-width: 100%; 
+            margin: 15px 0;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .semester h2 {
+            margin: 0 0 10px;
+            font-size: 1.5rem;
+            color: #04172c;
+        } .payment {
+            margin-left: 10px;
+            padding: 10px;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .organization p {
+    color: rgb(3, 49, 3); /* Light green for organization name */
+    font-size: 1.2em; /* Slightly larger font size */
+    margin-bottom: 5px; /* Spacing below organization name */
+}
+
+/* Payment name and price style */
+.payment p {
+    color: darkgreen; /* Dark green for payment name and price */
+    font-size: 1em; /* Normal font size */
+    margin: 0; /* No margin for payment items */
+}
+
+        .no-payments {
+            color: #dc3545;
+            font-style: italic;
+        }
+
+.icon-button {
+    border: none;
+    background-color: transparent;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    color: #034b03;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.icon-button:hover {
+    background-color: rgba(3, 75, 3, 0.1); 
+    transform: scale(1.1); 
+}
+.form-container {
+    margin: auto;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .form-container h4 {
+            color: #034b03;
+            margin-bottom: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #034b03;
+            box-shadow: 0 0 5px rgba(3, 75, 3, 0.5);
+        }
+
+        .btn-submit {
+            background-color: #034b03;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #026502;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center">
+            <!-- Left Section -->
+            <div class="d-flex align-items-center">
+                <!-- Sidebar Toggle -->
+                <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                    <i class="fas fa-bars" style="color: black;"></i>
+                </button>
+                
+                <!-- Logo -->
+                <div class="logo me-2">
+                    <img src="img/logo.png" alt="Logo" height="40">
+                </div>
+                
+                <!-- College Title -->
+                <h2 class="college-title mb-0" style="color: black; font-size: 20px;">COLLEGE OF COMPUTING STUDIES</h2>
+            </div>
+    
+            <!-- Right Section -->
+            <div class="ms-auto d-flex align-items-center">
+                <li id="profile-item" class="dropdown-item me-3">
+                    <a href="#" style="color: #25330f; text-decoration: none;">Loading...</a>
+                </li>
+    
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x" style="color: #25330f;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: #25330f;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                        width: 110px; 
+                        min-width: 110px; 
+                        background-color: #ffffff; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                        padding: 0;">
+                        <li>
+                            <a class="dropdown-item text-center" href="#" id="logout" style="
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                border-bottom: 1px solid #ddd; 
+                                border-radius: 8px;
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-sign-out-alt me-2" style="color: inherit;"></i> Sign Out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    
+        <!-- Scripts -->
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                const token = localStorage.getItem('token');
+    
+                if (!token) {
+                    window.location.href = 'adminlogin.html';
+                    return;
+                }
+    
+                try {
+                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+    
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch user data');
+                    }
+    
+                    const userData = await response.json();
+                    document.getElementById("profile-item").innerHTML = 
+                        `<a style="color: #25330f; text-decoration: none;" href="admin-info.html">${userData.username} (${userData.email})</a>`;
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    document.getElementById("profile-item").innerHTML = `<a href="#">Error loading profile</a>`;
+                }
+            });
+    
+            document.getElementById('logout').addEventListener('click', function(event) {
+                event.preventDefault();
+    
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to log out?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, log out!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem('token');
+                        Swal.fire({
+                            title: 'Logged Out!',
+                            text: 'You have been logged out successfully.',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = 'adminlogin.html';
+                        });
+                    }
+                });
+            });
+        </script>
+   
+    
+
+
+   <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                   
+                    <div class="sb-sidenav-menu-heading">Overview</div>
+                    <a class="nav-link" href="admindashboard.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+                    
+                    <div class="sb-sidenav-menu-heading">System Controls</div>
+                    <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Semester
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admincontrol.html">Management</a>
+                            <a class="nav-link" href="admincontrolOrganizationUsers.html">Payments</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-allpayments.html">Overview</a>
+                            <a class="nav-link" href="admin-payment.html">Management</a>
+                            <a class="nav-link" href="admin-payment-reports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseGcash" aria-expanded="false" aria-controls="collapseGcash">
+                        <div class="sb-nav-link-icon"><i class="fas fa-qrcode"></i></div>
+                        QR-Codes
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseGcash" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-order.html">Management</a>
+                            <a class="nav-link" href="admin-gcashorder-reports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Transaction Overview</div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseNew" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-alltransactions.html">Overview</a>
+                            <a class="nav-link" href="admin-allordertransactionsreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseNew1" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Orders
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseNew1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admin-allordertransactions.html">Overview</a>
+                            <a class="nav-link" href="admin-allordertransactionsreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">User Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                        Accounts
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+
+                   
+
+                    <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                Student
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-student.html">Overview</a>
+                                    <a class="nav-link" href="adminaccountsMain.html">Enrollment Status</a>
+                                    <a class="nav-link" href="adminaccountsReportsuser.html">Reports</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                Adviser
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-adviser.html">Overview</a>
+                                    
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAdmin" aria-expanded="false" aria-controls="pagesCollapseAdmin">
+                                Admin
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAdmin" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminaccounts-admin.html">Overview</a>     
+                                </nav>
+                            </div>                
+                        </nav>
+                    </div> 
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRegister" aria-expanded="false" aria-controls="collapseRegister">
+                        <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
+                        Register 
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseRegister" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="register.html">Student/Adviser</a>
+                            <a class="nav-link" href="adminaccregister.html">Admin</a>
+                        </nav>
+                    </div>
+                        
+                    <div class="sb-sidenav-menu-heading">Organization Management</div>
+                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrg" aria-expanded="false" aria-controls="collapseOrg">
+                        <div class="sb-nav-link-icon"><i class="fas fa-building"></i></div>
+                        Organization
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrg" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="admincontrolOrganization.html">Overview</a>
+                            <a class="nav-link" href="Admin-organizationsYear.html">Active List</a>
+                            <a class="nav-link" href="organizationRegistration.html">Register</a>
+                        </nav>
+                    </div>
+                </div>
+            </div> 
+        </nav>
+    </div>
+
+
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4" style="font-weight: normal;">Semester</h1>
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4" style="padding: 20px; background-color:#F5FFFA; ">
+                                    <ol class="breadcrumb mb-4">
+                                        <li class="breadcrumb-item" style="font-style: italic;">Semester</li>
+                                        <li class="breadcrumb-item" style="font-style: italic;">Management</li>
+                                        <li class="breadcrumb-item active" style="font-style: italic;">Add Semester</li>
+                                    </ol>
+                                    <div class="back-icon">
+                                        <i class="fa fa-arrow-left" onclick="goBack()"></i>
+                                    </div>
+                                    <div class="modal fade" id="semesterModal" tabindex="-1" aria-labelledby="semesterModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" style="max-width: 80%; width: 70%;">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="semesterModalLabel">Register Semester</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                                    <form id="semesterForm">
+                                                        <div class="form-group">
+                                                            <label for="yearPicker">Year</label>
+                                                            <input type="number" class="form-control" id="yearPicker" name="yearPicker" min="1900" max="2100">
+                                                        </div>
+                                    
+                                                        <div class="form-group">
+                                                            <label for="academic_year">Academic Year</label>
+                                                            <input type="text" class="form-control" id="academic_year" name="academic_year" placeholder="YYYY-YYYY" readonly>
+                                                        </div>
+                                    
+                                                        <div class="form-group">
+                                                            <label for="semester">Semester</label>
+                                                            <select class="form-control" id="semester" name="semester">
+                                                                <option value="1st Semester">1st Semester</option>
+                                                                <option value="2nd Semester">2nd Semester</option>
+                                                            </select>
+                                                        </div>
+                                    
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                                        </div>
+                                                        <div id="errorMessages" class="error"></div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                          
+                                    </div>
+                                </div>
+                                
+                            </div>
+                           
+  <style>
+   </style>
+                            <!-- jQuery and Bootstrap JS -->
+                            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+                            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                            
+                            <script>
+                                    async function checkAdminRole() {
+                                    try {
+                                        const token = localStorage.getItem('token');
+                                        if (!token) {
+                                            return; // If no token is found, do nothing
+                                        }
+                            
+                                        const response = await fetch('http://localhost:5000/api/auth/checkRole', {
+                                            method: 'GET',
+                                            headers: {
+                                                'Authorization': `Bearer ${token}`
+                                            }
+                                        });
+                            
+                                        if (!response.ok) {
+                                            return; // If the fetch request fails, do nothing
+                                        }
+                            
+                                        const data = await response.json();
+                            
+                                        // Check if the role is 'Super Admin'
+                                        if (data.role !== 'Super Admin') {
+                                            // Show SweetAlert and redirect to admin control page
+                                            Swal.fire({
+                                                title: 'Access Denied',
+                                                text: "You don't have permission to view this page.",
+                                                icon: 'error',
+                                                confirmButtonText: 'OK'
+                                            }).then(() => {
+                                                window.location.href = 'admincontrol.html'; // Redirect to admin control page
+                                            });
+                                        }
+                                    } catch (error) {
+                                        console.error('Error checking admin role:', error);
+                                    }
+                                }
+                            
+                                // Run the check when the page loads
+                                document.addEventListener('DOMContentLoaded', checkAdminRole);
+                            
+                            
+                                document.addEventListener('DOMContentLoaded', () => {
+  const yearPicker = document.getElementById('yearPicker');
+  const academicYearField = document.getElementById('academic_year');
+  const semesterSelect = document.getElementById('semester');
+
+  // Get the current year as fallback
+  const currentYear = new Date().getFullYear();
+  yearPicker.value = currentYear;
+
+  // Function to update the academic year display based on yearPicker's value
+  function updateAcademicYear() {
+    const year = parseInt(yearPicker.value, 10);
+    if (!isNaN(year)) {
+      academicYearField.value = `${year}-${year + 1}`;
+    }
+  }
+
+  updateAcademicYear();
+  yearPicker.addEventListener('change', updateAcademicYear);
+
+  // Fetch the latest semester details
+  fetch('http://localhost:5000/api/auth/latest-semester')
+    .then(response => response.json())
+    .then(data => {
+      if (data && (data.year || data.name)) {
+        // Use data.year if available; otherwise, parse from data.name (assumed format: "1st Semester 2024-2025")
+        let academicYearStr = data.year;
+        if (!academicYearStr && data.name) {
+          const parts = data.name.split(" ");
+          academicYearStr = parts[parts.length - 1]; // e.g. "2024-2025"
+        }
+        if (academicYearStr) {
+          const years = academicYearStr.split('-');
+          if (years.length === 2) {
+            const firstYear = parseInt(years[0], 10);
+            const secondYear = parseInt(years[1], 10);
+            
+            // Determine which year to lock based on the latest semester type
+            if (data.name.includes("1st Semester")) {
+              // Lock to the first year only
+              yearPicker.setAttribute('min', firstYear);
+              yearPicker.setAttribute('max', firstYear);
+              yearPicker.value = firstYear;
+            } else if (data.name.includes("2nd Semester")) {
+              // Lock to the second year only
+              yearPicker.setAttribute('min', secondYear);
+              yearPicker.setAttribute('max', secondYear);
+              yearPicker.value = secondYear;
+            } else {
+              // Fallback: allow selection between firstYear and secondYear
+              yearPicker.setAttribute('min', firstYear);
+              yearPicker.setAttribute('max', secondYear);
+              // Default value: if currentYear is in between, use it; otherwise, use firstYear
+              if (currentYear >= firstYear && currentYear <= secondYear) {
+                yearPicker.value = currentYear;
+              } else {
+                yearPicker.value = firstYear;
+              }
+            }
+            updateAcademicYear();
+          }
+        }
+
+        // Disable semester options if they already exist in the latest semester.
+        if (data.name && data.name.includes("1st Semester")) {
+          const option1 = document.querySelector('#semester option[value="1st Semester"]');
+          if (option1) {
+            option1.disabled = true;
+          }
+        }
+        if (data.name && data.name.includes("2nd Semester")) {
+          const option2 = document.querySelector('#semester option[value="2nd Semester"]');
+          if (option2) {
+            option2.disabled = true;
+          }
+        }
+
+        // If the current default selection is disabled, switch to an enabled option.
+        const currentSelectedValue = semesterSelect.value;
+        const currentSelectedOption = semesterSelect.querySelector(`option[value="${currentSelectedValue}"]`);
+        if (currentSelectedOption && currentSelectedOption.disabled) {
+          // Find the first enabled option
+          const enabledOptions = Array.from(semesterSelect.options).filter(option => !option.disabled);
+          if (enabledOptions.length > 0) {
+            semesterSelect.value = enabledOptions[0].value;
+          } else {
+            // If all options are disabled, clear the selection.
+            semesterSelect.value = "";
+          }
+        }
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching latest semester:', error);
+    });
+
+  // Form submission handler
+  document.getElementById('semesterForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const academic_year = academicYearField.value.trim();
+    const semester = semesterSelect.value;
+
+    if (!academic_year || !semester) {
+      Swal.fire('Error!', 'Academic year and semester are required.', 'error');
+      return;
+    }
+
+    // Confirm submission
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `You are about to add ${semester} for ${academic_year}.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#28a745',
+      cancelButtonColor: 'red',
+      confirmButtonText: 'Yes, add it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Adding Semester...',
+          text: 'Please wait while we process your request.',
+          allowOutsideClick: false,
+          showConfirmButton: false,
+          willOpen: () => Swal.showLoading()
+        });
+
+        fetch('http://localhost:5000/api/auth/semesters', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          },
+          body: JSON.stringify({ academic_year, semester })
+        })
+          .then(response => {
+            if (!response.ok) {
+              return response.text().then(text => { throw new Error(text); });
+            }
+            return response.json();
+          })
+          .then(data => {
+            Swal.fire('Success!', `${semester} for ${academic_year} added successfully.`, 'success')
+              .then(() => window.location.href = 'admincontrol.html');
+          })
+          .catch(error => {
+            Swal.fire('Error!', error.message || 'Failed to add semester.', 'error');
+          });
+      }
+    });
+  });
+});
+                            </script>
+                            
+                                </div>  
+                            </div>
+                        </div>   
+                    </div>  
+                </main>      
+            </div>
+        </div>
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>
+ 

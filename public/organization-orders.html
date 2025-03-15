@@ -1,0 +1,2038 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Admin Payment</title>
+  
+ <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+ <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+ <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+ <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+ <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+ <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"> 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        
+        
+    </head>
+<style>
+.export-container1 {
+  position: absolute;
+  right: 50px;
+  top: 80px;
+  z-index: 1;
+}
+
+.export-dropdown1 {
+  position: relative;
+  display: inline-block;
+}
+
+.export-btn1 {
+  background-color: #1B3A28;
+  color: #ffffff;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 60px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.export-btn1:hover {
+  background-color: #3e865c;
+}
+
+.export-content1 {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 83px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.export-content1 a {
+  color: #333;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.export-content1 a:hover {
+  background-color: #f8f9fa;
+}
+
+.export-dropdown1:hover .export-content1 {
+  display: block;
+}
+
+@media print {
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+  }
+
+  .export-container1, .dataTables_wrapper .top, .dataTables_wrapper .bottom {
+    display: none;
+  }
+
+  .custom-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+}
+
+#productResults {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 items per row */
+    gap: 20px; /* Space between items */
+    padding: 20px;
+}
+
+.product-item {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.product-item:hover {
+    transform: scale(1.05);
+}
+
+.product-image {
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+    margin-bottom: 10px;
+}
+.switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #4CAF50;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+</style>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center justify-content-between px-3">
+            <!-- Left Section -->
+            <div class="d-flex align-items-center">
+                <!-- Sidebar Toggle -->
+                <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                    <i class="fas fa-bars" style="color: rgb(255, 255, 255);"></i>
+                </button>
+        
+                <!-- Logo -->
+                <div class="logo me-2">
+                    <img src="img/logo.png" alt="Logo" height="40">
+                </div>
+        
+                <!-- Organization Info -->
+                <div id="organizationInfo" class="d-flex flex-grow-1">
+                    <!-- Organization Name will be inserted here -->
+                </div>
+            </div>
+        
+            <!-- Right Section -->
+            <div class="d-flex align-items-center">
+
+                <i id="profile-item" class="dropdown-item me-3">
+                    <a href="#" style="color: #25330f; text-decoration: none;">Loading...</a>
+                </i>
+        
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x" style="color: #ffffff;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: #ffffff;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                        width: 110px !important; 
+                        min-width: 110px !important; 
+                        background-color: #ffffff; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        height: auto;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                        padding: 0;">
+                        <li>
+                            <a class="dropdown-item" href="#" id="logout" style="
+                                display: flex; 
+                                align-items: center; 
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                height: auto;
+                                border-bottom: 1px solid #ddd; 
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-sign-out-alt" style="margin-right: 8px; color: inherit;"></i> Sign Out
+                            </a>
+                            <a class="dropdown-item" href="#" id="logouts" style="
+                                display: flex; 
+                                align-items: center; 
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                height: auto;
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-exchange-alt" style="margin-right: 8px; color: inherit;"></i> Switch
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+                <script>
+                   document.getElementById('logouts').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default link behavior
+        
+            // SweetAlert confirmation
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to switch account?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745', // Green confirm button
+                cancelButtonColor: '#dc3545', // Red cancel button
+                confirmButtonText: 'Yes, Switch Account!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Switch Account',
+                        text: 'Choose your organization',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = 'chooseorganizations.html'; // Redirect to choose organizations page
+                    });
+                }
+            });
+        });
+        function fetchOrganizationData() {
+    const token = localStorage.getItem('token'); // Retrieve token from storage
+    if (!token) {
+        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        return;
+    }
+
+    fetch('http://localhost:5000/api/auth/organization/details', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.name) {
+            
+            const infoDiv = document.getElementById('organizationInfo');
+            infoDiv.innerHTML = `
+              <div class="custom-heading">${data.name}</div>
+
+       
+              
+            `;
+        } else {
+            document.getElementById('organizationInfo').innerText = 'No organization data found.';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('errorMessages').innerText = 'An error occurred. Please try again.';
+    });
+}
+
+
+document.addEventListener('DOMContentLoaded', fetchOrganizationData);
+
+
+   function fetchLoggedInUserDetails() {
+    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+
+    if (!token) {
+        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        return;
+    }
+
+    fetch('http://localhost:5000/api/auth/organization-user/details', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(user => {
+        if (!user) {
+            throw new Error('User not found');
+        }
+        
+        
+        const fullName = `${user.firstname} ${user.lastname}`; 
+
+        document.getElementById('profile-item').innerHTML = `
+           <a style="color: #25330f; text-decoration: none; " href="organization-users-info.html">
+   
+   <h3 style="color: #25330f; text-decoration: none; font-size: 18px; margin-top:10px;">${user.firstname} ${user.lastname}</h3>
+</a>
+
+
+        `;
+    })
+    .catch(error => {
+        console.error('Error fetching organization user details:', error);
+        document.getElementById('profile-item').innerHTML = '<a href="#">Error loading profile</a>';
+    });
+}
+
+// Call the function when the DOM is loaded
+document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
+    
+            document.getElementById('logout').addEventListener('click', function(event) {
+                event.preventDefault();
+    
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to log out?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, log out!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem('token');
+                        Swal.fire({
+                            title: 'Logged Out!',
+                            text: 'You have been logged out successfully.',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = 'adminlogin.html';
+                        });
+                    }
+                });
+            });
+        </script>
+   
+    
+
+
+   <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">Overview</div>
+                    <a class="nav-link" href="organization-dashboard.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+
+                    <div class="sb-sidenav-menu-heading">Payment Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                        Payments
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                           
+                            <a class="nav-link" href="organization-allpayments.html">Overview</a>
+                            <a class="nav-link" href="organization-active-payment.html">Active Payment</a> 
+                            <a class="nav-link" href="organization-addpayments.html">Add Payment</a>
+                            <a class="nav-link" href="organization-reports.html">Reports</a> 
+                        </nav>
+                    </div>
+
+                   
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTransactions" aria-expanded="false" aria-controls="collapseTransactions">
+                        <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
+                        Transactions
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseTransactions" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-alltransactions.html">Overview</a>
+                            <a class="nav-link" href="organization-payment.html">Management</a>
+                            <a class="nav-link" href="organization-masterlist.html">Masterlist</a>
+                            <a class="nav-link" href="organization-transactionsreports.html">Reports</a>
+                        </nav>
+                    </div>
+
+
+                    <div class="sb-sidenav-menu-heading">Organization Overview</div>
+                    <a class="nav-link" href="organization-academic-list.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Academic List
+                    </a>
+                    <div class="sb-sidenav-menu-heading">Product Management</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseProducts" aria-expanded="false" aria-controls="collapseProducts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
+                        Products
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseProducts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-products.html">Management</a>
+                            <a class="nav-link" href="organization-pre-order.html">Pre-Order</a>
+                            <a class="nav-link" href="organization-gcashorder.html">Manage QR-Code</a>
+                            <a class="nav-link" href="organization-allorderreports.html">QR-Code Reports</a>
+                            <a class="nav-link" href="organization-addproduct.html">Add Product</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Order Management</div>
+                    <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrders" aria-expanded="false" aria-controls="collapseOrders">
+                        <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>
+                        Orders
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrders" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-orders.html">Transactions</a>
+                            <a class="nav-link" href="organization-ordersManage.html">Paid Orders Handling</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrderTransactions" aria-expanded="false" aria-controls="collapseOrderTransactions">
+                        <div class="sb-nav-link-icon"><i class="fas fa-receipt"></i></div>
+                        Transactions
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseOrderTransactions" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="organization-order-transaction.html">Overview</a>
+                            <a class="nav-link" href="organization-order-transaction-reports.html">Reports</a>
+                        </nav>
+                    </div>
+
+                    <div class="sb-sidenav-menu-heading">Transaction Summary</div>
+                    <a class="nav-link" href="organization-transactions-summary.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Overview
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-5"></h1>
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4" style="padding: 20px;">
+                                    <ol class="breadcrumb mb-4">
+                                        <li class="breadcrumb-item" style="font-style: italic;">Orders</li>
+                                        <li class="breadcrumb-item active" style="font-style: italic;">Transactions</li>
+                                    </ol>
+                                    <h2>Order Status</h2>
+    <label class="switch">
+        <input type="checkbox" id="orderToggle" onchange="toggleOrderStatus()">
+        <span class="slider"></span>
+    </label>
+    <p id="statusText">Checking status...</p>
+    <script>document.addEventListener("DOMContentLoaded", fetchOrderStatus);
+
+        async function fetchOrderStatus() {
+            try {
+                const token = localStorage.getItem("token");
+                const response = await fetch("http://localhost:5000/api/auth/organization/order-status", {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+    
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById("orderToggle").checked = (data.order_status === "Accept Order");
+                    document.getElementById("statusText").innerText = `Current Status: ${data.order_status}`;
+                } else {
+                    document.getElementById("statusText").innerText = "Error fetching order status";
+                }
+            } catch (error) {
+                console.error("Error fetching order status:", error);
+                document.getElementById("statusText").innerText = "Failed to load order status";
+            }
+        }
+    
+        async function toggleOrderStatus() {
+            const token = localStorage.getItem("token");
+            const orderToggle = document.getElementById("orderToggle");
+            const previousState = orderToggle.checked; // Save previous state before changing
+    
+            Swal.fire({
+                title: "Update Order Status",
+                text: "Are you sure you want to change the order status?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Change",
+                cancelButtonText: "Cancel"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Processing...",
+                        text: "Updating order status...",
+                        allowOutsideClick: false,
+                        didOpen: () => Swal.showLoading(),
+                    });
+    
+                    try {
+                        const response = await fetch("http://localhost:5000/api/auth/organization/order-status", {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${token}`
+                            }
+                        });
+    
+                        const data = await response.json();
+                        if (response.ok) {
+                            Swal.fire("Success", data.message, "success");
+                            orderToggle.checked = (data.newStatus === "Accept Order");
+                            document.getElementById("statusText").innerText = `Current Status: ${data.newStatus}`;
+                        } else {
+                            Swal.fire("Error", data.message, "error");
+                            orderToggle.checked = previousState; // Restore previous state if update fails
+                        }
+                    } catch (error) {
+                        console.error("Error updating order status:", error);
+                        Swal.fire("Error", "Failed to update order status", "error");
+                        orderToggle.checked = previousState; // Restore previous state on error
+                    }
+                } else {
+                    orderToggle.checked = previousState; // Restore previous state if canceled
+                }
+            });
+        }
+        </script>
+                                    <div id="payment-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1080; background: white; padding: 20px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                                        <h2>Enter Payment</h2>
+                                        <p id="total-amount-info" style="margin-bottom: 10px;">Total Amount: </p>
+                                        <label for="total-pay-input">Total Pay:</label>
+                                        <input type="number" id="total-pay-input" placeholder="Enter total pay" min="0" step="0.01" style="width: 100%; margin-bottom: 10px; padding: 8px; box-sizing: border-box;" />
+                                        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                                            <button id="confirm-payment-btn" style="padding: 10px 15px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Confirm Payment</button>
+                                            <button onclick="closePaymentModal()" style="padding: 10px 15px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
+                                        </div>
+                                    </div>
+                                    <div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1045;"></div>
+                                    
+                                    <script>
+                                        let currentOrderTransactionId = null;
+                                        let currentTotalAmount = null;
+                                    
+                                        function showPaymentModal(orderTransactionId, totalAmount) {
+                                            currentOrderTransactionId = orderTransactionId;
+                                            currentTotalAmount = totalAmount;
+                                    
+                                            
+                                            document.getElementById('total-amount-info').innerText = `Total Amount: ${totalAmount.toFixed(2)}`;
+                                    
+                                            // Show modal and overlay
+                                            document.getElementById('payment-modal').style.display = 'block';
+                                            document.getElementById('overlay').style.display = 'block';
+                                    
+                                            // Clear and focus the input field
+                                            const inputField = document.getElementById('total-pay-input');
+                                            inputField.value = '';
+                                            inputField.focus();
+                                        }
+                                    
+                                        function closePaymentModal() {
+                                            document.getElementById('payment-modal').style.display = 'none';
+                                            document.getElementById('overlay').style.display = 'none';
+                                    
+                                            currentOrderTransactionId = null;
+                                            currentTotalAmount = null;
+                                        }
+                                    
+                                        document.getElementById('confirm-payment-btn').addEventListener('click', async () => {
+                                    const totalPay = parseFloat(document.getElementById('total-pay-input').value);
+                                
+                                    if (isNaN(totalPay) || totalPay < 0) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Invalid Amount',
+                                            text: 'Please enter a valid payment amount.',
+                                        });
+                                        return;
+                                    }
+                                
+                                    if (totalPay > currentTotalAmount) {
+                                        Swal.fire({
+                                            icon: 'warning',
+                                            title: 'Payment Exceeded',
+                                            text: 'Payment cannot exceed the total amount.',
+                                        });
+                                        return;
+                                    }
+                                
+                                    try {
+                                        const apiUrl = `http://localhost:5000/api/auth/product-transactions/${currentOrderTransactionId}/pay`;
+                                        const token = localStorage.getItem('token');
+                                
+                                        // Confirmation dialog before processing the payment
+                                        const result = await Swal.fire({
+                                            title: 'Confirm Payment',
+                                            text: `Are you sure you want to proceed with a payment of ${totalPay.toFixed(2)}?`,
+                                            icon: 'question',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Yes, confirm payment!',
+                                        });
+                                
+                                        if (result.isConfirmed) {
+                                            const response = await fetch(apiUrl, {
+                                                method: 'PUT',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                    'Authorization': `Bearer ${token}`,
+                                                },
+                                                body: JSON.stringify({ totalPay }),
+                                            });
+                                
+                                            const data = await response.json();
+                                
+                                            if (!response.ok) {
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    title: 'Payment Failed',
+                                                    text: data.message || 'Failed to update payment.',
+                                                });
+                                                return;
+                                            }
+                                
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Payment Successful',
+                                                text: data.message,
+                                            });
+                                            closePaymentModal();
+                                            fetchProductTransactions(); // Refresh transactions
+                                        }
+                                    } catch (error) {
+                                        console.error('Error updating payment:', error);
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: 'An error occurred while processing the payment.',
+                                        });
+                                    }
+                                });</script>
+                                    
+                                
+                                    </script>
+                                
+                                    <div id="paybalancemodal" style="display: none;margin: auto; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 1045;">
+                                        <div style="background-color: #fff; padding: 20px; border-radius: 10px; width: 80%; max-width: 500px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); text-align: center; margin: auto; margin-top: 80px;">
+                                            <h2 style="margin-bottom: 20px; font-size: 24px;">Pay Balance</h2>
+                                            <p id="current-total-info" style="font-size: 18px; color: #333;"></p>
+                                            <p id="balance-info" style="font-size: 18px; color: #333; margin-bottom: 20px;"></p>
+                                            <input type="number" id="balance-pay-input" placeholder="Enter balance payment" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%; font-size: 16px; margin-bottom: 20px;" />
+                                            <div style="display: flex; justify-content: space-between; gap: 10px;">
+                                                <button id="confirm-balance-payment-btn" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Pay</button>
+                                                <button onclick="closeBalancePaymentModal()" style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Close</button>
+                                            </div>
+                                            <p id="balance-loading-message" style="display: none; color: green; margin-top: 15px;">Processing payment...</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <script>
+                                        let currentBalanceTransactionId = null;
+                                        let currentTotalPay = null;
+                                        let currentTotalAmounts = null;
+                                    
+                                        function showBalancePaymentModal(orderTransactionId, totalAmount, totalPay) {
+                                            currentBalanceTransactionId = orderTransactionId;
+                                            currentTotalAmounts = parseFloat(totalAmount).toFixed(2);
+                                            currentTotalPay = parseFloat(totalPay).toFixed(2);
+                                    
+                                            const remainingBalance = (totalAmount - totalPay).toFixed(2);
+                                            document.getElementById('current-total-info').innerText = `Current Total Paid: ${currentTotalPay}`;
+                                            document.getElementById('balance-info').innerText = `Remaining Balance: ${remainingBalance}`;
+                                    
+                                            const modal = document.getElementById('paybalancemodal');
+                                            modal.style.display = 'block';
+                                        }
+                                    
+                                        function closeBalancePaymentModal() {
+                                            const modal = document.getElementById('paybalancemodal');
+                                            modal.style.display = 'none';
+                                            currentBalanceTransactionId = null;
+                                            currentTotalAmounts = null;
+                                            currentTotalPay = null;
+                                            document.getElementById('balance-pay-input').value = ''; // Reset input field
+                                            document.getElementById('balance-loading-message').style.display = 'none';
+                                        }
+                                    
+                                        document.getElementById('confirm-balance-payment-btn').addEventListener('click', async () => {
+                                            const additionalPay = parseFloat(document.getElementById('balance-pay-input').value);
+                                    
+                                            if (isNaN(additionalPay) || additionalPay <= 0) {
+                                                alert('Please enter a valid payment amount.');
+                                                return;
+                                            }
+                                    
+                                            const remainingBalance = (currentTotalAmounts - currentTotalPay).toFixed(2);
+                                    
+                                            if (additionalPay > parseFloat(remainingBalance)) {
+                                                alert('Payment cannot exceed the remaining balance.');
+                                                return;
+                                            }
+                                    
+                                            if (additionalPay + parseFloat(currentTotalPay) > parseFloat(currentTotalAmounts)) {
+                                                alert('Total payment exceeds the total amount due.');
+                                                return;
+                                            }
+                                    
+                                            document.getElementById('balance-loading-message').style.display = 'block'; // Show loading message
+                                    
+                                            const apiUrl = `http://localhost:5000/api/auth/product-transactions/${currentBalanceTransactionId}/paybalance`;
+                                            const token = localStorage.getItem('token');
+                                    
+                                            try {
+                                                const response = await fetch(apiUrl, {
+                                                    method: 'PUT',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'Authorization': `Bearer ${token}`
+                                                    },
+                                                    body: JSON.stringify({ totalPay: additionalPay, paymentMethod: 'Gcash' })
+                                                });
+                                    
+                                                const data = await response.json();
+                                    
+                                                if (!response.ok) {
+                                                    throw new Error(data.message || 'Failed to process balance payment.');
+                                                }
+                                    
+                                                alert(data.message);
+                                                closeBalancePaymentModal();
+                                                fetchProductTransactions(); // Refresh transactions
+                                            } catch (error) {
+                                                console.error('Error processing balance payment:', error);
+                                                alert('Failed to process balance payment. Please try again.');
+                                            } finally {
+                                                document.getElementById('balance-loading-message').style.display = 'none'; // Hide loading message
+                                            }
+                                        });
+                                    </script>
+                                    
+                                
+                                <!-- Modal for Product Transaction Logs -->
+                                <div id="producttransactionlogsmodal" class="modal" 
+                                     style="margin: auto; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; justify-content: center; align-items: center; z-index: 1045;">
+                                    <div class="modal-content" 
+                                            style="margin-left:auto; margin-right:auto;margin-top:50px;background-color: #ffffff; width: 80%; max-width: 1000px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); overflow: hidden;justify-content: center; align-items: center;">
+                                            <div style="padding: 20px; border-bottom: 1px solid #e0e0e0; text-align: center;">
+                                                <h4 style="margin: 0; font-size: 24px; color: #333;">Product Transaction Logs</h4>
+                                            </div>
+                                        <div style="padding: 20px; overflow-y: auto; max-height: 400px; width: 1000px;">
+                                            <table id="transaction-logs-table" style="width: 100%; border-collapse: collapse; font-size: 16px; color: #333;">
+                                                <thead>
+                                                    <tr style="background-color: #f8f9fa; text-align: left;">
+                                                        
+                                                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Action Message</th>
+                                                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Status</th>
+                                                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Payment Method</th>
+                                                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Total Amount</th>
+                                                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Total Pay</th>
+                                                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Balance</th>
+                                                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Accepted By</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="transaction-logs-body">
+                                                    <!-- Logs will be inserted here dynamically -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div style="padding: 20px; text-align: right; border-top: 1px solid #e0e0e0;">
+                                             <span style="position: absolute; right: 20px; cursor: pointer; margin-top: 20px;" class="close" onclick="closeModal() ">
+                                        <i class="fas fa-times-circle"></i>
+                                    </span> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal structure -->
+                                <div id="modalordergcash" class="modals">
+                                    <div class="modal-contents">
+                                        <span style="position: absolute; right: 20px; cursor: pointer; margin-top: 20px;" class="close" onclick="closeModals() ">
+                                            <i class="fas fa-times-circle"></i>
+                                        </span> 
+                                        <h3 style="text-align: center;">Proof of Payment</h3>
+                                        <img id="modalImage" src="" alt="Proof of Payment" class="responsive-image" />
+                                    </div>
+                                </div>
+
+                                <div id="gcashmodallogsview" class="modals">
+                                    <div class="modal-content">
+                                        <span class="close" onclick="closeGcashProofModal()">
+                                            <i class="fas fa-times-circle"></i>
+                                        </span>
+                                        <h3 style="text-align: center;">Proof of Payment</h3>
+                                        <img id="gcashProofImage" src="" alt="Proof of Payment" class="responsive-image" />
+                                    </div>
+                                </div>
+                                <!-- Decline Report Modal -->
+<!-- Decline Report Modal -->
+<div id="declineReportModal" style="display: none; position: fixed; z-index: 1050; background: rgba(0, 0, 0, 0.5); width: 100%; height: 100%; top: 0; left: 0; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 20px; border-radius: 8px; width: 400px; text-align: center;">
+        <h3>Decline Balance Report</h3>
+        <p>Select a reason for declining:</p>
+        <label><input type="radio" name="declineReason" value="Invalid QR Codes"> Invalid QR Codes</label><br>
+        <label><input type="radio" name="declineReason" value="Inappropriate Image"> Inappropriate Image</label><br>
+        <label><input type="radio" name="declineReason" value="Other"> Other</label><br>
+        <textarea id="declineComment" placeholder="Add comments (optional)" style="width: 100%; margin-top: 10px;"></textarea>
+        <div style="margin-top: 10px;">
+            <button id="confirmDeclineReportButton" style="background: red; color: white; padding: 8px; border: none; cursor: pointer;">Submit Report</button>
+            <button onclick="closeDeclineReportModal()" style="background: gray; color: white; padding: 8px; border: none; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+
+                                <script>// Function to open the modal and set the image source
+                                    function showModal(imageUrl) {
+                                        // Set the image source to the clicked image URL
+                                        document.getElementById('modalImage').src = imageUrl;
+                                        
+                                        // Display the modal
+                                        document.getElementById('modalordergcash').style.display = "block";
+                                    }
+                                    
+                                    // Function to close the modal
+                                    function closeModals() {
+                                        document.getElementById('modalordergcash').style.display = "none";
+                                    }
+                                    
+                                    // Close the modal if the user clicks anywhere outside the modal content
+                                    window.onclick = function(event) {
+                                        if (event.target == document.getElementById('modalordergcash')) {
+                                            closeModals();
+                                        }
+                                    }
+                                    </script>
+                                <style>/* The Modal (background) */
+                                    /* The Modal (background) */
+                                .modals {
+                                    display: none; /* Hidden by default */
+                                    position: fixed;
+                                    z-index: 1045; /* Sit on top */
+                                    left: 0;
+                                    top: 0;
+                                    width: 100%; /* Full width */
+                                    height: 100%; /* Full height */
+                                    overflow: auto; /* Enable scroll if needed */
+                                    background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
+                                    padding-top: 60px;
+                                    box-sizing: border-box;
+                                }
+                                
+                                /* Modal Content */
+                                .modal-contents {
+                                    background-color: #fefefe;
+                                    margin: 5% auto;
+                                    padding: 30px;
+                                    border-radius: 8px; /* Rounded corners */
+                                    width: 70%; /* 70% of screen width for large screens */
+                                    max-width: 500px; /* Limit the max size */
+                                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+                                    position: relative;
+                                    text-align: center;
+                                }
+                                
+                                .close {
+                                    color: #cf0303;
+                                    position: absolute;
+                                    right: 20px;
+                                    top: 0px;
+                                    font-size: 28px;
+                                    font-weight: bold;
+                                }
+                                .closes {
+                                    color: #aaa;
+                                    right: 20px;
+                                    top: 30px;
+                                    font-size: 28px;
+                                    font-weight: bold;
+                                }.closes:hover,
+                                .closes:focus {
+                                    color: black;
+                                    text-decoration: none;
+                                    cursor: pointer;
+                                }
+                                .close:hover,
+                                .close:focus {
+                                    color: black;
+                                    text-decoration: none;
+                                    cursor: pointer;
+                                }
+                                
+                                /* Styling for the image */
+                                .responsive-image {
+                                    width: 100%;
+                                    max-width: 350px; /* Limit the size of the image */
+                                    height: auto;
+                                    margin: 20px 0;
+                                    border-radius: 8px; /* Optional: add rounded corners to the image */
+                                }
+                                
+                                /* Modal Header */
+                                .modal-header {
+                                    font-size: 24px;
+                                    font-weight: bold;
+                                    margin-bottom: 20px;
+                                    color: #333;
+                                }
+                                
+                                /* Button styling for the "View Proof of Payment" button */
+                                .modalordergcash {
+                                    padding: 10px 20px;
+                                    font-size: 16px;
+                                    background-color: #28a745; /* Green background */
+                                    color: white;
+                                    border: none;
+                                    border-radius: 5px;
+                                    cursor: pointer;
+                                    transition: background-color 0.3s ease;
+                                }
+                                
+                                .modalordergcash:hover {
+                                    background-color: #218838; /* Darker green on hover */
+                                }
+                                
+                                /* Modal content responsiveness */
+                                @media (max-width: 768px) {
+                                    .modal-contents {
+                                        width: 90%; /* On smaller screens, use 90% width */
+                                    }
+                                }
+                                
+                                    
+                                </style>
+                                
+                                
+                                <script>function showTransactionLogsModal(orderTransactionId) {
+                                    const apiUrl = `http://localhost:5000/api/auth/product-transaction-logs/${orderTransactionId}`;
+                                    const token = localStorage.getItem('token');
+                                
+                                    if (!token) {
+                                        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+                                        return;
+                                    }
+                                
+                                    fetch(apiUrl, {
+                                        method: 'GET',
+                                        headers: {
+                                            'Authorization': `Bearer ${token}`
+                                        }
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const logsBody = document.getElementById('transaction-logs-body');
+                                        logsBody.innerHTML = ''; // Clear the existing logs before adding new ones
+                                
+                                        data.forEach(log => {
+                                            // ✅ Calculate the remaining balance
+                                            const totalAmount = parseFloat(log.total_amount) || 0;
+                                            const totalPay = parseFloat(log.total_pay) || 0;
+                                            const balance = (totalAmount - totalPay).toFixed(2); // Ensure two decimal places
+                                
+                                            const row = document.createElement('tr');
+                                            row.innerHTML = `
+                                                <td>${log.action_message}</td>
+                                                <td>${log.status}</td>
+                                                <td>${log.payment_method} 
+                                                    ${log.payment_method.toLowerCase() === 'gcash' && log.proof_of_payment ? 
+                                                        `<button class="view-proof-btn" onclick="showGcashProofModal('${log.proof_of_payment}')">
+                                                            <i class="fas fa-eye"></i>
+                                                        </button>` : ''
+                                                    }
+                                                </td>
+                                                <td>₱${totalAmount.toFixed(2)}</td>
+                                                <td>₱${totalPay.toFixed(2)}</td>
+                                                <td style="font-weight: normal; color: ${balance > 0 ? 'red' : 'green'};">₱${balance}</td> 
+                                                <td>
+    ${!log.accepted_by || log.accepted_by === '0' || log.accepted_by === 0 || log.accepted_by === null ? 
+        'There is no receiver yet' : 
+        `${log.accepted_by_firstname || ''} ${log.accepted_by_middlename || ''} ${log.accepted_by_lastname || ''}`.trim()}
+</td>
+
+                                            `;
+                                            logsBody.appendChild(row);
+                                        });
+                                
+                                        // Display the modal
+                                        const modal = document.getElementById('producttransactionlogsmodal');
+                                        modal.style.display = 'block';
+                                    })
+                                    .catch(error => {
+                                        console.error('Error fetching product transaction logs:', error);
+                                    });
+                                }
+                                
+                                
+                                // Function to show the proof of payment modal
+                                function showGcashProofModal(proofImageUrl) {
+                                    document.getElementById('gcashProofImage').src = proofImageUrl;
+                                    document.getElementById('gcashmodallogsview').style.display = 'block';
+                                }
+                                
+                                // Function to close the modal
+                                function closeGcashProofModal() {
+                                    document.getElementById('gcashmodallogsview').style.display = 'none';
+                                }
+                                
+                                
+                                function closeModal() {
+                                    const modal = document.getElementById('producttransactionlogsmodal');
+                                    modal.style.display = 'none';
+                                }
+                                </script>
+                                <div id="addOrderModal" class="modal" 
+                                     style="margin: auto; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; justify-content: center; align-items: center; z-index: 1045;">
+                                    <div class="modal-content" 
+                                         style="margin-left: auto; margin-right: auto; margin-top: 50px; background-color: #ffffff; width: 80%; max-width: 1400px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); overflow: hidden;">
+                                        <!-- Header Section -->
+                                        <div style="padding: 20px; border-bottom: 1px solid #e0e0e0; text-align: center;">
+                                            <h4 style="margin: 0; font-size: 24px; color: #333;">Add New Order</h4>
+                                            <h4 style="margin-bottom: 10px; font-size: 20px; color: #555;">Select User</h4>
+                                            <input type="text" id="userSearch" name="userSearch" placeholder="Search user by name or ID number" 
+                                                   style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; margin-bottom: 15px;" required>
+                                            <div id="userResults" style="margin-bottom: 20px;"></div>
+                                            <input type="hidden" id="userId" name="userId">
+                                        </div>
+                                        
+                                        <!-- Content Section -->
+                                        <div style="padding: 20px; overflow-y: auto; max-height: 500px;">
+                                            <!-- User Search -->
+                                          
+                                
+                                            <!-- Product Selection -->
+                                            <h4 style="margin-bottom: 10px; font-size: 20px; color: #555;">Select Products</h4>
+                                            <div id="productResults" style="margin-bottom: 20px;"></div>
+                                            <div id="selectedProductsContainer" style="margin-bottom: 20px;">
+                                                <h5 style="font-size: 18px; color: #555;">Selected Products</h5>
+                                                <table id="selectedProductsTable" border="1" style="width: 100%; border-collapse: collapse; text-align: center;">
+                                                    <thead>
+                                                        <tr style="background-color: #f8f9fa; color: #333;">
+                                                            <th style="padding: 10px; border: 1px solid #ddd;">Product Name</th>
+                                                            <th style="padding: 10px; border: 1px solid #ddd;">Quantity</th>
+                                                            <th style="padding: 10px; border: 1px solid #ddd;">Small</th>
+                                                            <th style="padding: 10px; border: 1px solid #ddd;">Medium</th>
+                                                            <th style="padding: 10px; border: 1px solid #ddd;">Large</th>
+                                                            <th style="padding: 10px; border: 1px solid #ddd;">X-Large</th>
+                                                            <th style="padding: 10px; border: 1px solid #ddd;">Price</th>
+                                                            <th style="padding: 10px; border: 1px solid #ddd;">Total Price</th>
+                                                            
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- Selected products will be added here dynamically -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                
+                                            <!-- Total Amount -->
+                                            <h4 style="font-size: 20px; color: #555;">Total Amount: <span id="totalAmount" style="color: #28a745;">0</span></h4>
+                                        </div>
+                                        
+                                        <!-- Footer Section -->
+                                        <div style="padding: 20px; text-align: right; border-top: 1px solid #e0e0e0;">
+                                           
+                                            <button type="button" onclick="submitOrder()" 
+                                                    style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Submit</button>
+                                            <button onclick="closeAddOrderModal()" 
+                                                    style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                                
+                                <script>
+                                    const selectedProducts = {};
+                                    
+                                    // Function to calculate total amount
+                                    function updateTotalAmount() {
+                                        let totalAmount = 0;
+                                        
+                                        // Loop through all selected products
+                                        Object.keys(selectedProducts).forEach(productId => {
+                                            const product = selectedProducts[productId];
+                                            const quantity = parseInt(document.getElementById(`quantity-${productId}`).value) || 0;
+                                            const smallquantity = parseInt(document.getElementById(`smallquantity-${productId}`).value) || 0;
+                                            const mediumquantity = parseInt(document.getElementById(`mediumquantity-${productId}`).value) || 0;
+                                            const largequantity = parseInt(document.getElementById(`largequantity-${productId}`).value) || 0;
+                                            const xlargequantity = parseInt(document.getElementById(`xlargequantity-${productId}`).value) || 0;
+                                
+                                            // Calculate total price for this product
+                                            const totalPrice = (quantity + smallquantity + mediumquantity + largequantity + xlargequantity) * product.price;
+                                
+                                            // Update the total price in the table
+                                            const totalPriceCell = document.querySelector(`#selectedProductsTable tbody tr[data-product-id="${productId}"] .total-price`);
+                                            if (totalPriceCell) {
+                                                totalPriceCell.textContent = totalPrice.toFixed(2);
+                                            }
+                                
+                                            // Add to overall total amount
+                                            totalAmount += totalPrice;
+                                        });
+                                
+                                        // Update the total amount at the top
+                                        document.getElementById('totalAmount').textContent = totalAmount.toFixed(2);
+                                    }
+                                
+                                    function submitOrder() {
+    const userId = document.getElementById('userId').value; 
+    const orderData = {
+        userId: userId,
+        totalAmount: 0, // Initialize totalAmount
+        products: []
+    };
+
+    let totalAmount = 0; // Variable to calculate the total amount
+
+    // Gather selected products and their quantities
+    Object.keys(selectedProducts).forEach(productId => {
+        const product = selectedProducts[productId];
+        const price = parseFloat(product.price) || 0; // Assuming product price is available
+        const quantity = parseInt(document.getElementById(`quantity-${productId}`).value) || 0;
+        const smallquantity = parseInt(document.getElementById(`smallquantity-${productId}`).value) || 0;
+        const mediumquantity = parseInt(document.getElementById(`mediumquantity-${productId}`).value) || 0;
+        const largequantity = parseInt(document.getElementById(`largequantity-${productId}`).value) || 0;
+        const xlargequantity = parseInt(document.getElementById(`xlargequantity-${productId}`).value) || 0;
+
+        // Calculate the total for this product
+        const productTotal = price * (quantity + smallquantity + mediumquantity + largequantity + xlargequantity);
+        totalAmount += productTotal;
+
+        orderData.products.push({
+            productId: productId,
+            quantity,
+            smallquantity,
+            mediumquantity,
+            largequantity,
+            xlargequantity
+        });
+    });
+
+    // Set the total amount in orderData
+    orderData.totalAmount = totalAmount;
+
+    // **Step 1: Show Yes/No Confirmation before submission**
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You are about to create this order.',
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonText: 'No, cancel',
+        confirmButtonText: 'Yes, create it!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            
+            // **Step 2: Show loading message AFTER clicking "Yes"**
+            Swal.fire({
+                title: 'Processing Order...',
+                text: 'Please wait while your order is being created.',
+                icon: 'info',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // **Step 3: Submit the order**
+            fetch('http://localhost:5000/api/auth/addorder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify(orderData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                Swal.close(); // Close loading message after fetch response
+
+                if (data.message === 'Order created successfully') {
+                    // **Step 4: Show success message**
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Order Created',
+                        text: data.message,
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.reload(); // Reload the page after clicking OK
+                    });
+                } else {
+                    // Error: Display SweetAlert for errors
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message,
+                        confirmButtonText: 'OK'
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.close(); // Ensure loading is closed if an error occurs
+                console.error('Error:', error);
+                // Display SweetAlert for general errors
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message || 'Error creating order',
+                    confirmButtonText: 'OK'
+                });
+            });
+        } else {
+            // **If No is clicked, show cancellation message**
+            Swal.fire({
+                icon: 'info',
+                title: 'Cancelled',
+                text: 'Order creation was cancelled.',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+}
+
+                                
+                                function fetchProducts() {
+                                    const token = localStorage.getItem('token');
+                                    if (!token) {
+                                        window.location.href = 'adminlogin.html';
+                                        return;
+                                    }
+                                
+                                    fetch('http://localhost:5000/api/auth/products', {
+                                        headers: {
+                                            'Authorization': `Bearer ${token}`
+                                        }
+                                    })
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error('Failed to fetch products');
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        const productResults = document.getElementById('productResults');
+                                        productResults.innerHTML = '';
+                                
+                                        if (data.length === 0) {
+                                            productResults.innerHTML = '<p>No products found</p>';
+                                            return;
+                                        }
+                                
+                                        data.forEach(product => {
+                                            const productDiv = document.createElement('div');
+                                            productDiv.classList.add('product-item');
+                                
+                                            // Check the category to determine how to display the quantities
+                                            const showSizeQuantities = ["T-Shirt", "Longsleeve", "Jacket", "Pants"].includes(product.category);
+                                            const quantitiesHTML = showSizeQuantities
+                                                ? `Small: ${product.smallquantity} | Medium: ${product.mediumquantity} | Large: ${product.largequantity} | XLarge: ${product.xlargequantity}`
+                                                : `Quantity: ${product.quantity}`;
+                                
+                                            // Create the product HTML
+                                            productDiv.innerHTML = `
+                                                <div data-product-id="${product.product_id}">
+                                                    <img src="${product.product_image}" alt="Product Image" class="product-image">
+                                                    <p>Name: ${product.name} - Price: ${product.price}</p>
+                                                    <p>Category: ${product.category}</p>
+                                                    <p>Quantities available: ${quantitiesHTML}</p>
+                                                </div>
+                                            `;
+                                
+                                            // Add a click event for additional functionality
+                                            productDiv.addEventListener('click', () => toggleProductSelection(product));
+                                
+                                            // Append the productDiv to the results container
+                                            productResults.appendChild(productDiv);
+                                        });
+                                    })
+                                    .catch(error => {
+                                        console.error('Error fetching products:', error);
+                                    });
+                                }
+                                
+                                function toggleProductSelection(product) {
+                                    const productId = product.product_id;
+                                
+                                    // Check if the product is already selected
+                                    if (selectedProducts[productId]) {
+                                        // If it is selected, remove it from the selectedProducts object
+                                        delete selectedProducts[productId];
+                                
+                                        // Remove the product from the table
+                                        removeProductFromTable(productId);
+                                
+                                        // Optionally, you can add a visual indication that the product was deselected
+                                        unhighlightSelectedProduct(productId);
+                                        
+                                        
+                                    } else {
+                                        // If it’s not selected, add it to selectedProducts and the table
+                                        selectedProducts[productId] = { ...product };
+                                        addProductToTable(product);
+                                        highlightSelectedProduct(productId);
+                                    }
+                                }
+                                
+                                    function addProductToTable(product) {
+                                        const tableBody = document.querySelector('#selectedProductsTable tbody');
+                                        const row = document.createElement('tr');
+                                        row.setAttribute('data-product-id', product.product_id);
+                                        row.innerHTML = `
+                                            <td>${product.name}</td>
+                                            <td><input type="number" id="quantity-${product.product_id}" value="0" min="0" class="quantity-input" oninput="updateTotalAmount()"></td>
+                                            <td><input type="number" id="smallquantity-${product.product_id}" value="0" min="0" class="quantity-input" oninput="updateTotalAmount()"></td>
+                                            <td><input type="number" id="mediumquantity-${product.product_id}" value="0" min="0" class="quantity-input" oninput="updateTotalAmount()"></td>
+                                            <td><input type="number" id="largequantity-${product.product_id}" value="0" min="0" class="quantity-input" oninput="updateTotalAmount()"></td>
+                                            <td><input type="number" id="xlargequantity-${product.product_id}" value="0" min="0" class="quantity-input" oninput="updateTotalAmount()"></td>
+                                            <td>${product.price}</td>
+                                            <td class="total-price">${product.price}</td>
+                                            
+                                        `;
+                                        tableBody.appendChild(row);
+                                    }
+                                
+                                    function removeProductFromTable(productId) {
+                                    const tableBody = document.querySelector('#selectedProductsTable tbody');
+                                    const row = tableBody.querySelector(`[data-product-id="${productId}"]`);
+                                    if (row) {
+                                        row.remove();
+                                    }
+                                }
+                                
+                                
+                                function highlightSelectedProduct(productId) {
+                                    const productRow = document.querySelector(`[data-product-id="${productId}"]`);
+                                    if (productRow) {
+                                        productRow.classList.add('highlight');
+                                    }
+                                }
+                                
+                                
+                                function unhighlightSelectedProduct(productId) {
+                                    const productRow = document.querySelector(`[data-product-id="${productId}"]`);
+                                    if (productRow) {
+                                        productRow.classList.remove('highlight');
+                                    }
+                                }
+                                
+                                    function fetchUsers(query) {
+                                        const token = localStorage.getItem('token');
+                                        if (!token) {
+                                            window.location.href = 'adminlogin.html';
+                                            return;
+                                        }
+                                
+                                        fetch(`http://localhost:5000/api/auth/userspaymentorgOrder?search=${query}`, {
+                                            headers: {
+                                                'Authorization': `Bearer ${token}`
+                                            }
+                                        })
+                                        .then(response => {
+                                            if (!response.ok) {
+                                                throw new Error('Failed to fetch users');
+                                            }
+                                            return response.json();
+                                        })
+                                        .then(data => {
+                                            const userResults = document.getElementById('userResults');
+                                            userResults.innerHTML = ''; // Clear previous results
+                                
+                                            if (data.length === 0) {
+                                                userResults.innerHTML = '<p>No users found</p>';
+                                                return;
+                                            }
+                                
+                                            data.forEach(user => {
+                                                if (user.username.toLowerCase().startsWith(query.toLowerCase()) || user.idnumber.toLowerCase().startsWith(query.toLowerCase()) || user.firstname.toLowerCase().startsWith(query.toLowerCase()) || user.lastname.toLowerCase().startsWith(query.toLowerCase()) ||
+                                                user.email.toLowerCase().startsWith(query.toLowerCase())) {
+                                                    const userDiv = document.createElement('div');
+                                                    userDiv.classList.add('user-item');
+                                                    userDiv.innerHTML = `<p>${user.lastname} ${user.firstname}, (${user.idnumber})</p>`;
+                                                    userDiv.addEventListener('click', () => selectUser(user.id, user.username, user.email));
+                                                    userResults.appendChild(userDiv);
+                                                }
+                                            });
+                                        })
+                                        .catch(error => {
+                                            console.error('Error fetching users:', error);
+                                        });
+                                    }
+                                
+                                    document.getElementById('userSearch').addEventListener('input', function() {
+                                        const query = this.value.trim();
+                                        if (query.length > 0) {
+                                            fetchUsers(query); 
+                                        } else {
+                                            document.getElementById('userResults').innerHTML = ''; 
+                                        }
+                                    });
+                                
+                                    function selectUser(userId, username, email) {
+                                        document.getElementById('userId').value = userId; 
+                                        document.getElementById('userSearch').value = `${username} (${email})`; 
+                                        document.getElementById('userResults').innerHTML = ''; 
+                                    }
+                                
+                                    function showAddOrderModal() {
+                                        const modal = document.getElementById('addOrderModal');
+                                        modal.style.display = 'block';
+                                        fetchProducts();
+                                    }
+                                
+                                    function closeAddOrderModal() {
+                                        const modal = document.getElementById('addOrderModal');
+                                        modal.style.display = 'none';
+                                    }
+                                
+                                    
+                                </script>
+                                
+                                
+                                
+                                
+                                
+                                <div class="main-content">
+                                 
+                                    <div class="position-relative">
+                                        <!-- Ellipsis icon that triggers dropdown with animation -->
+                                        <i class="bi bi-three-dots-vertical position-absolute top-0 end-0 fs-4" style="cursor: pointer;" id="ellipsisIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                        
+                                        <!-- Dropdown menu -->
+                                        <ul class="dropdown-menu dropdown-menu-end" style="padding: 10px;">
+                                            
+                                          
+                                            <li>
+                                              <a href="organization-ordersManage.html" class="dropdown-item d-flex align-items-center" style="font-size: 14px;">
+                                                <i class="fas fa-credit-card me-2" style="font-size: 18px; width: 20px;"></i> Manage Orders
+                                              </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="dropdown-item d-flex align-items-center" onclick="showAddOrderModal()" style="font-size: 14px;">
+                                                    <i class="fas fa-shopping-cart me-2" style="font-size: 18px; width: 20px;"></i> Add Order
+                                                </a>
+                                            </li>
+                                            
+                                            
+                                            
+                                          </ul>
+                                          
+                                          
+                                          <h3 class="text-center mb-4" style="font-weight: 600; color: #333;">All Orders</h3>
+
+                                        <!-- Heading -->
+                                      </div>
+                                    
+                                    
+                                        <!-- Right-aligned buttons -->
+                                     
+                                    
+                                      
+                                      
+                                     
+                                
+                                   
+                                    <div class="table-responsive">
+                                        <table id="productTransactionsContainer" class="custom-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Full Name</th>
+                                                    <th>Order</th>
+                                                    <th>Order Item</th>
+                                                    <th>Quantity</th>
+                                                    <th>Status</th>
+                                                    <th>Payment Method</th>
+                                                    <th>Total Amount</th>
+                                                    <th>Total Pay</th>
+                                                    <th>Received By</th>
+                                                    <th>Created At</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="product-transactions-body">
+                                                <!-- Data will be populated here -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                
+                                    </div>
+                                </div>
+                                <div class="export-container1">
+                                    <div class="export-dropdown1">
+                                        <button class="export-btn1">
+                                            Export <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                        <div class="export-content1">
+                                            <a href="#" onclick="exportAction('copy')">Copy</a>
+                                            <a href="#" onclick="exportAction('print')">Print</a>
+                                            <a href="#" onclick="exportAction('pdf')">PDF</a>
+                                            <a href="#" onclick="exportAction('csv')">CSV</a>
+                                            <a href="#" onclick="exportAction('excel')">Excel</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                                
+                                
+                                 <script>
+
+                                    // Function to accept the order
+                                  function acceptOrder(orderTransactionId) {
+                                    const token = localStorage.getItem('token');
+                                    if (!token) {
+                                        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+                                        return;
+                                    }
+                                
+                                    // SweetAlert confirmation dialog
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "You are about to accept this order!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Yes, accept it!'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            fetch(`http://localhost:5000/api/auth/accept-order/${orderTransactionId}`, {
+                                                method: 'PUT',
+                                                headers: {
+                                                    'Authorization': `Bearer ${token}`,
+                                                    'Content-Type': 'application/json'
+                                                }
+                                            })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                Swal.fire(
+                                                    'Accepted!',
+                                                    data.message,
+                                                    'success'
+                                                );
+                                                fetchProductTransactions(); // Re-fetch the transactions to update the status
+                                            })
+                                            .catch(error => {
+                                                console.error('Error accepting order:', error);
+                                                Swal.fire(
+                                                    'Error!',
+                                                    'Error accepting order',
+                                                    'error'
+                                                );
+                                            });
+                                        }
+                                    });
+                                }
+                                
+                                function declineOrder(orderTransactionId) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        return;
+    }
+
+    // SweetAlert confirmation dialog
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You are about to decline this order!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, decline it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // ✅ Show a loading message while processing
+            Swal.fire({
+                title: 'Processing...',
+                text: 'Declining the order, please wait...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading(); // Show loading spinner
+                }
+            });
+
+            fetch(`http://localhost:5000/api/auth/decline-order/${orderTransactionId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // ✅ Close the loading message and show success message
+                Swal.fire(
+                    'Declined!',
+                    data.message,
+                    'success'
+                );
+
+                // Re-fetch transactions
+                fetchProductTransactions();
+
+                // ✅ Store orderTransactionId in localStorage so it persists even after refresh
+                localStorage.setItem('declinedTransaction', orderTransactionId);
+
+                // ✅ Open the report modal immediately after declining
+                setTimeout(() => {
+                    openDeclineReportModal(orderTransactionId);
+                }, 500); // Short delay to ensure UI updates
+            })
+            .catch(error => {
+                console.error('Error declining order:', error);
+                Swal.fire(
+                    'Error!',
+                    'Failed to decline order. Please try again.',
+                    'error'
+                );
+            });
+        }
+    });
+}
+
+                                   // Track if DataTable is initialized
+let transactionsTableInitialized = false;
+
+// Function to fetch product transactions and update the table
+function fetchProductTransactions() {
+    const apiUrl = 'http://localhost:5000/api/auth/product-transactions';
+    const token = localStorage.getItem('token');
+
+    // Redirect to login if no token is found
+    if (!token) {
+        window.location.href = 'adminlogin.html';
+        return;
+    }
+
+    fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const transactionsBody = document.getElementById('product-transactions-body');
+        transactionsBody.innerHTML = ''; // Clear existing rows
+
+        // Filter transactions based on payment method
+        const filteredTransactions = data.filter(transaction =>
+            (transaction.payment_method === 'Gcash' && transaction.proof_of_payment) || 
+            transaction.payment_method === 'Cash'
+        );
+
+        filteredTransactions.forEach(transaction => {
+            const filterQuantitiesWithLabels = (quantities, label) =>
+                quantities.split(', ').filter(q => !q.endsWith('0x'))
+                .map(q => `${label} ${q}`).join(', ');
+
+            const smallQuantities = filterQuantitiesWithLabels(transaction.order_smallquantities, 'Small');
+            const mediumQuantities = filterQuantitiesWithLabels(transaction.order_mediumquantities, 'Medium');
+            const largeQuantities = filterQuantitiesWithLabels(transaction.order_largequantities, 'Large');
+            const xLargeQuantities = filterQuantitiesWithLabels(transaction.order_xlargequantities, 'X-Large');
+            const orderQuantities = filterQuantitiesWithLabels(transaction.order_quantities, 'Quantity');
+
+            const proofOfPaymentButton = transaction.proof_of_payment
+                ? `<button class="modalordergcash" onclick="showModal('${transaction.proof_of_payment}')"
+                    style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer;">
+                    <i class="fas fa-eye"></i>
+                </button>`
+                : '';
+
+            const paymentDetails = `${transaction.payment_method} ${proofOfPaymentButton}`;
+
+            // Create table row
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${transaction.user_firstname} ${transaction.user_lastname}</td>
+                <td>${transaction.order_transaction_id}</td>
+                <td>${transaction.product_names}</td>
+                <td>${orderQuantities} ${smallQuantities} ${mediumQuantities} ${largeQuantities} ${xLargeQuantities}</td>
+                <td>${transaction.status}</td>
+                <td>${paymentDetails}</td>
+                <td>${transaction.total_amount}</td>
+                <td>${transaction.total_pay}</td>
+                <td>${transaction.accepted_by_firstname && transaction.accepted_by_lastname
+                    ? `${transaction.accepted_by_firstname} ${transaction.accepted_by_lastname}`
+                    : 'There is no receiver yet'}</td>
+                <td>${transaction.created_at}</td>
+                <td>
+
+
+                                                   <div style="display: flex; gap: 10px; justify-content: center;">
+                                            ${transaction.status === 'Pending Balance' ? `
+            <button onclick="acceptBalance('${transaction.order_transaction_id}')"
+                    style="background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer;">
+                Accept
+            </button>
+            <button onclick="declineBalance('${transaction.order_transaction_id}')"
+                    style="background-color: #dc3545; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer;">
+                Decline
+            </button>
+        ` : ''}
+
+
+
+                                            ${transaction.status === 'Pending' ? `
+                                                <button onclick="acceptOrder('${transaction.order_transaction_id}')"
+                                                        style="background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px; width: 35px;">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                                <button onclick="declineOrder('${transaction.order_transaction_id}')"
+                                                        style="background-color: #dc3545; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px; width: 35px;">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            ` : ''}
+
+                                            
+
+
+                                            ${transaction.status === 'Processing Balance' ? `
+                                                <button onclick="showBalancePaymentModal('${transaction.order_transaction_id}', ${transaction.total_amount}, ${transaction.total_pay})"
+                                                        style="background-color: #ffc107; color: black; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px; width: 35px;">
+                                                    <i class="fas fa-dollar-sign"></i>
+                                                </button>
+                                            ` : ''}
+
+
+
+                                            ${transaction.status === 'Accepted' ? `
+                                                <button onclick="showPaymentModal('${transaction.order_transaction_id}', ${transaction.total_amount})"
+                                                        style="background-color: #17a2b8; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px; width: 35px;">
+                                                    <i class="fas fa-credit-card"></i>
+                                                </button>
+                                            ` : ''}
+
+
+
+                                            <button onclick="showTransactionLogsModal('${transaction.order_transaction_id}')"
+                                                    style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px; width: 35px;">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                                </td>
+            `;
+            transactionsBody.appendChild(row);
+        });
+
+        // Initialize DataTable if not initialized
+        if (!transactionsTableInitialized) {
+            transactionsTableInitialized = true;
+            $('#productTransactionsContainer').DataTable({
+                dom: '<"top"f>rt<"bottom"lip>',
+                buttons: [
+                    { extend: 'copy', text: 'Copy' },
+                    { extend: 'csv', text: 'CSV' },
+                    { extend: 'excel', text: 'Excel' },
+                    { extend: 'pdf', text: 'PDF' },
+                    { extend: 'print', text: 'Print' }
+                ],
+                order: [[9, 'desc']],
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching product transactions:', error);
+    });
+}
+
+// Export Function
+function exportAction(action) {
+    const table = $('#productTransactionsContainer').DataTable();
+    switch (action) {
+        case 'copy':
+            table.button('.buttons-copy').trigger();
+            break;
+        case 'csv':
+            table.button('.buttons-csv').trigger();
+            break;
+        case 'excel':
+            table.button('.buttons-excel').trigger();
+            break;
+        case 'pdf':
+            table.button('.buttons-pdf').trigger();
+            break;
+        case 'print':
+            table.button('.buttons-print').trigger();
+            break;
+    }
+}
+
+// Fetch data at intervals
+setInterval(fetchProductTransactions, 15000);
+
+// Fetch data on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', fetchProductTransactions);
+
+                                    
+
+
+                                    function acceptBalance(orderTransactionId) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'adminlogin.html';
+        return;
+    }
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You are about to accept this balance payment!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, accept it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`http://localhost:5000/api/auth/product-transactions/${orderTransactionId}/accept-balance`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                Swal.fire('Accepted!', data.message, 'success');
+                fetchProductTransactions();
+            })
+            .catch(error => {
+                console.error('Error accepting balance:', error);
+                Swal.fire('Error!', 'Failed to accept balance payment.', 'error');
+            });
+        }
+    });
+}
+function declineBalance(orderTransactionId) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'adminlogin.html';
+        return;
+    }
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You are about to decline this balance payment!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, decline it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`http://localhost:5000/api/auth/product-transactions/${orderTransactionId}/decline-balance`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                Swal.fire('Declined!', data.message, 'success');
+                fetchProductTransactions();
+
+                // ✅ Store transaction ID in LocalStorage
+                localStorage.setItem('declinedTransaction', orderTransactionId);
+
+                // ✅ Open the report modal immediately
+                setTimeout(() => {
+                    openDeclineReportModal(orderTransactionId);
+                }, 500); // Delay to allow UI updates
+            })
+            .catch(error => {
+                console.error('Error declining balance:', error);
+                Swal.fire('Error!', 'Failed to decline balance payment.', 'error');
+            });
+        }
+    });
+}
+
+let currentReportTransactionId = null;
+
+// Function to open the Decline Report Modal
+function openDeclineReportModal(orderTransactionId) {
+    if (!orderTransactionId) return;
+    
+    currentReportTransactionId = orderTransactionId;
+    
+    // ✅ Open the modal
+    document.getElementById('declineReportModal').style.display = 'flex';
+
+    // ✅ Remove stored transaction ID to prevent reopening on every refresh
+    localStorage.removeItem('declinedTransaction');
+}
+
+
+
+function closeDeclineReportModal() {
+    document.getElementById('declineReportModal').style.display = 'none';
+}
+
+
+// ✅ Check LocalStorage on Page Load to Open Modal Only When Needed
+document.addEventListener('DOMContentLoaded', () => {
+    const declinedTransaction = localStorage.getItem('declinedTransaction');
+
+    if (declinedTransaction) {
+        setTimeout(() => {
+            openDeclineReportModal(declinedTransaction);
+        }, 500); // Small delay to ensure page loads properly
+    }
+});
+
+
+// Function to Handle Decline Report Submission
+document.getElementById('confirmDeclineReportButton').addEventListener('click', () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'adminlogin.html';
+        return;
+    }
+
+    const selectedReason = document.querySelector('input[name="declineReason"]:checked');
+    const comments = document.getElementById('declineComment').value;
+
+    if (!selectedReason) {
+        Swal.fire('Error!', 'Please select a reason for declining.', 'error');
+        return;
+    }
+
+    fetch(`http://localhost:5000/api/auth/product-transactions/${currentReportTransactionId}/report-decline`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ reasons: selectedReason.value, comments: comments })
+    })
+    .then(response => response.json())
+    .then(data => {
+        Swal.fire('Reported!', data.message, 'success');
+        closeDeclineReportModal();
+    })
+    .catch(error => {
+        console.error('Error reporting decline:', error);
+        Swal.fire('Error!', 'Failed to submit decline report.', 'error');
+    });
+});
+
+// ✅ Fix for Decline Balance - Now Opens Report Modal Correctly
+
+
+
+
+
+                                </script>
+
+                                </div>  
+                            </div>
+                        </div>   
+                    </div>  
+                </main>      
+            </div>
+        </div>
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+      

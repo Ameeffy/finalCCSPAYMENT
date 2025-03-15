@@ -1,0 +1,91 @@
+<div class="row">
+    <div class="col-lg-12 mb-3">
+        <div class="card text-white bg-success h-100">
+            <div class="card-header" style="background-color: #1B3A28; color: white;">
+                <h5 class="card-title text-center">All Transaction Reports for Adviser</h5>
+            </div>
+            <div class="card-body">
+                <table class="table text-white" id="transactionReportsTable">
+                    <thead>
+                        <tr>
+                            <th>Organization</th>
+                            <th>Payment Name</th>
+                            <th>Semester</th>
+                            <th>Transaction ID</th>
+                            <th>User</th>
+                            <th>Reported By</th>
+                            <th>Reason</th>
+                            <th>Description</th>
+                            
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Unauthorized access. Please log in.');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:5000/api/auth/all-transaction-reports-adviser', {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch transaction reports.');
+
+        const data = await response.json();
+        if (!data.length) {
+            Swal.fire('No Reports', 'There are no transaction reports available.', 'info');
+            return;
+        }
+
+        const tableBody = document.querySelector('#transactionReportsTable tbody');
+        tableBody.innerHTML = '';
+
+        data.forEach(report => {
+            const row = document.createElement('tr');
+            const reportedByText = report.reported_by_name || 'Unknown';
+
+            row.innerHTML = `
+                <td>${report.organization_name}</td>
+                <td>${report.payment_name}</td>
+                <td>${report.semester_name}</td>
+                <td>${report.transaction_id}</td>
+                <td>${report.user_full_name}</td>
+                <td>${reportedByText}</td>
+                <td>${report.reason}</td>
+                <td>${report.description || 'No description'}</td>
+                
+                <td>${new Date(report.created_at).toLocaleDateString()}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+        initializeDataTable();
+    } catch (error) {
+        console.error('Error fetching transaction reports:', error);
+    }
+});
+
+function initializeDataTable() {
+    if ($.fn.DataTable.isDataTable('#transactionReportsTable')) {
+        $('#transactionReportsTable').DataTable().destroy();
+    }
+    $('#transactionReportsTable').DataTable({
+        dom: 'Blfrtip',
+        buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+        scrollX: true,
+        order: [[8, 'desc']]
+    });
+}
+</script>

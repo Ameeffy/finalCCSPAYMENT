@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin OTP Verification</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            background-color: #0b3d2e; /* Dark Green */
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 30px;
+            background-color: #2a6d4f;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 2s ease-in-out;
+            margin-top: 100px;
+        }
+        .form-group label {
+            font-size: 1.2rem;
+        }
+        .btn-primary {
+            background-color: #2a6d4f;
+            border-color: #2a6d4f;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #1e5a42;
+            border-color: #1e5a42;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo img {
+            width: 120px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .otp-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .otp-boxes input {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            text-align: center;
+            margin: 0 5px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: #f4f4f4;
+        }
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            z-index: 9999;
+        }
+        .loading-screen.active {
+            visibility: visible;
+        }
+        .loading-screen .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- OTP Form Container -->
+    <div class="container">
+        <div class="logo">
+            <img src="img/logo.png" alt="Logo">
+        </div>
+        <h2 class="text-center">Admin OTP Verification</h2>
+
+        <form id="otpForm">
+            <div class="form-group otp-boxes">
+                <input type="text" maxlength="1" id="otp1" required>
+                <input type="text" maxlength="1" id="otp2" required>
+                <input type="text" maxlength="1" id="otp3" required>
+                <input type="text" maxlength="1" id="otp4" required>
+                <input type="text" maxlength="1" id="otp5" required>
+                <input type="text" maxlength="1" id="otp6" required>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Verify OTP</button>
+                <button type="button" class="btn btn-secondary" id="resendOtpBtn">Resend OTP</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Auto navigate to next input and submit if on the last box
+document.querySelectorAll('.otp-boxes input').forEach((input, index, inputs) => {
+    input.addEventListener('input', function () {
+        // Move to the next input if it's not the last one
+        if (this.value.length === 1 && index < inputs.length - 1) {
+            inputs[index + 1].focus();
+        }
+
+        // If on the last box and a digit is entered, auto-submit the form
+        if (index === inputs.length - 1 && this.value.length === 1) {
+            document.getElementById('otpForm').requestSubmit();
+        }
+    });
+
+    // Allow backspace to go to the previous box
+    input.addEventListener('keydown', function (event) {
+        if (event.key === 'Backspace' && this.value === '' && index > 0) {
+            inputs[index - 1].focus();
+        }
+    });
+});
+
+// Reset all boxes and focus on the first one if OTP is invalid or on page load
+const resetOtpBoxes = () => {
+    document.querySelectorAll('.otp-boxes input').forEach(input => {
+        input.value = '';
+    });
+    document.getElementById('otp1').focus();
+};
+
+// Call reset on page load to set focus to the first box
+resetOtpBoxes();
+
+// Modify the fetch logic to use resetOtpBoxes() if the OTP is invalid
+document.getElementById('otpForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const otp = Array.from(document.querySelectorAll('.otp-boxes input'))
+                    .map(input => input.value)
+                    .join('');
+    const email = localStorage.getItem('adminEmail');
+
+    if (!email) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Admin email not found in localStorage',
+        });
+        return;
+    }
+
+    document.getElementById('loadingScreen').classList.add('active');
+
+    fetch('http://localhost:5000/api/auth/verify-admin-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp })
+    })
+    .then(response => response.json())
+    .then(result => {
+        document.getElementById('loadingScreen').classList.remove('active');
+        if (result.msg === 'OTP verified successfully!') {
+            Swal.fire({
+                icon: 'success',
+                title: 'OTP Verified',
+                text: 'You have successfully verified your OTP!',
+                showConfirmButton: false,
+                timer: 2000
+            }).then(() => {
+                window.location.href = 'admincontrol.html';
+            });
+        } else if (result.msg === 'OTP expired. Admin registration deleted.' || 
+                   result.msg === 'Too many failed attempts. Admin registration deleted.') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Registration Denied',
+                text: result.msg
+            }).then(() => {
+                window.location.href = 'adminaccregister.html';
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid OTP',
+                text: result.msg
+            }).then(() => {
+                resetOtpBoxes();
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('loadingScreen').classList.remove('active');
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Something went wrong while verifying OTP.'
+        });
+    });
+});
+
+
+
+
+        // Resend OTP functionality
+        document.getElementById('resendOtpBtn').addEventListener('click', function() {
+            const email = localStorage.getItem('adminEmail');
+
+            if (!email) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Admin email not found in localStorage',
+                });
+                return;
+            }
+
+            document.getElementById('loadingScreen').classList.add('active');
+
+            fetch('http://localhost:5000/api/auth/resend-admin-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById('loadingScreen').classList.remove('active');
+                if (result.msg.includes('successfully')) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'OTP Resent',
+                        text: result.msg
+                    });
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Failed to Resend', text: result.msg });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loadingScreen').classList.remove('active');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Something went wrong while resending OTP.'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

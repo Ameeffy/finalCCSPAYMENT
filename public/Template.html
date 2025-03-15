@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="author" content="" />
+        <title>Admin Accounts</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>   
+    </head>
+
+    <style>
+         .modal {
+    display: none; 
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background-color: rgb(221, 231, 221);
+    padding: 20px; 
+    border: 1px solid #ccc; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+    width: 100%; 
+    max-width: 1200px; 
+    height: 100%;
+    max-height: 800px;
+    z-index: 1045;
+}
+.modal-users {
+    display: none; 
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background-color: rgb(221, 231, 221);
+    padding: 20px; 
+    border: 1px solid #ccc; 
+   
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+    width: 100%; 
+    z-index: 1045;
+    height: 100%;
+    
+}
+.modal-grad {
+    display: none; 
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background-color: rgb(221, 231, 221);
+    padding: 20px; 
+    border: 1px solid #ccc; 
+    
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+    width: 100%; 
+    z-index: 1045;
+    height: 100%;   
+}
+    </style>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center">
+            <!-- Left Section -->
+            <div class="d-flex align-items-center">
+                <!-- Sidebar Toggle -->
+                <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
+                    <i class="fas fa-bars" style="color: black;"></i>
+                </button>
+                
+                <!-- Logo -->
+                <div class="logo me-2">
+                    <img src="img/logo.png" alt="Logo" height="40">
+                </div>
+                
+                <!-- College Title -->
+                <h2 class="college-title mb-0" style="color: black; font-size: 20px;">COLLEGE OF COMPUTING STUDIES</h2>
+            </div>
+    
+            <!-- Right Section -->
+            <div class="ms-auto d-flex align-items-center">
+                <li id="profile-item" class="dropdown-item me-3">
+                    <a href="#" style="color: #25330f; text-decoration: none;">Loading...</a>
+                </li>
+    
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x" style="color: #25330f;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: #25330f;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+                        width: 110px; 
+                        min-width: 110px; 
+                        background-color: #ffffff; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                        padding: 0;">
+                        <li>
+                            <a class="dropdown-item text-center" href="#" id="logout" style="
+                                padding: 10px; 
+                                text-decoration: none; 
+                                font-size: 15px; 
+                                font-weight: 600; 
+                                color: #343a40; 
+                                border-bottom: 1px solid #ddd; 
+                                border-radius: 8px;
+                                transition: background-color 0.3s, color 0.3s;"
+                                onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                                <i class="fas fa-sign-out-alt me-2" style="color: inherit;"></i> Sign Out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    
+        <!-- Scripts -->
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                const token = localStorage.getItem('token');
+    
+                if (!token) {
+                    window.location.href = 'adminlogin.html';
+                    return;
+                }
+    
+                try {
+                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+    
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch user data');
+                    }
+    
+                    const userData = await response.json();
+                    document.getElementById("profile-item").innerHTML = 
+                        `<a style="color: #25330f; text-decoration: none;" href="admin-info.html">${userData.username} (${userData.email})</a>`;
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    document.getElementById("profile-item").innerHTML = `<a href="#">Error loading profile</a>`;
+                }
+            });
+    
+            document.getElementById('logout').addEventListener('click', function(event) {
+                event.preventDefault();
+    
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to log out?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, log out!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem('token');
+                        Swal.fire({
+                            title: 'Logged Out!',
+                            text: 'You have been logged out successfully.',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = 'adminlogin.html';
+                        });
+                    }
+                });
+            });
+        </script>
+   
+    
+
+
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                           
+                            <div class="sb-sidenav-menu-heading">Overview</div>
+                            <a class="nav-link" href="admindashboard.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Dashboard
+                            </a>
+                            
+                            <div class="sb-sidenav-menu-heading">System Controls</div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                Semester
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="admincontrol.html">Management</a>
+                                    <a class="nav-link" href="admincontrolOrganizationUsers.html">Payments</a>
+                                </nav>
+                            </div>
+
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                                <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                                Payments
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapsePayments" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="admin-payment.html">Management</a>
+                                    <a class="nav-link" href="admin-payment-reports.html">Reports</a>
+                                </nav>
+                            </div>
+
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseGcash" aria-expanded="false" aria-controls="collapseGcash">
+                                <div class="sb-nav-link-icon"><i class="fas fa-qrcode"></i></div>
+                                QR-Codes
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseGcash" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="admin-order.html">Management</a>
+                                    <a class="nav-link" href="admin-gcashorder-reports.html">Reports</a>
+                                </nav>
+                            </div>
+
+                            <div class="sb-sidenav-menu-heading">User Management</div>
+                            <a class="nav-link collapsed active" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                                Accounts
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+
+                           
+
+                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                        Student
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            <a class="nav-link" href="adminaccounts-student.html">Overview</a>
+                                            <a class="nav-link" href="adminaccountsMain.html">Enrollment Status</a>
+                                            <a class="nav-link" href="adminaccountsReportsuser.html">Reports</a>
+                                        </nav>
+                                    </div>
+                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                        Adviser
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            <a class="nav-link" href="adminaccounts-adviser.html">Overview</a>
+                                            
+                                        </nav>
+                                    </div>
+                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAdmin" aria-expanded="false" aria-controls="pagesCollapseAdmin">
+                                        Admin
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="pagesCollapseAdmin" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            <a class="nav-link" href="adminaccounts-admin.html">Overview</a>     
+                                        </nav>
+                                    </div>                
+                                </nav>
+                            </div> 
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRegister" aria-expanded="false" aria-controls="collapseRegister">
+                                <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
+                                Register
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseRegister" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="register.html">Student/Adviser</a>
+                                    <a class="nav-link" href="adminaccregister.html">Admin</a>
+                                </nav>
+                            </div>
+                                
+                            <div class="sb-sidenav-menu-heading">Organization Management</div>
+                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrg" aria-expanded="false" aria-controls="collapseOrg">
+                                <div class="sb-nav-link-icon"><i class="fas fa-building"></i></div>
+                                Organization
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseOrg" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="admincontrolOrganization.html">Overview</a>
+                                    <a class="nav-link" href="organizationRegistration.html">Register</a>
+                                </nav>
+                            </div>
+                        </div>
+                    </div> 
+                </nav>
+            </div>
+
+
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4" style="font-weight: normal;">Accounts</h1>
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4" style="padding: 20px; background-color:#F5FFFA; ">
+                                    
+                                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                        <!-- Left Side: Accounts -->
+                                        <ol class="breadcrumb mb-4">
+                                            <li class="breadcrumb-item" style="font-style: italic;">Accounts</li>
+                                            <li class="breadcrumb-item" style="font-style: italic;">Student</li>
+                                            <li class="breadcrumb-item" style="font-style: italic;">Overview</li>
+                                            <li class="breadcrumb-item active" style="font-style: italic;">Student Details</li>
+                                        </ol>
+                                        
+                                       
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h2 {
+            color: #333;
+        }
+        #userDetails {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+    .filter-buttons {
+        margin-bottom: 15px;
+    }
+    .filter-btn {
+        padding: 5px 10px;
+        margin-right: 5px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .filter-btn.active {
+        background-color: #0056b3;
+    }
+    .filter-btn:hover {
+        background-color: #0056b3;
+    }
+    #summaryContainer {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;   /* Allow wrapping for responsiveness */
+    justify-content: center;   /* Center the boxes */
+    margin-bottom: 20px;
+}
+
+.summaryBox {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(33.33% - 10px);   /* 3 boxes per row */
+    max-width: 300px;
+    min-height: 140px;
+    text-align: center;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.summaryBox:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.summaryBox strong {
+    display: block;
+    font-size: 18px;
+    color: #343a40;
+    margin-bottom: 10px;
+}
+
+.summaryBox ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.summaryBox ul li {
+    font-size: 16px;
+    color: #6c757d;
+    margin-bottom: 5px;
+}
+
+.summaryBox ul li span {
+    font-weight: bold;
+    color: #343a40;
+}
+@media (max-width: 1200px) {
+    .summaryBox {
+        width: calc(50% - 20px);  /* 2 boxes per row */
+    }
+}
+
+@media (max-width: 768px) {
+    .summaryBox {
+        width: 100%;   /* 1 box per row */
+    }
+}
+
+
+
+
+    </style>
+</head>
+<body>
+    <div id="userDetails">
+        Loading...
+    </div>
+   
+    <button id="viewOrderTransactionsBtn" style="margin-bottom: 20px;">View Order Transactions</button>
+    
+        <div id="summaryContainer">
+            <div class="summaryBox">
+                <p><strong>Total Transactions Summary</strong></p>
+                <ul>
+                    <li>Total Transactions: <span id="totalTransactions">0</span></li>
+                    <li>No Transactions: <span id="noTransactionsCount">0</span></li>
+                </ul>
+            </div>
+        
+            <div class="summaryBox">
+                <p><strong>Amount Summary</strong></p>
+                <ul>
+                    <li>Total Amount: ₱<span id="totalAmount">0.00</span></li>
+                    <li>Total Balance: ₱<span id="totalBalance">0.00</span></li>
+                </ul>
+            </div>
+        
+            <div class="summaryBox">
+                <p><strong>Payment Methods Breakdown</strong></p>
+                <ul id="paymentMethodBreakdown">
+                    <li>Cash: <span id="cashCount">0</span></li>
+                    <li>GCash: <span id="gcashCount">0</span></li>
+                </ul>
+            </div>
+            
+        </div>          
+
+    
+    
+    
+    
+    
+    
+        
+    
+    <h2>User Transactions</h2>
+    <div class="filter-buttons">
+        <button class="filter-btn" data-filter="All">All</button>
+        <button class="filter-btn" data-filter="Mandatory">Mandatory</button>
+        <button class="filter-btn" data-filter="Not mandatory">Not mandatory</button>
+        <button class="filter-btn" data-filter="Other fees">Other fees</button>
+        <button class="filter-btn" data-filter="No transactions" data-column="2">No Transactions</button>
+    </div>
+    
+    
+    
+    
+
+    <table id="transactionsTable" class="display">
+        <thead>
+            <tr>
+                <th>Payment Name</th>
+                <th>Payment Type</th>
+                <th>Semester</th>
+                <th>Transaction ID</th>
+                <th>Payment Status</th>
+                <th>Payment Method</th>
+                <th>Total Amount</th>
+                <th>Balance</th>
+                <th>Received By</th>
+                <th>Date</th>
+                
+            </tr>
+        </thead>
+        
+        <tbody>
+        </tbody>
+    </table>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script>
+        // Get userId from URL
+        function getUserIdFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('userId');
+        }
+
+        // Fetch and display user details
+        function fetchUserDetails(userId) {
+            fetch(`http://localhost:5000/api/auth/user/${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const userDetailsDiv = document.getElementById('userDetails');
+                    userDetailsDiv.innerHTML = `
+                        <h2><strong>${data.firstname} ${data.middlename} ${data.lastname}</strong> </h2>
+                        <p><strong>ID Number:</strong> ${data.idnumber}</p>
+                        <p><strong>Course and Section:</strong> ${data.course} - ${data.section}</p>
+                        <p><strong>Gender:</strong> ${data.gender}</p>
+                        <p><strong>Status:</strong> ${data.status}</p>
+                        <p><strong>Role:</strong> ${data.role}</p>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error fetching user details:', error);
+                });
+        }
+
+        function fetchTransactions(userId) {
+    fetch(`http://localhost:5000/api/auth/transactions/user/${userId}`)
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('transactionsTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; 
+
+            let totalTransactions = 0;
+            let totalAmount = 0;
+            let totalBalance = 0;
+            let cashCount = 0;
+            let gcashCount = 0;
+            let noTransactionsCount = 0;
+
+            data.transactions.forEach(transaction => {
+                // Check if it's a "No transactions" row
+                if (!transaction.transaction_id) {
+                    noTransactionsCount++;
+                } else {
+                    totalTransactions++;
+                    totalAmount += parseFloat(transaction.total_amount) || 0;
+                    totalBalance += parseFloat(transaction.balance) || 0;
+
+                    // Count payment methods
+                    if (transaction.payment_method === 'Cash') {
+                        cashCount++;
+                    } else if (transaction.payment_method === 'GCash') {
+                        gcashCount++;
+                    }
+                }
+
+                // Display all transactions, including those without transaction_id
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = transaction.payment_name;
+                row.insertCell(1).textContent = transaction.payment_type;
+                row.insertCell(2).textContent = transaction.semester_name;
+                row.insertCell(3).textContent = transaction.transaction_id || 'No transactions';
+                row.insertCell(4).textContent = transaction.payment_status || 'Unpaid';
+                row.insertCell(5).textContent = transaction.payment_method || 'None';
+                row.insertCell(6).textContent = transaction.total_amount || '0.00';
+                row.insertCell(7).textContent = transaction.balance || '0.00';
+                row.insertCell(8).textContent = transaction.received_by_name;
+                row.insertCell(9).textContent = transaction.updated_at || 'None';
+            });
+
+            // Update totals in the container
+            document.getElementById('totalTransactions').textContent = totalTransactions;
+            document.getElementById('totalAmount').textContent = totalAmount.toFixed(2);
+            document.getElementById('totalBalance').textContent = totalBalance.toFixed(2);
+            document.getElementById('cashCount').textContent = cashCount;
+            document.getElementById('gcashCount').textContent = gcashCount;
+            document.getElementById('noTransactionsCount').textContent = noTransactionsCount;
+
+            // Initialize or reinitialize DataTable
+            if ($.fn.DataTable.isDataTable('#transactionsTable')) {
+                $('#transactionsTable').DataTable().clear().destroy();
+            }
+
+            const dataTable = $('#transactionsTable').DataTable({
+                "order": [[9, 'desc']]
+            });
+
+            // Filter button functionality
+            $('.filter-btn').on('click', function() {
+                const filterValue = $(this).data('filter');
+                const filterColumn = $(this).data('column') || 1;
+
+                $('.filter-btn').removeClass('active');
+                $(this).addClass('active');
+
+                if (filterValue === 'All') {
+                    dataTable.columns().search('').draw();
+                } else if (filterValue === 'No transactions') {
+                    dataTable.columns().search('');
+                    dataTable.column(2).search(`^No transactions$`, true, false).draw();
+                } else {
+                    dataTable.column(2).search('');
+                    dataTable.column(1).search(`^${filterValue}$`, true, false).draw();
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching transactions:', error));
+}
+document.getElementById('viewOrderTransactionsBtn').addEventListener('click', function() {
+    const userId = getUserIdFromURL();
+    if (userId) {
+        viewOrderTransactions(userId);
+    } else {
+        alert('No user selected.');
+    }
+});
+
+function viewOrderTransactions(userId) {
+    window.location.href = `Admin-userdetailsOrdertransactions.html?userId=${userId}`;
+}
+
+    const userId = getUserIdFromURL();
+    if (userId) {
+        fetchUserDetails(userId);
+        fetchTransactions(userId);
+    } else {
+        alert('No user selected.');
+    }
+    // Fetch and display transaction summary
+function fetchTransactionSummary(userId) {
+    fetch(`http://localhost:5000/api/auth/transactions/summary/${userId}`)
+        .then(response => response.json())
+        .then(summary => {
+            document.getElementById('totalTransactions').textContent = summary.totalTransactions;
+            document.getElementById('totalAmount').textContent = summary.totalAmount;
+        })
+        .catch(error => console.error('Error fetching transaction summary:', error));
+}
+
+    </script>
+</body>
+</html>
+
+                                        </div>
+                                        <div class="back-icon">
+                                            <i class="fa fa-arrow-left" onclick="goBack()"></i>
+                                        </div>
+                                  
+                                      
+                                    </div> 
+                            </div>
+                        </div>   
+                    </div>  
+                </main>      
+            </div>
+        </div>
+        <script src="/static/js/scripts.js"></script>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+      

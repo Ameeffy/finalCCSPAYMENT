@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="icon" type="x-icon" href="img/logo.png"> <!-- Ensure img/logo.png exists -->
+    <title>ORGANIZATION</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #F5FFFA;
+        }
+
+        
+        .top {
+            background-color: #F5FFFA;
+            position: fixed;
+            width: 100%;
+            z-index: 0;
+            display: flex;
+            justify-content: end;
+            align-items: center;
+            padding-right: 20px;
+            z-index: 2;
+            border-bottom: 1px solid rgb(0, 72, 0);
+        }
+
+        .sidebar {
+            width: 12vw;
+            background-color: #F5FFFA; 
+            color: rgb(0, 0, 0);
+            display: flex;
+            flex-direction: column;            
+            z-index: 3;  
+            border-right: 1px solid rgb(0, 72, 0);   
+            padding: 10px;  
+            position: fixed;
+            height: 100vh;     
+        }
+        .main-content {
+            width: 85vw;
+            background-color: rgb(221, 231, 221);
+            margin-left: 200px;
+            height: 600px;
+            position: relative; 
+            border-radius: 10px;
+            height: 630px;
+            z-index: 1;
+        }
+        .sidebar .logo {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .sidebar .logo img {
+            max-width: 110px;
+            height: auto;
+        }
+
+        .sidebar .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .nav-item .icon {
+            margin-right: 15px;
+        }
+
+        .sidebar .nav-item .text {
+            font-size: 16px;
+        }
+
+        .sidebar .nav-item.active {
+            font-weight: bold;
+            color: #f1f1f1; /* Light color for contrast */
+        }
+
+        .sidebar .nav-item.active .icon {
+            color: #f1f1f1; /* Light color for contrast */
+        }
+
+        .sidebar .bottom-links {
+            margin-top: auto;
+            padding: 20px;
+            border-top: 1px solid #fff;
+        }
+
+        .sidebar .bottom-links .nav-item {
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            
+        }
+
+        .sidebar .bottom-links .nav-item:hover {
+            background-color: #085d15; /* Slightly darker green */
+        }
+
+       
+        .spacer {
+            flex: 1;
+        }
+
+        .full-container {
+            display: flex;
+            flex-direction: column;
+            margin-top: 80px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin-top: 40px;
+            margin-left: 40px;
+            font-weight: bold;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        h3 {
+            font-size: 20px;
+            text-align: right;
+            font-weight: bold;
+           
+        }
+
+        .add-account-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .set-semester-btn {
+            position: absolute;
+            top: 20px; 
+            right: 20px; 
+        }
+        .content {
+            margin-left: 260px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+       
+        table {
+    width: 97%;
+    margin: 20px auto; 
+    border-collapse: separate; 
+    border-spacing: 0 10px; 
+    max-width: 100%; 
+}
+
+th, td {
+     
+    padding: 8px;
+    text-align: left;
+    background-color: #ffffff;
+}
+
+
+th:first-child {
+    border-top-left-radius: 8px; 
+    border-bottom-left-radius: 8px; 
+}
+
+th:last-child {
+    border-top-right-radius: 8px; 
+    border-bottom-right-radius: 8px; 
+}
+
+
+td:first-child {
+    border-top-left-radius: 8px; 
+    border-bottom-left-radius: 8px; 
+}
+
+td:last-child {
+    border-top-right-radius: 8px; 
+    border-bottom-right-radius: 8px; 
+}
+
+
+th {
+    background-color: #034b03;
+    color: white;
+    font-weight: bold;  
+    font-size: 14px;
+}
+
+
+tr:hover td {
+    background-color: #ddfadc;
+    transform: translateX(5px) scale(1.05); 
+    transition: transform 0.2s ease-in-out; 
+    color: black;}
+
+.icon-button {
+    border: none;
+    background-color: transparent;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    color: #034b03;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.icon-button:hover {
+    background-color: rgba(3, 75, 3, 0.1); 
+    transform: scale(1.1); 
+}
+
+
+.dropdown-item {
+    width: auto;
+    border: none;
+    background-color: transparent;
+   
+    text-align: left;
+    cursor: pointer;
+    color: #034b03;
+    transition: background-color 0.3s;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(3, 75, 3, 0.1); 
+}
+
+
+.icon-button:hover + .dropdowns {
+    display: block; 
+}
+
+  
+
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <!-- Logo -->
+    <div class="logo">
+        <img src="img/logo.png" alt="Logo">
+    </div>
+    <!-- Navigation Items -->
+    <a href="admindashboard.html" class="nav-item" id="dashboard-link">
+        <div class="icon">
+            <i class="bi bi-house-door"></i>
+        </div>
+        <div class="text">Dashboard</div>
+    </a>
+    <a href="adminaccountsMain.html" class="nav-item" id="accounts-link">
+        <div class="icon">
+            <i class="bi bi-person"></i>
+        </div>
+        <div class="text">Accounts</div>
+    </a>
+    <a href="admincontrol.html" class="nav-item" id="control-link"  style="background-color: #034b03; color: white;  border-radius: 15px;">
+        <div class="icon">
+            <i class="bi bi-gear"></i>
+        </div>
+        <div class="text" style="font-weight: bold;">Control</div>
+    </a>
+
+    <a href="admincontrolOrganization.html" class="nav-item" id="control-link">
+        <div class="icon">
+            <i class="bi bi-gear"></i>
+        </div>
+        <div class="text">Organization</div>
+    </a>
+</div>
+
+
+
+<div class="top d-flex justify-content-end align-items-center p-2">
+
+    <h2 class="d-flex flex-grow-1" style="margin-left: 190px; color: #25330f;">COLLEGE OF COMPUTING STUDIES</h2>
+    
+    <i style="margin-right: 20px;">
+        <li id="profile-item" class="dropdown-item">
+            <a href="#">Loading...</a>
+        </li>
+    </i>
+    
+    
+        <div class="dropdownsss" style="margin-right: 25px ;">
+        <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            
+            <i class="fas fa-user-circle fa-2x" style="color: #25330f;"></i>
+           
+            <i class="fas fa-caret-down ms-2" style="color: #25330f;"></i>
+
+            
+
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
+        width: 110px !important; 
+        min-width: 110px !important; 
+        background-color: #ffffff; 
+        border: 1px solid #ccc; 
+        border-radius: 8px; 
+        height: auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        padding: 0;">
+        <li>
+            <a class="dropdown-item" href="#" id="logout" style="
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                padding: 10px; 
+                text-decoration: none; 
+                font-size: 15px; 
+                font-weight: 600; 
+                color: #343a40; 
+                height: auto;
+                border-bottom: 1px solid #ddd; 
+                border-radius: 8px;
+                transition: background-color 0.3s, color 0.3s;"
+               onmouseover="this.style.backgroundColor='rgb(221, 231, 221)'; this.style.color='black';"
+               onmouseout="this.style.backgroundColor='transparent'; this.style.color='#343a40';">
+                <i class="fas fa-sign-out-alt" style="margin-right: 8px; color: inherit;"></i> Sign Out
+            </a>
+        </li>
+    </ul>
+    
+    
+    
+    </div>
+</div>
+<script>document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('token'); // Adjust according to your token storage method
+
+    if (!token) {
+        
+        window.location.href = 'adminlogin.html';
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:5000/api/auth/admin/details', { // Adjust the URL as necessary
+            method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // Adjust as needed
+                },
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch user data');
+            }
+            
+            const userData = await response.json();
+            const profileItem = document.getElementById("profile-item");
+
+            
+            profileItem.innerHTML = `<a style="color: #25330f; text-decoration: none;" href="admin-info.html">${userData.username} (${userData.email}) </a>`;
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            
+            profileItem.innerHTML = `<a href="#">Error loading profile</a>`;
+        }
+    });
+</script>
+<script>
+    document.getElementById('logout').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the default link behavior
+
+    // SweetAlert confirmation
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to log out?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745', // Green confirm button
+        cancelButtonColor: '#dc3545', // Red cancel button
+        confirmButtonText: 'Yes, log out!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Remove token and redirect to login page
+            localStorage.removeItem('token');
+            Swal.fire({
+                title: 'Logged Out!',
+                text: 'You have been logged out successfully.',
+                icon: 'success',
+                timer: 1500,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = 'adminlogin.html';
+            });
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const links = document.querySelectorAll('.sidebar .nav-item');
+
+    links.forEach(link => {
+        link.addEventListener('click', function() {
+            // Remove active class from all links
+            links.forEach(item => item.classList.remove('active'));
+
+            // Add active class to the clicked link
+            this.classList.add('active');
+        });
+    });
+});
+
+</script>
+
+<div class="full-container">
+
+    <div class="main-content">
+
+    
+    </div>
+
+    
+
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+function fetchAllOrganizations() {
+    fetch('http://localhost:5000/api/auth/organizations')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('allOrganizationsContainer');
+            if (data.length > 0) {
+                data.forEach(org => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${org.name}</td>
+                        <td>${org.email}</td>
+                        <td style="position: relative; display: flex; justify-content: space-between; align-items: center;">
+    <!-- Register Organization User Button -->
+    <button onclick="registerOrganizationUser(${org.id})" class="icon-button">
+        <i class="fas fa-user-plus"></i>
+    </button>
+
+    <!-- More Options Button -->
+    <button onclick="toggleDropdowns(event)" class="icon-button">
+        <i class="fas fa-ellipsis-v"></i>
+    </button>
+
+    <!-- Dropdown Menu -->
+    <div class="dropdowns" style="display: none; position: absolute; top: 0px; left: 240px; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); z-index: 10;">
+        <button onclick="showDetails(${org.id}, '${org.name}', '${org.email}', '${org.created_at}', '${org.created_by_firstname}', '${org.created_by_lastname}')" class="dropdown-item">
+            Details
+        </button>
+        <button onclick="manageUserAccount(${org.id})" class="dropdown-item">
+            Organization User Account
+        </button>
+    </div>
+</td>
+
+
+                    `;
+                    container.appendChild(row);
+                });
+            } else {
+                container.innerHTML = '<tr><td colspan="3">No organizations available.</td></tr>';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function toggleDropdowns(event) {
+    const dropdown = event.target.nextElementSibling;
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    event.stopPropagation();
+}
+
+document.addEventListener('click', () => {
+    const dropdowns = document.querySelectorAll('.dropdowns');
+    dropdowns.forEach(dropdown => {
+        dropdown.style.display = 'none';
+    });
+});
+
+// Show the modal with organization details
+function showDetails(orgId, name, email, created_at, createdByFirstName, createdByLastName) {
+    // Format the created_at date
+    const formattedDate = new Date(created_at).toLocaleString('en-PH', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+    });
+
+    document.getElementById('modalOrgName').innerText = name;
+    document.getElementById('modalOrgEmail').innerText = email;
+    document.getElementById('modalCreatedBy').innerText = `${createdByFirstName} ${createdByLastName}`;
+    document.getElementById('modalCreatedAt').innerText = formattedDate; // Use the formatted date
+    
+    // Show the modal
+    document.getElementById('detailsModal').style.display = 'block';
+}
+
+
+// Close the modal
+function closeModal() {
+    document.getElementById('detailsModal').style.display = 'none';
+}
+
+// Function to manage user accounts and show the organization users modal
+function manageUserAccount(orgId) {
+    fetch(`http://localhost:5000/api/auth/organizations/${orgId}/users`)
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.getElementById('orgUsersTableBody');
+            const orgNameHeader = document.getElementById('organizationNameHeader'); // Get the h2 element for organization name
+            tbody.innerHTML = ''; // Clear previous rows
+
+            // Add table styles dynamically
+            const table = document.getElementById('organizationUsersTable');
+            table.style.width = '100%';
+            
+            table.style.borderCollapse = 'separate';
+            table.style.borderSpacing = '0 10px';
+            table.style.maxWidth = '100%';
+
+            const ths = table.getElementsByTagName('th');
+            for (let th of ths) {
+                th.style.padding = '8px';
+                th.style.textAlign = 'left';
+                th.style.backgroundColor = '#034b03';
+                th.style.color = 'white';
+                th.style.fontWeight = 'bold';
+                th.style.fontSize = '14px';
+            }
+
+            const tds = table.getElementsByTagName('td');
+            for (let td of tds) {
+                td.style.padding = '8px';
+                td.style.textAlign = 'left';
+                td.style.backgroundColor = '#ffffff';
+            }
+
+            // Add border-radius to the first and last th and td
+            ths[0].style.borderTopLeftRadius = '8px';
+            ths[0].style.borderBottomLeftRadius = '8px';
+            ths[ths.length - 1].style.borderTopRightRadius = '8px';
+            ths[ths.length - 1].style.borderBottomRightRadius = '8px';
+            
+            if (data.length > 0) {
+                // Set the organization name in the header
+                orgNameHeader.innerText = `${data[0].organization_name}`;
+                
+                data.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.firstname} ${user.middlename} ${user.lastname}</td>
+                        <td>${user.idnumber}</td>
+                        <td>${user.email}</td>
+                        <td>${user.created_by_firstname} ${user.created_by_middlename} ${user.created_by_lastname}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } else {
+                orgNameHeader.innerText = ''; // Clear the header if no users found
+                tbody.innerHTML = '<tr><td colspan="4">No users available.</td></tr>'; // Adjusted colspan
+            }
+            // Show the modal
+            document.getElementById('modalOrganizationUsers').style.display = 'block';
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+
+// Close the organization users modal
+function closeOrganizationUsersModal() {
+    document.getElementById('modalOrganizationUsers').style.display = 'none';
+}
+
+
+
+
+
+    function registerOrganizationUser(organizationId) {
+        // Navigate to the new page with organization_id in the query string
+        window.location.href = `adminorganizationusers.html?organization_id=${organizationId}`;
+    }
+
+    // Call the function to fetch and display organizations
+    fetchAllOrganizations();
+
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adviser Organization Users</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Include libraries for exporting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPDF/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+
+        h2 {
+            text-align: center;
+            color: #007bff;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        .organization-info {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #e9f5ff;
+            border-radius: 8px;
+        }
+
+        .organization-info h3 {
+            margin: 0;
+            color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        table thead {
+            background-color: #007bff;
+            color: white;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        /* Export Buttons */
+        .export-buttons {
+            text-align: right;
+            margin-bottom: 15px;
+        }
+
+        .export-buttons button {
+            margin: 5px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-copy { background-color: #007bff; color: white; }
+        .btn-excel { background-color: #28a745; color: white; }
+        .btn-csv { background-color: #17a2b8; color: white; }
+        .btn-pdf { background-color: #dc3545; color: white; }
+        .btn-print { background-color: #ffc107; color: black; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Your Organizations & Assigned Users</h2>
+        <p style="text-align: center;">Below is a list of organizations you are advising and the users under your guidance.</p>
+
+        <label for="organization-selector">Select Organization & Year:</label>
+        <select id="organization-selector">
+            <option value="">Loading...</option>
+        </select>
+
+        <div id="organization-details" class="organization-info">
+            <h3 id="selected-organization-title">No Organization Selected</h3>
+            <p id="organization-description">Select an organization from the dropdown to view its members.</p>
+        </div>
+
+        <div class="export-buttons">
+            <button class="btn-copy" onclick="copyTable()">Copy</button>
+            <button class="btn-excel" onclick="exportExcel()">Excel</button>
+            <button class="btn-csv" onclick="exportCSV()">CSV</button>
+            <button class="btn-pdf" onclick="exportPDF()">PDF</button>
+            <button class="btn-print" onclick="printTable()">Print</button>
+        </div>
+
+        <div class="table-container">
+            <table id="users-table">
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Position</th>
+                    </tr>
+                </thead>
+                <tbody id="users-list">
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let organizationsData = [];
+
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("http://localhost:5000/api/auth/adviser/organization-users", {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const selector = document.getElementById("organization-selector");
+                selector.innerHTML = "";
+
+                if (!data.organizations || data.organizations.length === 0) {
+                    selector.innerHTML = "<option value=''>No organizations found</option>";
+                    document.getElementById("organization-description").innerText = "You are not currently advising any organizations.";
+                    return;
+                }
+
+                organizationsData = data.organizations;
+
+                data.organizations.forEach((group, index) => {
+                    const option = document.createElement("option");
+                    option.value = index;
+                    option.innerText = `${group.organization} (${group.year})`;
+                    selector.appendChild(option);
+                });
+
+                if (data.organizations.length > 0) {
+                    loadOrganization(0);
+                }
+            })
+            .catch(error => console.error("Error fetching organization users:", error));
+
+            document.getElementById("organization-selector").addEventListener("change", function () {
+                const selectedIndex = this.value;
+                if (selectedIndex !== "") {
+                    loadOrganization(selectedIndex);
+                }
+            });
+        });
+
+        function loadOrganization(index) {
+            const selectedGroup = organizationsData[index];
+
+            document.getElementById("selected-organization-title").innerText = 
+                `${selectedGroup.organization} (${selectedGroup.year})`;
+
+            document.getElementById("organization-description").innerText = 
+                `This organization is under your guidance for the year ${selectedGroup.year}. Below are the assigned members and their roles.`;
+
+            const tableBody = document.getElementById("users-list");
+            tableBody.innerHTML = "";
+
+            selectedGroup.users.forEach(user => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${user.full_name}</td>
+                    <td>${user.position}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function exportPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const title = document.getElementById("selected-organization-title").innerText;
+            const description = document.getElementById("organization-description").innerText;
+            const fileName = title.replace(/[^a-zA-Z0-9]/g, "_") + ".pdf";
+
+            doc.setFontSize(16);
+            doc.text(title, 10, 10);
+            doc.setFontSize(12);
+            doc.text(description, 10, 20);
+
+            doc.autoTable({ html: "#users-table", startY: 30 });
+            doc.save(fileName);
+        }
+
+        function getExportFileName() {
+        const title = document.getElementById("selected-organization-title").innerText;
+        return title.replace(/[^a-zA-Z0-9]/g, "_"); // Remove special characters for file name
+    }
+
+    function getExportTableContent() {
+        const title = document.getElementById("selected-organization-title").innerText;
+        const description = document.getElementById("organization-description").innerText;
+        const table = document.getElementById("users-table");
+
+        let content = `${title}\n${description}\n\n`;
+
+        // Add table headers
+        const headers = [];
+        table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText));
+        content += headers.join(",") + "\n";
+
+        // Add table rows
+        table.querySelectorAll("tbody tr").forEach(tr => {
+            const rowData = [];
+            tr.querySelectorAll("td").forEach(td => rowData.push(td.innerText));
+            content += rowData.join(",") + "\n";
+        });
+
+        return content;
+    }
+
+    function copyTable() {
+        navigator.clipboard.writeText(getExportTableContent());
+        alert("Table copied to clipboard with title and description!");
+    }
+
+    function exportCSV() {
+        const content = getExportTableContent();
+        const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
+        const fileName = getExportFileName() + ".csv";
+        saveAs(blob, fileName);
+    }
+
+    function exportExcel() {
+        const table = document.getElementById("users-table");
+        const ws = XLSX.utils.table_to_sheet(table);
+        const wb = XLSX.utils.book_new();
+
+        // Add title & description at the top
+        XLSX.utils.sheet_add_aoa(ws, [[document.getElementById("selected-organization-title").innerText]], { origin: "A1" });
+        XLSX.utils.sheet_add_aoa(ws, [[document.getElementById("organization-description").innerText]], { origin: "A2" });
+
+        XLSX.utils.book_append_sheet(wb, ws, "Users");
+        const fileName = getExportFileName() + ".xlsx";
+        XLSX.writeFile(wb, fileName);
+    }
+
+        function printTable() {
+            window.print();
+        }
+    </script>
+</body>
+</html>
