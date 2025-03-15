@@ -434,7 +434,7 @@
                 }
     
                 try {
-                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin/details', {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -707,7 +707,7 @@
 
     const tableBody = document.querySelector('#paymentsTable tbody');
     try {
-        const response = await fetch('http://localhost:5000/api/auth/payments/all', {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/payments/all', {
             headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -950,7 +950,7 @@ async function acceptQr(paymentId) {
             });
 
             try {
-                const response = await fetch('http://localhost:5000/api/auth/payments/accept-qr', {
+                const response = await fetch('https://finalccspayment.onrender.com/api/auth/payments/accept-qr', {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -997,7 +997,7 @@ async function declineQr(paymentId) {
             });
 
             try {
-                const response = await fetch('http://localhost:5000/api/auth/payments/decline-qr', {
+                const response = await fetch('https://finalccspayment.onrender.com/api/auth/payments/decline-qr', {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -1149,7 +1149,7 @@ async function declineQr(paymentId) {
                                     });
                             
                                     try {
-                                        const response = await fetch('http://localhost:5000/api/auth/payments/report', {
+                                        const response = await fetch('https://finalccspayment.onrender.com/api/auth/payments/report', {
                                             method: 'POST',
                                             headers: {
                                                 'Content-Type': 'application/json',
@@ -1190,7 +1190,7 @@ async function declineQr(paymentId) {
                                         const bootstrapModal = new bootstrap.Modal(modal);
                                         bootstrapModal.show();
                                     
-                                        fetch(`http://localhost:5000/api/auth/adviser/payment/${paymentId}`)
+                                        fetch(`https://finalccspayment.onrender.com/api/auth/adviser/payment/${paymentId}`)
                                             .then(response => response.json())
                                             .then(data => {
                                                 const feesSection = document.getElementById('feesSection');
@@ -1298,7 +1298,7 @@ async function declineQr(paymentId) {
                                 });
                             
                                 try {
-                                    const response = await fetch(`http://localhost:5000/api/auth/admin/payment/fees/update`, {
+                                    const response = await fetch(`https://finalccspayment.onrender.com/api/auth/admin/payment/fees/update`, {
                                         method: 'PUT',
                                         headers: {
                                             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -1348,7 +1348,7 @@ async function declineQr(paymentId) {
                                     });
                             
                                     try {
-                                        const response = await fetch('http://localhost:5000/api/auth/payments/accept', {
+                                        const response = await fetch('https://finalccspayment.onrender.com/api/auth/payments/accept', {
                                             method: 'POST',
                                             headers: {
                                                 'Content-Type': 'application/json',
@@ -1396,7 +1396,7 @@ async function declineQr(paymentId) {
                                     });
                             
                                     try {
-                                        const response = await fetch('http://localhost:5000/api/auth/payments/decline', {
+                                        const response = await fetch('https://finalccspayment.onrender.com/api/auth/payments/decline', {
                                             method: 'POST',
                                             headers: {
                                                 'Content-Type': 'application/json',
