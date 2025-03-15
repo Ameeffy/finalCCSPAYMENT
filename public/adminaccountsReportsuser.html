@@ -372,7 +372,7 @@ body {
                 }
     
                 try {
-                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin/details', {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -659,7 +659,7 @@ body {
                             
                             <script>
                                 function fetchUserReports() {
-                                    fetch('http://localhost:5000/api/auth/get-users-reports') // Replace with your API endpoint
+                                    fetch('https://finalccspayment.onrender.com/api/auth/get-users-reports') // Replace with your API endpoint
                                         .then(response => response.json())
                                         .then(data => {
                                             const tableBody = document.getElementById('usersReportTable').getElementsByTagName('tbody')[0];
