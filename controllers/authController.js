@@ -30,6 +30,29 @@ async function uploadFileToDropbox() {
         console.error('Dropbox upload error:', error);
     }
 }
+exports.organizationsdetailsPresident = async (req, res) => {
+    const orgUserId = req.orgIduser; 
+
+    try {
+        const [result] = await db.query(`
+            SELECT position FROM organizations_users WHERE id = ?
+        `, [orgUserId]);
+
+        if (result.length === 0) {
+            return res.status(404).json({ msg: 'Organization User not found' });
+        }
+
+        // Check if the position is "President"
+        if (result[0].position !== "President") {
+            return res.status(403).json({ msg: 'Access denied. Only Presidents can view this page.' });
+        }
+
+        return res.json({ msg: 'Access granted' });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ msg: 'Server error' });
+    }
+};
 exports.getOrganizationsPaymentsWithTotal = async (req, res) => {
     try {
         const organizationId = req.userId; // Organization ID from token
