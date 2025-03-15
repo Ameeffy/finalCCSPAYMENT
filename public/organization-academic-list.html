@@ -114,7 +114,7 @@
         let academicLogs = [];
 
         document.addEventListener("DOMContentLoaded", function () {
-            fetch("http://localhost:5000/api/auth/organization/academic-logs", {
+            fetch("https://finalccspayment.onrender.com/api/auth/organization/academic-logs", {
                 headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
             })
             .then(response => response.json())
