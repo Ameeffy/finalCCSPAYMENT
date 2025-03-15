@@ -134,7 +134,7 @@
 
             // Fetch adviser details
             try {
-                const response = await fetch('http://localhost:5000/api/auth/adviser/details', {
+                const response = await fetch('https://finalccspayment.onrender.com/api/auth/adviser/details', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -333,7 +333,7 @@
                                         
                                         <script>
                                             document.addEventListener("DOMContentLoaded", function () {
-                                                fetch('http://localhost:5000/api/auth/adviser/payment-counts', {
+                                                fetch('https://finalccspayment.onrender.com/api/auth/adviser/payment-counts', {
                                                     headers: {
                                                         'Authorization': 'Bearer ' + localStorage.getItem('token')
                                                     }
@@ -380,7 +380,7 @@
                                         
                                         <script>
                                             document.addEventListener("DOMContentLoaded", function () {
-                                                fetch('http://localhost:5000/api/auth/adviser/qrcode-counts', {
+                                                fetch('https://finalccspayment.onrender.com/api/auth/adviser/qrcode-counts', {
                                                     headers: {
                                                         'Authorization': 'Bearer ' + localStorage.getItem('token')
                                                     }
@@ -429,11 +429,11 @@
                                                 const token = localStorage.getItem('token');
                                         
                                                 Promise.all([
-                                                    fetch('http://localhost:5000/api/auth/adviser/payment-report-count', {
+                                                    fetch('https://finalccspayment.onrender.com/api/auth/adviser/payment-report-count', {
                                                         headers: { 'Authorization': 'Bearer ' + token }
                                                     }).then(res => res.json()),
                                         
-                                                    fetch('http://localhost:5000/api/auth/adviser/gcash-order-report-count', {
+                                                    fetch('https://finalccspayment.onrender.com/api/auth/adviser/gcash-order-report-count', {
                                                         headers: { 'Authorization': 'Bearer ' + token }
                                                     }).then(res => res.json())
                                                 ])
@@ -497,7 +497,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function fetchOrganizations() {
-        fetch("http://localhost:5000/api/auth/adviser/organizations", {
+        fetch("https://finalccspayment.onrender.com/api/auth/adviser/organizations", {
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("token")
             }
@@ -574,11 +574,11 @@ document.addEventListener("DOMContentLoaded", function () {
                                                     const token = localStorage.getItem('token');
                                             
                                                     Promise.all([
-                                                        fetch("http://localhost:5000/api/auth/adviser/payment-count", {
+                                                        fetch("https://finalccspayment.onrender.com/api/auth/adviser/payment-count", {
                                                             headers: { "Authorization": "Bearer " + token }
                                                         }).then(res => res.json()),
                                             
-                                                        fetch("http://localhost:5000/api/auth/adviser/gcashorder-count", {
+                                                        fetch("https://finalccspayment.onrender.com/api/auth/adviser/gcashorder-count", {
                                                             headers: { "Authorization": "Bearer " + token }
                                                         }).then(res => res.json())
                                                     ])
