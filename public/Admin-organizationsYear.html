@@ -438,7 +438,7 @@ th {
                 }
     
                 try {
-                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin/details', {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -740,7 +740,7 @@ function showLoadingMessage() {
 // Fetch the latest academic year
 async function fetchLatestYear() {
     try {
-        const response = await fetch('http://localhost:5000/api/auth/latest-year', {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/latest-year', {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -766,7 +766,7 @@ async function fetchOrganizationsYear(selectedYear) {
     showLoadingMessage(); // Show loading message before fetching
 
     try {
-        const response = await fetch('http://localhost:5000/api/auth/organizations-year', {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/organizations-year', {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -891,7 +891,7 @@ async function deleteOrganizationYear(organizationId, year) {
     if (!confirmation.isConfirmed) return;
 
     try {
-        const response = await fetch(`http://localhost:5000/api/auth/delete-organization-year`, {
+        const response = await fetch(`https://finalccspayment.onrender.com/api/auth/delete-organization-year`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
