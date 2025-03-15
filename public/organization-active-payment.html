@@ -812,7 +812,7 @@
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -855,7 +855,7 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization-user/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization-user/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -1177,7 +1177,7 @@ function exportAction(type) {
     // Fetch Active Payments and populate the table
     function fetchActivePayments() {
         $.ajax({
-            url: 'http://localhost:5000/api/auth/payments/active', // Adjust the API URL as needed.
+            url: 'https://finalccspayment.onrender.com/api/auth/payments/active', // Adjust the API URL as needed.
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -1239,7 +1239,7 @@ function exportAction(type) {
                                     // Function to fetch transactions for a specific payment and show them in a modal
                                     function viewTransactions(paymentId, paymentName) {
     $.ajax({
-        url: 'http://localhost:5000/api/auth/payments/' + paymentId + '/transactions',
+        url: 'https://finalccspayment.onrender.com/api/auth/payments/' + paymentId + '/transactions',
         method: 'GET',
         headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('token')
