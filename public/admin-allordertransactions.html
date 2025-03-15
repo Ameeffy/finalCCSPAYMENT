@@ -641,7 +641,7 @@
                                             }
                                     
                                             try {
-                                                const response = await fetch('http://localhost:5000/api/auth/product-transactions/all', {
+                                                const response = await fetch('https://finalccspayment.onrender.com/api/auth/product-transactions/all', {
                                                     method: 'GET',
                                                     headers: {
                                                         'Authorization': `Bearer ${token}`,
@@ -798,7 +798,7 @@
                                        
                                         async function fetchLogs(orderTransactionId) {
                                     try {
-                                        const response = await fetch(`http://localhost:5000/api/auth/product-transaction-logsa/${orderTransactionId}`);
+                                        const response = await fetch(`https://finalccspayment.onrender.com/api/auth/product-transaction-logsa/${orderTransactionId}`);
                                         if (!response.ok) {
                                             throw new Error('Failed to fetch logs');
                                         }
