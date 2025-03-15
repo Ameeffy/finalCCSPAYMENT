@@ -152,7 +152,7 @@
                 }
     
                 try {
-                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin/details', {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -386,7 +386,7 @@
                                 </div>
                                 <script>
                                     // Fetch payments grouped by semesters from the API
-                                    fetch('http://localhost:5000/api/auth/payments/by-semesterAdmin', {
+                                    fetch('https://finalccspayment.onrender.com/api/auth/payments/by-semesterAdmin', {
                                         headers: {
                                             'Authorization': `Bearer ${localStorage.getItem('token')}` // Ensure token is stored and passed
                                         }
@@ -470,7 +470,7 @@
                                 <script>
                             
                             function fetchAllOrganizations() {
-                                    fetch('http://localhost:5000/api/auth/organizations')
+                                    fetch('https://finalccspayment.onrender.com/api/auth/organizations')
                                         .then(response => response.json())
                                         .then(data => {
                                             const container = document.getElementById('allOrganizationsContainer');
