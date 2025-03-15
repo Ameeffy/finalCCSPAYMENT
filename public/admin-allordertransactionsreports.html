@@ -522,7 +522,7 @@
                                     </div>
                                 <script>
                                     $(document).ready(function() {
-                                        fetch('http://localhost:5000/api/auth/all-order-transaction-reports')
+                                        fetch('https://finalccspayment.onrender.com/api/auth/all-order-transaction-reports')
                                             .then(response => response.json())
                                             .then(data => {
                                                 let logsData = data.logs.map(log => [
