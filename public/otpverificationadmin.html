@@ -185,7 +185,7 @@ document.getElementById('otpForm').addEventListener('submit', function(event) {
 
     document.getElementById('loadingScreen').classList.add('active');
 
-    fetch('http://localhost:5000/api/auth/verify-admin-otp', {
+    fetch('https://finalccspayment.onrender.com/api/auth/verify-admin-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp })
@@ -251,7 +251,7 @@ document.getElementById('otpForm').addEventListener('submit', function(event) {
 
             document.getElementById('loadingScreen').classList.add('active');
 
-            fetch('http://localhost:5000/api/auth/resend-admin-otp', {
+            fetch('https://finalccspayment.onrender.com/api/auth/resend-admin-otp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email })
