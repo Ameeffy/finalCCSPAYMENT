@@ -3629,7 +3629,7 @@ exports.updateOrganizationFeesPriceFees = async (req, res) => {
         const action = `Fees and prices were updated by Organization`;
         await db.query(
             `INSERT INTO payment_logs (payment_id, status, action, accepted_by, adviser_by, organization_by)
-            VALUES (?, 'Updated', ?, , null, ? )`,
+            VALUES (?, 'Updated', ?, null, null, ? )`,
             [paymentId, action, orgUserId]
         );
 
