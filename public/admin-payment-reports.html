@@ -367,7 +367,7 @@
                 }
     
                 try {
-                    const response = await fetch('http://localhost:5000/api/auth/admin/details', {
+                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/admin/details', {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -638,7 +638,7 @@
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/auth/reported-payments/all', {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/reported-payments/all', {
             headers: { Authorization: `Bearer ${token}` },
         });
 
