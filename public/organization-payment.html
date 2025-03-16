@@ -1347,9 +1347,9 @@ function openLogsModal(transactionId) {
                             
                                 </style>
                             <div id="transactionModal" class="modal" style="display: none;">
-                                <div class="modal-content-balance" style="margin: auto; background-color: rgb(221, 231, 221); border-radius: 10px; padding: 20px; width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); position: relative;">
+                                <div class="modal-content-balance" style="margin: auto; background-color: rgb(255, 255, 255); border-radius: 10px; padding: 20px; width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); position: relative;">
                                    <!-- Close Button -->
-                                    <span style="margin-top: 18px;" class="close" onclick="closeTransactionModals()">
+                                    <span style="margin-top: 18px;" class="close1" onclick="closeTransactionModals()">
                                         <i class="fas fa-times-circle"></i>
                                     </span>
                                     
@@ -1468,7 +1468,7 @@ function openLogsModal(transactionId) {
             return;
         }
 
-        // **Show loading message before fetch**
+        // Show loading message before fetch
         Swal.fire({
             title: 'Updating Payment...',
             text: 'Please wait while the payment is being processed.',
@@ -1499,9 +1499,8 @@ function openLogsModal(transactionId) {
                 title: 'Success',
                 text: responseResult.message
             }).then(() => {
-                document.getElementById('transactionModal').reset();
-                closeTransactionModals();
-                fetchTransactionsByPaymentId(paymentId);
+                closeTransactionModals(); // Close modal after success
+                fetchTransactionsByPaymentId(transactionId); // Refresh transaction data
             });
         } else {
             Swal.fire({
@@ -1519,6 +1518,7 @@ function openLogsModal(transactionId) {
         });
     }
 }
+
 
                             
 async function updatePaymentPending() {
@@ -2686,7 +2686,7 @@ table.innerHTML = `
            cursor: pointer; 
            font-size: 16px; 
            transition: background-color 0.3s;" 
-    onmouseover="this.style.backgroundColor='#157a4b'" 
+    onmouseover="this.style.backgroundColor='#157a4bh'" 
     onmouseout="this.style.backgroundColor='#198754'">
     <i class="fas fa-peso-sign" style="font-size: 20px;"></i>
 </button>
