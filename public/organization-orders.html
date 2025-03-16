@@ -7,7 +7,7 @@
         <link rel="icon" type="x-icon" href="img/logo.png">
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Organization Orders</title>
+        <title>Admin Payment</title>
   
  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
@@ -22,7 +22,8 @@
  <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"> 
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
         
     </head>
 <style>
@@ -97,6 +98,222 @@
   }
 }
 
+.table-container{
+            width: auto;
+            background-color: white;
+            padding-top: 20px;
+            padding-left: 10px;
+            padding-right: 10px;   
+            border-radius: 3px;
+            padding-bottom: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+.dataTables_scroll {
+    border-radius: 5px 5px 0 0; /* 5px top border radius */
+}
+
+.dataTables_scrollBody {
+    border-radius: 0; /* Ensure no bottom border radius */
+}
+
+
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px; /* Adjusted to 5px */
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px; /* Adjusted to 5px */
+}
+
+/* Ensure no bottom border-radius */
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important; /* Light gray border */
+    padding: 12px 16px; /* Comfortable spacing */
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important; /* Remove border from last row */
+}
+
+/* Optional hover effect */
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important; /* Very subtle hover background */
+    border-bottom-color: #d0d0d0 !important; /* Slightly darker border on hover */
+}
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        justify-self: flex-end;
+    }
+
+    /* Optional: Adjust spacing between elements */
+    .dataTables_wrapper .dataTables_length {
+        margin-right: 15px;
+    }
+   
+    .dataTables_wrapper .dataTables_info {
+        margin: 0 15px;
+    }
+    .dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    text-decoration: none;
+    color: #555;
+    background-color: #f9f9f9;
+}
+
+.dataTables_wrapper .dataTables_paginate a:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Styling the search box */
+.dataTables_wrapper .dataTables_filter {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Custom table design */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
+    border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
+    border-bottom: 1px solid #e0e0e0; /* Soft gray border on the right */
+
+}
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 12px 16px;
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important;
+    border-bottom-color: #d0d0d0 !important;
+}
+.back-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #ffffff; /* Adjust to your theme */
+    padding: 10px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.header-container {
+   
+    align-items: center; /* Vertically centers items */
+}
+.back-icon svg {
+    transition: transform 0.3s ease;
+}
+
+.back-icon:hover {
+    
+    transform: scale(1.1); /* Slight zoom effect */
+}
+
+.back-icon:hover svg {
+    transform: translateX(-5px); /* Moves the icon slightly left */
+}
 #productResults {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* 2 items per row */
@@ -342,7 +559,7 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         document.getElementById('profile-item').innerHTML = `
            <a style="color: #25330f; text-decoration: none; " href="organization-users-info.html">
    
-   <h3 style="color: #25330f; text-decoration: none; font-size: 18px; margin-top:10px;">${user.firstname} ${user.lastname}</h3>
+   <h3 style="color: white; text-decoration: none; font-size: 18px; margin-top:10px;">${user.firstname} ${user.lastname}</h3>
 </a>
 
 
@@ -581,219 +798,241 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
             });
         }
         </script>
-                                    <div id="payment-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1080; background: white; padding: 20px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
-                                        <h2>Enter Payment</h2>
-                                        <p id="total-amount-info" style="margin-bottom: 10px;">Total Amount: </p>
-                                        <label for="total-pay-input">Total Pay:</label>
-                                        <input type="number" id="total-pay-input" placeholder="Enter total pay" min="0" step="0.01" style="width: 100%; margin-bottom: 10px; padding: 8px; box-sizing: border-box;" />
-                                        <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                                            <button id="confirm-payment-btn" style="padding: 10px 15px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Confirm Payment</button>
-                                            <button onclick="closePaymentModal()" style="padding: 10px 15px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
-                                        </div>
+                                   <div id="payment-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1046; background: white; padding: 20px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                                    <h2>Enter Payment</h2>
+                                    <p id="total-amount-info" style="margin-bottom: 10px;">Total Amount: </p>
+                                    <label for="total-pay-input">Total Pay:</label>
+                                    <input type="number" id="total-pay-input" placeholder="Enter total pay" min="0" step="0.01" style="width: 100%; margin-bottom: 10px; padding: 8px; box-sizing: border-box;" />
+                                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                                        <button id="confirm-payment-btn" style="padding: 10px 15px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Confirm Payment</button>
+                                        <button onclick="closePaymentModal()" style="padding: 10px 15px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
                                     </div>
-                                    <div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1045;"></div>
-                                    
-                                    <script>
-                                        let currentOrderTransactionId = null;
-                                        let currentTotalAmount = null;
-                                    
-                                        function showPaymentModal(orderTransactionId, totalAmount) {
-                                            currentOrderTransactionId = orderTransactionId;
-                                            currentTotalAmount = totalAmount;
-                                    
-                                            
-                                            document.getElementById('total-amount-info').innerText = `Total Amount: ${totalAmount.toFixed(2)}`;
-                                    
-                                            // Show modal and overlay
-                                            document.getElementById('payment-modal').style.display = 'block';
-                                            document.getElementById('overlay').style.display = 'block';
-                                    
-                                            // Clear and focus the input field
-                                            const inputField = document.getElementById('total-pay-input');
-                                            inputField.value = '';
-                                            inputField.focus();
-                                        }
-                                    
-                                        function closePaymentModal() {
-                                            document.getElementById('payment-modal').style.display = 'none';
-                                            document.getElementById('overlay').style.display = 'none';
-                                    
-                                            currentOrderTransactionId = null;
-                                            currentTotalAmount = null;
-                                        }
-                                    
-                                        document.getElementById('confirm-payment-btn').addEventListener('click', async () => {
-                                    const totalPay = parseFloat(document.getElementById('total-pay-input').value);
+                                </div>
+                                <div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1045;"></div>
                                 
-                                    if (isNaN(totalPay) || totalPay < 0) {
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Invalid Amount',
-                                            text: 'Please enter a valid payment amount.',
-                                        });
-                                        return;
+                                <script>
+                                    let currentOrderTransactionId = null;
+                                    let currentTotalAmount = null;
+                                
+                                    function showPaymentModal(orderTransactionId, totalAmount) {
+                                        currentOrderTransactionId = orderTransactionId;
+                                        currentTotalAmount = totalAmount;
+                                
+                                        document.getElementById('total-amount-info').innerText = `Total Amount: ${totalAmount.toFixed(2)}`;
+                                
+                                        // Show modal and overlay
+                                        document.getElementById('payment-modal').style.display = 'block';
+                                        document.getElementById('overlay').style.display = 'block';
+                                
+                                        // Clear and focus the input field
+                                        const inputField = document.getElementById('total-pay-input');
+                                        inputField.value = '';
+                                        inputField.focus();
                                     }
                                 
-                                    if (totalPay > currentTotalAmount) {
-                                        Swal.fire({
-                                            icon: 'warning',
-                                            title: 'Payment Exceeded',
-                                            text: 'Payment cannot exceed the total amount.',
-                                        });
-                                        return;
+                                    function closePaymentModal() {
+                                        document.getElementById('payment-modal').style.display = 'none';
+                                        document.getElementById('overlay').style.display = 'none';
+                                
+                                        currentOrderTransactionId = null;
+                                        currentTotalAmount = null;
                                     }
                                 
-                                    try {
-                                        const apiUrl = `https://finalccspayment.onrender.com/api/auth/product-transactions/${currentOrderTransactionId}/pay`;
-                                        const token = localStorage.getItem('token');
+                                    document.getElementById('confirm-payment-btn').addEventListener('click', async () => {
+                                        const totalPay = parseFloat(document.getElementById('total-pay-input').value);
                                 
-                                        // Confirmation dialog before processing the payment
-                                        const result = await Swal.fire({
-                                            title: 'Confirm Payment',
-                                            text: `Are you sure you want to proceed with a payment of ${totalPay.toFixed(2)}?`,
-                                            icon: 'question',
-                                            showCancelButton: true,
-                                            confirmButtonColor: '#3085d6',
-                                            cancelButtonColor: '#d33',
-                                            confirmButtonText: 'Yes, confirm payment!',
-                                        });
-                                
-                                        if (result.isConfirmed) {
-                                            const response = await fetch(apiUrl, {
-                                                method: 'PUT',
-                                                headers: {
-                                                    'Content-Type': 'application/json',
-                                                    'Authorization': `Bearer ${token}`,
-                                                },
-                                                body: JSON.stringify({ totalPay }),
-                                            });
-                                
-                                            const data = await response.json();
-                                
-                                            if (!response.ok) {
-                                                Swal.fire({
-                                                    icon: 'error',
-                                                    title: 'Payment Failed',
-                                                    text: data.message || 'Failed to update payment.',
-                                                });
-                                                return;
-                                            }
-                                
+                                        if (isNaN(totalPay) || totalPay < 0) {
                                             Swal.fire({
-                                                icon: 'success',
-                                                title: 'Payment Successful',
-                                                text: data.message,
+                                                icon: 'error',
+                                                title: 'Invalid Amount',
+                                                text: 'Please enter a valid payment amount.',
                                             });
-                                            closePaymentModal();
-                                            fetchProductTransactions(); // Refresh transactions
+                                            return;
                                         }
-                                    } catch (error) {
-                                        console.error('Error updating payment:', error);
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Error',
-                                            text: 'An error occurred while processing the payment.',
-                                        });
-                                    }
-                                });</script>
-                                    
                                 
-                                    </script>
+                                        if (totalPay > currentTotalAmount) {
+                                            Swal.fire({
+                                                icon: 'warning',
+                                                title: 'Payment Exceeded',
+                                                text: 'Payment cannot exceed the total amount.',
+                                            });
+                                            return;
+                                        }
                                 
-                                    <div id="paybalancemodal" style="display: none;margin: auto; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 1045;">
-                                        <div style="background-color: #fff; padding: 20px; border-radius: 10px; width: 80%; max-width: 500px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); text-align: center; margin: auto; margin-top: 80px;">
-                                            <h2 style="margin-bottom: 20px; font-size: 24px;">Pay Balance</h2>
-                                            <p id="current-total-info" style="font-size: 18px; color: #333;"></p>
-                                            <p id="balance-info" style="font-size: 18px; color: #333; margin-bottom: 20px;"></p>
-                                            <input type="number" id="balance-pay-input" placeholder="Enter balance payment" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%; font-size: 16px; margin-bottom: 20px;" />
-                                            <div style="display: flex; justify-content: space-between; gap: 10px;">
-                                                <button id="confirm-balance-payment-btn" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Pay</button>
-                                                <button onclick="closeBalancePaymentModal()" style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Close</button>
-                                            </div>
-                                            <p id="balance-loading-message" style="display: none; color: green; margin-top: 15px;">Processing payment...</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <script>
-                                        let currentBalanceTransactionId = null;
-                                        let currentTotalPay = null;
-                                        let currentTotalAmounts = null;
-                                    
-                                        function showBalancePaymentModal(orderTransactionId, totalAmount, totalPay) {
-                                            currentBalanceTransactionId = orderTransactionId;
-                                            currentTotalAmounts = parseFloat(totalAmount).toFixed(2);
-                                            currentTotalPay = parseFloat(totalPay).toFixed(2);
-                                    
-                                            const remainingBalance = (totalAmount - totalPay).toFixed(2);
-                                            document.getElementById('current-total-info').innerText = `Current Total Paid: ${currentTotalPay}`;
-                                            document.getElementById('balance-info').innerText = `Remaining Balance: ${remainingBalance}`;
-                                    
-                                            const modal = document.getElementById('paybalancemodal');
-                                            modal.style.display = 'block';
-                                        }
-                                    
-                                        function closeBalancePaymentModal() {
-                                            const modal = document.getElementById('paybalancemodal');
-                                            modal.style.display = 'none';
-                                            currentBalanceTransactionId = null;
-                                            currentTotalAmounts = null;
-                                            currentTotalPay = null;
-                                            document.getElementById('balance-pay-input').value = ''; // Reset input field
-                                            document.getElementById('balance-loading-message').style.display = 'none';
-                                        }
-                                    
-                                        document.getElementById('confirm-balance-payment-btn').addEventListener('click', async () => {
-                                            const additionalPay = parseFloat(document.getElementById('balance-pay-input').value);
-                                    
-                                            if (isNaN(additionalPay) || additionalPay <= 0) {
-                                                alert('Please enter a valid payment amount.');
-                                                return;
-                                            }
-                                    
-                                            const remainingBalance = (currentTotalAmounts - currentTotalPay).toFixed(2);
-                                    
-                                            if (additionalPay > parseFloat(remainingBalance)) {
-                                                alert('Payment cannot exceed the remaining balance.');
-                                                return;
-                                            }
-                                    
-                                            if (additionalPay + parseFloat(currentTotalPay) > parseFloat(currentTotalAmounts)) {
-                                                alert('Total payment exceeds the total amount due.');
-                                                return;
-                                            }
-                                    
-                                            document.getElementById('balance-loading-message').style.display = 'block'; // Show loading message
-                                    
-                                            const apiUrl = `https://finalccspayment.onrender.com/api/auth/product-transactions/${currentBalanceTransactionId}/paybalance`;
+                                        try {
+                                            const apiUrl = `https://finalccspayment.onrender.com/api/auth/product-transactions/${currentOrderTransactionId}/pay`;
                                             const token = localStorage.getItem('token');
-                                    
-                                            try {
+                                
+                                            // Confirmation dialog before processing the payment
+                                            const result = await Swal.fire({
+                                                title: 'Confirm Payment',
+                                                text: `Are you sure you want to proceed with a payment of ${totalPay.toFixed(2)}?`,
+                                                icon: 'question',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#3085d6',
+                                                cancelButtonColor: '#d33',
+                                                confirmButtonText: 'Yes, confirm payment!',
+                                            });
+                                
+                                            if (result.isConfirmed) {
+                                                // Show loading screen while processing the payment
+                                                Swal.fire({
+    title: 'Processing Payment...',
+    text: 'Please wait while we process your payment.',
+    showConfirmButton: false,
+    allowOutsideClick: false,
+    didOpen: () => {
+        Swal.showLoading();
+    },
+});
+
+                                
                                                 const response = await fetch(apiUrl, {
                                                     method: 'PUT',
                                                     headers: {
                                                         'Content-Type': 'application/json',
-                                                        'Authorization': `Bearer ${token}`
+                                                        'Authorization': `Bearer ${token}`,
                                                     },
-                                                    body: JSON.stringify({ totalPay: additionalPay, paymentMethod: 'Gcash' })
+                                                    body: JSON.stringify({ totalPay }),
                                                 });
-                                    
+                                
                                                 const data = await response.json();
-                                    
+                                
                                                 if (!response.ok) {
-                                                    throw new Error(data.message || 'Failed to process balance payment.');
+                                                    Swal.fire({
+                                                        icon: 'error',
+                                                        title: 'Payment Failed',
+                                                        text: data.message || 'Failed to update payment.',
+                                                    });
+                                                    return;
                                                 }
-                                    
-                                                alert(data.message);
-                                                closeBalancePaymentModal();
+                                
+                                                Swal.fire({
+                                                    icon: 'success',
+                                                    title: 'Payment Successful',
+                                                    text: data.message,
+                                                });
+                                                closePaymentModal();
                                                 fetchProductTransactions(); // Refresh transactions
-                                            } catch (error) {
-                                                console.error('Error processing balance payment:', error);
-                                                alert('Failed to process balance payment. Please try again.');
-                                            } finally {
-                                                document.getElementById('balance-loading-message').style.display = 'none'; // Hide loading message
                                             }
-                                        });
+                                        } catch (error) {
+                                            console.error('Error updating payment:', error);
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Error',
+                                                text: 'An error occurred while processing the payment.',
+                                            });
+                                        }
+                                    });
+                                </script>
+                                </script>
+                                    
+                                
                                     </script>
+                                
+                                   <!-- Pay Balance Modal -->
+<div id="paybalancemodal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 1050; display: none;">
+    <div style="background-color: #fff; padding: 20px; border-radius: 10px; width: 90%; max-width: 500px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); text-align: center; position: relative;">
+        <h2 style="margin-bottom: 20px; font-size: 24px;">Pay Balance</h2>
+        <p id="current-total-info" style="font-size: 18px; color: #333;"></p>
+        <p id="balance-info" style="font-size: 18px; color: #333; margin-bottom: 20px;"></p>
+        <input type="number" id="balance-pay-input" placeholder="Enter balance payment" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%; font-size: 16px; margin-bottom: 20px;" />
+        <div style="display: flex; justify-content: space-between; gap: 10px;">
+            <button id="confirm-balance-payment-btn" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Pay</button>
+            <button onclick="closeBalancePaymentModal()" style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Close</button>
+        </div>
+        <p id="balance-loading-message" style="display: none; color: green; margin-top: 15px;">Processing payment...</p>
+    </div>
+</div>
+
+<script>
+  let currentBalanceTransactionId = null;
+    let currentTotalPay = null;
+    let currentTotalAmounts = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        closeBalancePaymentModal();
+    });
+
+    function showBalancePaymentModal(orderTransactionId, totalAmount, totalPay) {
+        currentBalanceTransactionId = orderTransactionId;
+        currentTotalAmounts = parseFloat(totalAmount).toFixed(2);
+        currentTotalPay = parseFloat(totalPay).toFixed(2);
+
+        const remainingBalance = (totalAmount - totalPay).toFixed(2);
+        document.getElementById('current-total-info').textContent = `Current Total Paid: ₱${currentTotalPay}`;
+        document.getElementById('balance-info').textContent = `Remaining Balance: ₱${remainingBalance}`;
+
+        const modal = document.getElementById('paybalancemodal');
+        modal.style.display = 'flex';
+        document.getElementById('balance-pay-input').focus();
+    }
+
+    function closeBalancePaymentModal() {
+        const modal = document.getElementById('paybalancemodal');
+        modal.style.display = 'none';
+        currentBalanceTransactionId = null;
+        currentTotalAmounts = null;
+        currentTotalPay = null;
+        document.getElementById('balance-pay-input').value = '';
+    }
+
+    document.getElementById('confirm-balance-payment-btn').addEventListener('click', async () => {
+        const additionalPay = parseFloat(document.getElementById('balance-pay-input').value);
+
+        if (isNaN(additionalPay) || additionalPay <= 0) {
+            Swal.fire('Error', 'Please enter a valid payment amount.', 'error');
+            return;
+        }
+
+        const remainingBalance = (currentTotalAmounts - currentTotalPay).toFixed(2);
+
+        if (additionalPay > parseFloat(remainingBalance)) {
+            Swal.fire('Error', `Payment cannot exceed the remaining balance of ₱${remainingBalance}.`, 'error');
+            return;
+        }
+
+        Swal.fire({
+            title: 'Processing Payment...',
+            text: 'Please wait...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        try {
+            const response = await fetch(`https://finalccspayment.onrender.com/api/auth/product-transactions/${currentBalanceTransactionId}/paybalance`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ 
+                    totalPay: additionalPay, 
+                    paymentMethod: 'Gcash' 
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) throw new Error(data.message || 'Payment failed');
+
+            Swal.fire('Success', `₱${additionalPay.toFixed(2)} payment processed!`, 'success');
+            closeBalancePaymentModal();
+            fetchProductTransactions();
+        } catch (error) {
+            Swal.fire('Error', error.message || 'Payment processing failed', 'error');
+        }
+    });
+
+    window.addEventListener('click', (event) => {
+        const modal = document.getElementById('paybalancemodal');
+        if (event.target === modal) {
+            closeBalancePaymentModal();
+        }
+    });
+</script>
                                     
                                 
                                 <!-- Modal for Product Transaction Logs -->
@@ -805,7 +1044,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                                 <h4 style="margin: 0; font-size: 24px; color: #333;">Product Transaction Logs</h4>
                                             </div>
                                         <div style="padding: 20px; overflow-y: auto; max-height: 400px; width: 1000px;">
-                                            <table id="transaction-logs-table" style="width: 100%; border-collapse: collapse; font-size: 16px; color: #333;">
+                                            <table class="custom-table" id="transaction-logs-table">
                                                 <thead>
                                                     <tr style="background-color: #f8f9fa; text-align: left;">
                                                         
@@ -832,22 +1071,22 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                 </div>
                                 <!-- Modal structure -->
                                 <div id="modalordergcash" class="modals">
-                                    <div class="modal-contents">
-                                        <span style="position: absolute; right: 20px; cursor: pointer; margin-top: 20px;" class="close" onclick="closeModals() ">
+                                    <div class="modal-content-gcash1">
+                                        <span style="position: absolute; right: 10px; cursor: pointer;" class="close" onclick="closeModals() ">
                                             <i class="fas fa-times-circle"></i>
                                         </span> 
-                                        <h3 style="text-align: center;">Proof of Payment</h3>
+                                        <h5 style="text-align: center;">Proof of Payment</h5>
                                         <img id="modalImage" src="" alt="Proof of Payment" class="responsive-image" />
                                     </div>
                                 </div>
 
                                 <div id="gcashmodallogsview" class="modals">
-                                    <div class="modal-content">
+                                    <div class="modal-content-gcash">
                                         <span class="close" onclick="closeGcashProofModal()">
                                             <i class="fas fa-times-circle"></i>
                                         </span>
-                                        <h3 style="text-align: center;">Proof of Payment</h3>
-                                        <img id="gcashProofImage" src="" alt="Proof of Payment" class="responsive-image" />
+                                        <h5 style="text-align: center;">Proof of Payment</h5>
+                                        <img id="gcashProofImage" src="" alt="Proof of Payment" class="responsive-image"/>
                                     </div>
                                 </div>
                                 <!-- Decline Report Modal -->
@@ -902,35 +1141,45 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                     height: 100%; /* Full height */
                                     overflow: auto; /* Enable scroll if needed */
                                     background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
-                                    padding-top: 60px;
                                     box-sizing: border-box;
                                 }
-                                
-                                /* Modal Content */
-                                .modal-contents {
+                                .modal-content-gcash1 {
                                     background-color: #fefefe;
-                                    margin: 5% auto;
-                                    padding: 30px;
+                                    margin: 1% auto;
+                                    padding: 10px;
                                     border-radius: 8px; /* Rounded corners */
-                                    width: 70%; /* 70% of screen width for large screens */
-                                    max-width: 500px; /* Limit the max size */
+                                    width: 60%; /* 70% of screen width for large screens */
+                                    max-width: 300px; /* Limit the max size */
                                     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
                                     position: relative;
                                     text-align: center;
                                 }
+                                 .modal-content-gcash {
+                                    background-color: #fefefe;
+                                    margin: 1% auto;
+                                    padding: 30px;
+                                    border-radius: 8px; /* Rounded corners */
+                                    width: 60%; /* 70% of screen width for large screens */
+                                    max-width: 300px; /* Limit the max size */
+                                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+                                    position: relative;
+                                    text-align: center;
+                                }
+                                /* Modal Content */
+                               
                                 
                                 .close {
                                     color: #cf0303;
                                     position: absolute;
-                                    right: 20px;
-                                    top: 0px;
+                                    right: 10px;
+                                    top: 0;
                                     font-size: 28px;
                                     font-weight: bold;
                                 }
                                 .closes {
                                     color: #aaa;
                                     right: 20px;
-                                    top: 30px;
+                                    top: 10px;
                                     font-size: 28px;
                                     font-weight: bold;
                                 }.closes:hover,
@@ -1017,14 +1266,32 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                             const balance = (totalAmount - totalPay).toFixed(2); // Ensure two decimal places
                                 
                                             const row = document.createElement('tr');
+                                            
                                             row.innerHTML = `
                                                 <td>${log.action_message}</td>
                                                 <td>${log.status}</td>
                                                 <td>${log.payment_method} 
                                                     ${log.payment_method.toLowerCase() === 'gcash' && log.proof_of_payment ? 
-                                                        `<button class="view-proof-btn" onclick="showGcashProofModal('${log.proof_of_payment}')">
-                                                            <i class="fas fa-eye"></i>
-                                                        </button>` : ''
+                                                        `<button 
+    class="view-proof-btn" 
+    style="background-color: #007bff; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 33px; /* Fixed width */
+           height: 35px; /* Fixed height */
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#0056b3'" 
+    onmouseout="this.style.backgroundColor='#007bff'" 
+    onclick="showGcashProofModal('${log.proof_of_payment}')">
+    
+    <i class="fas fa-eye" style="font-size: 20px;"></i> <!-- Adjust the size here -->
+</button>
+` : ''
                                                     }
                                                 </td>
                                                 <td>₱${totalAmount.toFixed(2)}</td>
@@ -1721,10 +1988,25 @@ function fetchProductTransactions() {
             const orderQuantities = filterQuantitiesWithLabels(transaction.order_quantities, 'Quantity');
 
             const proofOfPaymentButton = transaction.proof_of_payment
-                ? `<button class="modalordergcash" onclick="showModal('${transaction.proof_of_payment}')"
-                    style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer;">
-                    <i class="fas fa-eye"></i>
-                </button>`
+                ? `<button 
+    class="modalordergcash" 
+    onclick="showModal('${transaction.proof_of_payment}')"
+    style="background-color: #007bff; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 33px; /* Adjust width */
+           height: 35px; /* Adjust height */
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;"
+    onmouseover="this.style.backgroundColor='#0056b3'" 
+    onmouseout="this.style.backgroundColor='#007bff'">
+    <i class="fas fa-eye" style="font-size: 20px;"></i> <!-- Icon with size -->
+</button>
+`
                 : '';
 
             const paymentDetails = `${transaction.payment_method} ${proofOfPaymentButton}`;
@@ -1743,60 +2025,169 @@ function fetchProductTransactions() {
                 <td>${transaction.accepted_by_firstname && transaction.accepted_by_lastname
                     ? `${transaction.accepted_by_firstname} ${transaction.accepted_by_lastname}`
                     : 'There is no receiver yet'}</td>
-                <td>${transaction.created_at}</td>
+<td>${new Date(transaction.created_at).toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+})}</td>
                 <td>
 
 
                                                    <div style="display: flex; gap: 10px; justify-content: center;">
                                             ${transaction.status === 'Pending Balance' ? `
-            <button onclick="acceptBalance('${transaction.order_transaction_id}')"
-                    style="background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer;">
-                Accept
-            </button>
-            <button onclick="declineBalance('${transaction.order_transaction_id}')"
-                    style="background-color: #dc3545; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer;">
-                Decline
-            </button>
+           <!-- Accept Button -->
+<button 
+    onclick="acceptBalance('${transaction.order_transaction_id}')"
+    style="background-color: #28a745; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 33px; /* Fixed width */
+           height: 35px; /* Fixed height */
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;
+           font-size: 16px;" 
+    onmouseover="this.style.backgroundColor='#218838'" 
+    onmouseout="this.style.backgroundColor='#28a745'">
+    <i class="fas fa-check" style="font-size: 20px;"></i>
+</button>
+
+<!-- Decline Button -->
+<button 
+    onclick="declineBalance('${transaction.order_transaction_id}')"
+    style="background-color: #dc3545; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 33px; /* Fixed width */
+           height: 35px; /* Fixed height */
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;
+           font-size: 16px;" 
+    onmouseover="this.style.backgroundColor='#c82333'" 
+    onmouseout="this.style.backgroundColor='#dc3545'">
+    <i class="fas fa-times" style="font-size: 20px;"></i>
+</button>
+
         ` : ''}
 
 
 
                                             ${transaction.status === 'Pending' ? `
-                                                <button onclick="acceptOrder('${transaction.order_transaction_id}')"
-                                                        style="background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px; width: 35px;">
-                                                    <i class="fas fa-check"></i>
-                                                </button>
-                                                <button onclick="declineOrder('${transaction.order_transaction_id}')"
-                                                        style="background-color: #dc3545; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px; width: 35px;">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
+                                                <button 
+    onclick="acceptOrder('${transaction.order_transaction_id}')"
+    style="background-color: #28a745; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 35px; /* Fixed width */
+           height: 35px; /* Fixed height */
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#218838'" 
+    onmouseout="this.style.backgroundColor='#28a745'">
+    <i class="fas fa-check" style="font-size: 16px;"></i> <!-- Adjust the size here -->
+</button>
+
+<button 
+    onclick="declineOrder('${transaction.order_transaction_id}')"
+    style="background-color: #dc3545; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 35px; /* Fixed width */
+           height: 35px; /* Fixed height */
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#c82333'" 
+    onmouseout="this.style.backgroundColor='#dc3545'">
+    <i class="fas fa-times" style="font-size: 16px;"></i> <!-- Adjust the size here -->
+</button>
+
                                             ` : ''}
 
                                             
 
 
                                             ${transaction.status === 'Processing Balance' ? `
-                                                <button onclick="showBalancePaymentModal('${transaction.order_transaction_id}', ${transaction.total_amount}, ${transaction.total_pay})"
-                                                        style="background-color: #ffc107; color: black; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px; width: 35px;">
-                                                    <i class="fas fa-dollar-sign"></i>
-                                                </button>
+                                                <button 
+    onclick="showBalancePaymentModal('${transaction.order_transaction_id}', ${transaction.total_amount}, ${transaction.total_pay})"
+    style="background-color: #ffc107; 
+           color: black; 
+           border: none; 
+           border-radius: 5px; 
+           width: 35px; /* Fixed width */
+           height: 35px; /* Fixed height */
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;
+           font-size: 16px;" 
+    onmouseover="this.style.backgroundColor='#e0a800'" 
+    onmouseout="this.style.backgroundColor='#ffc107'">
+    <i class="fas fa-peso-sign" style="font-size: 20px;"></i>
+</button>
+
                                             ` : ''}
 
 
 
                                             ${transaction.status === 'Accepted' ? `
-                                                <button onclick="showPaymentModal('${transaction.order_transaction_id}', ${transaction.total_amount})"
-                                                        style="background-color: #17a2b8; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px; width: 35px;">
-                                                    <i class="fas fa-credit-card"></i>
-                                                </button>
+                                                <button 
+    onclick="showPaymentModal('${transaction.order_transaction_id}', ${transaction.total_amount})"
+    style="background-color: #17a2b8; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 33px; /* Fixed width */
+           height: 35px; /* Fixed height */
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;
+           font-size: 16px;" 
+    onmouseover="this.style.backgroundColor='#117a8b'" 
+    onmouseout="this.style.backgroundColor='#17a2b8'">
+    <i class="fas fa-credit-card" style="font-size: 20px;"></i> <!-- Adjusted size -->
+</button>
+
                                             ` : ''}
 
 
 
-                                            <button onclick="showTransactionLogsModal('${transaction.order_transaction_id}')"
-                                                    style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px; width: 35px;">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
+                                           <button 
+    onclick="showTransactionLogsModal('${transaction.order_transaction_id}')"
+    style="background-color: #007bff; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 33px; /* Fixed width */
+           height: 35px; /* Fixed height */
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;
+           font-size: 16px;" 
+    onmouseover="this.style.backgroundColor='#0056b3'" 
+    onmouseout="this.style.backgroundColor='#007bff'">
+    <i class="fas fa-eye" style="font-size: 20px;"></i> <!-- Adjust the size here -->
+</button>
+
                                         </div>
                                                 </td>
             `;
