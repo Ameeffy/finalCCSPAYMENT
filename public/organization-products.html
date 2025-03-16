@@ -1050,6 +1050,10 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                         <label for="updatePrice" class="form-label">Price</label>
                         <input type="number" class="form-control" id="updatePrice" placeholder="Price" step="0.01" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="updateDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="updateDescription" rows="3" placeholder="Product Description"></textarea>
+                    </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn-submit">Submit</button>
                     </div>
@@ -1058,6 +1062,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
         </div>
     </div>
 </div>
+
   
                            
                                 <script>
@@ -1068,12 +1073,11 @@ let updateProductModal = null;
 function editProduct(productId) {
     currentProductId = productId;
     getProductDetails(productId);
-    
-    // Initialize modal if not already done
+
     if (!updateProductModal) {
         updateProductModal = new bootstrap.Modal(document.getElementById('updateProductModal'));
     }
-    
+
     updateProductModal.show();
 }
 
@@ -1098,6 +1102,7 @@ function getProductDetails(productId) {
     .then(data => {
         document.getElementById('updateName').value = data.name;
         document.getElementById('updatePrice').value = data.price;
+        document.getElementById('updateDescription').value = data.description || ''; // Ensure description is handled properly
     })
     .catch(error => {
         console.error('Error:', error);
@@ -1125,6 +1130,7 @@ function updateProduct(productId) {
 
     const name = document.getElementById('updateName').value;
     const price = document.getElementById('updatePrice').value;
+    const description = document.getElementById('updateDescription').value;
 
     Swal.fire({
         title: 'Are you sure?',
@@ -1143,7 +1149,7 @@ function updateProduct(productId) {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ name, price })
+                body: JSON.stringify({ name, price, description }) // Send description in request body
             })
             .then(response => {
                 if (!response.ok) {
@@ -1152,15 +1158,15 @@ function updateProduct(productId) {
                 return response.json();
             })
             .then(() => {
-    Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: 'Product updated successfully!'
-    }).then(() => {
-        updateProductModal.hide();
-        location.reload();
-    });
-})
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Product updated successfully!'
+                }).then(() => {
+                    updateProductModal.hide();
+                    location.reload();
+                });
+            })
             .catch(error => {
                 console.error('Error:', error);
                 Swal.fire({
@@ -1172,6 +1178,7 @@ function updateProduct(productId) {
         }
     });
 }
+
 
                                 // Open Quantity Update Modal
                                 // Open Quantity Update Modal for generic quantity
