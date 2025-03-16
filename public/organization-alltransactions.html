@@ -356,9 +356,15 @@
                     <i class="fas fa-bars" style="color: rgb(255, 255, 255);"></i>
                 </button>
         
-                <!-- Logo -->
                 <div class="logo me-2">
-                    <img src="img/logo.png" alt="Logo" height="40">
+                    <label for="logoUpload">
+                        <div id="loadingIconLogo" class="logo-loading-container1">
+                            <div class="spinnerlogo1"></div>
+                        </div>
+                        <img id="organizationLogo" src="" alt="Logo" height="40" style="cursor: pointer; border-radius: 50%;">
+                    </label>
+                    <input type="file" id="logoUpload" style="display: none;" accept="image/*">
+                    <div id="uploadingMessage">Uploading logo...</div>
                 </div>
         
                 <!-- Organization Info -->
