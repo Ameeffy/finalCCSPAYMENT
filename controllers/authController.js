@@ -16376,7 +16376,7 @@ exports.reportUser = async (req, res) => {
     try {
         // Insert the report into UsersReport table
         const query = `
-            INSERT INTO UsersReport (semester_user_id, user_id, semester_id, reason, comment, reported_by_admin)
+            INSERT INTO usersreport (semester_user_id, user_id, semester_id, reason, comment, reported_by_admin)
             VALUES (?, ?, ?, ?, ?, ?)
         `;
         await db.query(query, [id, userId, semesterId, reason, comment, adminId]);
@@ -16406,7 +16406,7 @@ exports.checkReportExists = async (req, res) => {
     try {
         // Query to check if a report already exists for the given userId (semester_user_id)
         const query = `
-            SELECT * FROM UsersReport
+            SELECT * FROM usersreport
             WHERE semester_user_id = ?
         `;
         const [results] = await db.query(query, [userId]);
@@ -16556,7 +16556,7 @@ exports.getUsersReports = async (req, res) => {
                 s.name AS semester_name, 
                 ur.reason, 
                 ur.created_at
-            FROM UsersReport ur
+            FROM usersreport ur
             JOIN users u ON ur.user_id = u.id
             JOIN semesters s ON ur.semester_id = s.id
             ORDER BY ur.created_at DESC
