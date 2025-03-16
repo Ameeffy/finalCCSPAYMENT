@@ -63,9 +63,9 @@
            
         }
         .filter-btn {
-            background-color: #17a2b8;
+            background-color: #1B3A28;
             color: white;
-            padding: 10px 15px;
+            padding:8px 10px;
             border: none;
             cursor: pointer;
            
@@ -73,42 +73,10 @@
             transition: 0.3s;
         }
         .filter-btn:hover {
-            background-color: #117a8b;
+            background-color: #336b4a;
         }
 
-        th, td {  
-  padding: 8px;
-  text-align: left;
-  background-color: #ffffff;
-}
-th:first-child {
-  border-top-left-radius: 8px; 
-  border-bottom-left-radius: 8px; 
-}
-th:last-child {
-  border-top-right-radius: 8px; 
-  border-bottom-right-radius: 8px; 
-}
-td:first-child {
-  border-top-left-radius: 8px; 
-  border-bottom-left-radius: 8px; 
-}
-td:last-child {
-  border-top-right-radius: 8px; 
-  border-bottom-right-radius: 8px; 
-}
-th {
-  background-color: #034b03;
-  color: white;
-  font-weight: bold;  
-  font-size: 14px;
-}
-tr:hover td {
-  background-color: #ddfadc;
-  transform: translateX(5px) scale(1.05); 
-  transition: transform 0.2s ease-in-out; 
-  color: black;
-}
+      
         @media (max-width: 768px) {
             #summaryContainer {
                 flex-direction: column;
@@ -161,7 +129,7 @@ tr:hover td {
             margin: auto;
             margin-top: 50px;
             padding: 25px;
-            width: 70%;
+            width: 60%;
             max-width: 500px;
             border-radius: 10px;
             position: relative;
@@ -225,6 +193,315 @@ tr:hover td {
 }
 
 
+.export-container {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    z-index: 1;
+}
+
+.export-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.export-btn {
+    background-color: #1B3A28;
+    color: #ffffff;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 60px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+}
+
+.export-btn:hover {
+    background-color: #3e865c;
+}
+
+.export-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 83px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.export-content a {
+    color: #333;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+.export-content a:hover {
+    background-color: #f8f9fa;
+}
+
+.export-dropdown:hover .export-content {
+    display: block;
+}
+@media print {
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+    }
+
+    .export-container, .dataTables_wrapper .top, .dataTables_wrapper .bottom {
+        display: none;
+    }
+
+    .custom-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .custom-table th, .custom-table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    .custom-table thead {
+        background-color: #f1f1f1;
+    }
+}
+        .table-container{
+            width: auto;
+            background-color: white;
+            padding-top: 20px;
+            padding-left: 10px;
+            padding-right: 10px;   
+            border-radius: 3px;
+            padding-bottom: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+.dataTables_scroll {
+    border-radius: 5px 5px 0 0; /* 5px top border radius */
+}
+
+.dataTables_scrollBody {
+    border-radius: 0; /* Ensure no bottom border radius */
+}
+
+
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px; /* Adjusted to 5px */
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px; /* Adjusted to 5px */
+}
+
+/* Ensure no bottom border-radius */
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important; /* Light gray border */
+    padding: 12px 16px; /* Comfortable spacing */
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important; /* Remove border from last row */
+}
+
+/* Optional hover effect */
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important; /* Very subtle hover background */
+    border-bottom-color: #d0d0d0 !important; /* Slightly darker border on hover */
+}
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        justify-self: flex-end;
+    }
+
+    /* Optional: Adjust spacing between elements */
+    .dataTables_wrapper .dataTables_length {
+        margin-right: 15px;
+    }
+   
+    .dataTables_wrapper .dataTables_info {
+        margin: 0 15px;
+    }
+    .dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    text-decoration: none;
+    color: #555;
+    background-color: #f9f9f9;
+}
+
+.dataTables_wrapper .dataTables_paginate a:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Styling the search box */
+.dataTables_wrapper .dataTables_filter {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Custom table design */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
+    border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
+    margin-bottom: 50px;
+}
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 12px 16px;
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important;
+    border-bottom-color: #d0d0d0 !important;
+}
+
+
+.header-container {
+   
+    align-items: center; /* Vertically centers items */
+}
+.back-icon svg {
+    transition: transform 0.3s ease;
+}
+
+.back-icon:hover {
+    
+    transform: scale(1.1); /* Slight zoom effect */
+}
+
+.back-icon:hover svg {
+    transform: translateX(-5px); /* Moves the icon slightly left */
+}
+.close-btn {
+    font-size: 30px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #1B3A28; /* Dark green background */
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.close-btn:hover {
+    background-color: #e74c3c; /* Red background on hover */
+    transform: scale(1.1);
+}
+
+.close-btn:focus {
+    outline: none;
+}
 
     </style>
 
@@ -236,12 +513,19 @@ tr:hover td {
   
 
     <div class="row">
-        <div class="header-container">
-            <div class="back-icon">
-                <i class="fa fa-arrow-left" onclick="goBack()"></i>
-            </div>
-            <h2>User Order Transactions</h2>
+        <div class="header-container" style="display: flex; align-items: center; justify-content: space-between;">
+            <!-- Back Button on the left -->
+            <a href="javascript:window.history.back();" class="back-icon" style="flex-shrink: 0;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-back-up">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M9 14l-4 -4l4 -4" />
+                    <path d="M5 10h11a4 4 0 1 1 0 8h-1" />
+                </svg>
+            </a>
+            <!-- Title in the center -->
+            <h2 style="flex-grow: 1; text-align: center;">User Payment Transaction</h2>
         </div>
+        
         
         <!-- Total Transactions Summary -->
         <div class="col-lg-4 col-md-6 col-12 mb-3">
@@ -298,8 +582,10 @@ tr:hover td {
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title" id="logsModalLabel">User Information</h2>
-            <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
-                <i class="fas fa-times"></i>
+                <span type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
+                    &times;
+                </span>
+                                
             </button>
         </div>
             <div class="modal-details" id="userModalContent">
@@ -314,13 +600,12 @@ tr:hover td {
         <button class="filter-btn" data-filter="Mandatory">Mandatory</button>
         <button class="filter-btn" data-filter="Not mandatory">Not mandatory</button>
         <button class="filter-btn" data-filter="Other fees">Other fees</button>
-        <button class="filter-btn" data-filter="No transactions">No Transactions</button>
         
     </div>
 
     <div class="table-responsive">
-        <table id="transactionsTable">
-            <thead class="table-primary">
+        <table id="transactionsTable" class="custom-table">
+            <thead>
                 <tr>
                     <th>Payment Name</th>
                     <th>Payment Type</th>
@@ -441,7 +726,13 @@ tr:hover td {
                 row.insertCell(6).textContent = transaction.total_amount || '0.00';
                 row.insertCell(7).textContent = transaction.balance || '0.00';
                 row.insertCell(8).textContent = transaction.received_by_name;
-                row.insertCell(9).textContent = transaction.updated_at || 'None';
+                row.insertCell(9).textContent = transaction.updated_at 
+    ? new Date(transaction.updated_at).toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    }) 
+    : 'None';
             });
 
             // Update totals in the container
@@ -458,6 +749,8 @@ tr:hover td {
             }
 
             const dataTable = $('#transactionsTable').DataTable({
+                dom: '<"top"f>rt<"bottom"lip>',
+
                 "order": [[9, 'desc']]
             });
 
