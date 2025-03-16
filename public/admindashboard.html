@@ -25,7 +25,266 @@
         <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>   
     </head>
-<style> .text-white table tbody td {
+<style>
+.dataTables_scroll {
+    border-radius: 5px 5px 0 0; /* 5px top border radius */
+}
+
+.dataTables_scrollBody {
+    border-radius: 0; /* Ensure no bottom border radius */
+}
+
+
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px; /* Adjusted to 5px */
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px; /* Adjusted to 5px */
+}
+
+/* Ensure no bottom border-radius */
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important; /* Light gray border */
+    padding: 12px 16px; /* Comfortable spacing */
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important; /* Remove border from last row */
+}
+
+/* Optional hover effect */
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important; /* Very subtle hover background */
+    border-bottom-color: #d0d0d0 !important; /* Slightly darker border on hover */
+}
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        justify-self: flex-end;
+    }
+
+    /* Optional: Adjust spacing between elements */
+    .dataTables_wrapper .dataTables_length {
+        margin-right: 15px;
+    }
+   
+    .dataTables_wrapper .dataTables_info {
+        margin: 0 15px;
+    }
+    .dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    text-decoration: none;
+    color: #555;
+    background-color: #f9f9f9;
+}
+
+.dataTables_wrapper .dataTables_paginate a:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Styling the search box */
+.dataTables_wrapper .dataTables_filter {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Custom table design */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
+    border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
+    margin-bottom: 50px;
+}
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 8px 10px;
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important;
+    border-bottom-color: #d0d0d0 !important;
+}
+.export-container {
+  position: absolute;
+  right: 15px;
+  top: 50px;
+  z-index: 1;
+}
+
+.export-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.export-btn {
+  background-color: #1B3A28;
+  color: #ffffff;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+}
+
+.export-btn:hover {
+  background-color: #3e865c;
+}
+
+.export-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 83px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.export-content a {
+  color: #333;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.export-content a:hover {
+  background-color: #f8f9fa;
+}
+
+.export-dropdown:hover .export-content {
+  display: block;
+}
+@media print {
+  body {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+  }
+
+  .export-container, .dataTables_wrapper .top, .dataTables_wrapper .bottom {
+      display: none;
+  }
+
+  .custom-table {
+      border-collapse: collapse;
+      width: 100%;
+  }
+
+  .custom-table th, .custom-table td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+  }
+
+  .custom-table thead {
+      background-color: #f1f1f1;
+  }
+}
+.text-white table tbody td {
     color: black !important;
 }.dataTables_length,
 .dataTables_filter,
@@ -408,18 +667,15 @@
                                     </ol>
                                     <div class="row d-flex align-items-stretch">
                                         <!-- Total Users Card -->
-                                        <div class="col-lg-3 col-md-6 mb-3">
-                                            <div class="card text-white bg-success h-100">
+                                        <div class="col-lg-3 col-md-6 mb-3 d-flex">
+                                            <div class="card text-white bg-success w-100">
                                                 <div class="card-body d-flex flex-column h-100">
-                                                    <!-- Icon and Title Row -->
                                                     <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                                        <i class="fas fa-users fa-2x me-2"></i> <!-- Reduced icon size -->
+                                                        <i class="fas fa-users fa-3x me-3" style="color: #1B3A28;"></i>
                                                         <div class="me-2 text-truncate">
                                                             <h6 id="userRoleTitle" class="mt-2 fs-6 text-truncate">Student</h6>
                                                             <p id="totalUsers" class="card-text fs-4 fw-bold text-center">Loading...</p>
                                                         </div>
-                                        
-                                                        <!-- Dropdown -->
                                                         <div class="position-relative w-100 mt-2">
                                                             <div class="dropdown-container">
                                                                 <select id="roleDropdown" class="form-control form-select form-select-sm w-100">
@@ -430,19 +686,15 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <br>
-                                        
-                                                    <!-- Push Male & Female to Bottom -->
-                                                    <div class="mt-auto"> 
+                                                    <div class="mt-auto">
                                                         <div class="d-flex justify-content-between flex-wrap">
                                                             <span class="text-truncate">
-                                                                    <i class="fas fa-male"></i>
+                                                                <i class="fas fa-male"></i>
                                                                 <strong class="fs-6">Male:</strong> 
                                                                 <span id="totalMales" class="fs-6 text-truncate">Loading...</span>
                                                             </span>
-                                        
                                                             <span class="text-truncate">
-                                                                    <i class="fas fa-female"></i>
+                                                                <i class="fas fa-female"></i>
                                                                 <strong class="fs-6">Female:</strong> 
                                                                 <span id="totalFemales" class="fs-6 text-truncate">Loading...</span>
                                                             </span>
@@ -453,6 +705,36 @@
                                         </div>
                                         
                                         
+                                         <div class="col-lg-3 col-md-6 mb-3 d-flex">
+                                            <div class="card text-white bg-success w-100">
+                                                <div class="card-body d-flex flex-column h-100">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="fas fa-building fa-3x me-3" style="color: #1B3A28;"></i>
+                                                        <div>
+                                                            <h6 class="card-title">Total Organizations</h6>
+                                                            <div class="d-flex align-items-center justify-content-center" style="height: 80px;">
+                                                                <p id="totalOrganizations" class="card-text fw-bold" style="font-size: 80px;">Loading...</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-auto">
+                                                        <hr class="border-light">
+                                                        <div class="d-flex justify-content-between">
+                                                            <span>
+                                                                <i class="fas fa-check-circle"></i>
+                                                                <strong style="font-size: 14px;">Activated:</strong>
+                                                                <span id="totalOrganizationActive">Loading...</span>
+                                                            </span>
+                                                            <span>
+                                                                <i class="fas fa-times-circle"></i>
+                                                                <strong style="font-size: 14px;">Not Activated:</strong>
+                                                                <span id="totalOrganizationNotActive">Loading...</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         
                                         
                                         <script>
@@ -498,34 +780,28 @@
                                         });
                                         
                                         </script>
-                                    <div class="col-lg-3 col-md-6 mb-3">
-                                        <div class="card text-white bg-success h-100">
+                                    <div class="col-lg-3 col-md-6 mb-3 d-flex">
+                                        <div class="card text-white bg-success w-100">
                                             <div class="card-body d-flex flex-column h-100">
-                                                <!-- Icon and Title Row -->
                                                 <div class="d-flex align-items-center justify-content-between flex-wrap">
                                                     <div class="d-flex align-items-center">
-                                                        <i class="fas fa-calendar-alt fa-3x me-3"></i> <!-- Semester Icon -->
+                                                        <i class="fas fa-calendar-alt fa-3x me-3" style="color: #1B3A28;"></i>
                                                         <div>
-                                                            <h6 id="latestSemester" class="mt-2 fs-6">Loading...</h6> <!-- Latest Semester Display -->
+                                                            <h6 id="latestSemester" class="mt-2 fs-6">Loading...</h6>
                                                         </div>
                                                     </div>
                                                 </div>
-                                    
-                                                <!-- Dropdown for semester selection -->
                                                 <div class="position-relative w-100 mt-3">
                                                     <div class="dropdown">
                                                         <select id="semesterDropdown" class="form-control form-select form-select-sm w-100">
                                                             <!-- Options will be added dynamically -->
                                                         </select>
-                                                        <!-- Dropdown Icon: Remove the extra icon outside the select -->
                                                     </div>
                                                 </div>
-                                    
-                                                <!-- Push Active Users Icon to the Bottom -->
-                                                <div class="mt-auto">
+                                                <div class="mt-auto pt-2">
                                                     <div class="d-flex justify-content-between flex-wrap">
                                                         <span class="text-truncate">
-                                                            <i class="fas fa-users"></i> <!-- Active Users Icon -->
+                                                            <i class="fas fa-users"></i>
                                                             <strong class="fs-6">Active Users:</strong> 
                                                             <span id="ActiveUsers" class="fs-6 text-truncate">Loading...</span>
                                                         </span>
@@ -593,32 +869,7 @@
                                         </script>
                                     
                                         <!-- Total Amount Card -->
-                                        <div class="col-lg-3 col-md-6 mb-3">
-                                            <div class="card text-white bg-success h-100">
-                                                <div class="card-body d-flex flex-column">
-                                                    <div class="d-flex align-items-center">
-                                                        <i class="fas fa-building fa-2x me-2"></i>
-                                                        <div>
-                                                            <h6 class="card-title">Total Organizations</h6>
-                                                            <p id="totalOrganizations" class="card-text" style="font-size: 35px;">Loading...</p>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Push Activated & Not Activated to the Bottom -->
-                                                    <div class="mt-auto">
-                                                        <div class="d-flex justify-content-between">
-                                                            <span>
-                                                                    <i class="fas fa-check-circle"></i>
-                                                                <strong style="font-size: 14px;">Activated:</strong> <span id="totalOrganizationActive">Loading...</span>
-                                                            </span>
-                                                            <span>
-                                                                    <i class="fas fa-times-circle"></i>
-                                                                <strong style="font-size: 14px;">Not Activated:</strong> <span id="totalOrganizationNotActive">Loading...</span>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                       
                                         
                                         <script>
                                         document.addEventListener('DOMContentLoaded', async () => {
@@ -641,28 +892,22 @@
                                         });
                                         </script>
                                         
-                                        <div class="col-lg-3 col-md-6 mb-3">
-                                            <div class="card bg-success h-100">
+                                        <div class="col-lg-3 col-md-6 mb-3 d-flex">
+                                            <div class="card bg-success w-100">
                                                 <div class="card-body d-flex flex-column h-100">
-                                                    <!-- Top Section -->
                                                     <div class="d-flex justify-content-between align-items-center mb-3 flex-grow-1">
-                                                        <!-- Icon and Text -->
                                                         <div class="d-flex align-items-center">
-                                                            <i class="fas fa-dollar-sign fa-3x me-3"></i>
+                                                            <i class="fas fa-dollar-sign fa-3x me-3" style="color: #1B3A28;"></i>
                                                             <div>
                                                                 <h6 class="card-title mb-0" id="transactionTitle">Payments Transaction</h6>
                                                                 <p class="card-text mb-0" id="totalAmountDisplay" style="font-size: 25px;">₱0.00</p>
                                                             </div>
                                                         </div>
-                                                        
-                                                        <!-- Next Button -->
-                                                        <button class="btn btn-light d-flex align-items-center justify-content-center" id="toggleTransactionBtn">
+                                                        <button class="btn btn-light d-flex align-items-center justify-content-center" id="toggleTransactionBtn" style="background-color: #1B3A28 !important;">
                                                             <span id="nextTransactionText" class="d-none">Order Transaction</span> 
-                                                            <i class="fas fa-arrow-right ms-1" style="color: darkgreen;"></i>
+                                                            <i class="fas fa-angle-right" style="color: white;"></i>
                                                         </button>
                                                     </div>
-                                        
-                                                    <!-- Bottom Section (Cash/Gcash) -->
                                                     <div class="mt-auto pt-2">
                                                         <div class="d-flex justify-content-between flex-wrap">
                                                             <span class="text-truncate">
@@ -670,7 +915,6 @@
                                                                 <strong class="fs-6">Cash:</strong> 
                                                                 <span id="totalCashDisplay" class="fs-6 text-truncate">₱0.00</span>
                                                             </span>
-                                                            
                                                             <span class="text-truncate">
                                                                 <i class="fas fa-wallet me-1"></i>
                                                                 <strong class="fs-6">Gcash:</strong> 
@@ -685,67 +929,71 @@
                                         
                                         <script>
                                         document.addEventListener('DOMContentLoaded', async () => {
-                                            const token = localStorage.getItem('token');
-                                            if (!token) {
-                                                alert('Unauthorized access. Please log in.');
-                                                window.location.href = 'login.html';
-                                                return;
-                                            }
-                                        
-                                            const transactionTitle = document.getElementById('transactionTitle');
-                                            const totalAmountDisplay = document.getElementById('totalAmountDisplay');
-                                            const totalCashDisplay = document.getElementById('totalCashDisplay');
-                                            const totalGcashDisplay = document.getElementById('totalGcashDisplay');
-                                            const toggleTransactionBtn = document.getElementById('toggleTransactionBtn');
-                                            const nextTransactionText = document.getElementById('nextTransactionText');
-                                        
-                                            let isShowingPayments = true; // Flag to track current state
-                                        
-                                            async function fetchData() {
-                                                try {
-                                                    const [paymentsResponse, ordersResponse] = await Promise.all([
-                                                        fetch('https://finalccspayment.onrender.com/api/auth/admin-total-payments', { headers: { Authorization: `Bearer ${token}` } }),
-                                                        fetch('https://finalccspayment.onrender.com/api/auth/admin-total-product-transactions', { headers: { Authorization: `Bearer ${token}` } })
-                                                    ]);
-                                        
-                                                    if (!paymentsResponse.ok || !ordersResponse.ok) throw new Error('Failed to fetch transactions.');
-                                        
-                                                    const paymentsData = await paymentsResponse.json();
-                                                    const ordersData = await ordersResponse.json();
-                                        
-                                                    function updateUI(isPayments) {
-                                                        if (isPayments) {
-                                                            transactionTitle.textContent = "Payments Transaction";
-                                                            totalAmountDisplay.textContent = `₱${parseFloat(paymentsData.total_transactions).toFixed(2)}`;
-                                                            totalCashDisplay.textContent = `₱${parseFloat(paymentsData.total_cash).toFixed(2)}`;
-                                                            totalGcashDisplay.textContent = `₱${parseFloat(paymentsData.total_gcash).toFixed(2)}`;
-                                                            nextTransactionText.textContent = "Order Transaction";
-                                                        } else {
-                                                            transactionTitle.textContent = "Order Transaction";
-                                                            totalAmountDisplay.textContent = `₱${parseFloat(ordersData.total_transactions).toFixed(2)}`;
-                                                            totalCashDisplay.textContent = `₱${parseFloat(ordersData.total_cash).toFixed(2)}`;
-                                                            totalGcashDisplay.textContent = `₱${parseFloat(ordersData.total_gcash).toFixed(2)}`;
-                                                            nextTransactionText.textContent = "Payments Transaction";
-                                                        }
-                                                    }
-                                                    
-                                        
-                                                    // Initial state (show payments first)
-                                                    updateUI(isShowingPayments);
-                                        
-                                                    // Toggle button event listener
-                                                    toggleTransactionBtn.addEventListener('click', () => {
-                                                        isShowingPayments = !isShowingPayments;
-                                                        updateUI(isShowingPayments);
-                                                    });
-                                        
-                                                } catch (error) {
-                                                    console.error('Error fetching transactions:', error);
-                                                }
-                                            }
-                                        
-                                            fetchData();
-                                        });
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Unauthorized access. Please log in.');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    const transactionTitle = document.getElementById('transactionTitle');
+    const totalAmountDisplay = document.getElementById('totalAmountDisplay');
+    const totalCashDisplay = document.getElementById('totalCashDisplay');
+    const totalGcashDisplay = document.getElementById('totalGcashDisplay');
+    const toggleTransactionBtn = document.getElementById('toggleTransactionBtn');
+    const nextTransactionText = document.getElementById('nextTransactionText');
+
+    let isShowingPayments = true; // Flag to track current state
+
+    async function fetchData() {
+        try {
+            const [paymentsResponse, ordersResponse] = await Promise.all([
+                fetch('https://finalccspayment.onrender.com/api/auth/admin-total-payments', { headers: { Authorization: `Bearer ${token}` } }),
+                fetch('https://finalccspayment.onrender.com/api/auth/admin-total-product-transactions', { headers: { Authorization: `Bearer ${token}` } })
+            ]);
+
+            if (!paymentsResponse.ok || !ordersResponse.ok) throw new Error('Failed to fetch transactions.');
+
+            const paymentsData = await paymentsResponse.json();
+            const ordersData = await ordersResponse.json();
+
+            function formatMoney(amount) {
+                return `₱${parseFloat(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            }
+
+            function updateUI(isPayments) {
+                if (isPayments) {
+                    transactionTitle.textContent = "Payments Transaction";
+                    totalAmountDisplay.textContent = formatMoney(paymentsData.total_transactions);
+                    totalCashDisplay.textContent = formatMoney(paymentsData.total_cash);
+                    totalGcashDisplay.textContent = formatMoney(paymentsData.total_gcash);
+                    nextTransactionText.textContent = "Order Transaction";
+                } else {
+                    transactionTitle.textContent = "Order Transaction";
+                    totalAmountDisplay.textContent = formatMoney(ordersData.total_transactions);
+                    totalCashDisplay.textContent = formatMoney(ordersData.total_cash);
+                    totalGcashDisplay.textContent = formatMoney(ordersData.total_gcash);
+                    nextTransactionText.textContent = "Payments Transaction";
+                }
+            }
+
+            // Initial state (show payments first)
+            updateUI(isShowingPayments);
+
+            // Toggle button event listener
+            toggleTransactionBtn.addEventListener('click', () => {
+                isShowingPayments = !isShowingPayments;
+                updateUI(isShowingPayments);
+            });
+
+        } catch (error) {
+            console.error('Error fetching transactions:', error);
+        }
+    }
+
+    fetchData();
+});
+
                                         
                                         </script>
                                         
@@ -760,10 +1008,10 @@
                                             <div class="row">
                                                 <div class="col-xl-6 col-md-12 mb-4">
                                                     <div class="card text-white bg-success h-100">
-                                                        <div class="card-header" style="background-color: #1B3A28; color: white;">
+                                                        <div class="card-header" style="background-color: #1B3A28; color: white; padding: 10px;">
                                                             <i class="fas fa-chart-bar me-1"></i>
                                                             <span id="semesterTitle">Payments total transaction</span>
-                                                            <button id="nextSemesterButton" class="btn btn-light btn-sm float-end">Next</button>
+                                                            <button id="nextSemesterButton" class="btn btn-light btn-sm float-end"><i class="fas fa-angle-right"></i>                                                            </button>
                                                         </div>
                                                         <div class="card-body">
                                                             <canvas id="myBarChart"></canvas>
@@ -773,7 +1021,7 @@
     
                                                 <div class="col-xl-6 col-md-12 mb-4">
                                                     <div class="card text-white bg-success h-100">
-                                                        <div class="card-header" style="background-color: #1B3A28; color: white;">
+                                                        <div class="card-header" style="background-color: #1B3A28; color: white; padding: 10px;">
                                                             <i class="fas fa-chart-area me-1"></i>
                                                             Payments vs. Orders
                                                         </div>
@@ -837,22 +1085,22 @@
                         {
                             label: 'Total Transactions (Collection Payments)',
                             data: totalTransactions, // Y-axis data
-                            backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                            Color: 'black', // Light transparent white
-                            borderColor: 'black', // Slightly dim white border
+                            backgroundColor: 'red',
+                            Color: 'red', // Light transparent white
+                            borderColor: 'red', // Slightly dim white border
                             borderWidth: 2,
-                            pointBackgroundColor: 'black', // Slightly dim white
-                            pointBorderColor: 'black',
+                            pointBackgroundColor: 'red', // Slightly dim white
+                            pointBorderColor: 'red',
                         
                         },
                         {
                             label: 'Total Transactions (Product Payments)',
                             data: totalProductTransactions, // Y-axis data
-                            backgroundColor: 'rgba(255, 255, 255, 0.15)', // Light transparent white
-                            borderColor: 'black', // Slightly dim white border
+                            backgroundColor: '#1B3A28;', // Light transparent white
+                            borderColor: '#1B3A28;', // Slightly dim white border
                             borderWidth: 2,
-                            pointBackgroundColor: 'black', // Slightly dim white
-                            pointBorderColor: 'black'
+                            pointBackgroundColor: '#1B3A28;', // Slightly dim white
+                            pointBorderColor: '#1B3A28;'
                         }
                     ]
                 },
@@ -1230,7 +1478,7 @@
                                                 <input type="date" id="end_date" class="form-control">
                                             </div>
                                             <div class="col-md-2 mt-4">
-                                                <button class="btn btn-primary" onclick="fetchTransactions()">Filter</button>
+                                                <button class="btn btn-primary" onclick="fetchTransactions()"><i class="fas fa-filter"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -1242,7 +1490,7 @@
                                                 <div class="card text-white bg-success h-100">
                                                     <div class="card-body">
                                                         <h5 class="card-title text-center" id="paymentHeader">Payment Transactions Today</h5>
-                                                        <table class="table text-black" id="paymentTable">
+                                                        <table class="custom-table" id="paymentTable">
                                                             <thead>
                                                                 <tr>
                                                                     <th>Student Name</th>
@@ -1256,6 +1504,20 @@
                                                             <tbody></tbody>
                                                         </table>
                                                     </div>
+                                                    <div class="export-container">
+                                                        <div class="export-dropdown">
+                                                            <button class="export-btn">
+                                                                Export <i class="fas fa-chevron-down"></i>
+                                                            </button>
+                                                            <div class="export-content">
+                                                                <a href="#" onclick="exportAction('copy')">Copy</a>
+                                                                <a href="#" onclick="exportAction('print')">Print</a>
+                                                                <a href="#" onclick="exportAction('pdf')">PDF</a>
+                                                                <a href="#" onclick="exportAction('csv')">CSV</a>
+                                                                <a href="#" onclick="exportAction('excel')">Excel</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                     
@@ -1264,7 +1526,7 @@
                                                 <div class="card text-white bg-success h-100">
                                                     <div class="card-body">
                                                         <h5 class="card-title text-center" id="orderHeader">Order Transactions Today</h5>
-                                                        <table class="table text-white" id="orderTable">
+                                                        <table class="custom-table" id="orderTable">
                                                             <thead>
                                                                 <tr>
                                                                     <th>Student Name</th>
@@ -1277,13 +1539,77 @@
                                                             </thead>
                                                             <tbody></tbody>
                                                         </table>
+                                                        
+                                                    </div>
+                                                    <div class="export-container">
+                                                        <div class="export-dropdown">
+                                                            <button class="export-btn">
+                                                                Export <i class="fas fa-chevron-down"></i>
+                                                            </button>
+                                                            <div class="export-content">
+                                                                <a href="#" onclick="exportAction('copy')">Copy</a>
+                                                                <a href="#" onclick="exportAction('print')">Print</a>
+                                                                <a href="#" onclick="exportAction('pdf')">PDF</a>
+                                                                <a href="#" onclick="exportAction('csv')">CSV</a>
+                                                                <a href="#" onclick="exportAction('excel')">Excel</a>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                
                                             </div>
+                                            
                                         </div>  
                                
                                     
-                                    <script> // Function to get today's date in Manila timezone
+                                    <script>
+                                     let orderTable;
+
+function exportAction(type) {
+    var table = $('#orderTable').DataTable();
+    switch (type) {
+        case 'copy':
+            table.button('.buttons-copy').trigger();
+            break;
+        case 'print':
+            table.button('.buttons-print').trigger();
+            break;
+        case 'pdf':
+            table.button('.buttons-pdf').trigger();
+            break;
+        case 'csv':
+            table.button('.buttons-csv').trigger();
+            break;
+        case 'excel':
+            table.button('.buttons-excel').trigger();
+            break;
+    }
+}
+
+
+let paymentTable;
+
+function exportAction(type) {
+    var table = $('#paymentTable').DataTable();
+    switch (type) {
+        case 'copy':
+            table.button('.buttons-copy').trigger();
+            break;
+        case 'print':
+            table.button('.buttons-print').trigger();
+            break;
+        case 'pdf':
+            table.button('.buttons-pdf').trigger();
+            break;
+        case 'csv':
+            table.button('.buttons-csv').trigger();
+            break;
+        case 'excel':
+            table.button('.buttons-excel').trigger();
+            break;
+    }
+}
+
                                         function getManilaDate() {
                                             const now = new Date();
                                             const manilaTime = new Intl.DateTimeFormat('en-CA', { 
@@ -1388,7 +1714,8 @@
             className: 'btn-print'  // Add a custom class to style the background color
         }
     ],
-    dom: 'lBfrtip',
+    dom: '<"top"f>rt<"bottom"lip>',
+
     lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
 });
                                         
@@ -1445,7 +1772,8 @@
             className: 'btn-print'  // Add a custom class
         }
     ],
-    dom: 'lBfrtip',
+    dom: '<"top"f>rt<"bottom"lip>',
+
     lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
 });
                                         
