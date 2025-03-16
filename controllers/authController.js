@@ -31,7 +31,99 @@ async function uploadFileToDropbox() {
     }
 }
 
+const { sendBalanceProductTransactionEmail } = require('../config/sendEmailBalanceTransaction');
 
+exports.notifyProductTransactionBalance = async (req, res) => {
+    try {
+        const organizationId = req.userId;
+        if (!organizationId) {
+            return res.status(400).json({ error: 'Organization ID is required.' });
+        }
+
+        // Query to get transactions with "Balance" status
+        const query = `
+            SELECT 
+                pt.order_transaction_id,
+                pt.total_pay,
+                pt.payment_method,
+                pt.status,
+                u.firstname,
+                u.middlename,
+                u.lastname,
+                u.email
+            FROM product_transaction pt
+            JOIN users u ON pt.user_id = u.id
+            WHERE pt.status = 'Balance'
+            AND pt.order_transaction_id IN (
+                SELECT DISTINCT pfo.order_transaction_id
+                FROM product_transaction_final_order pfo
+                JOIN products p ON pfo.product_id = p.product_id
+                WHERE p.organization_id = ?
+            );
+        `;
+
+        const [transactions] = await db.query(query, [organizationId]);
+
+        if (transactions.length === 0) {
+            return res.status(200).json({ message: "No balance transactions found." });
+        }
+
+        // Loop through transactions and send email
+        for (const transaction of transactions) {
+            const userFullName = `${transaction.firstname} ${transaction.middlename || ''} ${transaction.lastname}`.trim();
+            await sendBalanceProductTransactionEmail(
+                transaction.email,
+                userFullName,
+                transaction.order_transaction_id,
+                transaction.total_pay
+            );
+        }
+
+        res.status(200).json({ message: "Balance transaction emails sent successfully." });
+    } catch (error) {
+        console.error("Error notifying product transaction balances:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+const { sendBalanceTransactionEmail } = require('../config/sendEmailBalanceTransaction');
+
+// Function to notify users with balance transactions
+exports.notifyBalanceTransactions = async (req, res) => {
+    try {
+        const organizationId = req.userId;
+
+        // Fetch transactions with "Balance" status
+        const [transactions] = await db.query(`
+            SELECT t.id, t.transaction_id, t.balance, t.payment_id, t.user_id, p.name AS payment_name, 
+                   u.firstname, u.middlename, u.lastname, u.email 
+            FROM transactions t
+            JOIN payments p ON t.payment_id = p.id
+            JOIN users u ON t.user_id = u.id
+            WHERE p.organization_id = ? AND t.payment_status = 'Balance'
+        `, [organizationId]);
+
+        if (transactions.length === 0) {
+            return res.status(200).json({ message: "No balance transactions found." });
+        }
+
+        // Send email notifications
+        for (const transaction of transactions) {
+            const userFullName = `${transaction.firstname} ${transaction.middlename || ''} ${transaction.lastname}`.trim();
+            await sendBalanceTransactionEmail(
+                transaction.email,
+                userFullName,
+                transaction.payment_name,
+                transaction.balance,
+                transaction.transaction_id
+            );
+        }
+
+        res.status(200).json({ message: "Balance transaction emails sent successfully." });
+    } catch (error) {
+        console.error("Error notifying balance transactions:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
 exports.organizationsdetailsPresident = async (req, res) => {
     const orgUserId = req.orgIduser; 
 
