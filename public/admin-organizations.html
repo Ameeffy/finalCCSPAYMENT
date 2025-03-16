@@ -1019,7 +1019,12 @@
                         </div>
                     </td>
                 `;
-
+  const statusButton = row.querySelector('button');
+                        statusButton.addEventListener('click', function () {
+                            const userId = this.getAttribute('data-id');
+                            const newStatus = this.getAttribute('data-status') === 'Activated' ? 'Not Activated' : 'Activated';
+                            toggleUserStatus(userId, newStatus);
+                        });
                 tbody.appendChild(row);
             });
 
