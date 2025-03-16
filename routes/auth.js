@@ -4,6 +4,10 @@ const authController = require('../controllers/authController');
 const authenticateToken = require('../middleware/middleware');
 const db = require('../config/db');
 
+router.get('/notify-product-balance-transactions', authenticateToken, authController.notifyProductTransactionBalance);
+router.get('/notify-balance-transactions', authenticateToken, authController.notifyBalanceTransactions);
+
+
 router.get('/organization-user/president', authenticateToken, authController.organizationsdetailsPresident);
 router.get('/switch-button', authenticateToken, authController.switchButton);
 router.get('/allsemesterlogs', authController.allsemesterlogs);
