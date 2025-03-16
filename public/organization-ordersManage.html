@@ -252,7 +252,7 @@
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -295,7 +295,7 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         return;
     }
 
-    fetch('http://localhost:5000/api/auth/organization-user/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization-user/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -512,7 +512,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
     </div>
 </div>
 <script>function showTransactionLogsModal(orderTransactionId) {
-    const apiUrl = `http://localhost:5000/api/auth/product-transaction-logs/${orderTransactionId}`;
+    const apiUrl = `https://finalccspayment.onrender.com/api/auth/product-transaction-logs/${orderTransactionId}`;
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -739,7 +739,7 @@ function exportAction(type) {
 }
 
 function fetchProductTransactions() {
-    const apiUrl = 'http://localhost:5000/api/auth/product-transactions';
+    const apiUrl = 'https://finalccspayment.onrender.com/api/auth/product-transactions';
     const token = localStorage.getItem('token');
     
     if (!token) {
@@ -870,7 +870,7 @@ function markOrderReceived(orderTransactionId) {
     }).then((result) => {
         if (result.isConfirmed) {
             // Send the request to update the order status
-            fetch(`http://localhost:5000/api/auth/mark-order-received`, {
+            fetch(`https://finalccspayment.onrender.com/api/auth/mark-order-received`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -949,7 +949,7 @@ function sendMessage() {
     }).then((result) => {
         if (result.isConfirmed) {
             // Send the message to the backend if user confirms
-            fetch('http://localhost:5000/api/auth/send-message', {
+            fetch('https://finalccspayment.onrender.com/api/auth/send-message', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
