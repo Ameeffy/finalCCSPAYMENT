@@ -1160,7 +1160,7 @@
     
         Swal.fire({
             title: 'Are you sure?',
-            text: `Do you want to ${newStatus === 'Activated' ? 'Activate' : 'Deactivate'} this user?`,
+            text: `Do you want to ${newStatus === 'Activated' ? 'Activate' : 'Not Activated'} this user?`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#28a745', // Green
@@ -1297,7 +1297,7 @@
                 toggleButton.addEventListener('click', function () {
                     const adviserId = this.getAttribute('data-id');
                     const currentStatus = this.getAttribute('data-status');
-                    const newStatus = currentStatus === 'Activated' ? 'Deactivated' : 'Activated';
+                    const newStatus = currentStatus === 'Activated' ? 'Not Activated' : 'Activated';
     
                     toggleAdviserStatus(adviserId, newStatus, this);
                 });
@@ -1329,7 +1329,7 @@
     
         Swal.fire({
             title: 'Are you sure?',
-            text: `Do you want to ${newStatus === 'Activated' ? 'Activate' : 'Deactivate'} this adviser?`,
+            text: `Do you want to ${newStatus === 'Activated' ? 'Activate' : 'Not Activated'} this adviser?`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#28a745',
@@ -1367,12 +1367,7 @@
                             showConfirmButton: false,
                         }).then(() => {
                             // Update button and status cell dynamically
-                            button.textContent = newStatus === 'Activated' ? 'Not Activated' : 'Activated';
-                            button.setAttribute('data-status', newStatus);
-    
-                            const row = button.closest('tr');
-                            const statusCell = row.querySelector('td:nth-child(4)');
-                            statusCell.textContent = newStatus;
+                            window.location.reload();
                         });
                     } else {
                         Swal.fire({
