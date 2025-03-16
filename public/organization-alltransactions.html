@@ -742,13 +742,22 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                     <div id="filterContainer" class="mb-3 p-3 border rounded bg-light">
                                         <div class="d-flex justify-content-between align-items-center">
                                           <!-- Received By Filter on the left -->
-                                          <div class="me-3">
-                                            <label for="receivedByFilter" class="fw-bold">Received By:</label>
-                                            <select id="receivedByFilter" class="form-select d-inline-block w-auto">
-                                              <option value="">All</option>
-                                            </select>
-                                          </div>
+                                          
+                                       <div class="d-flex align-items-center">
+                                            <div class="me-3">
+                                              <label for="minDate" class="fw-bold">Start Date:</label>
+                                              <input type="date" id="minDate" class="date-range form-control d-inline-block w-auto">
+                                            </div>
+                                            
+                                            <div class="me-3">
+                                              <label for="maxDate" class="fw-bold">End Date:</label>
+                                              <input type="date" id="maxDate" class="date-range form-control d-inline-block w-auto">
+                                            </div>
                                       
+                                            <button id="filterDateBtn" class="btn btn-primary btn-sm">Filter</button>
+                                          </div>
+
+                                            
                                           <button id="notifyBalanceButton" class="btn btn-danger btn-sm" style="display: none;" onclick="notifyBalanceUsers()">
                                             <i class="fas fa-envelope"></i> Notify Balance Users
                                         </button>
@@ -763,18 +772,14 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                         }
                                         </style>
                                             
-                                          <div class="d-flex align-items-center">
+                                         
+
+
                                             <div class="me-3">
-                                              <label for="minDate" class="fw-bold">Start Date:</label>
-                                              <input type="date" id="minDate" class="date-range form-control d-inline-block w-auto">
-                                            </div>
-                                            
-                                            <div class="me-3">
-                                              <label for="maxDate" class="fw-bold">End Date:</label>
-                                              <input type="date" id="maxDate" class="date-range form-control d-inline-block w-auto">
-                                            </div>
-                                      
-                                            <button id="filterDateBtn" class="btn btn-primary btn-sm">Filter</button>
+                                            <label for="receivedByFilter" class="fw-bold">Received By:</label>
+                                            <select id="receivedByFilter" class="form-select d-inline-block w-auto">
+                                              <option value="">All</option>
+                                            </select>
                                           </div>
                                         </div>
                                       </div>
