@@ -689,54 +689,63 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
 
 
                                     <div class="row">
-                                        <!-- Total Amount Card -->
-                                        <div class="col-md-3">
-                                            <div class="card shadow-sm border-primary mb-3">
-                                                <div class="card-body text-center">
-                                                    <h5 class="card-title">Total Amount</h5>
-                                                    <p id="totalAmountDisplay" class="font-weight-bold text-primary" style="font-size: 24px;">
-                                                        ₱0.00
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    
-                                        <!-- Total Cash Payments Card -->
-                                        <div class="col-md-3">
-                                            <div class="card shadow-sm border-success mb-3">
-                                                <div class="card-body text-center">
-                                                    <h5 class="card-title">Total Cash Payments</h5>
-                                                    <p id="totalCashDisplay" class="font-weight-bold text-success" style="font-size: 24px;">
-                                                        ₱0.00
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    
-                                        <!-- Total GCash Payments Card -->
-                                        <div class="col-md-3">
-                                            <div class="card shadow-sm border-info mb-3">
-                                                <div class="card-body text-center">
-                                                    <h5 class="card-title">Total GCash Payments</h5>
-                                                    <p id="totalGcashDisplay" class="font-weight-bold text-info" style="font-size: 24px;">
-                                                        ₱0.00
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    
-                                        <!-- Total Transactions Card -->
-                                        <div class="col-md-3">
-                                            <div class="card shadow-sm border-warning mb-3">
-                                                <div class="card-body text-center">
-                                                    <h5 class="card-title">Total Transactions</h5>
-                                                    <p id="totalTransactionsDisplay" class="font-weight-bold text-warning" style="font-size: 24px;">
-                                                        0
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+    <!-- Total Amount Card -->
+    <div class="col-md-3">
+        <div class="card shadow-sm border-primary mb-3" style="border: 1px solid #e0e0e0 !important;">
+            <div class="card-header text-center bg-primary text-white" style="background-color: #1B3A28 !important;">
+                Total Amount
+            </div>
+            <div class="card-body text-center">
+                <p id="totalAmountDisplay" class="font-weight-bold text-primary" style="font-size: 24px; color: #1B3A28 !important;">
+                    ₱0.00
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Cash Payments Card -->
+    <div class="col-md-3">
+        <div class="card shadow-sm border-success mb-3" style="border: 1px solid #e0e0e0 !important;">
+            <div class="card-header text-center bg-primary text-white" style="background-color: #1B3A28 !important;">
+                Total Cash Payments
+            </div>
+            <div class="card-body text-center">
+                <p id="totalCashDisplay" class="font-weight-bold text-success" style="font-size: 24px; color: #1B3A28 !important;">
+                    ₱0.00
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total GCash Payments Card -->
+    <div class="col-md-3">
+        <div class="card shadow-sm border-info mb-3" style="border: 1px solid #e0e0e0 !important;">
+            <div class="card-header text-center bg-primary text-white" style="background-color: #1B3A28 !important;">
+                Total GCash Payments
+            </div>
+            <div class="card-body text-center">
+                <p id="totalGcashDisplay" class="font-weight-bold text-info" style="font-size: 24px; color: #1B3A28 !important;">
+                    ₱0.00
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Transactions Card -->
+    <div class="col-md-3">
+        <div class="card shadow-sm border-warning mb-3" style="border: 1px solid #e0e0e0 !important;">
+            <div class="card-header text-center bg-primary text-white" style="background-color: #1B3A28 !important;">
+                Total Transactions
+            </div>
+            <div class="card-body text-center">
+                <p id="totalTransactionsDisplay" class="font-weight-bold text-warning" style="font-size: 24px; color: #1B3A28 !important;">
+                    0
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
                                     
                                   
                                     <div id="filterContainer" class="mb-3 p-3 border rounded bg-light">
