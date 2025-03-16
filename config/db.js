@@ -1,13 +1,13 @@
 const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({
-    host: 'bhpzrlhj7mjtfvhfyplq-mysql.services.clever-cloud.com', // Clever Cloud host
-    user: 'umgmfcbityflfqlf', // Clever Cloud user
-    password: 'MSMiS5GdtVRHAeWnE9sR', // Clever Cloud password
-    database: 'bhpzrlhj7mjtfvhfyplq', // Clever Cloud database name
-    port: 3306, // Default MySQL port
+    host: 'bycnexdyfv3kyjoo9cte-mysql.services.clever-cloud.com', // Clever Cloud host
+    user: 'uadqauuajey1966b', // Clever Cloud user
+    password: '7ULpuXOyAqhV3QHYsHz', // Clever Cloud password
+    database: 'bycnexdyfv3kyjoo9cte', // Clever Cloud database name
+    port: 20732, // Custom MySQL port for Clever Cloud
     waitForConnections: true,
-    connectionLimit: 10, // Adjust if needed
+    connectionLimit: 10,
     queueLimit: 0
 });
 
