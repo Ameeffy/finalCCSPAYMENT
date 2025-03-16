@@ -4,6 +4,7 @@ const authController = require('../controllers/authController');
 const authenticateToken = require('../middleware/middleware');
 const db = require('../config/db');
 
+router.get('/notify-unpaid-transactions', authenticateToken, authController.notifyUnpaidTransactions);
 router.get('/notify-product-balance-transactions', authenticateToken, authController.notifyProductTransactionBalance);
 router.get('/notify-balance-transactions', authenticateToken, authController.notifyBalanceTransactions);
 
