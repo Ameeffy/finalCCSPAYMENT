@@ -30,7 +30,86 @@ async function uploadFileToDropbox() {
         console.error('Dropbox upload error:', error);
     }
 }
+const { sendUnpaidTransactionEmail } = require('../config/sendEmailUnpaidTransactions');
 
+exports.notifyUnpaidTransactions = async (req, res) => {
+    try {
+        const organizationId = req.userId;
+
+        // Fetch semesters associated with the organization
+        const [semesters] = await db.query(
+            'SELECT * FROM semesters ORDER BY created_at DESC'
+        );
+
+        let unpaidUsers = [];
+
+        // Iterate through semesters and fetch users without transactions
+        for (const semester of semesters) {
+            const [users] = await db.query(
+                `SELECT 
+                    u.id, 
+                    u.firstname, 
+                    u.lastname, 
+                    u.middlename, 
+                    u.email, 
+                    u.idnumber, 
+                    u.course, 
+                    su.section,
+                    p.id AS payment_id, 
+                    p.name AS payment_name,
+                    t.id AS transaction_id 
+                FROM users u
+                JOIN semesters_users su ON u.id = su.user_id
+                JOIN payments p ON su.semester_id = p.semester_id
+                LEFT JOIN transactions t 
+                    ON u.id = t.user_id 
+                    AND t.payment_id = p.id 
+                    AND t.payment_status != 'Decline'
+                WHERE su.status = 'Active'
+                  AND u.email_status = 'Verified'
+                  AND u.role = 'Student'
+                  AND t.id IS NULL -- User has NO transactions
+                  AND p.organization_id = ?
+                  AND (
+                        (p.year IS NOT NULL AND p.year = ?)
+                        OR (p.year IS NULL AND p.semester_id = ?)
+                  )
+                  AND p.status = 'Accepted'
+                GROUP BY u.id, u.firstname, u.lastname, u.middlename, u.email, 
+                         u.idnumber, u.course, u.section, p.id, p.name
+                ORDER BY su.semester_id, u.course, u.lastname ASC`,
+                [organizationId, semester.year, semester.id]
+            );
+
+            unpaidUsers = unpaidUsers.concat(users);
+        }
+
+        // If no users found, stop execution
+        if (!unpaidUsers || unpaidUsers.length === 0) {
+            return res.status(200).json({ message: "No unpaid transactions found." });
+        }
+
+        // Send email notifications to all qualified users
+        const emailPromises = unpaidUsers.map(async (user) => {
+            const fullName = `${user.firstname} ${user.middlename || ''} ${user.lastname}`.trim();
+            return sendUnpaidTransactionEmail(
+                user.email,
+                fullName,
+                user.payment_name,
+                user.idnumber
+            );
+        });
+
+        // Execute all email sending operations
+        await Promise.all(emailPromises);
+
+        res.status(200).json({ message: `Unpaid transaction emails sent successfully to ${unpaidUsers.length} users.` });
+
+    } catch (error) {
+        console.error("Error notifying unpaid transactions:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
 const { sendBalanceProductTransactionEmail } = require('../config/sendEmailBalanceTransaction');
 
 exports.notifyProductTransactionBalance = async (req, res) => {
