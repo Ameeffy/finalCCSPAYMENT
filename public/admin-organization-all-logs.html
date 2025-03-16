@@ -294,13 +294,46 @@
 .custom-table tbody tr:hover td {
     background-color: #f8f9fa !important;
     border-bottom-color: #d0d0d0 !important;
+}.header-container {
+   
+   align-items: center; /* Vertically centers items */
 }
+.back-icon svg {
+   transition: transform 0.3s ease;
+}
+
+.back-icon:hover {
+   
+   transform: scale(1.1); /* Slight zoom effect */
+}
+
+.back-icon:hover svg {
+   transform: translateX(-5px); /* Moves the icon slightly left */
+}
+
 </style>
 <body>
 
     
-    <div class="table-container">
-        <h2 style="text-align: center;">Organizations Users & Advisers History</h2>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item" style="font-style: italic;">Organization</li>
+        <li class="breadcrumb-item active" style="font-style: italic;">History</li>
+    </ol>
+    <div class="header-container" style="display: flex; align-items: center; justify-content: space-between;">
+        
+        <!-- Back Button on the left -->
+        <a href="javascript:window.history.back();" class="back-icon" style="flex-shrink: 0;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-back-up">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M9 14l-4 -4l4 -4" />
+                <path d="M5 10h11a4 4 0 1 1 0 8h-1" />
+            </svg>
+        </a>
+        
+        <!-- Title in the center -->
+        <h2 style="flex-grow: 1; text-align: center;">Organization Users & Adviser History</h2>
+    </div>
+
 
     <table id="historyTable" class="display nowrap custom-table" style="width:100%">
         <thead>
@@ -316,7 +349,7 @@
         </thead>
         <tbody>
     </table>
-    </div>
+
     <div class="export-container">
         <div class="export-dropdown">
             <button class="export-btn">
