@@ -4,34 +4,44 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
         <link rel="icon" type="x-icon" href="img/logo.png">
+        <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Admin Accounts</title>
+        <title>Admin Payment</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"> 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>   
     </head>
+<style>
 
-    <style>
+
+body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
         .table-container{
             width: auto;
-            
+            background-color: white;
             padding-top: 20px;
             padding-left: 10px;
             padding-right: 10px;   
             border-radius: 3px;
             padding-bottom: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
         }
 .dataTables_scroll {
     border-radius: 5px 5px 0 0; /* 5px top border radius */
@@ -106,7 +116,6 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    margin-top: 50px;
 }
 
 .dataTables_wrapper .dataTables_length,
@@ -211,88 +220,89 @@
 .custom-table tbody tr:hover td {
     background-color: #f8f9fa !important;
     border-bottom-color: #d0d0d0 !important;
-}
+} 
 .export-container {
-  position: absolute;
-  left: 20px;;
-  top:10px;
-  z-index: 1;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    z-index: 1;
 }
 
 .export-dropdown {
-  position: relative;
-  display: inline-block;
+    position: relative;
+    display: inline-block;
 }
 
 .export-btn {
-  background-color: #1B3A28;
-  color: #ffffff;
-  padding: 6px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  margin-top: 60px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    background-color: #1B3A28;
+    color: #ffffff;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 40px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
 
 }
 
 .export-btn:hover {
-  background-color: #3e865c;
+    background-color: #3e865c;
 }
 
 .export-content {
-  display: none;
-  position: absolute;
-  background-color: #fff;
-  min-width: 83px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-  z-index: 1;
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 83px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 1;
 }
 
 .export-content a {
-  color: #333;
-  padding: 8px 16px;
-  text-decoration: none;
-  display: block;
-  font-size: 14px;
-  border-bottom: 1px solid #eee;
+    color: #333;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
 }
 
 .export-content a:hover {
-  background-color: #f8f9fa;
+    background-color: #f8f9fa;
 }
 
 .export-dropdown:hover .export-content {
-  display: block;
+    display: block;
 }
 @media print {
-  body {
-      font-family: Arial, sans-serif;
-      font-size: 12px;
-  }
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+    }
 
-  .export-container, .dataTables_wrapper .top, .dataTables_wrapper .bottom {
-      display: none;
-  }
+    .export-container, .dataTables_wrapper .top, .dataTables_wrapper .bottom {
+        display: none;
+    }
 
-  .custom-table {
-      border-collapse: collapse;
-      width: 100%;
-  }
+    .custom-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
 
-  .custom-table th, .custom-table td {
-      padding: 10px;
-      text-align: left;
-      border: 1px solid #ddd;
-  }
+    .custom-table th, .custom-table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
 
-  .custom-table thead {
-      background-color: #f1f1f1;
-  }
-}
-    </style>
+    .custom-table thead {
+        background-color: #f1f1f1;
+    }
+}  
+
+</style>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center">
             <!-- Left Section -->
@@ -574,7 +584,6 @@
     </div>
 
 
-
             
             <div id="layoutSidenav_content">
                 <main>
@@ -584,194 +593,75 @@
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="card mb-4" style="padding: 20px;">
-                                    
-                                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                        <!-- Left Side: Accounts -->
-                                        <ol class="breadcrumb mb-4">
-                                            <li class="breadcrumb-item" style="font-style: italic;">Accounts</li>
-                                            <li class="breadcrumb-item" style="font-style: italic;">Student</li>
-                                            <li class="breadcrumb-item active" style="font-style: italic;">Enrollment Status</li>
-                                        </ol>
-                                        
-                                        <div class="position-relative">
-                                            <!-- Ellipsis icon that triggers dropdown with animation -->
-                                            <i class="bi bi-three-dots-vertical position-absolute top-0 end-0 fs-4" style="cursor: pointer;" id="ellipsisIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                                            
-                                            <!-- Dropdown menu -->
-                                            <ul class="dropdown-menu dropdown-menu-end" style="padding: 10px;">
-                                                <li>
-                                                    <a href="#" class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#UsersModal" style="font-size: 14px;">
-                                                      <i class="fas fa-pen-to-square fa-fw me-2 fs-5"></i> Enroll Student
-                                                    </a>
-                                                  </li>
-                                                 
-                                              </ul>
-                                              
-                                              
-                                              
-                                            
-                                            <!-- Heading -->
-                                          </div>
-                                    
-                                        <!-- Right Side: Button -->
-                                      
-
-                                        <script>
-                                            document.addEventListener('DOMContentLoaded', function () {
-                                                const openModalButton = document.getElementById('openModalButton');
-                                                const closeModalButton = document.getElementById('closeModalButton');
-                                                const usersModal = document.getElementById('UsersModal');
-                                                const userSearchInput = document.getElementById('userSearch');
-                                                const userResults = document.getElementById('userResults');
-                                            
-                                                // Function to show the modal
-                                                openModalButton?.addEventListener('click', function () {
-                                                    usersModal.style.display = 'flex'; // Show modal
-                                                });
-                                            
-                                                // Function to close the modal
-                                                closeModalButton?.addEventListener('click', function () {
-                                                    usersModal.style.display = 'none'; // Hide modal
-                                                });
-                                            
-                                                // Close modal when clicking outside the content
-                                                window.addEventListener('click', function (event) {
-                                                    if (event.target === usersModal) {
-                                                        usersModal.style.display = 'none';
-                                                    }
-                                                });
-                                            
-                                                // Fetch and display users based on the search query
-                                                function fetchUsers(query) {
-                                                    const token = localStorage.getItem('token');
-                                                    if (!token) {
-                                                        window.location.href = 'adminlogin.html';
-                                                        return;
-                                                    }
-                                            
-                                                    fetch(`https://finalccspayment.onrender.com/api/auth/userspaymentorgWeb?search=${query}`, {
-                                                        headers: {
-                                                            'Authorization': `Bearer ${token}`
-                                                        }
-                                                    })
-                                                        .then(response => {
-                                                            if (!response.ok) {
-                                                                throw new Error('Failed to fetch users');
-                                                            }
-                                                            return response.json();
-                                                        })
-                                                        .then(data => {
-                                                            userResults.innerHTML = ''; // Clear previous results
-                                            
-                                                            if (data.length === 0) {
-                                                                userResults.innerHTML = '<p>No users found</p>';
-                                                                return;
-                                                            }
-                                            
-                                                            data.forEach(user => {
-                                                                if (
-                                                                    user.username.toLowerCase().startsWith(query.toLowerCase()) ||
-                                                                    user.idnumber.toLowerCase().startsWith(query.toLowerCase()) ||
-                                                                    user.firstname.toLowerCase().startsWith(query.toLowerCase()) ||
-                                                                    user.lastname.toLowerCase().startsWith(query.toLowerCase()) ||
-                                                                    user.email.toLowerCase().startsWith(query.toLowerCase())
-                                                                ) {
-                                                                    const userDiv = document.createElement('div');
-                                                                    userDiv.classList.add('user-item');
-                                                                    userDiv.innerHTML = `<p>${user.lastname} ${user.firstname} (${user.idnumber})</p>`;
-                                                                    userDiv.addEventListener('click', () => selectUser(user.id, user.lastname, user.firstname));
-                                                                    userResults.appendChild(userDiv);
-                                                                }
-                                                            });
-                                                        })
-                                                        .catch(error => {
-                                                            console.error('Error fetching users:', error);
-                                                            userResults.innerHTML = '<p>Failed to load users. Try again later.</p>';
-                                                        });
-                                                }
-                                            
-                                                // Handle search input changes
-                                                userSearchInput?.addEventListener('input', function () {
-                                                    const query = this.value.trim();
-                                                    if (query.length > 0) {
-                                                        fetchUsers(query);
-                                                    } else {
-                                                        userResults.innerHTML = ''; // Clear results if query is empty
-                                                    }
-                                                });
-                                            
-                                                // Select a user from the search results
-                                                function selectUser(userId, lastname, firstname) {
-                                                    document.getElementById('userId').value = userId; // Set hidden input
-                                                    userSearchInput.value = `${lastname} ${firstname}`; // Set input value
-                                                    userResults.innerHTML = ''; // Clear search results
-                                                }
-                                            });
-                                            
-                                            </script>
-                                            <div id="UsersModal" class="modal fade" tabindex="-1" aria-labelledby="UsersModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg">
-                                                  <div class="modal-content">
-                                                    <form id="UsersForm">
-                                                      <!-- Modal Header -->
-                                                      <div class="modal-header">
-                                                        <h5 class="modal-title" id="UsersModalLabel">User Information</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                      </div>
-                                              
-                                                      <!-- Modal Body -->
-                                                      <div class="modal-body">
-                                                        <!-- User Search Section -->
-                                                        <div class="mb-3">
-                                                          <label for="userSearch" class="form-label">User:</label>
-                                                          <input type="text" id="userSearch" name="userSearch" class="form-control" placeholder="Search user by name or ID number" required>
-                                                          <div id="userResults" class="mt-3 text-center" style="font-size: 20px;"></div>
-                                                        </div>
-                                              
-                                                        <!-- Section Dropdown -->
-                                                        <div class="mb-3">
-                                                          <label for="section" class="form-label">Section:</label>
-                                                          <select id="section" class="form-select" name="section" required>
-                                                            <option value="" disabled selected>Select Section</option>
-                                                            <option value="1A">1A</option>
-                                                            <option value="1B">1B</option>
-                                                            <option value="1C">1C</option>
-                                                            <option value="2A">2A</option>
-                                                            <option value="2B">2B</option>
-                                                            <option value="2C">2C</option>
-                                                            <option value="3A">3A</option>
-                                                            <option value="3B">3B</option>
-                                                            <option value="3C">3C</option>
-                                                            <option value="4A">4A</option>
-                                                            <option value="4B">4B</option>
-                                                            <option value="4C">4C</option>
-                                                          </select>
-                                                        </div>
-                                              
-                                                        <!-- Hidden User ID -->
-                                                        <input type="hidden" id="userId" name="userId">
-                                              
-                                                      </div>
-                                              
-                                                      <!-- Modal Footer -->
-                                                      <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                                      </div>
-                                                    </form>
-                                                    <div id="formError" class="error"></div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                              
-                                            
-                                            
-                                            
-                                            <script>
-                                                let dataTable;
+                                    <ol class="breadcrumb mb-4">
+                                        <li class="breadcrumb-item" style="font-style: italic;">Accounts</li>
+                                        <li class="breadcrumb-item" style="font-style: italic;">Student</li>
+                                        <li class="breadcrumb-item active" style="font-style: italic;">Reports</li>
+                                    </ol>
+                                
+                                    <table id="usersReportTable" class="custom-table">
+                                        <thead>
+                                            <tr>
+                                                <th>COR #</th>
+                                                <th>Student Name</th>
+                                                <th>Semester</th>
+                                                <th>Reason</th>
+                                                <th>Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Data will be inserted dynamically here -->
+                                        </tbody>
+                                    </table>
+                                    <div class="export-container">
+                                        <div class="export-dropdown">
+                                            <button class="export-btn">
+                                                Export <i class="fas fa-chevron-down"></i>
+                                            </button>
+                                            <div class="export-content">
+                                                <a href="#" onclick="exportAction('copy')">Copy</a>
+                                                <a href="#" onclick="exportAction('print')">Print</a>
+                                                <a href="#" onclick="exportAction('pdf')">PDF</a>
+                                                <a href="#" onclick="exportAction('csv')">CSV</a>
+                                                <a href="#" onclick="exportAction('excel')">Excel</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                            
+                            <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+                            <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+                            <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+                            <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+                            <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+                            <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+                            <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+                            
+                            <!-- DataTables Buttons CSS and JS -->
+                            <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+                            <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+                            
+                            <!-- JSZip for Excel Export -->
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+                            
+                            <!-- pdfMake for PDF Export -->
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+                            
+                            <!-- DataTables Buttons Extensions -->
+                            <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+                            <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+                            
+                            
+                            <script>
+                                let dataTable;
 
 function exportAction(type) {
-    var table = $('#accountsTable').DataTable();
+    var table = $('#usersReportTable').DataTable();
     switch (type) {
         case 'copy':
             table.button('.buttons-copy').trigger();
@@ -790,523 +680,31 @@ function exportAction(type) {
             break;
     }
 }
-                                                document.getElementById('UsersForm').addEventListener('submit', function (event) {
-    event.preventDefault();
-
-    const userId = document.getElementById('userId').value;
-    const section = document.getElementById('section').value;
-
-    if (!userId || !section) {
-        Swal.fire(
-            'Error!',
-            'Please select a user and a section.',
-            'error'
-        );
-        return;
-    }
-
-    // Show confirmation prompt before making the request
-    Swal.fire({
-        title: 'Are you sure?',
-        text: 'Do you want to enroll the user this semester??',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, Enrool!',
-        cancelButtonText: 'Cancel',
-    }).then((result) => {
-        if (result.isConfirmed) {
-            
-            // Show loading message while processing
-            Swal.fire({
-                title: 'Processing...',
-                text: 'Please wait while updating the user status and section.',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                },
-            });
-
-            fetch('https://finalccspayment.onrender.com/api/auth/update-user-statusWeb', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-                body: JSON.stringify({ user_id: userId, section })
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.success) {
-                    Swal.fire(
-                        'Success!',
-                        'User status and section updated successfully!',
-                        'success'
-                    ).then(() => {
-                        document.getElementById('UsersModal').style.display = 'none'; // Close the modal
-                        window.location.reload(); // Reload the page after success
-                    });
-                } else {
-                    Swal.fire(
-                        'Error!',
-                        data.msg || 'Failed to update user status and section.',
-                        'error'
-                    );
-                }
-            })
-            .catch((error) => {
-                console.error('Error updating user status:', error);
-                Swal.fire(
-                    'Error!',
-                    'An error occurred while updating the user.',
-                    'error'
-                );
-            });
-        }
-    });
-});
-
-                                            
-                                            </script>
-                                            
-                                            <div id="UsersModalGrad" class="modal-grad" style="display: none; position: fixed; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center;">
-                                                <div class="modal-content-payment" style="background: white; padding: 20px; border-radius: 10px; width: 50%; max-width: 500px; position: relative;">
-                                                    <form id="UsersFormGrad">
-                                                        <span style="position: absolute; right: 20px; top: 20px; cursor: pointer;" class="close" id="closeModalButtonGrad">
-                                                            <i class="fas fa-times-circle"></i>
-                                                        </span>
-                                            
-                                                        <label style="font-weight: bold; margin-top: 20px;">User:</label>
-                                                        <input type="text" id="userSearchGrad" name="userSearch" placeholder="Search user by name or ID number" required style="width: 100%; padding: 10px; box-sizing: border-box; margin-bottom: 10px;">
-                                            
-                                                        <div id="userResultsGrad" style="width: 100%; padding: 10px; box-sizing: border-box; margin-top: 10px; cursor: pointer; text-align: center; font-size: 20px;"></div>
-                                            
-                                                        <label for="status">Status:</label>
-                                                        <select id="status" class="form-control" name="status" required style="width: 100%; padding: 10px; box-sizing: border-box; margin-bottom: 10px;">
-                                                            <option value="" disabled selected>Select Status</option>
-                                                            <option value="Graduated">Graduated</option>
-                                                            <option value="Not Enrolled">Not Enrolled</option>
-                                                            <option value="Active">Active</option>
-                                                        </select>
-                                            
-                                                        <br><br>
-                                                        <input type="hidden" id="userId" name="userId">
-                                            
-                                                        <button type="submit" class="btn-submit">Submit</button>
-                                                    </form>
-                                                    <div id="formErrorGrad" class="error"></div>
-                                                </div>
-                                            </div>
-                                            
-                                            
-                                            <script>
-                                            document.addEventListener('DOMContentLoaded', function () {
-                                                const openModalButtonGrad = document.getElementById('openModalButtonGrad');
-                                                const closeModalButtonGrad = document.getElementById('closeModalButtonGrad');
-                                                const usersModalGrad = document.getElementById('UsersModalGrad');
-                                                const userSearchInputGrad = document.getElementById('userSearchGrad');
-                                                const userResultsGrad = document.getElementById('userResultsGrad');
-                                            
-                                                // Function to show the modal
-                                                openModalButtonGrad?.addEventListener('click', function () {
-                                                    usersModalGrad.style.display = 'flex'; // Show modal
-                                                });
-                                            
-                                                // Function to close the modal
-                                                closeModalButtonGrad?.addEventListener('click', function () {
-                                                    usersModalGrad.style.display = 'none'; // Hide modal
-                                                });
-                                            
-                                                // Close modal when clicking outside the content
-                                                window.addEventListener('click', function (event) {
-                                                    if (event.target === usersModalGrad) {
-                                                        usersModalGrad.style.display = 'none';
-                                                    }
-                                                });
-                                            
-                                                // Function to fetch users based on the search query
-                                                function fetchUsersGrad(query) {
-                                                    const token = localStorage.getItem('token');
-                                                    if (!token) {
-                                                        window.location.href = 'adminlogin.html';
-                                                        return;
-                                                    }
-                                            
-                                                    fetch(`https://finalccspayment.onrender.com/api/auth/userspaymentorg?search=${query}`, {
-                                                        headers: {
-                                                            'Authorization': `Bearer ${token}`
-                                                        }
-                                                    })
-                                                    .then(response => {
-                                                        if (!response.ok) {
-                                                            throw new Error('Failed to fetch users');
-                                                        }
-                                                        return response.json();
-                                                    })
-                                                    .then(data => {
-                                                        userResultsGrad.innerHTML = ''; // Clear previous results
-                                            
-                                                        if (data.length === 0) {
-                                                            userResultsGrad.innerHTML = '<p>No users found</p>';
-                                                            return;
-                                                        }
-                                            
-                                                        data.forEach(user => {
-                                                            if (
-                                                                user.username.toLowerCase().startsWith(query.toLowerCase()) ||
-                                                                user.idnumber.toLowerCase().startsWith(query.toLowerCase()) ||
-                                                                user.firstname.toLowerCase().startsWith(query.toLowerCase()) ||
-                                                                user.lastname.toLowerCase().startsWith(query.toLowerCase()) ||
-                                                                user.email.toLowerCase().startsWith(query.toLowerCase())
-                                                            ) {
-                                                                const userDiv = document.createElement('div');
-                                                                userDiv.classList.add('user-item');
-                                                                userDiv.innerHTML = `<p>${user.lastname} ${user.firstname} (${user.idnumber})</p>`;
-                                                                userDiv.addEventListener('click', () => selectUserGrad(user.id, user.lastname, user.firstname));
-                                                                userResultsGrad.appendChild(userDiv);
-                                                            }
-                                                        });
-                                                    })
-                                                    .catch(error => {
-                                                        console.error('Error fetching users:', error);
-                                                        userResultsGrad.innerHTML = '<p>Failed to load users. Try again later.</p>';
-                                                    });
-                                                }
-                                            
-                                                // Handle search input changes for Grad
-                                                userSearchInputGrad?.addEventListener('input', function () {
-                                                    const query = this.value.trim();
-                                                    if (query.length > 0) {
-                                                        fetchUsersGrad(query);
-                                                    } else {
-                                                        userResultsGrad.innerHTML = ''; // Clear results if query is empty
-                                                    }
-                                                });
-                                            
-                                                // Select a user from the search results
-                                                function selectUserGrad(userId, lastname, firstname) {
-                                                    document.getElementById('userId').value = userId; // Set hidden input
-                                                    document.getElementById('userSearchGrad').value = `${lastname} ${firstname}`; // Set input value
-                                                    userResultsGrad.innerHTML = ''; // Clear search results
-                                                }
-                                            
-                                                // Submit Graduate action (Handling the form submission)
-                                                document.getElementById('submitGrad')?.addEventListener('click', function (e) {
-                                                    e.preventDefault();
-                                            
-                                                    const userId = document.getElementById('userId').value;
-                                                    const status = document.getElementById('status').value;
-                                            
-                                                    if (!userId || !status) {
-                                                        alert("Please select a user and status");
-                                                        return;
-                                                    }
-                                            
-                                                    const token = localStorage.getItem('token');
-                                                    if (!token) {
-                                                        window.location.href = 'adminlogin.html';
-                                                        return;
-                                                    }
-                                            
-                                                    fetch('https://finalccspayment.onrender.com/api/auth/updateUserStatusGrad', {
-                                                        method: 'POST',
-                                                        headers: {
-                                                            'Content-Type': 'application/json',
-                                                            'Authorization': `Bearer ${token}`
-                                                        },
-                                                        body: JSON.stringify({
-                                                            user_id: userId,
-                                                            status: status
-                                                        })
-                                                    })
-                                                    .then(response => response.json())
-                                                    .then(data => {
-                                                        if (data.success) {
-                                                            Swal.fire(
-                                                                'Success!',
-                                                                'User has been successfully updated to Graduate!',
-                                                                'success'
-                                                            ).then(() => {
-                                                                usersModalGrad.style.display = 'none'; // Close modal
-                                                                window.location.reload(); // Reload the page
-                                                            });
-                                                        } else {
-                                                            Swal.fire(
-                                                                'Error!',
-                                                                'There was an issue updating the status.',
-                                                                'error'
-                                                            );
-                                                        }
-                                                    })
-                                                    .catch(error => {
-                                                        console.error('Error updating status:', error);
-                                                        Swal.fire(
-                                                            'Error!',
-                                                            'There was an error processing the request.',
-                                                            'error'
-                                                        );
-                                                    });
-                                                });
-                                            });       
-                                                </script>
-                                        
-                                    </div>
-                            <body>
-                                <table id="accountsTable" class="custom-table">
-                                    <thead>
-                                        <tr>     
-                                            <th>Student Name</th>
-                                            <th>Upload Certificate</th>
-                                            <th>Semester</th>
-                                            <th>Status</th>
-                                            <th>Section</th>
-                                            <th>Action</th>
-                                            <th>Date</th>
-                                            <th>COR #</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                                <div class="export-container">
-                                    <div class="export-dropdown">
-                                        <button class="export-btn">
-                                            Export <i class="fas fa-chevron-down"></i>
-                                        </button>
-                                        <div class="export-content">
-                                            <a href="#" onclick="exportAction('print')">Print</a>
-                                            <a href="#" onclick="exportAction('pdf')">PDF</a>
-                                            <a href="#" onclick="exportAction('csv')">CSV</a>
-                                            <a href="#" onclick="exportAction('excel')">Excel</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 9999; justify-content: center; align-items: center;">
-                                    <div style="background: rgba(0, 0, 0, 0); padding: 20px; border-radius: 10px; max-width: 100%; max-height: 100%; overflow: auto; position: relative;">
-                                        <span style="position: absolute; right: 30px; top: 40px; cursor: pointer;" class="close" id="closeModal">
-                                            <i class="fas fa-times-circle"></i>
-                                        </span>
-                                        <div style="text-align: center; margin-top: 10px; max-width: 100%; overflow: hidden;">
-                                            <img id="modalImage" src="" alt="Certificate Image" style="max-width: 100%; max-height:80vh; object-fit: contain;"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <script>
-                                    
-                                  function fetchUserData() {
-                                fetch('https://finalccspayment.onrender.com/api/auth/getsemesters_users')
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        const tableBody = document.getElementById('accountsTable').getElementsByTagName('tbody')[0];
-                                        tableBody.innerHTML = ''; // Clear the table before populating it
+                                function fetchUserReports() {
+                                    fetch('https://finalccspayment.onrender.com/api/auth/get-users-reports') // Replace with your API endpoint
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            const tableBody = document.getElementById('usersReportTable').getElementsByTagName('tbody')[0];
+                                            tableBody.innerHTML = ''; // Clear previous rows
                             
-                                        // Loop through each user and insert a row in the table
-                                        const pendingUsers = data.filter(user => 
-                                            user.status === 'Pending' || user.status === 'Declined' || user.status === 'Active'
-                                        );
+                                            // Loop through the data and insert into table
+                                            data.forEach(report => {
+                                                const row = tableBody.insertRow();
+                                                row.insertCell(0).textContent = report.semester_user_id;
+                                                row.insertCell(1).textContent = `${report.lastname} ${report.firstname} ${report.middlename}`;
+                                                row.insertCell(2).textContent = report.semester_name;
+                                                row.insertCell(3).textContent = report.reason;
+                                                row.insertCell(4).textContent = new Date(report.created_at).toLocaleString();
+                                            });
                             
-                                        pendingUsers.forEach(user => {
-                                            const row = tableBody.insertRow();
-                                            
-                                            row.insertCell(0).textContent = `${user.lastname} ${user.firstname} ${user.middlename}`;
-                            
-                                            const uploadCell = row.insertCell(1);
-                                            if (user.uploadcertificate) {
-// Create the button element
-const iconButton = document.createElement('button');
-
-// Add Bootstrap & custom styles
-iconButton.className = 'btn btn-primary view-btn';
-iconButton.innerHTML = '<i class="fas fa-eye"></i>';  // Add eye icon
-
-// Apply styling
-iconButton.style.cursor = 'pointer';
-iconButton.style.padding = '10px 10px';
-iconButton.style.display = 'flex';
-iconButton.style.alignItems = 'center';
-iconButton.style.gap = '6px'; // Space between icon and text
-iconButton.style.border = 'none';
-iconButton.style.borderRadius = '6px';
-iconButton.style.transition = '0.3s ease-in-out';
-
-// Hover effect
-iconButton.onmouseover = function () {
-    iconButton.style.backgroundColor = '#0056b3';
-};
-iconButton.onmouseout = function () {
-    iconButton.style.backgroundColor = '#007bff';
-};
-
-// Event listener to open the modal when the button is clicked
-iconButton.onclick = function () {
-    openModal(user.uploadcertificate);
-};
-
-                            
-                                                uploadCell.appendChild(iconButton);
-                                            } else {
-                                                uploadCell.textContent = 'Face to face verification';
+                                            // Initialize or refresh DataTable
+                                            if ($.fn.DataTable.isDataTable('#usersReportTable')) {
+                                                $('#usersReportTable').DataTable().clear().destroy(); // Destroy previous DataTable
                                             }
                             
-                                            row.insertCell(2).textContent = user.semester_name;
-                                            row.insertCell(3).textContent = user.status;
-                                            row.insertCell(4).textContent = user.section;
-                            
-                                            if (user.status === 'Pending') {
-    const actionCell = row.insertCell(5);
-
-    // Accept Button
-    const acceptButton = document.createElement('button');
-    acceptButton.innerHTML = '<i class="fas fa-check"></i>'; // FontAwesome check icon
-    acceptButton.style.cursor = 'pointer';
-    acceptButton.style.padding = '10px 10px';
-    acceptButton.style.background = '#28a745';
-    acceptButton.style.color = 'white';
-    acceptButton.style.border = 'none';
-    acceptButton.style.borderRadius = '5px';
-    acceptButton.style.marginRight = '5px'; // Adds spacing between buttons
-    acceptButton.onclick = function() {
-        // Show confirmation dialog including section
-        Swal.fire({
-            title: 'Are you sure?',
-            text: `You are about to accept this user from Section: ${user.section}`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, accept it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // If user confirms, proceed with the action
-                handleAction(user.user_id, user.id, 'Accepted', user.section);
-            }
-        });
-    };
-    actionCell.appendChild(acceptButton);
-
-    // Decline Button
-    const declineButton = document.createElement('button');
-    declineButton.innerHTML = '<i class="fas fa-times"></i>'; // FontAwesome "X" icon
-    declineButton.style.cursor = 'pointer';
-    declineButton.style.padding = '10px 10px';
-    declineButton.style.background = '#dc3545';
-    declineButton.style.color = 'white';
-    declineButton.style.border = 'none';
-    declineButton.style.borderRadius = '5px';
-    declineButton.onclick = function() {
-        // Show confirmation dialog including section
-        Swal.fire({
-            title: 'Are you sure?',
-            text: `You are about to decline this user from Section: ${user.section}`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, decline it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // If user confirms, proceed with the action
-                handleAction(user.user_id, user.id, 'Declined', user.section);
-            }
-        });
-    };
-    actionCell.appendChild(declineButton);
-}
- else if (user.status === 'Active') {
-                                const actionCell = row.insertCell(5);
-                                // Add italic text "Officially enrolled"
-                                const enrolledText = document.createElement('span');
-                                enrolledText.style.fontStyle = 'italic';
-                                enrolledText.textContent = 'Officially enrolled';
-                                actionCell.appendChild(enrolledText);
-                            } else if (user.status === 'Declined') {
-                                const actionCell = row.insertCell(5);
-                            
-                                // Add icon for report
-                                const reportIcon = document.createElement('i');
-                            
-                                const reportButton = document.createElement('button');
-                                reportButton.textContent = 'Report';
-                                reportButton.style.cursor = 'pointer';
-                                reportButton.style.padding = '5px 10px';
-                                reportButton.style.background = '#ffc107';
-                                reportButton.style.color = 'white';
-                                reportButton.style.border = 'none';
-                                reportButton.style.borderRadius = '5px';
-                            
-                                // Check if a report exists for the user (using user.id as semester_user_id)
-                                checkReportExists(user.id).then(reportExists => {
-                                    if (reportExists) {
-                                        // If a report exists, hide the "Report" button and show the declined text
-                                        const declinedText = document.createElement('span');
-                                        declinedText.style.fontStyle = 'italic';
-                                        declinedText.textContent = 'Users declined';
-                                        actionCell.appendChild(declinedText);
-                                    } else {
-                                        // If no report exists, show the "Report" button
-                                        reportButton.onclick = function() {
-                                            Swal.fire({
-                                                title: 'Are you sure?',
-                                                text: `You are about to report ${user.firstname} ${user.lastname}`,
-                                                icon: 'warning',
-                                                showCancelButton: true,
-                                                confirmButtonColor: '#3085d6',
-                                                cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Yes, report it!'
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    openUserModalReport(user.user_id, user.semester_id, user.id); // Use user.id as semester_user_id
-                                                }
-                                            });
-                                        };
-                                        actionCell.appendChild(reportIcon);
-                                        actionCell.appendChild(reportButton);
-                                    }
-                                });
-                            }
-                            
-                            // Function to check if a report already exists for the user
-                            async function checkReportExists(userId) {
-                                try {
-                                    const response = await fetch('https://finalccspayment.onrender.com/api/auth/check-report-exists', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                        },
-                                        body: JSON.stringify({ userId }) // Pass userId as semester_user_id
-                                    });
-                                    const data = await response.json();
-                                    return data.exists;
-                                } catch (error) {
-                                    console.error('Error checking report existence:', error);
-                                    return false;
-                                }
-                            }
-                            const createdAtDate = new Date(user.created_at);
-
-// Ensure created_at is a valid date before formatting
-const formattedDate = !isNaN(createdAtDate.getTime()) 
-    ? createdAtDate.toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' }) 
-    : 'Invalid Date';
-
-// Insert formatted date into the table
-row.insertCell(6).textContent = formattedDate;
-
-                            row.insertCell(7).textContent = user.id;
-                            
-                                        });
-                                        
-                            
-                                       
-                                        if ($.fn.DataTable.isDataTable('#accountsTable')) {
-                                            const table = $('#accountsTable').DataTable();
-                                            table.clear(); 
-                                            table.rows.add($(tableBody).find('tr')); 
-                                            table.draw();
-                                        } else {
-                                            
-                                            $('#accountsTable').DataTable({
+                                            $('#usersReportTable').DataTable({
                                                 dom: '<"top"f>rt<"bottom"lip>',
+
                                                 buttons: [
                                                     {
                                                         extend: 'copy',
@@ -1334,11 +732,10 @@ row.insertCell(6).textContent = formattedDate;
                                                         titleAttr: 'Print'
                                                     }
                                                 ],
-                                                order: [[6, 'desc']],
+                                                order: [[4, 'desc']], // Sort by created_at
+                                                searching: true,
                                                 lengthMenu: [10, 25, 50, 100],
                                                 pageLength: 10,
-                                                searching: true,
-                                                ordering: true,
                                                 language: {
                                                     lengthMenu: "Show _MENU_ entries",
                                                     info: "Showing _START_ to _END_ of _TOTAL_ entries",
@@ -1350,190 +747,22 @@ row.insertCell(6).textContent = formattedDate;
                                                     }
                                                 }
                                             });
-                                        }
-                                    })
-                                    .catch(error => {
-                                        console.error('Error fetching user data:', error);
-                                        document.getElementById('errorMessages').textContent = 'Failed to load user data.';
-                                    });
-                            }
-                            
-                            $(document).ready(function() {
-                                fetchUserData();
-                            });
-                           
-                            setInterval(fetchUserData, 15000);
-                            
-                            function openUserModalReport(userId, semesterId, id) {
-    const declineReasons = [
-        'Not latest Certificate of Registration',
-        'Inappropriate image',
-        'Malicious content'
-    ];
-
-    Swal.fire({
-        title: 'Report User Decline',
-        html: `
-            <label for="reason">Select reason for decline:</label><br>
-            <select id="reason" class="swal2-input">
-                ${declineReasons.map(reason => `<option value="${reason}">${reason}</option>`).join('')}
-            </select>
-            <label for="comment">Additional Comments:</label><br>
-            <textarea id="comment" class="swal2-input" rows="3"></textarea>
-        `,
-        showCancelButton: true,
-        confirmButtonText: 'Submit Report',
-        cancelButtonText: 'Cancel',
-        preConfirm: () => {
-            const reason = document.getElementById('reason').value;
-            const comment = document.getElementById('comment').value.trim(); // Get the comment correctly
-            if (!reason) {
-                Swal.showValidationMessage('Please select a reason');
-            }
-            return { reason, comment };
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const { reason, comment } = result.value;
-            submitUserReport(userId, semesterId, id, reason, comment); 
-        }
-    });
-}
-
-function submitUserReport(userId, semesterId, id, reason, comment) {
-    Swal.fire({
-        title: 'Submitting Report',
-        text: 'Please wait while the report is being submitted...',
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        didOpen: () => {
-            Swal.showLoading();
-        },
-    });
-
-    // Retrieve token from localStorage or sessionStorage
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-
-    if (!token) {
-        Swal.fire('Error', 'User is not authenticated. Please log in again.', 'error');
-        return;
-    }
-
-    fetch('https://finalccspayment.onrender.com/api/auth/report-user', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Include the token in the request
-        },
-        body: JSON.stringify({
-            userId,
-            semesterId,
-            id,                                      
-            reason,
-            comment, // Now the comment is correctly passed
-        }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            Swal.fire('Report Submitted', 'The report has been successfully submitted.', 'success')
-                .then(() => {
-                    fetchUserData(); 
-                });
-        } else {
-            Swal.fire('Error', data.message || 'There was an error submitting the report.', 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Error submitting report:', error);
-        Swal.fire('Error', 'There was an error submitting the report.', 'error');
-    });
-}
-
-
-                            function handleAction(userId, id, action, section) {
-                                const token = localStorage.getItem('token'); 
-                            
-                                if (!token) {
-                                    window.location.href = 'adminlogin.html';
-                                    return;
+                                        })
+                                        .catch(error => {
+                                            console.error('Error fetching user reports:', error);
+                                        });
                                 }
                             
-                                Swal.fire({
-                                    title: 'Processing...',
-                                    text: `Please wait while we ${action.toLowerCase()} the user.`,
-                                    allowOutsideClick: false,
-                                    allowEscapeKey: false,
-                                    didOpen: () => {
-                                        Swal.showLoading();
-                                    },
-                                });
+                                // Call fetchUserReports to display the data when the page loads
+                                document.addEventListener('DOMContentLoaded', fetchUserReports);
+                            </script>
                             
                             
-                                const status = action === 'Accepted' ? 'Active' : 'Declined';
-                            
-                                fetch('https://finalccspayment.onrender.com/api/auth/updateUserStatus', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'Authorization': `Bearer ${token}`, 
-                                    },
-                                    body: JSON.stringify({
-                                        user_id: userId,
-                                        id: id,
-                                        status: status, 
-                                        action: action,
-                                        section: section, 
-                                    }),
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        Swal.fire(
-                                            'Success!',
-                                            `User has been ${action.toLowerCase()} from Section: ${section} successfully!`,
-                                            'success'
-                                        ).then(() => {
-                                            fetchUserData();
-                                        });
-                                    } else {
-                                        console.error('Error updating user status:', data.error);
-                                        Swal.fire(
-                                            'Error!',
-                                            'There was an issue updating the status.',
-                                            'error'
-                                        );
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Error updating status:', error);
-                                    Swal.fire(
-                                        'Error!',
-                                        'There was an error processing the request.',
-                                        'error'
-                                    );
-                                });
-                            }
-                                                function openModal(imageSrc) {
-                                        const modal = document.getElementById('imageModal');
-                                        const modalImage = document.getElementById('modalImage');
-                                        modalImage.src = imageSrc;  // Set the image source to the passed URL
-                                        modal.style.display = 'flex';  // Show the modal
-                                    }
-                                    function closeModal() {
-                                        const modal = document.getElementById('imageModal');
-                                        modal.style.display = 'none';
-                                    }
-                                    document.getElementById('closeModal').onclick = closeModal;
-                                    document.addEventListener('DOMContentLoaded', fetchUserData);
-                                        </script>
-                                    </body>
-                                </html>
+                                  
+                                </div>  
                             </div>
-                        </div>
-                            
-                        
-                         
+                        </div>   
+                    </div>  
                 </main>      
             </div>
         </div>
