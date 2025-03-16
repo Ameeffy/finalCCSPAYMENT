@@ -549,11 +549,10 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         const fullName = `${user.firstname} ${user.lastname}`; 
 
         document.getElementById('profile-item').innerHTML = `
-           <a style="color: #25330f; text-decoration: none; " href="organization-users-info.html">
+           <a style="color: white; text-decoration: none; " href="organization-users-info.html">
    
-   <h3 style="color: #25330f; text-decoration: none; font-size: 18px; margin-top:10px;">${user.firstname} ${user.lastname}</h3>
+   <h3 style="color: white; text-decoration: none; font-size: 18px; margin-top:10px;">${user.firstname} ${user.lastname}</h3>
 </a>
-
 
         `;
     })
@@ -734,6 +733,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                     </div> 
                                     <h1 style="text-align: center;">Products</h1>-->
                                 
+                                    
                                     <div class="position-relative">
                                         <!-- Ellipsis icon that triggers dropdown with animation -->
                                         <i class="bi bi-three-dots-vertical position-absolute top-0 end-0 fs-4" style="cursor: pointer;" id="ellipsisIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
@@ -1032,45 +1032,147 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
 </div>
 
 
-<!-- Modal -->
+<!-- Bootstrap 5 Modal -->
 <div class="modal fade" id="updateProductModal" tabindex="-1" aria-labelledby="updateProductModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        
-        <div class="modal-header">
-          <h5 class="modal-title" id="updateProductModalLabel">Update Product</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateProductModalLabel">Update Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateProductForm">
+                    <div class="mb-3">
+                        <label for="updateName" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="updateName" placeholder="Product Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="updatePrice" class="form-label">Price</label>
+                        <input type="number" class="form-control" id="updatePrice" placeholder="Price" step="0.01" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn-submit">Submit</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        
-        <form id="updateProductForm">
-          <div class="modal-body">
-            
-            <!-- Product Name Input -->
-            <div class="mb-3">
-              <label for="name" class="form-label">Product Name</label>
-              <input type="text" class="form-control" id="name" placeholder="Product Name" required>
-            </div>
-            
-            <!-- Price Input -->
-            <div class="mb-3">
-              <label for="price" class="form-label">Price</label>
-              <input type="number" class="form-control" id="price" placeholder="Price" step="0.01" required>
-            </div>
-            
-          </div>
-  
-          <!-- Modal Footer with Update Button -->
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Update Product</button>
-          </div>
-        </form>
-  
-      </div>
     </div>
-  </div>
+</div>
   
-                            <script>
+                           
+                                <script>
+// Add this script to your organization-products.html
+
+let updateProductModal = null;
+
+function editProduct(productId) {
+    currentProductId = productId;
+    getProductDetails(productId);
+    
+    // Initialize modal if not already done
+    if (!updateProductModal) {
+        updateProductModal = new bootstrap.Modal(document.getElementById('updateProductModal'));
+    }
+    
+    updateProductModal.show();
+}
+
+function getProductDetails(productId) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'adminlogin.html';
+        return;
+    }
+
+    fetch(`https://finalccspayment.onrender.com/api/auth/products/${productId}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('updateName').value = data.name;
+        document.getElementById('updatePrice').value = data.price;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to fetch product details.'
+        });
+    });
+}
+
+document.getElementById('updateProductForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    if (currentProductId) {
+        updateProduct(currentProductId);
+    }
+});
+
+function updateProduct(productId) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'adminlogin.html';
+        return;
+    }
+
+    const name = document.getElementById('updateName').value;
+    const price = document.getElementById('updatePrice').value;
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to update this product?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#007bff',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, update it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`https://finalccspayment.onrender.com/api/auth/products/${productId}/update`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ name, price })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(() => {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Product updated successfully!'
+    }).then(() => {
+        updateProductModal.hide();
+        location.reload();
+    });
+})
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to update product.'
+                });
+            });
+        }
+    });
+}
+
                                 // Open Quantity Update Modal
                                 // Open Quantity Update Modal for generic quantity
                             function openQuantityUpdateModal(productId, currentQuantity) {
@@ -1779,15 +1881,15 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                             ">
                              
 
-                               <a href="javascript:void(0);" 
+<!-- Update your edit button to just call editProduct() -->
+<!-- Edit Button -->
+<a href="javascript:void(0);" 
    class="edit-button" 
-   data-bs-toggle="modal" 
-   data-bs-target="#updateProductModal" 
    onclick="editProduct(${product.product_id})" 
-   title="Edit" 
+   title="Edit"
    style="
        width: 35px;
-       height: auto;
+       height: 35px; /* Fixed height */
        text-decoration: none; 
        color: #ffc107; 
        font-size: 18px; 
@@ -1801,107 +1903,116 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
    "
    onmouseover="this.style.backgroundColor='#ffc107';this.style.color='white';"
    onmouseout="this.style.backgroundColor='white';this.style.color='#ffc107';">
-    <i class="fas fa-edit"></i>
+    <i class="fas fa-edit" style="font-size: 20px;"></i>
 </a>
 
-                                <a href="javascript:void(0);" 
-                                   class="delete-button" 
-                                   onclick="deleteProduct(${product.product_id})" 
-                                   title="Delete" 
-                                   style="
-                                    width: 35px;
-                                        height: auto;
-                                       text-decoration: none; 
-                                       color: #f44336; 
-                                       font-size: 18px; 
-                                       display: flex; 
-                                       justify-content: center; 
-                                       align-items: center;
-                                       border: 1px solid #f44336; 
-                                       padding: 8px; 
-                                       border-radius: 5px;
-                                       transition: background-color 0.3s, color 0.3s;
-                                   "
-                                   onmouseover="this.style.backgroundColor='#f44336';this.style.color='white';"
-                                   onmouseout="this.style.backgroundColor='white';this.style.color='#f44336';">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
-                                <a href="javascript:void(0);" 
-                                   class="action-button" 
-                                   onclick="openUpdateModal(${product.product_id})" 
-                                   title="Update Quantity" 
-                                   style="
-                                    width: 35px;
-                                        height: auto;
-                                       text-decoration: none; 
-                                       color: #2196f3; 
-                                       font-size: 18px; 
-                                       display: flex; 
-                                       justify-content: center; 
-                                       align-items: center;
-                                       border: 1px solid #2196f3; 
-                                       text-align: center;
-                                       padding: 8px; 
-                                       border-radius: 5px;
-                                       transition: background-color 0.3s, color 0.3s;
-                                   "
-                                   onmouseover="this.style.backgroundColor='#2196f3';this.style.color='white';"
-                                   onmouseout="this.style.backgroundColor='white';this.style.color='#2196f3';">
-                                    <i class="fas fa-sync-alt"></i>
-                                </a>
-                                ${product.status === 'Out of Stock' ? `
-                        <a href="javascript:void(0);" onclick="confirmPreOrder(${product.product_id}, '${product.name}')" 
-                           class="action-button" title="Pre-Order"
-                           style="
-                                    width: 35px;
-                                        height: auto;
-                                       text-decoration: none; 
-                                       color: #2196f3; 
-                                       font-size: 18px; 
-                                       display: flex; 
-                                       justify-content: center; 
-                                       align-items: center;
-                                       border: 1px solid #2196f3; 
-                                       text-align: center;
-                                       padding: 8px; 
-                                       border-radius: 5px;
-                                       transition: background-color 0.3s, color 0.3s;
-                                   "
-                                   onmouseover="this.style.backgroundColor='#2196f3';this.style.color='white';"
-                                   onmouseout="this.style.backgroundColor='white';this.style.color='#2196f3';">
-                            <i class="fas fa-shopping-cart"></i>
-                        </a>
-                    ` : ''} ${product.status === 'Pre-Order' ? `
+<!-- Delete Button -->
+<a href="javascript:void(0);" 
+   class="delete-button" 
+   onclick="deleteProduct(${product.product_id})" 
+   title="Delete" 
+   style="
+       width: 35px;
+       height: 35px; /* Fixed height */
+       text-decoration: none; 
+       color: #f44336; 
+       font-size: 18px; 
+       display: flex; 
+       justify-content: center; 
+       align-items: center;
+       border: 1px solid #f44336; 
+       padding: 8px; 
+       border-radius: 5px;
+       transition: background-color 0.3s, color 0.3s;
+   "
+   onmouseover="this.style.backgroundColor='#f44336';this.style.color='white';"
+   onmouseout="this.style.backgroundColor='white';this.style.color='#f44336';">
+    <i class="fas fa-trash-alt" style="font-size: 20px;"></i>
+</a>
+
+<!-- Update Quantity Button -->
+<a href="javascript:void(0);" 
+   class="action-button" 
+   onclick="openUpdateModal(${product.product_id})" 
+   title="Update Quantity" 
+   style="
+       width: 35px;
+       height: 35px; /* Fixed height */
+       text-decoration: none; 
+       color: #2196f3; 
+       font-size: 18px; 
+       display: flex; 
+       justify-content: center; 
+       align-items: center;
+       border: 1px solid #2196f3; 
+       padding: 8px; 
+       border-radius: 5px;
+       transition: background-color 0.3s, color 0.3s;
+   "
+   onmouseover="this.style.backgroundColor='#2196f3';this.style.color='white';"
+   onmouseout="this.style.backgroundColor='white';this.style.color='#2196f3';">
+    <i class="fas fa-sync-alt" style="font-size: 20px;"></i>
+</a>
+
+<!-- Pre-Order Button (Visible only if product status is 'Out of Stock') -->
+${product.status === 'Out of Stock' ? `
+    <a href="javascript:void(0);" 
+       onclick="confirmPreOrder(${product.product_id}, '${product.name}')" 
+       class="action-button" 
+       title="Pre-Order"
+       style="
+           width: 35px;
+           height: 35px; /* Fixed height */
+           text-decoration: none; 
+           color: #2196f3; 
+           font-size: 18px; 
+           display: flex; 
+           justify-content: center; 
+           align-items: center;
+           border: 1px solid #2196f3; 
+           padding: 8px; 
+           border-radius: 5px;
+           transition: background-color 0.3s, color 0.3s;
+       "
+       onmouseover="this.style.backgroundColor='#2196f3';this.style.color='white';"
+       onmouseout="this.style.backgroundColor='white';this.style.color='#2196f3';">
+        <i class="fas fa-shopping-cart" style="font-size: 20px;"></i>
+    </a>
+` : ''}
+
+<!-- Update Pre-Order Limit Button (Visible only if product status is 'Pre-Order') -->
+${product.status === 'Pre-Order' ? `
     <a href="javascript:void(0);" 
        onclick="updatePreOrderLimit(${product.product_id}, '${product.name}')" 
        class="action-button updatepreorderlimit" 
        title="Update Pre-Order Limit"
        style="
            width: 35px;
-           height: auto;
+           height: 35px; /* Fixed height */
            text-decoration: none; 
-           color: #2196F3; 
+           color: #2196f3; 
            font-size: 18px; 
            display: flex; 
            justify-content: center; 
            align-items: center;
-           border: 1px solid #2196F3; 
+           border: 1px solid #2196f3; 
            padding: 8px; 
            border-radius: 5px;
            transition: background-color 0.3s, color 0.3s;
        "
-       onmouseover="this.style.backgroundColor='#2196F3';this.style.color='white';"
-       onmouseout="this.style.backgroundColor='white';this.style.color='#2196F3';">
-        <i class="fas fa-cart-plus"></i>
+       onmouseover="this.style.backgroundColor='#2196f3';this.style.color='white';"
+       onmouseout="this.style.backgroundColor='white';this.style.color='#2196f3';">
+        <i class="fas fa-cart-plus" style="font-size: 20px;"></i>
     </a>
 
+    <!-- Remove Pre-Order Button (Visible only if product status is 'Pre-Order') -->
     <a href="javascript:void(0);" 
        onclick="removePreOrder(${product.product_id}, '${product.name}')" 
        class="action-button removepreorder" 
        title="Remove Pre-Order"
        style="
            width: 35px;
-           height: auto;
+           height: 35px; /* Fixed height */
            text-decoration: none; 
            color: #f44336; 
            font-size: 18px; 
@@ -1915,9 +2026,10 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
        "
        onmouseover="this.style.backgroundColor='#f44336';this.style.color='white';"
        onmouseout="this.style.backgroundColor='white';this.style.color='#f44336';">
-        <i class="fas fa-times"></i>
+        <i class="fas fa-times" style="font-size: 20px;"></i>
     </a>
 ` : ''}
+
 
                             </div>
                             
