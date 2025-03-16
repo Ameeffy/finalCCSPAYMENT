@@ -25,7 +25,295 @@
         <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>   
     </head>
-<style> .text-white table tbody td {
+<style> 
+       .export-container {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    z-index: 1;
+}
+
+.export-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.export-btn {
+    background-color: #1B3A28;
+    color: #ffffff;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 60px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+}
+
+.export-btn:hover {
+    background-color: #3e865c;
+}
+
+.export-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 83px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.export-content a {
+    color: #333;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+.export-content a:hover {
+    background-color: #f8f9fa;
+}
+
+.export-dropdown:hover .export-content {
+    display: block;
+}
+@media print {
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+    }
+
+    .export-container, .dataTables_wrapper .top, .dataTables_wrapper .bottom {
+        display: none;
+    }
+
+    .custom-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .custom-table th, .custom-table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    .custom-table thead {
+        background-color: #f1f1f1;
+    }
+}
+        .table-container{
+            width: auto;
+            background-color: white;
+            padding-top: 20px;
+            padding-left: 10px;
+            padding-right: 10px;   
+            border-radius: 3px;
+            padding-bottom: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+.dataTables_scroll {
+    border-radius: 5px 5px 0 0; /* 5px top border radius */
+}
+
+.dataTables_scrollBody {
+    border-radius: 0; /* Ensure no bottom border radius */
+}
+
+
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px; /* Adjusted to 5px */
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px; /* Adjusted to 5px */
+}
+
+/* Ensure no bottom border-radius */
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important; /* Light gray border */
+    padding: 12px 16px; /* Comfortable spacing */
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important; /* Remove border from last row */
+}
+
+/* Optional hover effect */
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important; /* Very subtle hover background */
+    border-bottom-color: #d0d0d0 !important; /* Slightly darker border on hover */
+}
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        justify-self: flex-end;
+    }
+
+    /* Optional: Adjust spacing between elements */
+    .dataTables_wrapper .dataTables_length {
+        margin-right: 15px;
+    }
+   
+    .dataTables_wrapper .dataTables_info {
+        margin: 0 15px;
+    }
+    .dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    text-decoration: none;
+    color: #555;
+    background-color: #f9f9f9;
+}
+
+.dataTables_wrapper .dataTables_paginate a:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Styling the search box */
+.dataTables_wrapper .dataTables_filter {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Custom table design */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
+    border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
+    margin-bottom: 50px;
+}
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 12px 16px;
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important;
+    border-bottom-color: #d0d0d0 !important;
+}
+
+
+.header-container {
+   
+    align-items: center; /* Vertically centers items */
+}
+.back-icon svg {
+    transition: transform 0.3s ease;
+}
+
+.back-icon:hover {
+    
+    transform: scale(1.1); /* Slight zoom effect */
+}
+
+.back-icon:hover svg {
+    transform: translateX(-5px); /* Moves the icon slightly left */
+}
+
+.text-white table tbody td {
     color: black !important;
 }.dataTables_length,
 .dataTables_filter,
@@ -396,6 +684,7 @@
                 </nav>
             </div>
 
+
             
             <div id="layoutSidenav_content">
                 <main>
@@ -412,32 +701,38 @@
                                         <!-- Total Amount Boxes -->
                                         <div class="col-lg-6">
                                             <div class="card shadow-sm border-primary mb-3">
+                                                <div class="card-header text-white text-center" style="background-color: #1B3A28; color: white;">
+                                                    <h5 class="mb-0">Total Amount for <span id="semesterTitle"></span></h5>
+                                                </div>
                                                 <div class="card-body text-center">
-                                                    <h5 class="card-title">Total Amount for <span id="semesterTitle"></span></h5>
-                                                    <p id="totalSemesterAmount" class="font-weight-bold text-primary" style="font-size: 24px;">₱0.00</p>
+                                                    <p id="totalSemesterAmount" class="font-weight-bold text-primary" style="font-size: 24px; color:#1B3A28 !important;">₱0.00</p>
                                                 </div>
                                             </div>
                                         </div>
+                                        
                                         <div class="col-lg-6">
                                             <div class="card shadow-sm border-info mb-3">
+                                                <div class="card-header text-white text-center"style="background-color: #1B3A28; color: white;">
+                                                    <h5 class="mb-0">Total Amount for Academic Year</h5>
+                                                </div>
                                                 <div class="card-body text-center">
-                                                    <h5 class="card-title">Total Amount for Academic Year</h5>
-                                                    <p id="totalAcademicYearAmount" class="font-weight-bold text-info" style="font-size: 24px;">₱0.00</p>
+                                                    <p id="totalAcademicYearAmount" class="font-weight-bold text-info" style="font-size: 24px; color:#1B3A28 !important;">₱0.00</p>
                                                 </div>
                                             </div>
                                         </div>
+                                        
                                     </div>
                                 
                                     <div class="row">
                                         <div class="col-lg-12 mb-3">
                                             <div class="card text-white bg-success h-100">
-                                                <div class="card-header d-flex justify-content-between align-items-center">
+                                                <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #1B3A28; color: white;">
                                                     <button id="prevSemesterButton" class="btn btn-light btn-sm" style="display: none;">Previous Semester</button>
-                                                    <h5 class="card-title text-center">Adviser Payments Per Semester</h5>
+                                                    <h5 class="card-title text-center">Payments Per Semester</h5>
                                                     <button id="nextSemesterButton" class="btn btn-light btn-sm">Next Semester</button>
                                                 </div>
                                                 <div class="card-body">
-                                                    <table class="display nowrap" id="paymentsTable" style="width:100%">
+                                                    <table class="custom-table" id="paymentsTable" style="width:100%">
                                                         <thead>
                                                             <tr>
                                                                 <th>Organization</th>
@@ -570,11 +865,10 @@
                                                     { title: 'Semester and Academic Year' },
                                                     { title: 'Total Transactions' }
                                                 ],
-                                                dom: 'Bfrtip',
+                                                dom: '<"top"f>rt<"bottom"lip>',
                                                 order: [[2, 'desc']],
                                                 buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
                                                 responsive: true,
-                                                scrollX: true
                                             });
                                         }
                                     });
@@ -582,35 +876,41 @@
                              
                              
 <div class="row">
-<div class="col-lg-6">
-    <div class="card shadow-sm border-primary mb-3">
-        <div class="card-body text-center">
-            <h5 class="card-title">Total Product Amount for <span id="productSemesterTitle"></span></h5>
-            <p id="totalProductSemesterAmount" class="font-weight-bold text-primary" style="font-size: 24px;">₱0.00</p>
+    <div class="col-lg-6">
+        <div class="card shadow-sm border-primary mb-3">
+            <div class="card-header text-white text-center" style="background-color: #1B3A28; color: white;">
+                <h5 class="mb-0">Total Product Amount for <span id="productSemesterTitle"></span></h5>
+            </div>
+            <div class="card-body text-center">
+                <p id="totalProductSemesterAmount" class="font-weight-bold text-primary" style="font-size: 24px; color:#1B3A28 !important;">₱0.00</p>
+            </div>
         </div>
     </div>
-</div>
-<div class="col-lg-6">
-    <div class="card shadow-sm border-info mb-3">
-        <div class="card-body text-center">
-            <h5 class="card-title">Total Product Amount for Academic Year</h5>
-            <p id="totalProductAcademicYearAmount" class="font-weight-bold text-info" style="font-size: 24px;">₱0.00</p>
+    
+    <div class="col-lg-6">
+        <div class="card shadow-sm border-info mb-3">
+            <div class="card-header text-white text-center" style="background-color: #1B3A28; color: white;">
+                <h5 class="mb-0">Total Product Amount for Academic Year</h5>
+            </div>
+            <div class="card-body text-center">
+                <p id="totalProductAcademicYearAmount" class="font-weight-bold text-info" style="font-size: 24px; color:#1B3A28 !important;">₱0.00</p>
+            </div>
         </div>
     </div>
-</div>
+    
 </div>
 
 <!-- Product Transactions Table -->
 <div class="row">
 <div class="col-lg-12 mb-3">
     <div class="card text-white bg-success h-100">
-        <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #1B3A28; color: white;">
             <button id="prevProductSemesterButton" class="btn btn-light btn-sm" style="display: none;">Previous Semester</button>
             <h5 class="card-title text-center">Product Transactions by Semester & Organization</h5>
             <button id="nextProductSemesterButton" class="btn btn-light btn-sm">Next Semester</button>
         </div>
         <div class="card-body">
-            <table class="display nowrap" style="width:100%" id="productTransactionsTable">
+            <table class="custom-table" style="width:100%" id="productTransactionsTable">
                 <thead>
                     <tr>
                         <th>Semester</th>
@@ -739,11 +1039,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 
                 { title: 'Total Pay' }
             ],
-            dom: 'Bfrtip',
+            dom: '<"top"f>rt<"bottom"lip>',
             order: [[1, 'desc']],
             buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
             responsive: true,
-            scrollX: true
         });
     }
 });
