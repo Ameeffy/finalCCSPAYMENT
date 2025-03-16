@@ -15817,7 +15817,7 @@ exports.getUserById = async (req, res) => {
     try {
         const query = `
             SELECT 
-                id, firstname, middlename, lastname, idnumber, course, section, gender, status, role 
+                id, firstname, middlename, lastname, idnumber, course, section, gender, email_status, status, role 
             FROM 
                 users
             WHERE 
