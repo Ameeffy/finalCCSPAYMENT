@@ -28,6 +28,15 @@
     </head>
 
     <style>
+        .user-item {
+    padding: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+}
+.user-item:hover {
+    background-color: #f8f9fa;
+}
           .export-container {
     position: absolute;
     right: 30px;
@@ -263,6 +272,7 @@
     border-spacing: 0;
     border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
     border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
+    border-bottom: 1px solid #e0e0e0; /* Soft gray border on the right */
     margin-bottom: 50px;
 }
 
@@ -663,10 +673,65 @@
 
 
                                    
-                                      
+                <!-- Teacher Registration Modal -->
+<div class="modal fade" id="organizationTeacherModal" tabindex="-1" aria-labelledby="organizationTeacherModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="organizationTeacherModalLabel">
+                    Registration Adviser for <span id="organizationNameTeacher"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="organizationTeacherForm">
+                    <div class="mb-3">
+                        <label class="form-label">Search Teacher</label>
+                        <input type="text" id="teacherSearch" class="form-control" 
+                               placeholder="Search by name or ID" required>
+                        <div id="teacherResults" class="mt-2"></div>
+                    </div>
+                    <input type="hidden" id="teacherId" name="teacherId">
+                </form>
+            </div>
+            <div class="modal-footer" style="padding: 10px;">
+                <button type="button" class="btn-submit" onclick="submitOrganizationTeacher()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>                      
                                       <!-- CSS for rotation animation -->
                                    
-                                        
+                        <!-- Add this modal at the bottom of the body -->
+                        <div class="modal fade" id="organizationUserModal" tabindex="-1" aria-labelledby="organizationUserModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered"> <!-- Added modal-dialog-centered -->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="organizationUserModalLabel">
+                                            Registration for <span id="organizationName"></span>
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="organizationUserForm">
+                                            <div class="mb-3">
+                                                <label class="form-label">Search Student</label>
+                                                <input type="text" id="userSearch" class="form-control" 
+                                                       placeholder="Search by name or ID" required>
+                                                <div id="userResults" class="mt-2"></div>
+                                            </div>
+                                            
+                                            <input type="hidden" id="userId" name="userId">
+                                            <input type="hidden" name="position" value="Member">
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn-submit" onclick="submitOrganizationUser()">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                      
                                         
                                      
 
@@ -890,6 +955,63 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        function fetchUsers(query) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'adminlogin.html';
+        return;
+    }
+
+    fetch(`https://finalccspayment.onrender.com/api/auth/userspaymentorg?search=${query}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch users');
+        }
+        return response.json();
+    })
+    .then(data => {
+        const userResults = document.getElementById('userResults');
+        userResults.innerHTML = ''; // Clear previous results
+
+        if (data.length === 0) {
+            userResults.innerHTML = '<p>No users found</p>';
+            return;
+        }
+
+        data.forEach(user => {
+            if (user.username.toLowerCase().startsWith(query.toLowerCase()) || user.idnumber.toLowerCase().startsWith(query.toLowerCase()) || user.firstname.toLowerCase().startsWith(query.toLowerCase()) || user.lastname.toLowerCase().startsWith(query.toLowerCase()) ||
+            user.email.toLowerCase().startsWith(query.toLowerCase())) {
+                const userDiv = document.createElement('div');
+                userDiv.classList.add('user-item');
+                userDiv.innerHTML = `<p>${user.lastname} ${user.firstname}, (${user.idnumber})</p>`;
+                userDiv.addEventListener('click', () => selectUser(user.id, user.lastname, user.firstname, user.middlename));
+                userResults.appendChild(userDiv);
+            }
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching users:', error);
+    });
+}
+
+document.getElementById('userSearch').addEventListener('input', function() {
+    const query = this.value.trim();
+    if (query.length > 0) {
+        fetchUsers(query); 
+    } else {
+        document.getElementById('userResults').innerHTML = ''; 
+    }
+});
+
+function selectUser(userId, lastname,firstname, middlename) {
+    document.getElementById('userId').value = userId; 
+    document.getElementById('userSearch').value = `${lastname} ${firstname} ${middlename}`; 
+    document.getElementById('userResults').innerHTML = ''; 
+}
         document.getElementById('registerForm').addEventListener('submit', function(event) {
                                         event.preventDefault();
                                 
@@ -969,7 +1091,7 @@
                                             });
                                     });
         let currentPage = 1;
-        const rowsPerPage = 5;
+        const rowsPerPage = 4;
         let totalPages = 0;
         let organizationsData = [];
     
@@ -1016,42 +1138,46 @@
                        <td style="position: relative; display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top:10px;">
     ${org.status === 'Not Activated' ? `` : `
         <!-- Register Organization User Button -->
-        <button 
-            style="background-color: #6c757d; 
-                   color: white; 
-                   border: none; 
-                   border-radius: 5px; 
-                   width: 33px; /* Fixed width */
-                   height: 35px; /* Fixed height */
-                   display: flex; 
-                   align-items: center; 
-                   justify-content: center; 
-                   cursor: pointer; 
-                   transition: background-color 0.3s;" 
-            onmouseover="this.style.backgroundColor='#5a6268'" 
-            onmouseout="this.style.backgroundColor='#6c757d'" 
-            onclick="registerOrganizationUser(${org.id})">
-            <i class="fas fa-user-plus" style="font-size: 16px;"></i>
-        </button>
+      <button 
+    style="background-color: #6c757d; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 33px;
+           height: 35px;
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#5a6268'" 
+    onmouseout="this.style.backgroundColor='#6c757d'" 
+    data-bs-toggle="modal" 
+    data-bs-target="#organizationUserModal"
+    onclick="prepareOrganizationModal(${org.id})">
+    <i class="fas fa-user-plus" style="font-size: 16px;"></i>
+</button>
 
         <!-- Register Organization Teacher Button -->
-        <button 
-            style="background-color: #6c757d; 
-                   color: white; 
-                   border: none; 
-                   border-radius: 5px; 
-                   width: 33px; /* Fixed width */
-                   height: 35px; /* Fixed height */
-                   display: flex; 
-                   align-items: center; 
-                   justify-content: center; 
-                   cursor: pointer; 
-                   transition: background-color 0.3s;" 
-            onmouseover="this.style.backgroundColor='#5a6268'" 
-            onmouseout="this.style.backgroundColor='#6c757d'" 
-            onclick="registerOrganizationUserTeacher(${org.id})">
-            <i class="fas fa-chalkboard-teacher" style="font-size: 16px;"></i>
-        </button>
+       <button 
+    style="background-color: #6c757d; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 33px;
+           height: 35px;
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#5a6268'" 
+    onmouseout="this.style.backgroundColor='#6c757d'" 
+    data-bs-toggle="modal" 
+    data-bs-target="#organizationTeacherModal"
+    onclick="prepareOrganizationTeacherModal(${org.id})">
+    <i class="fas fa-chalkboard-teacher" style="font-size: 16px;"></i>
+</button>
 
         <!-- Toggle Dropdowns Button -->
         <button 
@@ -1140,6 +1266,224 @@
             }
         }
         
+        // Add these variables at the top
+let currentOrganizationIdTeacher = null;
+let organizationTeacherModal = null;
+
+// Initialize modal when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    organizationTeacherModal = new bootstrap.Modal(document.getElementById('organizationTeacherModal'));
+});
+
+function prepareOrganizationTeacherModal(organizationId) {
+    currentOrganizationIdTeacher = organizationId;
+    
+    // Clear previous values
+    document.getElementById('teacherSearch').value = '';
+    document.getElementById('teacherId').value = '';
+    document.getElementById('teacherResults').innerHTML = '';
+    
+    // Fetch organization name
+    fetch(`https://finalccspayment.onrender.com/api/auth/organizations/${organizationId}`, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('organizationNameTeacher').textContent = data.name;
+    })
+    .catch(err => {
+        console.error('Error fetching organization:', err);
+        Swal.fire('Error', 'Failed to load organization details', 'error');
+    });
+}
+
+function fetchTeachers(query) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'adminlogin.html';
+        return;
+    }
+
+    fetch(`https://finalccspayment.onrender.com/api/auth/getAdviserorg?search=${query}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to fetch teachers');
+        return response.json();
+    })
+    .then(data => {
+        const teacherResults = document.getElementById('teacherResults');
+        teacherResults.innerHTML = '';
+
+        if (data.length === 0) {
+            teacherResults.innerHTML = '<p>No teachers found</p>';
+            return;
+        }
+
+        data.forEach(user => {
+            const teacherDiv = document.createElement('div');
+            teacherDiv.classList.add('user-item');
+            teacherDiv.innerHTML = `<p>${user.lastname} ${user.firstname}, (${user.idnumber})</p>`;
+            teacherDiv.addEventListener('click', () => selectTeacher(user.id, user.lastname, user.firstname, user.middlename));
+            teacherResults.appendChild(teacherDiv);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching teachers:', error);
+        Swal.fire('Error', 'Failed to load teachers', 'error');
+    });
+}
+
+function selectTeacher(teacherId, lastname, firstname, middlename) {
+    document.getElementById('teacherId').value = teacherId;
+    document.getElementById('teacherSearch').value = `${lastname} ${firstname} ${middlename}`;
+    document.getElementById('teacherResults').innerHTML = '';
+}
+
+function submitOrganizationTeacher() {
+    const teacherId = document.getElementById('teacherId').value;
+    
+    if (!currentOrganizationIdTeacher || !teacherId) {
+        Swal.fire('Error', 'Please select a teacher first', 'error');
+        return;
+    }
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'Register this teacher as an adviser?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#dc3545',
+        confirmButtonText: 'Yes, register'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Processing...',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            });
+
+            fetch(`https://finalccspayment.onrender.com/api/auth/register/organizationuserTeacher/${currentOrganizationIdTeacher}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ userId: teacherId })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Registration failed');
+                return response.json();
+            })
+            .then(data => {
+                Swal.fire('Success', data.msg, 'success');
+                organizationTeacherModal.hide();
+                // Optionally refresh your organization list here
+            })
+            .catch(error => {
+                Swal.fire('Error', error.message || 'Registration failed', 'error');
+            });
+        }
+    });
+}
+
+// Add event listener for teacher search input
+document.getElementById('teacherSearch').addEventListener('input', function() {
+    const query = this.value.trim();
+    if (query.length > 0) {
+        fetchTeachers(query); 
+    } else {
+        document.getElementById('teacherResults').innerHTML = ''; 
+    }
+});
+        let currentOrganizationId = null;
+let organizationUserModal = null;
+
+// Initialize modal when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    organizationUserModal = new bootstrap.Modal(document.getElementById('organizationUserModal'));
+});
+
+function prepareOrganizationModal(organizationId) {
+    currentOrganizationId = organizationId;
+    
+    // Clear previous values
+    document.getElementById('userSearch').value = '';
+    document.getElementById('userId').value = '';
+    document.getElementById('userResults').innerHTML = '';
+    
+    // Fetch organization name
+    fetch(`https://finalccspayment.onrender.com/api/auth/organizations/${organizationId}`, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('organizationName').textContent = data.name;
+    })
+    .catch(err => {
+        console.error('Error fetching organization:', err);
+        Swal.fire('Error', 'Failed to load organization details', 'error');
+    });
+}
+
+function submitOrganizationUser() {
+    const userId = document.getElementById('userId').value;
+    
+    if (!currentOrganizationId || !userId) {
+        Swal.fire('Error', 'Please select a user first', 'error');
+        return;
+    }
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'Register this user to the organization?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#dc3545',
+        confirmButtonText: 'Yes, register'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Processing...',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            });
+
+            fetch(`https://finalccspayment.onrender.com/api/auth/register/organizationuser/${currentOrganizationId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ 
+                    userId, 
+                    position: 'Member' 
+                })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Registration failed');
+                return response.json();
+            })
+            .then(data => {
+                Swal.fire('Success', data.msg, 'success');
+                organizationUserModal.hide();
+                // Optionally refresh your organization list here
+            })
+            .catch(error => {
+                Swal.fire('Error', error.message || 'Registration failed', 'error');
+            });
+        }
+    });
+}
+
         function showOrganizationLogs(orgId) {
     // Fetch logs for the organization
     fetch(`https://finalccspayment.onrender.com/api/auth/organization-logs/${orgId}`, {
@@ -1282,13 +1626,8 @@ function goToAcademicList(organizationId) {
     }
         fetchAllOrganizations();
 
-        function registerOrganizationUser(organizationId) {
-            window.location.href = `adminorganizationusers.html?organization_id=${organizationId}`;
-        }
-        function registerOrganizationUserTeacher(organizationId) {
-            window.location.href = `adminorganizationusersTeacher.html?organization_id=${organizationId}`;
-        }
-    
+       
+       
         // Pagination controls logic
         function updatePaginationControls() {
             document.getElementById('pageNumber').textContent = currentPage;
