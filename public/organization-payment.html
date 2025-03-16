@@ -7,7 +7,7 @@
         <link rel="icon" type="x-icon" href="img/logo.png">
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>ORGANIZATION - PAYMENTS</title>
+        <title>Admin Payment</title>
        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
     
@@ -27,6 +27,70 @@
         
     </head>
 <style>
+    /* Modal background */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.7); /* Black with opacity */
+    padding-top: 60px;
+}
+
+/* Modal content */
+.modal-content-promissory {
+    margin: auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+    position: relative;
+}
+
+/* Close button */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.close1 {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close1:hover,
+.close1:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Responsive image */
+.responsive-image {
+    max-width: 100%;
+    height: auto;
+}
+
     table.dataTable.no-footer{
         border-bottom: 1px solid #e9e7e7 !important;
     }
@@ -267,7 +331,7 @@
     border-spacing: 0;
     border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
     border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
-    margin-bottom: 50px;
+    border-bottom: 1px solid #e0e0e0; /* Soft gray border on the right */
 }
 
 .custom-table thead th:first-child {
@@ -515,7 +579,65 @@
         border: 1px solid #ddd;
         padding: 10px;
     }
- 
+/* The Modal - Hidden by default */
+/* The Modal - Hidden by default */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.7); /* Black with opacity */
+    padding-top: 60px; /* Padding top for center alignment */
+}
+
+/* Modal Content */
+.modal-content-gcash {
+
+    margin: auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+    position: relative; /* For positioning the close button */
+    border-radius: 8px;
+}
+
+/* Close Button */
+.close {
+    position: absolute;
+    right: 170px;
+    top: 25px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}
+
+/* Close Button Hover Effect */
+.close:hover,
+.close:focus {
+    color: #e60000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Image Styling (Make it smaller) */
+.responsive-image {
+    width: 50%;  /* Adjust this value to make the image smaller or larger */
+    height: auto;
+    border-radius: 8px;
+    margin: 0 auto;  /* Center the image */
+    display: block;
+}
+
+/* When the modal is active, show it */
+.modal.show {
+    display: block;
+}
+
 
   
 </style>
@@ -1099,32 +1221,27 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <td>${tx.action ? tx.action : 'N/A'}</td>
                                     ${showPromissoryNote ? `
                                         <td>
-                                            <button 
-                                                onclick="openLogsModal('${tx.transaction_id}')" 
-                                                class="btn btn-secondary"
-                                                style="background-color: #6c757d; 
-                                                       color: white; 
-                                                       border: none; 
-                                                       border-radius: 5px; 
-                                                       width: 33px; 
-                                                       height: 35px; 
-                                                       display: flex; 
-                                                       align-items: center; 
-                                                       justify-content: center; 
-                                                       cursor: pointer; 
-                                                       transition: background-color 0.3s;" 
-                                                onmouseover="this.style.backgroundColor='#5a6268'" 
-                                                onmouseout="this.style.backgroundColor='#6c757d'">
-                                                <i class="fas fa-eye" style="font-size: 20px;"></i>
-                                            </button>
-                                            <div id="logsModal-${tx.transaction_id}" class="modallogs" style="display:none;">
-                                                <div class="modal-contentlogs">
-                                                    <span class="close" onclick="closeLogsModal('${tx.transaction_id}')">
-                                                        <i class="fas fa-times-circle"></i>
-                                                    </span>
-                                                    <img src="${tx.promissory_note}" alt="Promissory Note" class="responsive-image" />
-                                                </div>
-                                            </div>
+                                           <button 
+    onclick="openLogsModal('${tx.transaction_id}')" 
+    class="btn btn-secondary" 
+    style="background-color: #6c757d; color: white; border: none; border-radius: 5px; width: 33px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#5a6268'" 
+    onmouseout="this.style.backgroundColor='#6c757d'">
+    <i class="fas fa-eye" style="font-size: 20px;"></i>
+</button>
+                                           <div class="modal fade" id="logsModal-${tx.transaction_id}" tabindex="-1" aria-labelledby="logsModalLabel-${tx.transaction_id}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logsModalLabel-${tx.transaction_id}">Promissory Note</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img src="${tx.promissory_note}" alt="Promissory Note" class="img-fluid" />
+            </div>
+        </div>
+    </div>
+</div>
                                         </td>
                                     ` : ''}
                                 </tr>
@@ -1141,13 +1258,12 @@ document.addEventListener('DOMContentLoaded', () => {
 function closeGcashQrModal() {
     document.getElementById('gcashqrcodemodal').style.display = 'none';
 }
+// Open Modal Function
+function openLogsModal(transactionId) {
+    let modal = new bootstrap.Modal(document.getElementById('logsModal-' + transactionId));
+    modal.show();
+}
 
-                            function openLogsModal(transactionId) {
-                                const modal = document.getElementById(`logsModal-${transactionId}`);
-                                if (modal) {
-                                    modal.style.display = 'block';
-                                }
-                            }
                             
                             function closeLogsModal(transactionId) {
                                 const modal = document.getElementById(`logsModal-${transactionId}`);
@@ -1166,12 +1282,10 @@ function closeGcashQrModal() {
                                 });
                             };
                             
-                            function openGcashModal(transactionId) {
-                                document.getElementById(`qrgcash-${transactionId}`).style.display = 'block';
-                            }
-                            function closeGcashModal(transactionId) {
-                                document.getElementById(`qrgcash-${transactionId}`).style.display = 'none';
-                            }
+
+
+
+                          
                             function closeTransactionModalHistory() {
                                 // Hide the modal
                                 document.getElementById('transactionHistoryModal').style.display = 'none';
@@ -1233,7 +1347,7 @@ function closeGcashQrModal() {
                             
                                 </style>
                             <div id="transactionModal" class="modal" style="display: none;">
-                                <div class="modal-content-balance" style="background-color: rgb(221, 231, 221); border-radius: 10px; padding: 20px; width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); position: relative;">
+                                <div class="modal-content-balance" style="margin: auto; background-color: rgb(221, 231, 221); border-radius: 10px; padding: 20px; width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); position: relative;">
                                    <!-- Close Button -->
                                     <span style="margin-top: 18px;" class="close" onclick="closeTransactionModals()">
                                         <i class="fas fa-times-circle"></i>
@@ -1271,9 +1385,9 @@ function closeGcashQrModal() {
                             </div>
                             
                             <div id="transactionModalPending" class="modal" style="display: none;">
-                                <div class="modal-content-balance" style="background-color: rgb(221, 231, 221); border-radius: 10px; padding: 20px; width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); position: relative;">
+                                <div class="modal-content-balance" style="margin: auto; background-color: white; border-radius: 10px; padding: 20px; width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); position: relative;">
                                    <!-- Close Button -->
-                                    <span style="margin-top: 18px;" class="close" onclick="closeTransactionModalPending()">
+                                    <span style="margin-top: 18px;" class="close1" onclick="closeTransactionModalPending()">
                                         <i class="fas fa-times-circle"></i>
                                     </span>
                                     
@@ -1318,16 +1432,7 @@ function closeGcashQrModal() {
                                 document.getElementById('error-message').innerText = '';
                             }
                             
-                            function openTransactionModalPending(transactionId, balance) {
-                                document.getElementById('transactionModalPending').style.display = 'block';
-                                document.getElementById('currentBalancePending').innerText = `Current Balance: ${balance}`;
-                                document.getElementById('transactionModalPending').dataset.transactionId = transactionId;
-                            }
-                            
-                            function closeTransactionModalPending() {
-                                document.getElementById('transactionModalPending').style.display = 'none';
-                                document.getElementById('error-message-pending').innerText = '';
-                            }
+                           
                             
                             async function updatePayment() {
     const transactionId = document.getElementById('transactionModal').dataset.transactionId;
@@ -1450,16 +1555,14 @@ async function updatePaymentPending() {
             return;
         }
 
-        // **Show loading message before fetch**
+        // Show loading message
         Swal.fire({
             title: 'Updating Payment...',
             text: 'Please wait while the payment is being processed.',
             icon: 'info',
             showConfirmButton: false,
             allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
+            didOpen: () => Swal.showLoading()
         });
 
         const response = await fetch('https://finalccspayment.onrender.com/api/auth/update-paymentPending', {
@@ -1472,8 +1575,7 @@ async function updatePaymentPending() {
         });
 
         const responseResult = await response.json();
-
-        Swal.close(); // Close loading message after fetch response
+        Swal.close();
 
         if (response.ok) {
             Swal.fire({
@@ -1481,9 +1583,15 @@ async function updatePaymentPending() {
                 title: 'Success',
                 text: responseResult.message
             }).then(() => {
-                document.getElementById('transactionModalPending').reset();
+                // Clear input fields
+                document.getElementById('additionalAmountPending').value = '';
+                document.getElementById('payment_method_pending').value = 'Cash';
+                
+                // Close modal
                 closeTransactionModalPending();
-                fetchTransactionsByPaymentId(paymentId);
+                
+                // Refresh transactions - make sure paymentId is properly defined
+                fetchTransactionsByPaymentId(transactionId); // Changed to transactionId if needed
             });
         } else {
             Swal.fire({
@@ -1502,16 +1610,25 @@ async function updatePaymentPending() {
     }
 }
 
+// Modal functions (unchanged but included for completeness)
+function openTransactionModalPending(transactionId, balance) {
+    document.getElementById('transactionModalPending').style.display = 'block';
+    document.getElementById('currentBalancePending').innerText = `Current Balance: ${balance}`;
+    document.getElementById('transactionModalPending').dataset.transactionId = transactionId;
+}
+
+function closeTransactionModalPending() {
+    document.getElementById('transactionModalPending').style.display = 'none';
+    document.getElementById('error-message-pending').innerText = '';
+}
+
+
                             
                             // Close the modal when clicking outside of it
                             window.onclick = function(event) {
                                 const modal = document.getElementById('transactionModal');
                                 if (event.target == modal) {
                                     closeTransactionModals();
-                                }
-                                const modalPending = document.getElementById('transactionModalPending');
-                                if (event.target == modalPending) {
-                                    closeTransactionModalPending();
                                 }
                             }
                             </script>
@@ -1552,10 +1669,7 @@ async function updatePaymentPending() {
                                         </div>
                                         
                                         
-                                        
-                                        <div id="formError" class="error"></div>
-                                        
-                                        <div id="formError" class="error"></div>
+                                     
                                     </div>
                                 </div>
 
@@ -1586,7 +1700,6 @@ async function updatePaymentPending() {
             </div>
           </div>
   
-          <div id="formErrorAll" class="error" style="color: red; margin-top: 10px;"></div>
           <input type="hidden" id="semesterIdAll" name="semesterIdAll">
   
           <!-- Modal footer with Submit button -->
@@ -2358,47 +2471,7 @@ table.innerHTML = `
                                             <td>
                                                 ${tx.payment_method === 'Gcash' ? `
                                                     ${tx.payment_method} <br>
-<button 
-    onclick="openGcashModal('${tx.transaction_id}')" 
-    style="background-color: #007bff; 
-           color: white; 
-           border: none; 
-           border-radius: 5px; 
-           padding: 8px; 
-           width: 35px; 
-           height: 35px; 
-           display: flex; 
-           align-items: center; 
-           justify-content: center; 
-           cursor: pointer; 
-           font-size: 16px; 
-           transition: background-color 0.3s;" 
-    onmouseover="this.style.backgroundColor='#0056b3'" 
-    onmouseout="this.style.backgroundColor='#007bff'" 
-    data-bs-toggle="modal" 
-    data-bs-target="#qrgcash-${tx.transaction_id}">
-    <i class="fas fa-qrcode" style="font-size: 18px;"></i>
-</button>
 
-
-
-                            <!-- Modal -->
-<!-- GCash Proof of Payment Modal -->
-<div class="modal fade" id="qrgcash-${tx.transaction_id}" tabindex="-1" aria-labelledby="qrgcashModalLabel-${tx.transaction_id}" aria-hidden="true">
-    <div class="modal-dialog sm" style="max-width: 30%;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="qrgcashModalLabel-${tx.transaction_id}">Gcash Proof of Payment</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
-                    <img src="${tx.proof_of_payment}" alt="Proof of Payment" class="img-fluid" style="max-width: 100%; max-height: 550px;" />
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
                                                 ` : tx.payment_method}
                                             </td>
                                             <td>₱ ${tx.total_amount}</td>
@@ -2420,21 +2493,44 @@ table.innerHTML = `
                                             ${hasPromissoryNotes ? `
                                 <td>
                                     ${tx.promissory_note && tx.promissory_note.trim() !== '' ? `
-         <button 
-    onclick="openPromissoryModal('${tx.transaction_id}')" 
-    style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px; width: 35px; height: 40px;">
-    <i class="bi bi-eye" style="font-size: 18px;"></i>
+  <button 
+    type="button" 
+    class="btn" 
+    style="background-color: #007bff; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 33px; 
+           height: 35px; 
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s; 
+           padding: 8px; 
+           font-size: 16px;" 
+    data-bs-toggle="modal" 
+    data-bs-target="#promissoryModal-${tx.transaction_id}">
+    
+    <i class="fas fa-eye" style="font-size: 20px;"></i>
 </button>
 
-                                        <div id="promissoryModal-${tx.transaction_id}" class="modal" style="display:none;">
-                                            <div class="modal-content-promissory">
-                                            <span style="position: absolute; right: 20px; cursor: pointer; margin-top: 20px;" class="close" onclick="closePromissoryModal('${tx.transaction_id}')">
-                                <i class="fas fa-times-circle"></i>
-                            </span>
-                            
-                                                <img src="${tx.promissory_note}" alt="Promissory Note" class="responsive-image" />
-                                            </div>
-                                        </div>
+
+                                   <div id="promissoryModal-${tx.transaction_id}" class="modal fade" tabindex="-1" aria-labelledby="promissoryModalLabel-${tx.transaction_id}" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+                        <h5>Promissory Note</h5>
+<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <img src="${tx.promissory_note}" alt="Promissory Note" class="img-fluid" />
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
                                     ` : 'N/A'}
                                 </td>
@@ -2450,7 +2546,7 @@ table.innerHTML = `
            border: none; 
            border-radius: 5px; 
            padding: 8px; 
-           width: 35px; 
+           width: 33px; 
            height: 35px; 
            display: flex; 
            align-items: center; 
@@ -2470,7 +2566,7 @@ table.innerHTML = `
            border: none; 
            border-radius: 5px; 
            padding: 8px; 
-           width: 35px; 
+           width: 33px; 
            height: 35px; 
            display: flex; 
            align-items: center; 
@@ -2492,7 +2588,7 @@ table.innerHTML = `
            border: none; 
            border-radius: 5px; 
            padding: 8px; 
-           width: 35px; 
+           width: 33px; 
            height: 35px; 
            display: flex; 
            align-items: center; 
@@ -2511,7 +2607,7 @@ table.innerHTML = `
            border: none; 
            border-radius: 5px; 
            padding: 8px; 
-           width: 35px; 
+           width: 33px; 
            height: 35px; 
            display: flex; 
            align-items: center; 
@@ -2528,10 +2624,25 @@ table.innerHTML = `
         ${tx.payment_status === 'Balance' || (tx.payment_status === 'Processing' && tx.total_amount > 0) ? `
             ${(tx.payment_method === 'Cash' || tx.payment_method === null || tx.payment_method === 'None') && tx.promissory_note ? `
                 <button 
-                    style="background-color: #ff69b4; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px; width: 40px; height: 40px;" 
-                    onclick="openTransactionModalPending('${tx.transaction_id}', ${tx.balance})">
-                    <i class="bi bi-credit-card"></i>
-                </button>
+    onclick="openTransactionModalPending('${tx.transaction_id}', ${tx.balance})"
+    style="background-color: #ff69b4; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           padding: 8px; 
+           width: 33px; 
+           height: 35px; 
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           font-size: 16px; 
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#ff3385'" 
+    onmouseout="this.style.backgroundColor='#ff69b4'">
+    <i class="bi bi-credit-card" style="font-size: 20px;"></i>
+</button>
+
             ` : ''}
         ` : ''}
 
@@ -2543,7 +2654,7 @@ table.innerHTML = `
            border: none; 
            border-radius: 5px; 
            padding: 8px; 
-           width: 35px; 
+           width: 33px; 
            height: 35px; 
            display: flex; 
            align-items: center; 
@@ -2567,7 +2678,7 @@ table.innerHTML = `
            border: none; 
            border-radius: 5px; 
            padding: 8px; 
-           width: 35px; 
+           width: 33px; 
            height: 35px; 
            display: flex; 
            align-items: center; 
@@ -2588,7 +2699,7 @@ table.innerHTML = `
            border: none; 
            border-radius: 5px; 
            padding: 8px; 
-           width: 35px; 
+           width: 33px; 
            height: 35px; 
            display: flex; 
            align-items: center; 
@@ -2701,6 +2812,25 @@ table.innerHTML = `
                                 .catch(error => console.error('Error fetching transactions:', error));
                             }
                             
+                            // Add this script to your existing JavaScript code
+                            document.addEventListener('shown.bs.modal', function (event) {
+    const modal = event.target;
+    // Check if the modal is a promissory note modal
+    if (modal.id.startsWith('promissoryModal-')) {
+        setTimeout(() => {
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.classList.remove('modal-backdrop', 'fade', 'show');
+            }
+
+            const modalElement = modal.querySelector('.modal');
+            if (modalElement) {
+                modalElement.classList.remove('fade', 'show');
+            }
+        }, 1000); // 10 seconds delay
+    }
+});
+
                             function openPromissoryModal(transactionId) {
                                 const modal = document.getElementById(`promissoryModal-${transactionId}`);
                                 if (modal) {
