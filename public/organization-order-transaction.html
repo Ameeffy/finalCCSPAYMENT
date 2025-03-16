@@ -97,7 +97,20 @@
         <input type="date" id="maxDate" class="form-control d-inline-block w-auto">
         <button id="filterDateBtn" class="btn btn-primary btn-sm">Filter</button>
     </div>
-
+<button id="notifyBalanceButton" class="btn btn-danger btn-sm" style="display: none;" onclick="notifyBalanceUsers()">
+        <i class="fas fa-envelope"></i> Notify balance users
+    </button>
+    <style>.blinking {
+        animation: blink 1s infinite;
+    }
+    
+    @keyframes blink {
+        0% { opacity: 1; }
+        50% { opacity: 0.3; }
+        100% { opacity: 1; }
+    }
+    </style>
+  
     <div id="acceptedByFilterContainer">
         <label for="acceptedByFilter" class="fw-bold">Filter by Accepted By:</label>
         <select id="acceptedByFilter" class="form-select d-inline-block w-auto">
@@ -145,6 +158,7 @@
     
                 transactionsData = await response.json();
                 populateTransactionsTable(transactionsData);
+                checkForBalanceTransactions();
             } catch (error) {
                 console.error('Error fetching transactions:', error);
                 Swal.fire('Error!', 'Failed to load product transactions.', 'error');
@@ -329,6 +343,102 @@
         function closeLogsModal() {
             document.getElementById('logsModal').style.display = 'none';
         }
+
+      function checkForBalanceTransactions() {
+    let showButton = transactionsData.some(transaction => transaction.status === "Balance");
+
+    let notifyButton = document.getElementById("notifyBalanceButton");
+
+    if (showButton) {
+        notifyButton.style.display = "inline-block"; // Show the button
+        startBlinkingAnimation(); // Start blinking animation
+    } else {
+        notifyButton.style.display = "none"; // Hide the button
+        stopBlinkingAnimation(); // Stop blinking animation
+    }
+}
+
+// Function to start blinking animation
+function startBlinkingAnimation() {
+    let button = document.getElementById("notifyBalanceButton");
+    if (!button) return;
+
+    button.classList.add("blinking");
+}
+
+// Function to stop blinking animation
+function stopBlinkingAnimation() {
+    let button = document.getElementById("notifyBalanceButton");
+    if (!button) return;
+
+    button.classList.remove("blinking");
+}
+
+// Function to notify balance users with SweetAlert confirmation, loading, and success messages
+async function notifyBalanceUsers() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Unauthorized!',
+            text: 'Please log in first.',
+            confirmButtonColor: '#d33',
+        }).then(() => {
+            window.location.href = "adminlogin.html";
+        });
+        return;
+    }
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to notify users with a balance?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Notify Users!',
+        cancelButtonText: 'Cancel'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Sending Notifications...',
+                text: 'Please wait while we notify the users.',
+                icon: 'info',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            try {
+                const response = await fetch("https://finalccspayment.onrender.com/api/auth/notify-product-balance-transactions", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                const result = await response.json();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Notifications Sent!',
+                    text: result.message,
+                    confirmButtonColor: '#28a745'
+                });
+
+                checkForBalanceTransactions(); // Re-check after sending notifications
+            } catch (error) {
+                console.error("Error sending balance notifications:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed!',
+                    text: 'Failed to send balance notifications. Please try again.',
+                    confirmButtonColor: '#d33'
+                });
+            }
+        }
+    });
+}
         document.addEventListener('DOMContentLoaded', fetchProductTransactions);
     </script>
     
