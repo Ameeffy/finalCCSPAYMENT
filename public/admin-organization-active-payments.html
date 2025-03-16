@@ -21,6 +21,61 @@
   
 
   <style>
+     
+.export-container1 {
+  position: absolute;
+  right: 30px;
+  top: 70px;
+  z-index: 1;
+}
+
+.export-dropdown1 {
+  position: relative;
+  display: inline-block;
+}
+
+.export-btn1 {
+  background-color: #1B3A28;
+  color: #ffffff;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 150px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.export-btn1:hover {
+  background-color: #3e865c;
+}
+
+.export-content1 {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 83px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.export-content1 a {
+  color: #333;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.export-content1 a:hover {
+  background-color: #f8f9fa;
+}
+
+.export-dropdown1:hover .export-content1 {
+  display: block;
+}
         .table-container{
             width: auto;     
             padding-top: 20px;
@@ -757,19 +812,21 @@
                                                     <!-- Transaction rows will be inserted here dynamically -->
                                                 </tbody>
                                             </table>
-                                            <div class="export-container">
-                                                <div class="export-dropdown">
-                                                    <button class="export-btn">
-                                                        Export <i class="fas fa-chevron-down"></i>
-                                                    </button>
-                                                    <div class="export-content">
-                                                        <a href="#" onclick="exportTransactionAction('print')">Print</a>
-                                                        <a href="#" onclick="exportTransactionAction('pdf')">PDF</a>
-                                                        <a href="#" onclick="exportTransactionAction('csv')">CSV</a>
-                                                        <a href="#" onclick="exportTransactionAction('excel')">Excel</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div class="export-container1">
+    <div class="export-dropdown1">
+        <button class="export-btn1">
+            Export <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="export-content1">
+            <a href="#" onclick="exportAction('print')">Print</a>
+            <a href="#" onclick="exportAction('pdf')">PDF</a>
+            <a href="#" onclick="exportAction('csv')">CSV</a>
+            <a href="#" onclick="exportAction('excel')">Excel</a>
+            <a href="#" onclick="exportAction('copy')">Copy</a>
+        </div>
+    </div>
+</div>
+
                                             </div>
                                             </div>
                                         </div>
