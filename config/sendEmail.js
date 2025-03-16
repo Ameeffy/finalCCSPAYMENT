@@ -328,7 +328,7 @@ const sendTransactionReportEmail = (email, userFullName, orgUserFullName, organi
                         <div class="logo">
                             <img src="https://drive.google.com/uc?id=1WawamI-BP8S6hG0DfEEBe0gu9pxDySl-" alt="Logo">
                         </div>
-                        <h2>Hello${userFullName},</h2>
+                        <h2>Hello ${userFullName},</h2>
                        
                         <p>A transaction associated with your account has been reported by <strong style="color: #0b3d2e;">${orgUserFullName}</strong> from the <strong style="color: #0b3d2e;">${organizationName}</strong>.</p>
 
