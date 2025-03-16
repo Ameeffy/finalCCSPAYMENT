@@ -12587,23 +12587,21 @@ exports.updateXXXLQuantity = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
     const { id } = req.params;
-    const { name, price } = req.body;
-    const created_by = req.orgIduser; // Assuming you are getting this from middleware or request
-    const organization_id = req.userId; // Assuming you are getting this from the request
+    const { name, price, description } = req.body;
+    const created_by = req.orgIduser;
+    const organization_id = req.userId;
 
-    if (!name && !price) {
-        return res.status(400).json({ message: 'At least name or price is required' });
+    if (!name && !price && !description) {
+        return res.status(400).json({ message: 'At least name, price, or description is required' });
     }
 
     try {
-        // Get the current product details before updating
         const [currentProduct] = await db.query(
             'SELECT * FROM products WHERE product_id = ?',
             [id]
         );
 
         if (currentProduct.length === 0) {
-            console.log(`No product found with ID: ${id}`); // Log for debugging
             return res.status(404).json({ message: 'Product not found' });
         }
 
@@ -12623,20 +12621,23 @@ exports.updateProduct = async (req, res) => {
             logMessage.push(`Updated price from "${currentProduct[0].price}" to "${price}"`);
         }
 
-        // If there are fields to update, proceed with the update
+        if (description && description !== currentProduct[0].description) {
+            updateFields.push('description = ?');
+            updateValues.push(description);
+            logMessage.push(`Updated description`);
+        }
+
         if (updateFields.length > 0) {
             await db.query(
                 `UPDATE products SET ${updateFields.join(', ')} WHERE product_id = ?`,
                 [...updateValues, id]
             );
 
-            // Log the update action
             await db.query(
                 'INSERT INTO products_logs (product_id, organization_id, created_by, action) VALUES (?, ?, ?, ?)',
                 [id, organization_id, created_by, logMessage.join(', ')]
             );
 
-            // Fetch the updated product details
             const [rows] = await db.query(
                 'SELECT * FROM products WHERE product_id = ?',
                 [id]
@@ -12644,7 +12645,6 @@ exports.updateProduct = async (req, res) => {
 
             res.status(200).json(rows[0]);
         } else {
-            // No changes were made
             return res.status(400).json({ message: 'No changes detected' });
         }
     } catch (error) {
