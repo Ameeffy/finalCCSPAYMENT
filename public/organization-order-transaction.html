@@ -486,7 +486,7 @@
         return;
     }
 
-    fetch('https://finalccspayment.onrender.comapi/auth/organization/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -529,7 +529,7 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         return;
     }
 
-    fetch('https://finalccspayment.onrender.comapi/auth/organization-user/details', {
+    fetch('https://finalccspayment.onrender.com/api/auth/organization-user/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -966,7 +966,7 @@ function exportAction(type) {
                                             }
                                     
                                             try {
-                                                const response = await fetch('https://finalccspayment.onrender.com/api/auth/product-transactions', {
+                                                const response = await fetch('https://finalccspayment.onrender.com//api/auth/product-transactions', {
                                                     method: 'GET',
                                                     headers: {
                                                         'Authorization': `Bearer ${token}`,
@@ -1142,7 +1142,7 @@ function exportAction(type) {
                                        
                                         async function fetchLogs(orderTransactionId) {
                                     try {
-                                        const response = await fetch(`https://finalccspayment.onrender.com/api/auth/product-transaction-logsa/${orderTransactionId}`);
+                                        const response = await fetch(`https://finalccspayment.onrender.com//api/auth/product-transaction-logsa/${orderTransactionId}`);
                                         if (!response.ok) {
                                             throw new Error('Failed to fetch logs');
                                         }
@@ -1251,7 +1251,7 @@ function exportAction(type) {
                                             });
                                 
                                             try {
-                                                const response = await fetch("https://finalccspayment.onrender.com/api/auth/notify-product-balance-transactions", {
+                                                const response = await fetch("https://finalccspayment.onrender.com//api/auth/notify-product-balance-transactions", {
                                                     headers: { Authorization: `Bearer ${token}` }
                                                 });
                                 
