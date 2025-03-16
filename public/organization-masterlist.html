@@ -10,7 +10,7 @@
         <title>Organization Mastetlist</title>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
-        
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
@@ -710,6 +710,26 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                                   <i class="bi bi-search"></i>
                                               </span>
                                           </div>
+                                          <br>
+                                          <button id="notifyUnpaidButton" class="btn btn-warning btn-sm" style="display: none;" onclick="notifyUnpaidUsers()">
+                                            <i class="fas fa-envelope"></i> Notify Unpaid Users
+                                        </button>                                       
+                                    <style>
+                                        .blinking {
+                                            animation: blink 1s infinite;
+                                        }
+                                        
+                                        @keyframes slowBlink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+.blinking {
+    animation: slowBlink 2.5s infinite ease-in-out;
+}
+
+                                        </style>   
                                       </form>
                                   </div>
                                    
@@ -908,6 +928,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
         { extend: 'print', className: 'export-print' }
       ]
     });
+    checkForUnpaidTransactions();
 
     // Create custom export dropdown
     const dropdownHtml = `
@@ -952,6 +973,117 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
     console.error('Error fetching users and transactions:', error);
   });
 }
+function checkForUnpaidTransactions() {
+    var unpaidExists = false;
+    $("table.custom-table").each(function() {
+        var table = $(this).DataTable();
+        table.rows().every(function () {
+            var rowData = this.data();
+            if (rowData && rowData[4] && rowData[4].trim().toLowerCase() === "unpaid") { 
+                unpaidExists = true;
+            }
+        });
+    });
+
+    var notifyButton = document.getElementById("notifyUnpaidButton");
+
+    if (unpaidExists) {
+        notifyButton.style.display = "inline-block";
+        startBlinkingAnimation();
+    } else {
+        notifyButton.style.display = "none";
+        stopBlinkingAnimation();
+    }
+}
+
+function startBlinkingAnimation() {
+    var button = document.getElementById("notifyUnpaidButton");
+    if (!button) return;
+
+    button.classList.add("blinking");
+}
+
+function stopBlinkingAnimation() {
+    var button = document.getElementById("notifyUnpaidButton");
+    if (!button) return;
+
+    button.classList.remove("blinking");
+}
+
+async function notifyUnpaidUsers() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        Swal.fire({
+            icon: "warning",
+            title: "Unauthorized",
+            text: "You need to log in first.",
+            confirmButtonText: "OK"
+        }).then(() => {
+            window.location.href = "adminlogin.html";
+        });
+        return;
+    }
+
+    // Confirmation message before sending emails
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to notify users with unpaid transactions?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#dc3545",
+        confirmButtonText: "Yes, send notifications!",
+        cancelButtonText: "Cancel"
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            // Show loading message
+            Swal.fire({
+                title: "Processing...",
+                text: "Sending unpaid transaction notifications. Please wait.",
+                icon: "info",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            try {
+                const response = await fetch("https://finalccspayment.onrender.com/api/auth/notify-unpaid-transactions", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Success!",
+                        text: "Successfully Send to Unpaid Users",
+                        confirmButtonColor: "#28a745"
+                    });
+                } else {
+                    throw new Error(result.error || "Something went wrong.");
+                }
+
+                checkForUnpaidTransactions(); // Re-check unpaid transactions after sending
+
+            } catch (error) {
+                console.error("Error sending unpaid transaction notifications:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Failed to send unpaid transaction notifications.",
+                    confirmButtonColor: "#dc3545"
+                });
+            }
+        }
+    });
+}
+                                    
 
 function getStatusClass(status) {
   switch (status) {
