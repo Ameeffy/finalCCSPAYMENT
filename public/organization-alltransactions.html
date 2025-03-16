@@ -749,7 +749,20 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                             </select>
                                           </div>
                                       
-                                          <!-- Start Date, End Date, and Filter Button grouped together on the right -->
+                                          <button id="notifyBalanceButton" class="btn btn-danger btn-sm" style="display: none;" onclick="notifyBalanceUsers()">
+                                            <i class="fas fa-envelope"></i> Notify Balance Users
+                                        </button>
+                                        <style>.blinking {
+                                            animation: blink 1s infinite;
+                                        }
+                                        
+                                        @keyframes blink {
+                                            0% { opacity: 1; }
+                                            50% { opacity: 0.3; }
+                                            100% { opacity: 1; }
+                                        }
+                                        </style>
+                                            
                                           <div class="d-flex align-items-center">
                                             <div class="me-3">
                                               <label for="minDate" class="fw-bold">Start Date:</label>
@@ -1022,6 +1035,113 @@ function updateFilteredTotalAmount() {
 
     // Display total filtered GCash amount
     gcashDisplayBox.innerHTML = `₱${totalFilteredGcash.toFixed(2)} `;
+}
+document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(checkForBalanceTransactions, 1000); // Wait 1 second to ensure data is populated
+});
+
+function checkForBalanceTransactions() {
+    var table = $('#transactionsTable').DataTable();
+    var showButton = false;
+
+    table.rows().every(function () {
+        var rowData = this.data();
+        if (rowData && rowData[3] && rowData[3].trim() === "Balance") { // Ensure correct column index for 'payment_status'
+            showButton = true;
+        }
+    });
+
+    var notifyButton = document.getElementById("notifyBalanceButton");
+
+    if (showButton) {
+        notifyButton.style.display = "inline-block"; // Show the button
+        startBlinkingAnimation(); // Start blinking animation
+    } else {
+        notifyButton.style.display = "none"; // Hide the button
+        stopBlinkingAnimation(); // Stop animation if no balance is found
+    }
+}
+
+// Function to start blinking animation
+function startBlinkingAnimation() {
+    var button = document.getElementById("notifyBalanceButton");
+    if (!button) return;
+
+    button.classList.add("blinking");
+}
+
+// Function to stop blinking animation
+function stopBlinkingAnimation() {
+    var button = document.getElementById("notifyBalanceButton");
+    if (!button) return;
+
+    button.classList.remove("blinking");
+}
+
+// Function to notify balance users with SweetAlert
+async function notifyBalanceUsers() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Unauthorized!',
+            text: 'Please log in first.',
+            confirmButtonColor: '#d33',
+        }).then(() => {
+            window.location.href = "adminlogin.html";
+        });
+        return;
+    }
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to notify users with a balance?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Notify Users!',
+        cancelButtonText: 'Cancel'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Sending Notifications...',
+                text: 'Please wait while we notify the users.',
+                icon: 'info',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            try {
+                const response = await fetch("https://finalccspayment.onrender.com/api/auth/notify-balance-transactions", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                const result = await response.json();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Notifications Sent!',
+                    text: result.message,
+                    confirmButtonColor: '#28a745'
+                });
+
+                checkForBalanceTransactions(); // Re-check after sending notifications
+            } catch (error) {
+                console.error("Error sending balance notifications:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed!',
+                    text: 'Failed to send balance notifications. Please try again.',
+                    confirmButtonColor: '#d33'
+                });
+            }
+        }
+    });
 }
 
 
