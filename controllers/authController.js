@@ -9624,7 +9624,8 @@ exports.getTransactionsByPaymentIdfetch = async (req, res) => {
                     u.email, 
                     u.idnumber, 
                     u.course, 
-                    u.section, 
+             
+                    su.section,
                     MAX(t.id) AS transaction_id, 
                     MAX(t.payment_method) AS payment_method, 
                     MAX(t.payment_status) AS payment_status
@@ -9652,7 +9653,7 @@ exports.getTransactionsByPaymentIdfetch = async (req, res) => {
                     u.email, 
                     u.idnumber, 
                     u.course, 
-                    u.section, 
+                    su.section,
                     t.id AS transaction_id, 
                     t.payment_method, 
                     t.payment_status
