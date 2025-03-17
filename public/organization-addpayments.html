@@ -410,8 +410,8 @@
                 <!-- User Dropdown -->
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-user-circle fa-2x" style="color: #25330f;"></i>
-                        <i class="fas fa-caret-down ms-2" style="color: #25330f;"></i>
+                        <i class="fas fa-user-circle fa-2x" style="color: white;"></i>
+                        <i class="fas fa-caret-down ms-2" style="color: white;"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="userDropdown" style="
                         width: 110px !important; 
@@ -1063,51 +1063,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                 
                                    
                                    
-                                    <script>
-                                        function fetchOrganizationData() {
-                                    const token = localStorage.getItem('token'); // Retrieve token from storage
-                                    if (!token) {
-                                        window.location.href = 'adminlogin.html'; // Redirect to login if no token
-                                        return;
-                                    }
                                 
-                                    fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
-                                        headers: {
-                                            'Authorization': `Bearer ${token}`
-                                        }
-                                    })
-                                    .then(response => {
-                                        if (!response.ok) {
-                                            throw new Error('Network response was not ok');
-                                        }
-                                        return response.json();
-                                    })
-                                    .then(data => {
-                                        if (data && data.name) {
-                                            
-                                            const infoDiv = document.getElementById('organizationInfo');
-                                            infoDiv.innerHTML = `
-                                              <h2 
-                                    style="color: #25330f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: 190px; font-size: 30px; text-transform: uppercase;">
-                                    ${data.name}
-                                </h2>
-                                       
-                                              
-                                            `;
-                                        } else {
-                                            document.getElementById('organizationInfo').innerText = 'No organization data found.';
-                                        }
-                                    })
-                                    .catch(error => {
-                                        console.error('Error:', error);
-                                        document.getElementById('errorMessages').innerText = 'An error occurred. Please try again.';
-                                    });
-                                }
-                                
-                                
-                                document.addEventListener('DOMContentLoaded', fetchOrganizationData);
-                                
-                                    </script>
                                 </body>
                                 </html>
                                 
