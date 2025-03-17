@@ -16,7 +16,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+            background-color: #1B3A28;
             margin: 0;
             padding: 20px;
         }
@@ -32,7 +32,7 @@
 
         h2 {
             text-align: center;
-            color: #007bff;
+            color: #1B3A28;
         }
 
         label {
@@ -59,7 +59,7 @@
 
         .organization-info h3 {
             margin: 0;
-            color: #0056b3;
+            color: #1B3A28;
         }
 
         table {
@@ -69,7 +69,7 @@
         }
 
         table thead {
-            background-color: #007bff;
+            background-color: #1B3A28;
             color: white;
         }
 
@@ -106,10 +106,44 @@
         .btn-csv { background-color: #17a2b8; color: white; }
         .btn-pdf { background-color: #dc3545; color: white; }
         .btn-print { background-color: #ffc107; color: black; }
+        .back-icon svg {
+    transition: transform 0.3s ease;
+}
+
+.back-icon:hover {
+    
+    transform: scale(1.1); /* Slight zoom effect */
+}
+
+.back-icon:hover svg {
+    transform: translateX(-5px); /* Moves the icon slightly left */
+}
+.back-icon {
+  
+  top: 50px;
+  left: 20px;
+  cursor: pointer;
+  font-size: 24px;
+  color: #0b5e1d; /* Change this color to match your theme */
+ 
+}
+
+.back-icon:hover {
+  color: #046317; /* Change this hover effect color to match your theme */
+}
+
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Back Button on the left -->
+        <a href="javascript:window.history.back();" class="back-icon" style="flex-shrink: 0;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-back-up">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M9 14l-4 -4l4 -4" />
+                <path d="M5 10h11a4 4 0 1 1 0 8h-1" />
+            </svg>
+        </a>
         <h2>Your Organizations & Assigned Users</h2>
         <p style="text-align: center;">Below is a list of organizations you are advising and the users under your guidance.</p>
 
