@@ -578,7 +578,7 @@ document.addEventListener("DOMContentLoaded", function () {
             headers: { "Authorization": "Bearer " + token }
         }).then(res => res.json()),
 
-        fetch("http://localhost:5000/api/auth/adviser/gcashorder-count", {
+        fetch("https://finalccspayment.onrender.com/api/auth/adviser/gcashorder-count", {
             headers: { "Authorization": "Bearer " + token }
         }).then(res => res.json())
     ])
