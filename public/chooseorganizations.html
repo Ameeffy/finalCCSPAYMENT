@@ -159,14 +159,39 @@
     }
 
     /* Dark Green Spinner */
+    #loadingScreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #1B3A28; /* Dark Green */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 22px;
+        font-weight: bold;
+        z-index: 9999;
+        flex-direction: column;
+    }
+
+    /* Centered Spinner Container */
+    .spinner-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Dark Green Spinner */
     .spinner {
-        border: 5px solid rgba(0, 0, 0, 0.1);
-        border-left-color: #ffffff; /* Dark Green */
+        border: 5px solid rgba(255, 255, 255, 0.2); /* Transparent White Border */
+        border-top: 5px solid #ffffff; /* White Spinner */
         border-radius: 50%;
-        width: 100px;
-        height: 100px;
+        width: 60px;
+        height: 60px;
         animation: spin 1s linear infinite;
-        position: absolute;
+        margin-bottom: 10px; /* Space below spinner */
     }
 
     @keyframes spin {
@@ -192,7 +217,12 @@
     </div>
 
 
-    <div id="loadingScreen">Loading organizations...</div>
+    <div id="loadingScreen">
+    <div class="spinner-container">
+        <div class="spinner"></div>
+        <p>Loading Organizations...</p>
+    </div>
+</div>
     <h2>Choose Your Organization</h2>
 
     <div id="organizations-list"></div> <!-- Organizations Display -->
