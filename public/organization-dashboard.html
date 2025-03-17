@@ -32,6 +32,275 @@
         
     </head>
 <style>
+            .export-container {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    z-index: 1;
+}
+
+.export-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.export-btn {
+    background-color: #1B3A28;
+    color: #ffffff;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 40px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+}
+
+.export-btn:hover {
+    background-color: #3e865c;
+}
+
+.export-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 83px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.export-content a {
+    color: #333;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+.export-content a:hover {
+    background-color: #f8f9fa;
+}
+
+.export-dropdown:hover .export-content {
+    display: block;
+}
+@media print {
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+    }
+
+    .export-container, .dataTables_wrapper .top, .dataTables_wrapper .bottom {
+        display: none;
+    }
+
+    .custom-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .custom-table th, .custom-table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    .custom-table thead {
+        background-color: #f1f1f1;
+    }
+}
+        .table-container{
+            width: auto;
+            background-color: white;
+            padding-top: 20px;
+            padding-left: 10px;
+            padding-right: 10px;   
+            border-radius: 3px;
+            padding-bottom: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+.dataTables_scroll {
+    border-radius: 5px 5px 0 0; /* 5px top border radius */
+}
+
+.dataTables_scrollBody {
+    border-radius: 0; /* Ensure no bottom border radius */
+}
+
+
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px; /* Adjusted to 5px */
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px; /* Adjusted to 5px */
+}
+
+/* Ensure no bottom border-radius */
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important; /* Light gray border */
+    padding: 12px 16px; /* Comfortable spacing */
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important; /* Remove border from last row */
+}
+
+/* Optional hover effect */
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important; /* Very subtle hover background */
+    border-bottom-color: #d0d0d0 !important; /* Slightly darker border on hover */
+}
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        justify-self: flex-end;
+    }
+
+    /* Optional: Adjust spacing between elements */
+    .dataTables_wrapper .dataTables_length {
+        margin-right: 15px;
+    }
+   
+    .dataTables_wrapper .dataTables_info {
+        margin: 0 15px;
+    }
+    .dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    text-decoration: none;
+    color: #555;
+    background-color: #f9f9f9;
+}
+
+.dataTables_wrapper .dataTables_paginate a:hover {
+    background-color: #007bff;
+    color: #000000;
+    border-color: #007bff;
+}
+
+/* Styling the search box */
+.dataTables_wrapper .dataTables_filter {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Custom table design */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
+    border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
+    margin-bottom: 50px;
+}
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 12px 16px;
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important;
+    border-bottom-color: #d0d0d0 !important;
+}
+
     .image-container {
     position: relative;
     width: 120px;
@@ -63,14 +332,7 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-    .text-white table tbody td {
-    color: black !important;
-}.dataTables_length,
-.dataTables_filter,
-.dataTables_info,
-.dataTables_paginate {
-    color: rgb(255, 255, 255) !important; /* Makes DataTables UI elements black */
-}
+  
 .btn-copy {
         background-color: #007bff; /* Blue background */
     }
@@ -91,6 +353,7 @@
     .btn-copy:hover, .btn-csv:hover, .btn-excel:hover, .btn-pdf:hover, .btn-print:hover {
         opacity: 0.8;
     }
+
 
 </style>
     <body class="sb-nav-fixed">
@@ -221,7 +484,7 @@
         return;
     }
 
-    fetch('https://finalccspayment.onrender.com/api/auth/organization/details', {
+    fetch('http://localhost:5000/api/auth/organization/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -264,7 +527,7 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         return;
     }
 
-    fetch('https://finalccspayment.onrender.com/api/auth/organization-user/details', {
+    fetch('http://localhost:5000/api/auth/organization-user/details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -493,7 +756,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
         }
 
         try {
-            const response = await fetch('https://finalccspayment.onrender.com/api/auth/total-amount-payment-organization', {
+            const response = await fetch('http://localhost:5000/api/auth/total-amount-payment-organization', {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -548,7 +811,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                         }
                                 
                                         try {
-                                            const response = await fetch('https://finalccspayment.onrender.com/api/auth/total-pay-organization', {
+                                            const response = await fetch('http://localhost:5000/api/auth/total-pay-organization', {
                                                 headers: { Authorization: `Bearer ${token}` },
                                             });
                                 
@@ -607,7 +870,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                         }
                                     
                                         try {
-                                            const response = await fetch('https://finalccspayment.onrender.com/api/auth/product-quantities-organization', {
+                                            const response = await fetch('http://localhost:5000/api/auth/product-quantities-organization', {
                                                 headers: { Authorization: `Bearer ${token}` },
                                             });
                                     
@@ -706,7 +969,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                         }
                                     
                                         try {
-                                            const response = await fetch('https://finalccspayment.onrender.com/api/auth/product-review-stats', {
+                                            const response = await fetch('http://localhost:5000/api/auth/product-review-stats', {
                                                 headers: { Authorization: `Bearer ${token}` },
                                             });
                                     
@@ -832,7 +1095,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
     }
 
     try {
-        const response = await fetch('https://finalccspayment.onrender.com/api/auth/monthly-totals', {
+        const response = await fetch('http://localhost:5000/api/auth/monthly-totals', {
             headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -934,7 +1197,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let currentSemesterIndex = 0;
 
     try {
-        const response = await fetch('https://finalccspayment.onrender.com/api/auth/accepted-payments-total-amount-payment-method', {
+        const response = await fetch('http://localhost:5000/api/auth/accepted-payments-total-amount-payment-method', {
             headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -1069,129 +1332,33 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
                                         </script>
-                                                    <!-- Insert Pie Chart and Donut Chart -->
-<div class="row">
-    <div class="col-lg-3 col-md-6 mb-3">
-        <div class="card text-white bg-success h-100">
-            <div class="card-body">
-                <h5 class="card-title text-center" id="semesterPaymentsTitle">Payments Transactions - Semester</h5>
-                <p class="card-text text-center" id="semesterPaymentsAmount" style="font-size: 25px;">₱0.00</p>
-                <button id="nextSemesterPayments" class="btn btn-light btn-sm float-end">Next</button>
-            </div>
-        </div>
-    </div>
 
-    <!-- Product Transactions Per Semester -->
-    <div class="col-lg-3 col-md-6 mb-3">
-        <div class="card text-white bg-success h-100">
-            <div class="card-body">
-                <h5 class="card-title text-center" id="semesterOrdersTitle">Order Transactions - Semester</h5>
-                <p class="card-text text-center" id="semesterOrdersAmount" style="font-size: 25px;">₱0.00</p>
-                <button id="nextSemesterOrders" class="btn btn-light btn-sm float-end">Next</button>
+    </script>
+    <div class="row d-flex justify-content-center">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card text-white bg-success h-100">
+                <div class="card-header" style="background-color: #1B3A28; color: white;">
+                    <h5 class="card-title text-center">Payments Transactions Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="paymentsPieChart"></canvas>
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card text-white bg-success h-100">
+                <div class="card-header" style="background-color: #1B3A28; color: white;">
+                    <h5 class="card-title text-center">Product Transactions Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="productsDonutChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                alert('Unauthorized access. Please log in.');
-                window.location.href = 'adminlogin.html';
-                return;
-            }
-        
-            let semesters = [];
-            let semesterPayments = [];
-            let semesterOrders = [];
-            let currentSemesterIndexPayments = 0; // Track for payments separately
-            let currentSemesterIndexOrders = 0; // Track for orders separately
-        
-            try {
-                const response = await fetch('https://finalccspayment.onrender.com/api/auth/payments-transactions-by-semester', {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-        
-                if (!response.ok) throw new Error('Failed to fetch semester-wise payments.');
-        
-                const data = await response.json();
-                semesters = data.semesters;
-                semesterPayments = data.payments;
-                semesterOrders = data.orders;
-        
-                if (semesters.length === 0) {
-                    throw new Error('No semester data available.');
-                }
-        
-                // Display the first semester for both sections
-                updateSemesterPaymentsView(currentSemesterIndexPayments);
-                updateSemesterOrdersView(currentSemesterIndexOrders);
-        
-                // Button click event for Payments Transactions (Independent)
-                document.getElementById('nextSemesterPayments').addEventListener('click', () => {
-                    currentSemesterIndexPayments = (currentSemesterIndexPayments + 1) % semesters.length;
-                    updateSemesterPaymentsView(currentSemesterIndexPayments);
-                });
-        
-                // Button click event for Orders Transactions (Independent)
-                document.getElementById('nextSemesterOrders').addEventListener('click', () => {
-                    currentSemesterIndexOrders = (currentSemesterIndexOrders + 1) % semesters.length;
-                    updateSemesterOrdersView(currentSemesterIndexOrders);
-                });
-        
-            } catch (error) {
-                console.error('Error fetching semester-wise transactions:', error);
-            }
-        
-            // Function to update UI for Payments Transactions
-            function updateSemesterPaymentsView(index) {
-                const semester = semesters[index];
-                if (!semester) return;
-        
-                const semesterPaymentsTotal = semesterPayments
-                    .filter(p => parseInt(p.semester_id) === parseInt(semester.id))
-                    .reduce((sum, p) => sum + parseFloat(p.total_amount || 0), 0);
-        
-                document.getElementById('semesterPaymentsTitle').textContent = `Payments Transactions - ${semester.name}`;
-                document.getElementById('semesterPaymentsAmount').textContent = `₱${semesterPaymentsTotal.toFixed(2)}`;
-            }
-        
-            // Function to update UI for Orders Transactions
-            function updateSemesterOrdersView(index) {
-                const semester = semesters[index];
-                if (!semester) return;
-        
-                const semesterOrdersTotal = semesterOrders
-                    .filter(o => parseInt(o.semester_id) === parseInt(semester.id))
-                    .reduce((sum, o) => sum + parseFloat(o.total_pay || 0), 0);
-        
-                document.getElementById('semesterOrdersTitle').textContent = `Order Transactions - ${semester.name}`;
-                document.getElementById('semesterOrdersAmount').textContent = `₱${semesterOrdersTotal.toFixed(2)}`;
-            }
-        });</script>
-    <div class="col-lg-3 col-md-6 mb-3">
-        <div class="card text-white bg-success h-100">
-            <div class="card-header" style="background-color: #1B3A28; color: white;">
-                <h7 class="card-title text-center">Payments Transactions Distribution</h7>
-            </div>
-            <div class="card-body">
-               
-                <canvas id="paymentsPieChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-6 mb-3">
-        <div class="card text-white bg-success h-100">
-            <div class="card-header" style="background-color: #1B3A28; color: white;">
-                <h7 class="card-title text-center">Product Transactions Distribution</h7>
-            </div>
-            <div class="card-body">
-               
-                <canvas id="productsDonutChart"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
+    
+    
 
 <!-- Chart.js Script -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1207,12 +1374,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         // Fetch Payments Transactions Data
-        const paymentsResponse = await fetch('https://finalccspayment.onrender.com/api/auth/transaction-status-counts', {
+        const paymentsResponse = await fetch('http://localhost:5000/api/auth/transaction-status-counts', {
             headers: { Authorization: `Bearer ${token}` },
         });
 
         // Fetch Product Transactions Data
-        const productsResponse = await fetch('https://finalccspayment.onrender.com/api/auth/product-transaction-status-counts', {
+        const productsResponse = await fetch('http://localhost:5000/api/auth/product-transaction-status-counts', {
             headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -1235,7 +1402,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             productsData.declined_count
         ];
 
-        // Payment Transactions Pie Chart
+        // https://finalccspayment.onrender.coms Pie Chart
         var ctx1 = document.getElementById('paymentsPieChart').getContext('2d');
         new Chart(ctx1, {
             type: 'pie',
@@ -1292,7 +1459,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                                             }
                                                     
                                                             try {
-                                                                const response = await fetch('https://finalccspayment.onrender.com/api/auth/product-transaction-status-counts', {
+                                                                const response = await fetch('http://localhost:5000/api/auth/product-transaction-status-counts', {
                                                                     headers: { Authorization: `Bearer ${token}` },
                                                                 });
                                                     
@@ -1330,13 +1497,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                                                         </div>
                                                         
                                                         
-                                                            <!-- Payment Transactions -->
+                                                            <!-- https://finalccspayment.onrender.coms -->
                                                             <div class="row">
                                                                 <div class="col-lg-6 col-md-6 mb-3">
-                                                                    <div class="card text-white bg-success h-100">
+                                                                    <div class="card text-black bg-white h-100">
                                                                         <div class="card-body">
-                                                                            <h5 class="card-title text-center" id="paymentHeader">Payment Transactions Today</h5>
-                                                                            <table class="table text-white" id="paymentTable">
+                                                                            <h5 class="card-title text-center" id="paymentHeader">https://finalccspayment.onrender.coms Today</h5>
+                                                                            <table class="custom-table" id="paymentTable">
                                                                                 <thead>
                                                                                     <tr>
                                                                                         <th>Student Name</th>
@@ -1349,16 +1516,31 @@ document.addEventListener('DOMContentLoaded', async () => {
                                                                                 </thead>
                                                                                 <tbody></tbody>
                                                                             </table>
+                                                                            <div class="export-container">
+                                                                                <div class="export-dropdown">
+                                                                                    <button class="export-btn">
+                                                                                        Export <i class="fas fa-chevron-down"></i>
+                                                                                    </button>
+                                                                                    <div class="export-content">
+                                                                                        <a href="#" onclick="exportAction('copy')">Copy</a>
+                                                                                        <a href="#" onclick="exportAction('print')">Print</a>
+                                                                                        <a href="#" onclick="exportAction('pdf')">PDF</a>
+                                                                                        <a href="#" onclick="exportAction('csv')">CSV</a>
+                                                                                        <a href="#" onclick="exportAction('excel')">Excel</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
+                                                                        
                                                                     </div>
                                                                 </div>
                                                         
                                                                 <!-- Order Transactions -->
                                                                 <div class="col-lg-6 col-md-6 mb-3">
-                                                                    <div class="card text-white bg-success h-100">
+                                                                    <div class="card text-black bg-white h-100">
                                                                         <div class="card-body">
                                                                             <h5 class="card-title text-center" id="orderHeader">Order Transactions Today</h5>
-                                                                            <table class="table text-white" id="orderTable">
+                                                                            <table class="custom-table" id="orderTable">
                                                                                 <thead>
                                                                                     <tr>
                                                                                         <th>Student Name</th>
@@ -1371,13 +1553,73 @@ document.addEventListener('DOMContentLoaded', async () => {
                                                                                 </thead>
                                                                                 <tbody></tbody>
                                                                             </table>
+                                                                            <div class="export-container">
+                                                                                <div class="export-dropdown">
+                                                                                    <button class="export-btn">
+                                                                                        Export <i class="fas fa-chevron-down"></i>
+                                                                                    </button>
+                                                                                    <div class="export-content">
+                                                                                        <a href="#" onclick="exportAction('copy')">Copy</a>
+                                                                                        <a href="#" onclick="exportAction('print')">Print</a>
+                                                                                        <a href="#" onclick="exportAction('pdf')">PDF</a>
+                                                                                        <a href="#" onclick="exportAction('csv')">CSV</a>
+                                                                                        <a href="#" onclick="exportAction('excel')">Excel</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>  
                                                    
                                                         
-                                                        <script> // Function to get today's date in Manila timezone
+                                                        <script> 
+                                                        
+                                                        let orderTable;
+
+function exportAction(type) {
+    var table = $('#orderTable').DataTable();
+    switch (type) {
+        case 'copy':
+            table.button('.buttons-copy').trigger();
+            break;
+        case 'print':
+            table.button('.buttons-print').trigger();
+            break;
+        case 'pdf':
+            table.button('.buttons-pdf').trigger();
+            break;
+        case 'csv':
+            table.button('.buttons-csv').trigger();
+            break;
+        case 'excel':
+            table.button('.buttons-excel').trigger();
+            break;
+    }
+}// Function to get today's date in Manila timezone
+let paymentTable;
+
+function exportAction(type) {
+    var table = $('#paymentTable').DataTable();
+    switch (type) {
+        case 'copy':
+            table.button('.buttons-copy').trigger();
+            break;
+        case 'print':
+            table.button('.buttons-print').trigger();
+            break;
+        case 'pdf':
+            table.button('.buttons-pdf').trigger();
+            break;
+        case 'csv':
+            table.button('.buttons-csv').trigger();
+            break;
+        case 'excel':
+            table.button('.buttons-excel').trigger();
+            break;
+    }
+}// Function 
                                                             function getManilaDate() {
                                                                 const now = new Date();
                                                                 const manilaTime = new Intl.DateTimeFormat('en-CA', { 
@@ -1414,7 +1656,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                                                 }
                                                             
                                                                 try {
-                                                                    const response = await fetch(`https://finalccspayment.onrender.com/api/auth/all-payments-transactions-dashboard?start_date=${startDate}&end_date=${endDate}`, {
+                                                                    const response = await fetch(`http://localhost:5000/api/auth/all-payments-transactions-dashboard?start_date=${startDate}&end_date=${endDate}`, {
                                                                         headers: { Authorization: `Bearer ${token}` },
                                                                     });
                                                             
@@ -1424,12 +1666,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                                                             
                                                                     // Update the headers dynamically
                                                                     document.getElementById('paymentHeader').textContent = 
-                                                                        startDate === endDate ? `Payment Transactions Today (${formatDate(startDate)})` : `Payment Transactions (${formatDate(startDate)} to ${formatDate(endDate)})`;
+                                                                        startDate === endDate ? `https://finalccspayment.onrender.coms Today (${formatDate(startDate)})` : `https://finalccspayment.onrender.coms (${formatDate(startDate)} to ${formatDate(endDate)})`;
                                                             
                                                                     document.getElementById('orderHeader').textContent = 
                                                                         startDate === endDate ? `Order Transactions Today (${formatDate(startDate)})` : `Order Transactions (${formatDate(startDate)} to ${formatDate(endDate)})`;
                                                             
-                                                                    // Populate Payment Transactions Table
+                                                                    // Populate https://finalccspayment.onrender.coms Table
                                                                     $('#paymentTable').DataTable().clear().destroy();
                                                                     $('#paymentTable tbody').empty();
                                                                     data.payments.forEach(transaction => {
@@ -1450,6 +1692,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                                                     });
                                                             
                                                                     $('#paymentTable').DataTable({
+                                                                        dom: '<"top"f>rt<"bottom"lip>',
                                                                         buttons: [
         {
             extend: 'copy',
@@ -1482,7 +1725,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             className: 'btn-print'  // Add a custom class to style the background color
         }
     ],
-    dom: 'lBfrtip',
     lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
 });
                                                             
@@ -1507,6 +1749,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                                                                     });
                                                             
                                                                     $('#orderTable').DataTable({
+                                                                        dom: '<"top"f>rt<"bottom"lip>',
+
                                                                         buttons: [
         {
             extend: 'copy',
@@ -1539,7 +1783,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             className: 'btn-print'  // Add a custom class to style the background color
         }
     ],
-    dom: 'lBfrtip',
     lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
 });
                                                             
