@@ -5,25 +5,311 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Organization Product Logs</title>
 
-    <!-- DataTables & Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css" rel="stylesheet">
-
-    <!-- jQuery & DataTables Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.excel.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 
     <style>
+           .export-container {
+    position: absolute;
+    right: 25px;
+    top: 20px;
+    z-index: 1;
+}
+        .export-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.export-btn {
+    background-color: #1B3A28;
+    color: #ffffff;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 40px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+}
+
+.export-btn:hover {
+    background-color: #3e865c;
+}
+
+.export-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 83px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.export-content a {
+    color: #333;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+.export-content a:hover {
+    background-color: #f8f9fa;
+}
+
+.export-dropdown:hover .export-content {
+    display: block;
+}
+@media print {
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+    }
+
+    .export-container, .dataTables_wrapper .top, .dataTables_wrapper .bottom {
+        display: none;
+    }
+
+    .custom-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .custom-table th, .custom-table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    .custom-table thead {
+        background-color: #f1f1f1;
+    }
+}
+        .table-container{
+            width: auto;
+            background-color: white;
+            padding-top: 20px;
+            padding-left: 10px;
+            padding-right: 10px;   
+            border-radius: 3px;
+            padding-bottom: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+.dataTables_scroll {
+    border-radius: 5px 5px 0 0; /* 5px top border radius */
+}
+
+.dataTables_scrollBody {
+    border-radius: 0; /* Ensure no bottom border radius */
+}
+
+
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px; /* Adjusted to 5px */
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px; /* Adjusted to 5px */
+}
+
+/* Ensure no bottom border-radius */
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important; /* Light gray border */
+    padding: 12px 16px; /* Comfortable spacing */
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important; /* Remove border from last row */
+}
+
+/* Optional hover effect */
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important; /* Very subtle hover background */
+    border-bottom-color: #d0d0d0 !important; /* Slightly darker border on hover */
+}
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        justify-self: flex-end;
+    }
+
+    /* Optional: Adjust spacing between elements */
+    .dataTables_wrapper .dataTables_length {
+        margin-right: 15px;
+    }
+   
+    .dataTables_wrapper .dataTables_info {
+        margin: 0 15px;
+    }
+    .dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    text-decoration: none;
+    color: #555;
+    background-color: #f9f9f9;
+}
+
+.dataTables_wrapper .dataTables_paginate a:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Styling the search box */
+.dataTables_wrapper .dataTables_filter {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Custom table design */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
+    border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
+    margin-bottom: 50px;
+}
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 12px 16px;
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important;
+    border-bottom-color: #d0d0d0 !important;
+}
+
+
+.header-container {
+   
+    align-items: center; /* Vertically centers items */
+}
+.back-icon svg {
+    transition: transform 0.3s ease;
+}
+
+.back-icon:hover {
+    
+    transform: scale(1.1); /* Slight zoom effect */
+}
+
+.back-icon:hover svg {
+    transform: translateX(-5px); /* Moves the icon slightly left */
+}
+
         body {
             font-family: Arial, sans-serif;
-            background-color: #F5FFFA;
+            background-color: #ffffff;
             margin: 0;
             padding: 20px;
         }
@@ -51,9 +337,22 @@
     </style>
 </head>
 <body>
-
-    <h1>Organization Product Logs</h1>
-    <table id="organizationProductsLogsTable" class="display nowrap">
+<div class="header-container" style="display: flex; align-items: center; justify-content: space-between;">
+        
+        <!-- Back Button on the left -->
+        <a href="javascript:window.history.back();" class="back-icon" style="flex-shrink: 0;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-back-up">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M9 14l-4 -4l4 -4" />
+                <path d="M5 10h11a4 4 0 1 1 0 8h-1" />
+            </svg>
+        </a>
+        
+        <!-- Title in the center -->
+        <h2 style="flex-grow: 1; text-align: center;">Organization Product Logs</h2>
+    </div>
+ 
+    <table id="organizationProductsLogsTable" class="custom-table">
         <thead>
             <tr>
                 <th>Product Name</th>
@@ -64,9 +363,46 @@
         </thead>
         <tbody>
         </tbody>
+        
     </table>
-
+    
+    <div class="export-container">
+        <div class="export-dropdown">
+            <button class="export-btn">
+                Export <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="export-content">
+                <a href="#" onclick="exportAction('copy')">Copy</a>
+                <a href="#" onclick="exportAction('print')">Print</a>
+                <a href="#" onclick="exportAction('pdf')">PDF</a>
+                <a href="#" onclick="exportAction('csv')">CSV</a>
+                <a href="#" onclick="exportAction('excel')">Excel</a>
+            </div>
+        </div>
+    </div>
     <script>
+        let dataTable;
+
+function exportAction(type) {
+    var table = $('#organizationProductsLogsTable').DataTable();
+    switch (type) {
+        case 'copy':
+            table.button('.buttons-copy').trigger();
+            break;
+        case 'print':
+            table.button('.buttons-print').trigger();
+            break;
+        case 'pdf':
+            table.button('.buttons-pdf').trigger();
+            break;
+        case 'csv':
+            table.button('.buttons-csv').trigger();
+            break;
+        case 'excel':
+            table.button('.buttons-excel').trigger();
+            break;
+    }
+}
         $(document).ready(function() {
             const token = localStorage.getItem('token'); // Retrieve token from localStorage
             
@@ -106,7 +442,7 @@
                         { title: "Performed By" },
                         { title: "Date", type: "num" } // Sort by timestamp
                     ],
-                    dom: 'Bfrtip',
+                    dom: '<"top"f>rt<"bottom"lip>',
                     buttons: ['copy', 'csv', 'excel', 'pdf', 'print'], // Added Excel, PDF, and Print
                     order: [[3, 'desc']] // Sort by timestamp
                 });
@@ -117,6 +453,7 @@
             });
         });
     </script>
+            <link rel="stylesheet" href="/static/css/styles.css">
 
 </body>
 </html>
