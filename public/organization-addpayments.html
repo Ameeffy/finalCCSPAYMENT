@@ -386,7 +386,7 @@
             <div class="d-flex align-items-center">
                 <!-- Sidebar Toggle -->
                 <button class="btn btn-link btn-sm me-3" id="sidebarToggle">
-                    <i class="fas fa-bars" style="color: black;"></i>
+                    <i class="fas fa-bars" style="color: white;"></i>
                 </button>
         
                 <!-- Logo -->
@@ -508,7 +508,7 @@
             
             const infoDiv = document.getElementById('organizationInfo');
             infoDiv.innerHTML = `
-              <h2 class="custom-heading">${data.name}</h2>
+              <div class="custom-heading">${data.name}</div>
 
        
               
@@ -557,7 +557,7 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         document.getElementById('profile-item').innerHTML = `
            <a style="color: #25330f; text-decoration: none; " href="organization-users-info.html">
    
-   <h3 style="color: #25330f; text-decoration: none; font-size: 18px; margin-top:10px;">${user.firstname} ${user.lastname}</h3>
+   <h3 style="color: white; text-decoration: none; font-size: 18px; margin-top:10px;">${user.firstname} ${user.lastname}</h3>
 </a>
 
 
