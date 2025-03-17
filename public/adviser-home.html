@@ -7,7 +7,7 @@
         <link rel="icon" type="x-icon" href="img/logo.png">
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Admin Payment</title>
+        <title>Adviser Dashboard</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -559,7 +559,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                             <!-- Bar Chart -->
                                             <div class="col-xl-6 col-md-12 mb-4">
                                                 <div class="card text-white bg-success h-100">
-                                                    <div class="card-header">
+                                                    <div class="card-header" style="background-color: #1B3A28; color: white;">
                                                         <i class="fas fa-chart-bar me-1"></i>
                                                         Payments and QR-Codes
                                                     </div>
@@ -571,98 +571,164 @@ document.addEventListener("DOMContentLoaded", function () {
                                             
                                             <script>
                                                 document.addEventListener("DOMContentLoaded", function () {
-                                                    const token = localStorage.getItem('token');
-                                            
-                                                    Promise.all([
-                                                        fetch("https://finalccspayment.onrender.com/api/auth/adviser/payment-count", {
-                                                            headers: { "Authorization": "Bearer " + token }
-                                                        }).then(res => res.json()),
-                                            
-                                                        fetch("https://finalccspayment.onrender.com/api/auth/adviser/gcashorder-count", {
-                                                            headers: { "Authorization": "Bearer " + token }
-                                                        }).then(res => res.json())
-                                                    ])
-                                                    .then(([paymentData, gcashData]) => {
-                                                        const paymentsCount = paymentData.totalPayments || 0;
-                                                        const gcashCount = gcashData.totalGcashOrders || 0;
-                                            
-                                                        var ctx2 = document.getElementById('myBarChart').getContext('2d');
-                                                        new Chart(ctx2, {
-                                                            type: 'bar',
-                                                            data: {
-                                                                labels: ['Payments', 'QR-Codes'],
-                                                                datasets: [{
-                                                                    label: 'Total Count',
-                                                                    data: [paymentsCount, gcashCount],
-                                                                    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                                                                    borderColor: '#ffffff',
-                                                                    borderWidth: 1
-                                                                }]
-                                                            },
-                                                            options: {
-                                                                plugins: {
-                                                                    legend: { labels: { color: '#ffffff' } }
-                                                                },
-                                                                scales: {
-                                                                    x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255, 255, 255, 0.2)' } },
-                                                                    y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255, 255, 255, 0.2)' } }
-                                                                }
-                                                            }
-                                                        });
-                                                    })
-                                                    .catch(error => console.error("Error fetching chart data:", error));
-                                                });
+    const token = localStorage.getItem('token');
+
+    Promise.all([
+        fetch("https://finalccspayment.onrender.com/api/auth/adviser/payment-count", {
+            headers: { "Authorization": "Bearer " + token }
+        }).then(res => res.json()),
+
+        fetch("http://localhost:5000/api/auth/adviser/gcashorder-count", {
+            headers: { "Authorization": "Bearer " + token }
+        }).then(res => res.json())
+    ])
+    .then(([paymentData, gcashData]) => {
+        const paymentsCount = paymentData.totalPayments || 0;
+        const gcashCount = gcashData.totalGcashOrders || 0;
+
+        var ctx2 = document.getElementById('myBarChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Payments', 'QR-Codes'],
+                datasets: [{
+                    label: 'Total Count',
+                    data: [paymentsCount, gcashCount],
+                    backgroundColor: ['#1B3A28', '#1B3A28'], // Much darker green
+                    borderColor: '#001a00', // Very dark green border
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: { 
+                            color: '#002200', // Darkest green for legend text
+                            font: { weight: 'bold' }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: '#002200', font: { weight: 'bold' } },
+                        grid: { color: '#001a00' } // Darker grid lines
+                    },
+                    y: {
+                        ticks: { color: '#002200', font: { weight: 'bold' } },
+                        grid: { color: '#001a00' }
+                    }
+                }
+            }
+        });
+
+        // Set header to a much darker green
+        
+    })
+    .catch(error => console.error("Error fetching chart data:", error));
+});
+
                                             </script>
                                             
                                             <!-- Area Chart -->
                                             <div class="col-xl-6 col-md-12 mb-4">
                                                 <div class="card text-white bg-success h-100">
-                                                    <div class="card-header">
-                                                        <i class="fas fa-chart-area me-1"></i>
-                                                        Area Chart Example
+                                                    <div class="card-header" style="background-color: #1B3A28; color: white;">
+                                                        <i class="fas fa-users me-1"></i>
+                                                        Students You Handle
                                                     </div>
-                                                    <div class="card-body">
-                                                        <canvas id="myAreaChart"></canvas>
+                                                    <div class="card-body" id="studentsBox">
+                                                        <ul id="studentsList" class="list-group list-group-flush text-dark">
+                                                            <li class="list-group-item">Loading...</li>
+                                                        </ul>
+                                                        <div class="d-flex justify-content-between mt-3">
+                                                            <button id="prevBtn" class="btn btn-light" style="display: none;">Prev</button>
+                                                            <button id="nextBtn" class="btn btn-light" style="display: none;">Next</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             
-                                            
-                                        </div>
-                                        
-                                        
-                                        <!-- Include Chart.js -->
-                                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                                        <script>
-                                            // Area Chart
-                                            var ctx1 = document.getElementById('myAreaChart').getContext('2d');
-                                            var myAreaChart = new Chart(ctx1, {
-                                                type: 'line',
-                                                data: {
-                                                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                                                    datasets: [{
-                                                        label: 'Users Growth',
-                                                        data: [100, 200, 400, 300, 500, 700],
-                                                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                                                        borderColor: '#ffffff',
-                                                        borderWidth: 2,
-                                                        pointBackgroundColor: '#ffffff'
-                                                    }]
-                                                },
-                                                options: {
-                                                    plugins: {
-                                                        legend: { labels: { color: '#ffffff' } }
-                                                    },
-                                                    scales: {
-                                                        x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255, 255, 255, 0.2)' } },
-                                                        y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255, 255, 255, 0.2)' } }
-                                                    }
-                                                }
-                                            });
-                                        
-                                            // Bar Chart
-                                            
-                                        </script>
+                                            <script>
+                                                document.addEventListener("DOMContentLoaded", function () {
+    let organizations = [];
+    let currentIndex = 0;
+
+    function updateUI() {
+        const studentsList = document.getElementById("studentsList");
+        studentsList.innerHTML = ""; 
+
+        if (organizations.length === 0) {
+            studentsList.innerHTML = "<li class='list-group-item text-center font-weight-bold'>No students found.</li>";
+            document.getElementById("prevBtn").style.display = "none";
+            document.getElementById("nextBtn").style.display = "none";
+            return;
+        }
+
+        const org = organizations[currentIndex];
+        const headerItem = document.createElement("li");
+
+        // Apply dark green background and styled text for the header inside the white container
+        headerItem.style.backgroundColor = "#1B3A28"; // Deep dark green
+        headerItem.style.color = "white"; 
+        headerItem.style.fontWeight = "bold"; // Makes text more prominent
+        headerItem.style.padding = "10px"; // Adds spacing for better visibility
+        headerItem.style.border = "1px solid #0A1F12"; // Slightly darker border for contrast
+        headerItem.style.borderRadius = "5px"; // Rounded corners for a modern look
+        headerItem.style.textAlign = "center"; // Centers the text nicely
+        headerItem.style.textTransform = "uppercase"; // Makes text stand out more
+
+        // Set the formatted text content
+        headerItem.textContent = `📌 ${org.organization} - ${org.year}`; // Adds an icon for emphasis
+        studentsList.appendChild(headerItem);
+
+        // Add the students list
+        org.users.forEach(user => {
+            const studentItem = document.createElement("li");
+            studentItem.classList.add("list-group-item");
+            studentItem.textContent = `${user.full_name} - ${user.position}`;
+            studentsList.appendChild(studentItem);
+        });
+
+        document.getElementById("prevBtn").style.display = currentIndex > 0 ? "inline-block" : "none";
+        document.getElementById("nextBtn").style.display = currentIndex < organizations.length - 1 ? "inline-block" : "none";
+    }
+
+    fetch('https://finalccspayment.onrender.com/api/auth/adviser/organization-users', {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.organizations.length === 0) {
+            document.getElementById("studentsList").innerHTML = "<li class='list-group-item text-center font-weight-bold'>No students found.</li>";
+            return;
+        }
+
+        organizations = data.organizations;
+        currentIndex = 0;
+        updateUI();
+    })
+    .catch(error => {
+        console.error('Error fetching students:', error);
+        document.getElementById("studentsList").innerHTML = "<li class='list-group-item text-center font-weight-bold text-danger'>Error loading students.</li>";
+    });
+
+    document.getElementById("prevBtn").addEventListener("click", function() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateUI();
+        }
+    });
+
+    document.getElementById("nextBtn").addEventListener("click", function() {
+        if (currentIndex < organizations.length - 1) {
+            currentIndex++;
+            updateUI();
+        }
+    });
+});
+                                            </script>
                                     
                                 </div>  
                             </div>  
