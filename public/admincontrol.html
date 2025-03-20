@@ -7,7 +7,7 @@
         <link rel="icon" type="x-icon" href="img/logo.png">
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Admin Payments</title>
+        <title>Admin Semester Control</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -1390,6 +1390,7 @@ function displaySemesters() {
     $('#semester-table').DataTable({
         dom: '<"top"f>rt<"bottom"lip>',
         pageLength: 3,
+        order: [[2, 'desc']],
         buttons: [
             {
                 extend: 'copy',
