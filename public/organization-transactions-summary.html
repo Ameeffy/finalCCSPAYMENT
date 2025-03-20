@@ -559,7 +559,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                     
                                         } catch (error) {
                                             console.error('Error fetching adviser payments:', error);
-                                            Swal.fire('Error', 'Failed to load data', 'error');
+                                            Swal.fire('Warning', 'You dont have any data yet', 'error');
                                         }
                                     
                                         function updateSemesterView(index) {
@@ -728,7 +728,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     } catch (error) {
         console.error('Error fetching product transactions:', error);
-        Swal.fire('Error', 'Failed to load data', 'error');
+        Swal.fire('Warning', 'You dont have any data yet', 'error');
     }
 
     function updateProductSemesterView(index) {
