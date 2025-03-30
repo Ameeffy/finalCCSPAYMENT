@@ -615,7 +615,102 @@ const sendUserPositionUpdateEmail = async (email, firstname, middlename, lastnam
     }
 };
 
+const sendUserStatusUpdateEmailAdviser = async (email, firstname, middlename, lastname, orgName, status, adminFullName) => {
+    try {
+        let message = '';
+        if (status === 'Activated') {
+            message = `
+                <h2>${orgName}</h2>
+                <p>Hello ${firstname} ${middlename || ''} ${lastname},</p>
+                <p>We are pleased to inform you that your account is now <strong>Activated</strong> for the <strong>${orgName}</strong> portal.</p>
+                <p>You now have access to all organization-related activities.</p>
+            `;
+        } else {
+            message = `
+                <h2>${orgName}</h2>
+                <p>Hello ${firstname} ${middlename || ''} ${lastname},</p>
+                <p>We regret to inform you that your account has been <strong>Deactivated</strong> for the <strong>${orgName}</strong> portal.</p>
+                <p>You can no longer access the organization's portal until further notice.</p>
+            `;
+        }
 
+        const subject = `Organization Portal Access: ${status}`;
+
+        const mailOptions = {
+            from: 'collegofcomputingstudies2024@gmail.com',
+            to: email,
+            subject,
+            html: `
+                <html>
+                    <head>
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                color: #333;
+                                background-color: #f4f4f4;
+                                padding: 20px;
+                            }
+                            .container {
+                                max-width: 600px;
+                                margin: 0 auto;
+                                background-color: #ffffff;
+                                padding: 20px;
+                                border-radius: 8px;
+                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                            }
+                            h2 {
+                                color: #0b3d2e;
+                            }
+                            p {
+                                font-size: 16px;
+                                line-height: 1.5;
+                            }
+                            .footer {
+                                margin-top: 20px;
+                                font-size: 14px;
+                                color: #777;
+                            }
+                            .footer a {
+                                color: #0b3d2e;
+                                text-decoration: none;
+                            }
+                            .logo {
+                                text-align: center;
+                                margin-bottom: 20px;
+                            }
+                            .logo img {
+                                width: 150px;
+                                margin-bottom: 15px;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="logo">
+                                <img src="https://drive.google.com/uc?id=1WawamI-BP8S6hG0DfEEBe0gu9pxDySl-" alt="Logo">
+                            </div>
+                            
+                            ${message}
+                            <p><strong>Performed by:</strong> ${adminFullName}</p>
+                            <div class="footer">
+                                <p>Best Regards,<br>
+                                The College of Computing Studies</p>
+                                <p style="font-size: 14px; color: #777; margin-top: 10px;">
+                                    Follow us on <a href="https://www.facebook.com/wmsuccs">Facebook</a>
+                                </p>
+                            </div>
+                        </div>
+                    </body>
+                </html>
+            `,
+        };
+
+        await transporter.sendMail(mailOptions);
+        console.log(`User Status Update Email sent successfully to ${email}`);
+    } catch (error) {
+        console.error(`Error sending email to ${email}:`, error);
+    }
+};
 const sendUserStatusUpdateEmail = async (email, firstname, middlename, lastname, orgName, status, adminFullName) => {
     try {
         let message = '';
@@ -1097,5 +1192,5 @@ const sendOrganizationStatusEmailDelete = async (email, orgName, semesterName, s
     }
 };
 module.exports = { sendSemesterStatusEmail, sendGcashOrderStatusEmail, sendGcashOrderReportEmail, sendOrganizationStatusEmail, sendOrganizationUserRegistrationEmail, 
-    sendOrganizationAdviserRegistrationEmail, sendUserPositionUpdateEmail, sendUserStatusUpdateEmail, sendUserStatusUpdateEmailDelete,sendAdviserStatusUpdateEmail,
+    sendOrganizationAdviserRegistrationEmail, sendUserPositionUpdateEmail, sendUserStatusUpdateEmail, sendUserStatusUpdateEmailAdviser, sendUserStatusUpdateEmailDelete,sendAdviserStatusUpdateEmail,
     sendAdviserStatusUpdateEmailDelete,sendOrganizationStatusEmailDelete  };
