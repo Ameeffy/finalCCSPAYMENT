@@ -71,10 +71,14 @@ exports.deleteOrganizationsUsersLogAdviser = async (req, res) => {
         const organizationName = organizationResult[0].name;
 
         // Fetch admin details
-        const [adminResult] = await db.query('SELECT firstname, middlename, lastname FROM organizations_adviser WHERE id = ?', [createdBy]);
+        const [adminResult] = await db.query(`
+            SELECT firstname, middlename, lastname 
+            FROM organizations_adviser 
+            WHERE user_id = ?
+        `, [createdBy]);
 
         if (adminResult.length === 0) {
-            return res.status(404).json({ message: 'Admin not found.' });
+            return res.status(404).json({ msg: 'Admin not found.' });
         }
 
         const adminFullName = `${adminResult[0].firstname} ${adminResult[0].middlename || ''} ${adminResult[0].lastname}`;
