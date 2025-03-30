@@ -41,7 +41,7 @@ const sendReportEmail = async (semester_user_id, user_id, semester_id, reason, c
                     <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
                         <h2 style="color: #0b3d2e;">Hello ${user.firstname},</h2>
                         <p>We have received a report for the user <strong>${user.firstname} ${user.lastname}</strong> in the <strong>${semester.name}</strong>.</p>
-                        <p><strong>COR Number:</strong> ${corNumber}</p>
+                        <p><strong>Documents Number:</strong> ${corNumber}</p>
                         <p><strong>Reason for Report:</strong> ${reason}</p>
                         <p><strong>Comments:</strong> ${comment || 'No additional comments'}</p>
                         <p><strong>Reported by:</strong> ${admin ? admin.firstname + ' ' + admin.lastname : 'Unknown Admin'}</p>
