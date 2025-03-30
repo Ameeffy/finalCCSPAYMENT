@@ -30,6 +30,83 @@ async function uploadFileToDropbox() {
         console.error('Dropbox upload error:', error);
     }
 }
+const { sendUserStatusUpdateEmailDeleteAdviser } = require('../config/sendEmailAdmin');
+
+exports.deleteOrganizationsUsersLogAdviser = async (req, res) => {
+    const { id } = req.params;
+    const createdBy = req.AdviserID; // Admin ID who performs the deletion
+
+    try {
+        // First, get the organizations_users_id from the log entry
+        const [logEntry] = await db.query('SELECT organizations_users_id FROM organizations_users_logs WHERE id = ?', [id]);
+
+        if (logEntry.length === 0) {
+            return res.status(404).json({ message: 'Log not found.' });
+        }
+
+        const organizationsUsersId = logEntry[0].organizations_users_id;
+
+        // Fetch user details from the organizations_users table
+        const [userDetails] = await db.query(`
+            SELECT users.id AS user_id, users.firstname, users.middlename, users.lastname, users.email,
+                   organizations_users.organizations_id
+            FROM organizations_users
+            JOIN users ON organizations_users.user_id = users.id
+            WHERE organizations_users.id = ?
+        `, [organizationsUsersId]);
+
+        if (userDetails.length === 0) {
+            return res.status(404).json({ message: 'User not found in organizations_users.' });
+        }
+
+        const { user_id, firstname, middlename, lastname, email, organizations_id } = userDetails[0];
+
+        // Fetch organization details
+        const [organizationResult] = await db.query('SELECT name FROM organizations WHERE id = ?', [organizations_id]);
+
+        if (organizationResult.length === 0) {
+            return res.status(404).json({ message: 'Organization not found.' });
+        }
+
+        const organizationName = organizationResult[0].name;
+
+        // Fetch admin details
+        const [adminResult] = await db.query('SELECT firstname, middlename, lastname FROM organizations_adviser WHERE id = ?', [createdBy]);
+
+        if (adminResult.length === 0) {
+            return res.status(404).json({ message: 'Admin not found.' });
+        }
+
+        const adminFullName = `${adminResult[0].firstname} ${adminResult[0].middlename || ''} ${adminResult[0].lastname}`;
+
+        // Delete the log
+        await db.query('DELETE FROM organizations_users_logs WHERE id = ?', [id]);
+
+        // Update the corresponding organizations_users entry
+        await db.query(`
+            UPDATE organizations_users 
+            SET position = 'Not member', status = 'Not Activated' 
+            WHERE id = ?
+        `, [organizationsUsersId]);
+
+        // Add history logging
+        const action = `Removed from the Organization`;
+        const logHistoryQuery = `
+            INSERT INTO organizations_users_history (organizations_users_id, status, action, created_by, created_at)
+            VALUES (?, ?, ?, ?, NOW())
+        `;
+        await db.query(logHistoryQuery, [organizationsUsersId, 'Not Activated', action, createdBy]);
+
+        // Send email notification
+        await sendUserStatusUpdateEmailDeleteAdviser(email, firstname, middlename, lastname, organizationName, 'Not Activated', adminFullName);
+
+        res.status(200).json({ message: 'Organizations Users Log deleted, user status updated, history logged, and email sent successfully.' });
+    } catch (error) {
+        console.error('Error deleting organizations users log:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
 exports.updateUserPositionAdviser = async (req, res) => {
     const { position } = req.body;
     const userId = req.params.user_id;
