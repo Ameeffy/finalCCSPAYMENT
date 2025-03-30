@@ -3357,17 +3357,41 @@ exports.getActivePayments = async (req, res) => {
                 p.id AS payment_id, 
                 p.name AS payment_name, 
                 s.name AS semester_name,
+                o.name AS organization_name,
                 IFNULL(SUM(t.total_amount), 0) AS total_transactions
             FROM payments p
             LEFT JOIN semesters s ON p.semester_id = s.id
+            LEFT JOIN organizations o ON p.organization_id = o.id
             LEFT JOIN transactions t ON p.id = t.payment_id AND t.payment_status NOT IN ('Declined')
             WHERE p.status = 'Accepted'
-            GROUP BY p.id, p.name, s.name
+            GROUP BY p.id, p.name, s.name, o.name
         `;
+        
         const [payments] = await db.query(query);
         res.status(200).json({ payments });
     } catch (error) {
         console.error("Error fetching active payments:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+exports.getTotalPaymentsPerOrganization = async (req, res) => {
+    try {
+        const query = `
+            SELECT 
+                o.id AS organization_id,
+                o.name AS organization_name,
+                o.photo AS organization_photo,
+                IFNULL(SUM(t.total_amount), 0) AS total_transactions
+            FROM organizations o
+            LEFT JOIN payments p ON o.id = p.organization_id
+            LEFT JOIN transactions t ON p.id = t.payment_id AND t.payment_status NOT IN ('Declined')
+            GROUP BY o.id, o.name
+        `;
+        const [organizations] = await db.query(query);
+        res.status(200).json({ organizations });
+    } catch (error) {
+        console.error("Error fetching total payments per organization:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 };
