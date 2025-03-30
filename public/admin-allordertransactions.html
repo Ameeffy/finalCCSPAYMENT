@@ -7,7 +7,7 @@
         <meta name="description" content="" />
         <link rel="icon" type="x-icon" href="img/logo.png">
         <meta name="author" content="" />
-        <title>Admin Dashboard</title>
+        <title>Admin Order Transactions</title>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -21,6 +21,13 @@
         <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"> 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+        <!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
     </head>
 <style> 
  .table-container{
@@ -170,61 +177,7 @@
     border: 1px solid #ccc;
     font-size: 14px;
 }
-.export-container {
-  position: absolute;
-  right: 20px;
-  top: 10px;
-  z-index: 1;
-}
 
-.export-dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.export-btn {
-  background-color: #1B3A28;
-  color: #ffffff;
-  padding: 6px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  margin-top: 60px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-
-}
-
-.export-btn:hover {
-  background-color: #3e865c;
-}
-
-.export-content {
-  display: none;
-  position: absolute;
-  background-color: #fff;
-  min-width: 83px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-  z-index: 1;
-}
-
-.export-content a {
-  color: #333;
-  padding: 8px 16px;
-  text-decoration: none;
-  display: block;
-  font-size: 14px;
-  border-bottom: 1px solid #eee;
-}
-
-.export-content a:hover {
-  background-color: #f8f9fa;
-}
-
-.export-dropdown:hover .export-content {
-  display: block;
-}
 @media print {
   body {
       font-family: Arial, sans-serif;
@@ -292,61 +245,7 @@
     font-size: 1.2rem; /* Adjust the size of the icon */
     color: #6c757d; /* Optional: Set icon color */
 }
-.export-container {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    z-index: 1;
-}
 
-.export-dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.export-btn {
-    background-color: #1B3A28;
-    color: #ffffff;
-    padding: 6px 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    margin-top: 240px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-
-}
-
-.export-btn:hover {
-    background-color: #3e865c;
-}
-
-.export-content {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    min-width: 83px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-    z-index: 1;
-}
-
-.export-content a {
-    color: #333;
-    padding: 8px 16px;
-    text-decoration: none;
-    display: block;
-    font-size: 14px;
-    border-bottom: 1px solid #eee;
-}
-
-.export-content a:hover {
-    background-color: #f8f9fa;
-}
-
-.export-dropdown:hover .export-content {
-    display: block;
-}
 @media print {
     body {
         font-family: Arial, sans-serif;
@@ -948,10 +847,10 @@
                                         <!-- Filter Container on Right -->
                                         <div id="acceptedByFilterContainer" style="flex: 0 0 auto;">
                                             <label for="acceptedByFilter" class="fw-bold">Filter by Accepted By:</label>
-                                            <select id="acceptedByFilter" class="form-select d-inline-block w-auto">
+                                            <select id="acceptedByFilter" class="form-control">
                                                 <option value="">All</option>
-                                                <!-- Add dynamic options here -->
                                             </select>
+                                            
                                         </div>
                                     </div>
                                     
@@ -1128,166 +1027,173 @@ function exportAction(type) {
             break;
     }
 }
-                                        let transactionsData = [];
-                                        
-                                        async function fetchProductTransactions() {
-                                            const token = localStorage.getItem('token');
-                                            if (!token) {
-                                                window.location.href = 'adminlogin.html';
-                                                return;
-                                            }
-                                    
-                                            try {
-                                                const response = await fetch('https://finalccspayment.onrender.com/api/auth/product-transactions/all', {
-                                                    method: 'GET',
-                                                    headers: {
-                                                        'Authorization': `Bearer ${token}`,
-                                                        'Content-Type': 'application/json'
-                                                    }
-                                                });
-                                    
-                                                if (!response.ok) throw new Error('Failed to fetch transactions');
-                                    
-                                                transactionsData = await response.json();
-                                                populateTransactionsTable(transactionsData);
-                                            } catch (error) {
-                                                console.error('Error fetching transactions:', error);
-                                                Swal.fire('Error!', 'Failed to load product transactions.', 'error');
-                                            }
-                                        }
-                                    
-                                        function populateTransactionsTable(transactions) {
-                                            const transactionsBody = document.getElementById('transactionsBody');
-                                            transactionsBody.innerHTML = '';
-                                    
-                                            let acceptedByNames = new Set();
-                                    
-                                            transactions.forEach(transaction => {
-    const row = document.createElement('tr');
-    
-    const acceptedByText = transaction.accepted_by
-        ? `${transaction.accepted_by_firstname} ${transaction.accepted_by_lastname}`
-        : 'No receiver';
+let transactionsData = [];
 
-    acceptedByNames.add(acceptedByText);
+async function fetchProductTransactions() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'adminlogin.html';
+        return;
+    }
 
-    // Format the date to: March 16, 2025 - 10:03 PM
-    const formattedDate = new Date(transaction.created_at).toLocaleString('en-US', { 
-        month: 'numeric', 
-        day: 'numeric', 
-        year: 'numeric', 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        hour12: true 
+    try {
+        const response = await fetch('https://finalccspayment.onrender.com/api/auth/product-transactions/all', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch transactions');
+
+        transactionsData = await response.json();
+        populateTransactionsTable(transactionsData);
+    } catch (error) {
+        console.error('Error fetching transactions:', error);
+        Swal.fire('Error!', 'Failed to load product transactions.', 'error');
+    }
+}
+
+$(document).ready(function() {
+    $('#acceptedByFilter').select2({
+        placeholder: "Search Receiver",
+        allowClear: true,
+        width: '100%'
+    });
+});
+
+function populateTransactionsTable(transactions) {
+    const transactionsBody = document.getElementById('transactionsBody');
+    transactionsBody.innerHTML = '';
+
+    let acceptedByNames = new Set();
+
+    transactions.forEach(transaction => {
+        const row = document.createElement('tr');
+
+        const acceptedByText = transaction.accepted_by
+            ? `${transaction.accepted_by_firstname} ${transaction.accepted_by_lastname}`
+            : 'No receiver';
+
+        acceptedByNames.add(acceptedByText);
+
+        // Format the date: March 16, 2025 - 10:03 PM
+        const formattedDate = new Date(transaction.created_at).toLocaleString('en-US', { 
+            month: 'numeric', 
+            day: 'numeric', 
+            year: 'numeric', 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            hour12: true 
+        });
+
+        row.innerHTML = `
+            <td>${transaction.order_transaction_id}</td>
+            <td>${transaction.user_firstname} ${transaction.user_lastname}</td>
+            <td>${transaction.status}</td>
+            <td>${transaction.payment_method}</td>
+            <td>₱${parseFloat(transaction.total_pay || 0).toFixed(2)}</td>
+            <td>${acceptedByText}</td>
+            <td>${formattedDate}</td>
+            <td>
+                <button 
+                    style="background-color: #007bff; color: white; border: none; border-radius: 5px; width: 33px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color 0.3s;" 
+                    onmouseover="this.style.backgroundColor='#0056b3'" 
+                    onmouseout="this.style.backgroundColor='#007bff'" 
+                    onclick="fetchLogs('${transaction.order_transaction_id}')">
+                    <i class="fas fa-history" style="font-size: 20px;"></i>
+                </button>
+            </td>
+        `;
+        transactionsBody.appendChild(row);
     });
 
-    row.innerHTML = `
-        <td>${transaction.order_transaction_id}</td>
-        <td>${transaction.user_firstname} ${transaction.user_lastname}</td>
-        <td>${transaction.status}</td>
-        <td>${transaction.payment_method} 
-        <td>₱${parseFloat(transaction.total_pay || 0).toFixed(2)}</td>
-        <td>${acceptedByText}</td>
-        <td>${formattedDate}</td>
-                                                    <td>
-                                                     <button 
-    style="background-color: #007bff; 
-           color: white; 
-           border: none; 
-           border-radius: 5px; 
-           width: 33px; /* Fixed width */
-           height: 35px; /* Fixed height */
-           display: flex; 
-           align-items: center; 
-           justify-content: center; 
-           cursor: pointer; 
-           transition: background-color 0.3s;" 
-    onmouseover="this.style.backgroundColor='#0056b3'" 
-    onmouseout="this.style.backgroundColor='#007bff'" 
-    onclick="fetchLogs('${transaction.order_transaction_id}')">
-    
-    <i class="fas fa-history" style="font-size: 20px;"></i>
-</button>
+    populateAcceptedByDropdown(acceptedByNames);
+    initializeDataTable();
+    updateSummaryBoxes(transactions);
+}
 
-                                                    </td>
-                                                `;
-                                                transactionsBody.appendChild(row);
-                                            });
-                                    
-                                            populateAcceptedByDropdown(acceptedByNames);
-                                            initializeDataTable();
-                                            updateSummaryBoxes(transactions);
-                                        }
-                                    
-                                        function populateAcceptedByDropdown(acceptedByNames) {
-                                    const acceptedByFilter = document.getElementById('acceptedByFilter');
-                                    const selectedValue = acceptedByFilter.value; // Preserve selected value
-                                
-                                    // Maintain a global set of all accepted names to avoid disappearing values
-                                    if (!window.allAcceptedByNames) {
-                                        window.allAcceptedByNames = new Set();
-                                    }
-                                
-                                    acceptedByNames.forEach(name => window.allAcceptedByNames.add(name)); // Keep all names
-                                
-                                    acceptedByFilter.innerHTML = `<option value="">All</option>`; // Reset options
-                                
-                                    window.allAcceptedByNames.forEach(name => {
-                                        const option = document.createElement('option');
-                                        option.value = name;
-                                        option.textContent = name;
-                                
-                                        if (name === selectedValue) {
-                                            option.selected = true; // Keep selected value active
-                                        }
-                                
-                                        acceptedByFilter.appendChild(option);
-                                    });
-                                }
-                                
-                                
-                                    
-                                        function initializeDataTable() {
-                                            if ($.fn.DataTable.isDataTable('#transactionsTable')) {
-                                                $('#transactionsTable').DataTable().destroy();
-                                            }
-                                            $('#transactionsTable').DataTable({
-                                                dom: '<"top"f>rt<"bottom"lip>',
-                                                buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
-                                                scrollX: true,
-                                                order: [[6, 'desc']]
-                                            });
-                                        }
-                                        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                                              const min = $('#minDate').val();
-                                              const max = $('#maxDate').val();
-                                              const acceptedBySelected = document.getElementById('acceptedByFilter').value;
-                                              const date = data[6];
-                                              const acceptedBy = data[5];
-                                    
-                                              if (!min && !max && !acceptedBySelected) return true;
-                                              const dateObj = new Date(date);
-                                              if (min && dateObj < new Date(min + "T00:00:00")) return false;
-                                              if (max && dateObj > new Date(max + "T23:59:59")) return false;
-                                              if (acceptedBySelected && acceptedBy !== acceptedBySelected) return false;
-                                              return true;
-                                            });
-                                    
-                                            $('#filterDateBtn, #acceptedByFilter').on('change click', function() {
-                                              table.draw();
-                                              updateFilteredProductTransactions();
-                                            });
-                                    
-                                            function updateSummaryBoxes(filteredTransactions) {
-    let totalTransactions = 0;
+function populateAcceptedByDropdown(acceptedByNames) {
+    const acceptedByFilter = $('#acceptedByFilter');
+    const selectedValue = acceptedByFilter.val(); // Preserve selected value
+
+    if (!window.allAcceptedByNames) {
+        window.allAcceptedByNames = new Set();
+    }
+
+    acceptedByNames.forEach(name => window.allAcceptedByNames.add(name));
+
+    acceptedByFilter.empty().append('<option value="">All</option>');
+
+    window.allAcceptedByNames.forEach(name => {
+        const option = new Option(name, name, false, name === selectedValue);
+        acceptedByFilter.append(option);
+    });
+
+    // Destroy and reinitialize Select2
+    acceptedByFilter.select2('destroy').select2({
+        placeholder: "Search Receiver",
+        allowClear: true,
+        width: '100%'
+    }).trigger('change'); // Ensure it refreshes
+}
+
+function initializeDataTable() {
+    if ($.fn.DataTable.isDataTable('#transactionsTable')) {
+        $('#transactionsTable').DataTable().destroy();
+    }
+    $('#transactionsTable').DataTable({
+        dom: '<"top"f>rt<"bottom"lip>',
+        buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+        scrollX: true,
+        order: [[6, 'desc']]
+    });
+}
+
+$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+    const min = $('#minDate').val();
+    const max = $('#maxDate').val();
+    const acceptedBySelected = $('#acceptedByFilter').val(); 
+
+    const date = data[6]; // Created_at column
+    const acceptedBy = data[5]; // Accepted By column
+
+    // Date comparison
+    const dateObj = new Date(date);
+    if (min && dateObj < new Date(min + "T00:00:00")) return false;
+    if (max && dateObj > new Date(max + "T23:59:59")) return false;
+
+    // Accepted By comparison
+    if (acceptedBySelected && acceptedBySelected !== "" && acceptedBy !== acceptedBySelected) {
+        return false;
+    }
+
+    return true;
+});
+
+$('#filterDateBtn, #acceptedByFilter').on('change', function() {
+    $('#transactionsTable').DataTable().draw(); // Apply filter
+});
+
+function updateSummaryBoxes(filteredTransactions) {
+    if (!filteredTransactions || filteredTransactions.length === 0) {
+        document.getElementById('totalTransactionsDisplay').innerText = 0;
+        document.getElementById('totalAmountPaidDisplay').innerText = `₱0.00`;
+        document.getElementById('totalCashDisplay').innerText = `₱0.00`;
+        document.getElementById('totalGcashDisplay').innerText = `₱0.00`;
+        return;
+    }
+
+    let totalTransactions = filteredTransactions.length;
     let totalAmountPaid = 0;
     let totalCash = 0;
     let totalGcash = 0;
 
     filteredTransactions.forEach(transaction => {
         const totalPay = parseFloat(transaction.total_pay || 0);
-        totalTransactions++;
         totalAmountPaid += totalPay;
+
         if (transaction.payment_method === "Cash") {
             totalCash += totalPay;
         } else if (transaction.payment_method === "Gcash") {
@@ -1301,25 +1207,40 @@ function exportAction(type) {
     document.getElementById('totalGcashDisplay').innerText = `₱${totalGcash.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
 }
 
-                                    
-                                        document.getElementById('filterDateBtn').addEventListener('click', filterTransactions);
-                                        document.getElementById('acceptedByFilter').addEventListener('change', filterTransactions);
-                                    
-                                        function filterTransactions() {
-                                            const minDate = document.getElementById('minDate').value;
-                                            const maxDate = document.getElementById('maxDate').value;
-                                            const acceptedBySelected = document.getElementById('acceptedByFilter').value;
-                                    
-                                            const filteredTransactions = transactionsData.filter(transaction => {
-                                                return (!minDate || new Date(transaction.created_at) >= new Date(minDate)) &&
-                                                       (!maxDate || new Date(transaction.created_at) <= new Date(maxDate)) &&
-                                                       (!acceptedBySelected || transaction.accepted_by && `${transaction.accepted_by_firstname} ${transaction.accepted_by_lastname}` === acceptedBySelected);
-                                            });
-                                    
-                                            populateTransactionsTable(filteredTransactions);
-                                            initializeDataTable(); // Fix: Ensure DataTable updates with filtered data
-                                        }
-                                    
+
+
+/** 
+ * ✅ Filter Transactions and Update Summary Boxes 
+ */
+ function filterTransactions() {
+    const table = $('#transactionsTable').DataTable();
+    
+    // Get all visible rows after filtering
+    const filteredTransactions = [];
+    table.rows({ search: "applied" }).every(function() {
+        const rowData = this.data(); // Get row data from DataTable
+        const order_transaction_id = rowData[0]; // Use the Order ID to find the matching transaction
+        const transaction = transactionsData.find(t => t.order_transaction_id == order_transaction_id);
+        if (transaction) {
+            filteredTransactions.push(transaction);
+        }
+    });
+
+    updateSummaryBoxes(filteredTransactions); // ✅ Update the summary using only visible rows
+}
+
+
+$('#acceptedByFilter, #filterDateBtn, #minDate, #maxDate').on('change', function() {
+    $('#transactionsTable').DataTable().draw(); // Redraw table
+    setTimeout(filterTransactions, 100); // ✅ Delay to ensure table is updated before summary
+});
+
+
+
+document.addEventListener('DOMContentLoaded', fetchProductTransactions);
+
+
+                                        
                                        
                                         async function fetchLogs(orderTransactionId) {
                                     try {
@@ -1396,7 +1317,7 @@ function exportAction(type) {
                                         function closeLogsModal() {
                                             document.getElementById('logsModal').style.display = 'none';
                                         }
-                                        document.addEventListener('DOMContentLoaded', fetchProductTransactions);
+                                        
 </script>
 
                                 </div>  
