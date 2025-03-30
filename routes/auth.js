@@ -4,6 +4,14 @@ const authController = require('../controllers/authController');
 const authenticateToken = require('../middleware/middleware');
 const db = require('../config/db');
 
+
+
+router.get('/organizationsAdviser',authenticateToken, authController.getAllOrganizationsAdviser);
+router.put('/organizations/users/:userId/update-statusAdviser',authenticateToken, authController.updateUserStatusorgAdviser);
+router.post('/register/organizationuserAdviser/:organization_id', authenticateToken, authController.registerOrganizationUserAdviser);
+router.put('/organizations/users/:user_id/update-positionAdviser',authenticateToken, authController.updateUserPositionAdviser);
+
+
 router.get('/payments/total-per-organization', authenticateToken, authController.getTotalPaymentsPerOrganization);
 
 
