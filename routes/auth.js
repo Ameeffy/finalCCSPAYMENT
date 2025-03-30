@@ -4,7 +4,7 @@ const authController = require('../controllers/authController');
 const authenticateToken = require('../middleware/middleware');
 const db = require('../config/db');
 
-
+router.delete('/organizations/users-logsAdviser/:id', authenticateToken, authController.deleteOrganizationsUsersLogAdviser);
 
 router.get('/organizationsAdviser',authenticateToken, authController.getAllOrganizationsAdviser);
 router.put('/organizations/users/:userId/update-statusAdviser',authenticateToken, authController.updateUserStatusorgAdviser);
