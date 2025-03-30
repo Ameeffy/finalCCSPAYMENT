@@ -30,6 +30,363 @@ async function uploadFileToDropbox() {
         console.error('Dropbox upload error:', error);
     }
 }
+exports.updateUserPositionAdviser = async (req, res) => {
+    const { position } = req.body;
+    const userId = req.params.user_id;
+    const createdBy = req.AdviserID; // Admin ID from token
+
+    if (!position) {
+        return res.status(400).json({ msg: 'Position is required.' });
+    }
+
+    try {
+        // Fetch the current organizations_users record
+        const [userDetails] = await db.query(`
+            SELECT id AS organizations_users_id, user_id, position AS currentPosition, organizations_id
+            FROM organizations_users 
+            WHERE id = ?
+        `, [userId]);
+
+        if (userDetails.length === 0) {
+            return res.status(404).json({ msg: 'User not found in organizations_users.' });
+        }
+
+        const { organizations_users_id, user_id, currentPosition, organizations_id } = userDetails[0];
+
+        // Fetch user details from the `users` table
+        const [userResult] = await db.query(`
+            SELECT firstname, middlename, lastname, email 
+            FROM users 
+            WHERE id = ?
+        `, [user_id]);
+
+        if (userResult.length === 0) {
+            return res.status(404).json({ msg: 'User not found.' });
+        }
+
+        const { firstname, middlename, lastname, email } = userResult[0];
+
+        // Fetch organization details
+        const [organizationResult] = await db.query(`
+            SELECT name FROM organizations WHERE id = ?
+        `, [organizations_id]);
+
+        if (organizationResult.length === 0) {
+            return res.status(404).json({ msg: 'Organization not found.' });
+        }
+
+        const organizationName = organizationResult[0].name;
+
+        // Fetch the latest semester's academic year
+        const [latestSemester] = await db.query(`
+            SELECT year
+            FROM semesters
+            ORDER BY id DESC
+            LIMIT 1
+        `);
+
+        if (!latestSemester || latestSemester.length === 0) {
+            return res.status(400).json({ success: false, message: 'No active semester found.' });
+        }
+
+        const { year } = latestSemester[0]; // This is the academic year
+
+        // Ensure no duplicate positions (except for "Member")
+        if (position.toLowerCase() !== "member") {
+            const [existingPosition] = await db.query(`
+                SELECT * 
+                FROM organizations_users_logs 
+                WHERE position = ? AND year = ? AND organizations_id = ?
+            `, [position, year, organizations_id]);
+
+            if (existingPosition.length > 0) {
+                return res.status(400).json({ msg: `The position "${position}" for the academic year "${year}" is already assigned in this organization.` });
+            }
+        }
+
+        // Update the user's position
+        const [updateResult] = await db.query(
+            'UPDATE organizations_users SET position = ?, created_at = NOW() WHERE id = ?',
+            [position, userId]
+        );
+
+        if (updateResult.affectedRows === 0) {
+            return res.status(404).json({ msg: 'No changes made or user not found.' });
+        }
+
+        // Add an entry in organizations_users_history
+        const action = `"${currentPosition}" position updated to "${position}" for the academic year ${year}`;
+        await db.query(`
+            INSERT INTO organizations_users_history (organizations_users_id, status, action, created_at, created_by)
+            VALUES (?, ?, ?, NOW(), ?)
+        `, [organizations_users_id, position, action, createdBy]);
+
+        // Check if a log for the same user and year already exists
+        const [existingLog] = await db.query(`
+            SELECT * 
+            FROM organizations_users_logs 
+            WHERE organizations_users_id = ? AND year = ?
+        `, [organizations_users_id, year]);
+
+        if (existingLog.length > 0) {
+            // Update the existing log
+            await db.query(`
+                UPDATE organizations_users_logs
+                SET position = ?, created_at = NOW(), created_by = ?
+                WHERE organizations_users_id = ? AND year = ?
+            `, [position, createdBy, organizations_users_id, year]);
+        } else {
+            // Insert a new log
+            await db.query(`
+                INSERT INTO organizations_users_logs (organizations_users_id, user_id, organizations_id, position, year, created_at, created_by)
+                VALUES (?, ?, ?, ?, ?, NOW(), ?)
+            `, [organizations_users_id, user_id, organizations_id, position, year, createdBy]);
+        }
+
+        // Send email notification to the user including the academic year
+        await sendUserPositionUpdateEmail(email, firstname, middlename, lastname, organizationName, position, year);
+
+        res.status(200).json({ success: true, msg: 'Position updated successfully and notification sent!' });
+    } catch (err) {
+        console.error('Error updating position and logging:', err);
+        return res.status(500).json({ msg: 'Server error.', error: err.message });
+    }
+};
+const { sendUserStatusUpdateEmailAdviser } = require('../config/sendEmailAdmin');
+
+exports.updateUserStatusorgAdviser = async (req, res) => {
+    const userId = req.params.userId; // ID from the `organizations_users` table
+    const { apply_status } = req.body;
+    const createdBy = req.AdviserID; // ID of the admin making the change
+
+    try {
+        // Fetch `organizations_users` details
+        const [userDetails] = await db.query(`
+            SELECT id AS organizations_users_id, user_id, organizations_id, position, status
+            FROM organizations_users
+            WHERE id = ?
+        `, [userId]);
+
+        if (userDetails.length === 0) {
+            return res.status(404).json({ success: false, message: 'User not found in organizations_users' });
+        }
+
+        const { organizations_users_id, user_id, organizations_id, position, status: currentStatus } = userDetails[0];
+
+        // Fetch user details from the `users` table
+        const [userResult] = await db.query(`
+            SELECT firstname, middlename, lastname, email 
+            FROM users 
+            WHERE id = ?
+        `, [user_id]);
+
+        if (userResult.length === 0) {
+            return res.status(404).json({ msg: 'User not found.' });
+        }
+
+        const { firstname, middlename, lastname, email } = userResult[0];
+
+        // Fetch organization details
+        const [organizationResult] = await db.query(`
+            SELECT name FROM organizations WHERE id = ?
+        `, [organizations_id]);
+
+        if (organizationResult.length === 0) {
+            return res.status(404).json({ msg: 'Organization not found.' });
+        }
+
+        const organizationName = organizationResult[0].name;
+
+        // Fetch admin details
+        const [adminResult] = await db.query(`
+            SELECT firstname, middlename, lastname 
+            FROM organizations_adviser 
+            WHERE user_id = ?
+        `, [createdBy]);
+
+        if (adminResult.length === 0) {
+            return res.status(404).json({ msg: 'Admin not found.' });
+        }
+
+        const adminFullName = `${adminResult[0].firstname} ${adminResult[0].middlename || ''} ${adminResult[0].lastname}`;
+
+        // If activating the status, check for position conflicts
+        if (apply_status === "Activated") {
+            // Fetch the latest semester year
+            const [latestSemester] = await db.query(`
+                SELECT year
+                FROM semesters
+                ORDER BY id DESC
+                LIMIT 1
+            `);
+
+            if (!latestSemester || latestSemester.length === 0) {
+                return res.status(400).json({ success: false, message: 'No active semester found.' });
+            }
+
+            const { year } = latestSemester[0];
+
+            // Check if the position already exists for the year (except "member")
+            if (position.toLowerCase() !== "member" && position.toLowerCase() !== "not member") {
+                const [existingPosition] = await db.query(`
+                    SELECT * 
+                    FROM organizations_users_logs 
+                    WHERE position = ? AND year = ? AND organizations_id = ?
+                `, [position, year, organizations_id]);
+
+                // If the position is taken and the user is not the owner, block the activation
+                if (existingPosition.length > 0 && existingPosition[0].user_id !== user_id) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `The position "${position}" is already assigned for the year ${year}.`,
+                    });
+                }
+            }
+
+            // Check if a log already exists
+            const [existingLog] = await db.query(`
+                SELECT * 
+                FROM organizations_users_logs 
+                WHERE organizations_users_id = ? AND year = ?
+            `, [organizations_users_id, year]);
+
+            if (existingLog.length === 0) {
+                // Adjust position to "Member" if it's currently "Not member"
+                const logPosition = position.toLowerCase() === "not member" ? "Member" : position;
+
+                const insertLogQuery = `
+                    INSERT INTO organizations_users_logs (organizations_users_id, user_id, organizations_id, position, year, created_by, created_at)
+                    VALUES (?, ?, ?, ?, ?, ?, NOW())
+                `;
+                await db.query(insertLogQuery, [organizations_users_id, user_id, organizations_id, logPosition, year, createdBy]);
+            }
+        }
+
+        const updatedPosition = position.toLowerCase() === "not member" ? "Member" : position;
+
+        const updateQuery = `
+            UPDATE organizations_users
+            SET status = ?, position = ?, created_at = NOW()
+            WHERE id = ?
+        `;
+
+        await db.query(updateQuery, [apply_status, updatedPosition, userId]);
+
+        const action = `Status changed to "${apply_status}"`;
+        const logHistoryQuery = `
+            INSERT INTO organizations_users_history (organizations_users_id, status, action, created_by, created_at)
+            VALUES (?, ?, ?, ?, NOW())
+        `;
+        await db.query(logHistoryQuery, [userId, apply_status, action, createdBy]);
+
+        // Send email notification
+        await sendUserStatusUpdateEmailAdviser(email, firstname, middlename, lastname, organizationName, apply_status, adminFullName);
+
+        res.status(200).json({ success: true, message: 'Status and position updated, logged successfully, and notification sent!' });
+    } catch (error) {
+        console.error('Error updating user status and logging:', error);
+        res.status(500).json({ success: false, message: 'Failed to update status and position, and log the action' });
+    }
+};
+
+exports.registerOrganizationUserAdviser = async (req, res) => {
+    const { userId, position } = req.body;
+    const organizationId = req.params.organization_id; // Organization ID from URL params
+    const createdBy = req.AdviserID; // Admin ID from token
+
+    if (!createdBy) {
+        return res.status(403).json({ msg: 'Unauthorized: Admin ID is missing' });
+    }
+
+    try {
+        // Check if the user is already registered in the organization
+        const [existingUser] = await db.query(
+            'SELECT * FROM organizations_users WHERE user_id = ? AND organizations_id = ?',
+            [userId, organizationId]
+        );
+
+        if (existingUser.length > 0) {
+            // Fetch the organization name for detailed error feedback
+            const [organization] = await db.query(
+                'SELECT name FROM organizations WHERE id = ?',
+                [organizationId]
+            );
+
+            const organizationName = organization.length > 0 ? organization[0].name : 'Unknown Organization';
+            return res.status(400).json({
+                msg: `User is already registered in the "${organizationName}".`,
+            });
+        }
+
+        // Fetch user details from the `users` table
+        const [userDetails] = await db.query(
+            'SELECT firstname, middlename, lastname, email FROM users WHERE id = ?',
+            [userId]
+        );
+
+        if (userDetails.length === 0) {
+            return res.status(404).json({ msg: 'User not found.' });
+        }
+
+        const { firstname, middlename, lastname, email } = userDetails[0];
+
+        // Fetch organization details
+        const [organizationResult] = await db.query(
+            'SELECT name FROM organizations WHERE id = ?',
+            [organizationId]
+        );
+
+        if (organizationResult.length === 0) {
+            return res.status(404).json({ msg: 'Organization not found.' });
+        }
+
+        const organizationName = organizationResult[0].name;
+
+        // Insert the user into organizations_users
+        await db.query('INSERT INTO organizations_users SET ?', {
+            user_id: userId,
+            organizations_id: organizationId,
+            position,
+            created_at: new Date(),
+            created_by: createdBy,
+            status: 'Not Activated',
+            apply_status: 'Accepted',
+            firstname,
+            middlename,
+            lastname,
+        });
+
+        // Send email notification to the user
+        await sendOrganizationUserRegistrationEmail(email, firstname, middlename, lastname, organizationName, position);
+
+        return res.status(201).json({ msg: 'Successfully registered organization user and notification sent!' });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ msg: 'Server error', error: err.message });
+    }
+};
+exports.getAllOrganizationsAdviser = async (req, res) => {
+    try {
+        const adviserId = req.AdviserID; // Get adviser ID from token
+
+        const [rows] = await db.query(`
+            SELECT o.id, o.name, o.email, o.photo, o.status, 
+                   a.firstname AS created_by_firstname, 
+                   a.middlename AS created_by_middlename, 
+                   a.lastname AS created_by_lastname
+            FROM organizations_adviser oa
+            JOIN organizations o ON oa.organizations_id = o.id
+            LEFT JOIN admins a ON o.created_by = a.id
+            WHERE oa.user_id = ?
+              AND oa.status = 'Activated'
+              AND o.status = 'Activated'`, [adviserId]);
+
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error('Error fetching organizations:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
 const { sendUnpaidTransactionEmail } = require('../config/sendEmailUnpaidTransactions');
 
 exports.notifyUnpaidTransactions = async (req, res) => {
@@ -13185,7 +13542,39 @@ exports.getOrganizationsUsersLogsa = async (req, res) => {
 exports.getOrganizationsUsersHistory = async (req, res) => {
     try {
         const query = `
-            SELECT 
+            SELECT DISTINCT 
+                ouh.id,
+                CONCAT(ou.firstname, ' ', COALESCE(ou.middlename, ''), ' ', ou.lastname) AS user_fullname,
+                o.name AS organization_name,
+                ouh.status,
+                ouh.action,
+                CONCAT(a.firstname, ' ', COALESCE(a.middlename, ''), ' ', a.lastname) AS created_by,
+                ouh.created_at,
+                'Student' AS type
+            FROM organizations_users_history ouh
+            JOIN organizations_users ou ON ouh.organizations_users_id = ou.id
+            JOIN organizations o ON ou.organizations_id = o.id
+            JOIN organizations_adviser a ON ouh.created_by = a.user_id
+
+            UNION ALL
+
+            SELECT DISTINCT 
+                oah.id,
+                CONCAT(oa.firstname, ' ', COALESCE(oa.middlename, ''), ' ', oa.lastname) AS user_fullname,
+                o.name AS organization_name,
+                oah.status,
+                oah.action,
+                CONCAT(a.firstname, ' ', COALESCE(a.middlename, ''), ' ', a.lastname) AS created_by,
+                oah.created_at,
+                'Adviser' AS type
+            FROM organizations_adviser_history oah
+            JOIN organizations_adviser oa ON oah.organizations_adviser_id = oa.id
+            JOIN organizations o ON oa.organizations_id = o.id
+            JOIN admins a ON oah.created_by = a.id
+
+            UNION ALL
+
+            SELECT DISTINCT 
                 ouh.id,
                 CONCAT(ou.firstname, ' ', COALESCE(ou.middlename, ''), ' ', ou.lastname) AS user_fullname,
                 o.name AS organization_name,
@@ -13199,22 +13588,6 @@ exports.getOrganizationsUsersHistory = async (req, res) => {
             JOIN organizations o ON ou.organizations_id = o.id
             JOIN admins a ON ouh.created_by = a.id
 
-            UNION ALL
-
-            SELECT 
-                oah.id,
-                CONCAT(oa.firstname, ' ', COALESCE(oa.middlename, ''), ' ', oa.lastname) AS user_fullname,
-                o.name AS organization_name,
-                oah.status,
-                oah.action,
-                CONCAT(a.firstname, ' ', COALESCE(a.middlename, ''), ' ', a.lastname) AS created_by,
-                oah.created_at,
-                'Adviser' AS type
-            FROM organizations_adviser_history oah
-            JOIN organizations_adviser oa ON oah.organizations_adviser_id = oa.id
-            JOIN organizations o ON oa.organizations_id = o.id
-            JOIN admins a ON oah.created_by = a.id
-            
             ORDER BY created_at DESC;
         `;
 
