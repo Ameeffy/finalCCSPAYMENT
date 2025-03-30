@@ -1058,13 +1058,13 @@ function exportAction(type) {
                                     <thead>
                                         <tr>     
                                             <th>Student Name</th>
-                                            <th>Upload Certificate</th>
+                                            <th>Proof Documents</th>
                                             <th>Semester</th>
                                             <th>Status</th>
                                             <th>Section</th>
                                             <th>Action</th>
                                             <th>Date</th>
-                                            <th>COR #</th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1294,7 +1294,7 @@ const formattedDate = !isNaN(createdAtDate.getTime())
 // Insert formatted date into the table
 row.insertCell(6).textContent = formattedDate;
 
-                            row.insertCell(7).textContent = user.id;
+                            
                             
                                         });
                                         
@@ -1368,10 +1368,14 @@ row.insertCell(6).textContent = formattedDate;
                             
                             function openUserModalReport(userId, semesterId, id) {
     const declineReasons = [
-        'Not latest Certificate of Registration',
-        'Inappropriate image',
-        'Malicious content'
-    ];
+    'Not latest Certificate of Registration',
+    'Documents are not updated',
+    'Not currently enrolled',
+    'Inappropriate image',
+    'Malicious content',
+    
+    'Image is blurred'
+];
 
     Swal.fire({
         title: 'Report User Decline',
