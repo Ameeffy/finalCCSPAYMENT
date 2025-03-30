@@ -1064,6 +1064,7 @@ function exportAction(type) {
                                             <th>Section</th>
                                             <th>Action</th>
                                             <th>Date</th>
+                                            <th>Doc #</th>
                                             
                                         </tr>
                                     </thead>
@@ -1294,7 +1295,7 @@ const formattedDate = !isNaN(createdAtDate.getTime())
 // Insert formatted date into the table
 row.insertCell(6).textContent = formattedDate;
 
-                            
+                            row.insertCell(7).textContent = user.id;
                             
                                         });
                                         
