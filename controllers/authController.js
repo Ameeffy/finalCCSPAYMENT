@@ -2727,20 +2727,31 @@ exports.adminTotalPayTransactions = async (req, res) => {
     try {
         const query = `
             SELECT 
-                IFNULL(SUM(pt.total_pay), 0) AS total_transactions,
-                IFNULL(SUM(CASE WHEN pt.payment_method = 'Cash' THEN pt.total_pay ELSE 0 END), 0) AS total_cash,
-                IFNULL(SUM(CASE WHEN pt.payment_method = 'Gcash' THEN pt.total_pay ELSE 0 END), 0) AS total_gcash
+                COALESCE(SUM(pt.total_pay), 0) AS total_transactions,
+                COALESCE(SUM(CASE WHEN pt.payment_method = 'Cash' THEN pt.total_pay END), 0) AS total_cash,
+                COALESCE(SUM(CASE WHEN pt.payment_method = 'Gcash' THEN pt.total_pay END), 0) AS total_gcash
             FROM product_transaction pt
-            JOIN product_transaction_final_order pfo ON pt.order_transaction_id = pfo.order_transaction_id
-            JOIN products p ON pfo.product_id = p.product_id
+            WHERE pt.order_transaction_id IN (
+                SELECT DISTINCT pfo.order_transaction_id
+                FROM product_transaction_final_order pfo
+            );
         `;
 
         const [result] = await db.query(query);
-        res.status(200).json(result[0]);
+        
+        // Ensure the response always has numerical values, even if no data is found
+        res.status(200).json({
+            total_transactions: result[0]?.total_transactions || 0,
+            total_cash: result[0]?.total_cash || 0,
+            total_gcash: result[0]?.total_gcash || 0
+        });
 
     } catch (error) {
-        console.error("Error fetching product transaction totals:", error);
-        res.status(500).json({ error: "Internal server error" });
+        console.error("Error fetching total pay per organization:", error);
+        res.status(500).json({ 
+            error: "Internal server error",
+            message: error.message
+        });
     }
 };
 
