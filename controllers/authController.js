@@ -16502,7 +16502,7 @@ exports.uploadCertificate = [
 
 exports.getSemestersUsers = async (req, res) => {
     try {
-        // Query to get all semesters_users data along with user's first name, middle name, last name, and semester name, ordered by created_at DESC
+        // Query to get all semesters_users data while excluding users who have reports and are declined
         const [results] = await db.query(`
             SELECT 
                 su.id, 
@@ -16519,6 +16519,8 @@ exports.getSemestersUsers = async (req, res) => {
             FROM semesters_users su
             JOIN users u ON su.user_id = u.id
             JOIN semesters s ON su.semester_id = s.id
+            LEFT JOIN usersreport ur ON su.id = ur.semester_user_id
+            WHERE NOT (su.status = 'Declined' AND ur.semester_user_id IS NOT NULL) -- Exclude users with reports & Declined status
             ORDER BY su.created_at DESC
         `);
         
@@ -16534,6 +16536,7 @@ exports.getSemestersUsers = async (req, res) => {
         res.status(500).json({ msg: 'Internal server error' });
     }
 };
+
 const { sendReportEmail } = require('../config/SendEmailUsersReport'); // Import the send email function
 
 exports.reportUser = async (req, res) => {
