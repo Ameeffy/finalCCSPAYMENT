@@ -731,7 +731,8 @@
                                                 <th>Transaction ID</th>
                                                 <th>Status</th>
                                                 <th>Method</th>
-                                                <th>Total Amount</th>
+                                                <th>Total Pay</th>
+                                                <th>Balance</th>
                                                 <th>Received By</th>
                                                 <th>Created At</th>
                                                 <th>Action</th>
@@ -992,7 +993,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             dom: '<"top"f>rt<"bottom"lip>',
             buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
             destroy: true,
-            order: [[7, 'desc']]
+            order: [[8, 'desc']]
         });
 
         table.draw();
