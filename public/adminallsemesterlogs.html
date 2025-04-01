@@ -419,21 +419,34 @@ $(document).ready(function() {
             tableBody.empty();
 
             data.forEach(log => {
+                let formattedDate = new Date(log.created_at).toLocaleDateString("en-US", {
+                    year: 'numeric',
+                    month: 'long',
+                    day: '2-digit'
+                });
+
                 let row = ` 
                     <tr>
                         <td>${log.semester_name}</td>
                         <td>${log.action}</td>
                         <td>${log.performed_by}</td>
-                        <td>${new Date(log.created_at).toLocaleString()}</td>
+                        <td>${formattedDate}</td>
                     </tr>
                 `;
                 tableBody.append(row);
             });
 
-            // Initialize DataTable with buttons
-            dataTable = $('#semesterLogsTable').DataTable({
+            // Destroy existing DataTable instance if it exists
+            if ($.fn.DataTable.isDataTable('#semesterLogsTable')) {
+                $('#semesterLogsTable').DataTable().destroy();
+            }
+
+            // Reinitialize DataTable
+            let dataTable = $('#semesterLogsTable').DataTable({
                 dom: '<"top"f>rt<"bottom"lip>',
                 pageLength: 10,
+                responsive: true,
+                autoWidth: false,
                 buttons: [
                     'copyHtml5',
                     'csvHtml5',
@@ -442,7 +455,7 @@ $(document).ready(function() {
                         extend: 'pdfHtml5',
                         orientation: 'landscape'
                     },
-                    'print' // Ensure the print button is enabled
+                    'print' // Enable print button
                 ],
                 language: {
                     buttons: {
@@ -452,15 +465,14 @@ $(document).ready(function() {
                 }
             });
 
-            // Attach the print action to the print button in the export dropdown
-            $('.export-btn').on('click', function() {
-                dataTable.button('.buttons-print').trigger(); // Trigger the print action directly
+            // Attach print action to the print button
+            $('.export-btn').off('click').on('click', function() {
+                dataTable.button('.buttons-print').trigger();
             });
 
         })
         .catch(error => console.error('Error fetching logs:', error));
 });
-
 
 </script>
     
