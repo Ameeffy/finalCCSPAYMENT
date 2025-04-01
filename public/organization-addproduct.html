@@ -7,25 +7,24 @@
         <link rel="icon" type="x-icon" href="img/logo.png">
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Admin Payment</title>
+        <title>Add Product</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>  
+    
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+      
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> 
-        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.3/purify.min.js"></script> 
+
+
         
     </head>
 <style>
@@ -52,7 +51,7 @@
     width: 100%;
 }
 .quantity-column, .quantity-cell {
-    display: none; /* Hide by default */
+    display: none; 
 }
 
 #toggleQuantityBtn {
@@ -62,7 +61,7 @@
 .pagination {
             display: flex;
             justify-content: center;
-            align-items: center; /* Align items vertically */
+            align-items: center;
             margin-top: 20px;
         }
 
@@ -82,7 +81,7 @@
         }
 
         .page-info {
-            margin: 0 10px; /* Add margin to space out the text */
+            margin: 0 10px; 
             font-weight: bold;
         }
         
@@ -121,20 +120,20 @@
                     <div id="uploadingMessage">Uploading logo...</div>
                 </div>
         
-                <!-- Organization Info -->
+
                 <div id="organizationInfo" class="d-flex flex-grow-1">
-                    <!-- Organization Name will be inserted here -->
+
                 </div>
             </div>
         
-            <!-- Right Section -->
+
             <div class="d-flex align-items-center">
               
                 <i id="profile-item" class="dropdown-item me-3">
                     <a href="#" style="color: #25330f; text-decoration: none;">Loading...</a>
                 </i>
         
-                <!-- User Dropdown -->
+
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user-circle fa-2x" style="color: #ffffff;"></i>
@@ -186,16 +185,16 @@
         </nav>
                 <script>
                    document.getElementById('logouts').addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent the default link behavior
+            event.preventDefault(); 
         
-            // SweetAlert confirmation
+
             Swal.fire({
                 title: 'Are you sure?',
                 text: "Do you want to switch account?",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#28a745', // Green confirm button
-                cancelButtonColor: '#dc3545', // Red cancel button
+                confirmButtonColor: '#28a745', 
+                cancelButtonColor: '#dc3545', 
                 confirmButtonText: 'Yes, Switch Account!',
                 cancelButtonText: 'Cancel'
             }).then((result) => {
@@ -207,15 +206,15 @@
                         timer: 1500,
                         showConfirmButton: false
                     }).then(() => {
-                        window.location.href = 'chooseorganizations.html'; // Redirect to choose organizations page
+                        window.location.href = 'chooseorganizations.html'; 
                     });
                 }
             });
         });
         function fetchOrganizationData() {
-    const token = localStorage.getItem('token'); // Retrieve token from storage
+    const token = localStorage.getItem('token'); 
     if (!token) {
-        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        window.location.href = 'adminlogin.html'; 
         return;
     }
 
@@ -255,10 +254,10 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
 
 
    function fetchLoggedInUserDetails() {
-    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+    const token = localStorage.getItem('token'); 
 
     if (!token) {
-        window.location.href = 'adminlogin.html'; // Redirect to login if no token
+        window.location.href = 'adminlogin.html'; 
         return;
     }
 
@@ -484,9 +483,9 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                             <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
                             <script>
                                  function goBack() {
-                                window.history.back();  // Goes to the previous page in the browser history
+                                window.history.back();  
                             }
-                                // JavaScript to handle the active class on sidebar items
+
                                 document.addEventListener('DOMContentLoaded', function() {
                                     const links = document.querySelectorAll('.sidebar .nav-item');
                             
@@ -502,10 +501,83 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                             </script>
                             
                             <body>
+                            <script>document.getElementById('name').addEventListener('input', function(event) {
+                                let value = event.target.value;
+        
+                                if (value.includes('*')) {
+                                    value = value.replace(/\*/g, '');
+                                }
+   
+                                if (value.includes(';')) {
+                                    value = value.replace(/;/g, '');
+                                }
+                                if (value.includes('--')) {
+                                    value = value.replace(/--/g, '');
+                                }
+                                if (value.includes('#')) {
+                                    value = value.replace(/#/g, '');
+                                }
+                                if (value.includes("'")) {
+                                    value = value.replace(/'/g, '');
+                                }
+                                if (value.includes('"')) {
+                                    value = value.replace(/"/g, '');
+                                }
+                                if (value.includes('/*')) {
+                                    value = value.replace(/\/\*/g, '');
+                                }
+                                if (value.includes('*/')) {
+                                    value = value.replace(/\*\//g, '');
+                                }
+                                if (value.includes("<")) {
+                                    value = value.replace(/</g, '');
+                                }
+                                if (value.includes(">")) {
+                                    value = value.replace(/>/g, '');
+                                }
+                                event.target.value = value; 
+                            });
                             
+                            document.getElementById('description').addEventListener('input', function(event) {
+                                let value = event.target.value;
+   
+                                if (value.includes('*')) {
+                                    value = value.replace(/\*/g, '');
+                                }
+        
+                                if (value.includes(';')) {
+                                    value = value.replace(/;/g, '');
+                                }
+                                if (value.includes('--')) {
+                                    value = value.replace(/--/g, '');
+                                }
+                                if (value.includes('#')) {
+                                    value = value.replace(/#/g, '');
+                                }
+                                if (value.includes("'")) {
+                                    value = value.replace(/'/g, '');
+                                }
+                                if (value.includes("<")) {
+                                    value = value.replace(/</g, '');
+                                }
+                                if (value.includes(">")) {
+                                    value = value.replace(/>/g, '');
+                                }
+                                if (value.includes('"')) {
+                                    value = value.replace(/"/g, '');
+                                }
+                                if (value.includes('/*')) {
+                                    value = value.replace(/\/\*/g, '');
+                                }
+                                if (value.includes('*/')) {
+                                    value = value.replace(/\*\//g, '');
+                                }
+                                event.target.value = value; 
+                            });
+                            </script>
                                 <script>
                                     document.getElementById('logout').addEventListener('click', function(event) {
-                                        event.preventDefault(); // Prevent the default link behavior
+                                        event.preventDefault(); 
                                 
                                         
                                         localStorage.removeItem('token');
@@ -547,7 +619,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                             .form-container-product input[type="number"],
                             .form-container-product input[type="file"],
                             .form-container-product select,
-                            .form-container-product textarea {  /* Added textarea selector */
+                            .form-container-product textarea {  
                                 width: 100%;
                                 padding: 8px;
                                 margin-bottom: 10px;
@@ -556,7 +628,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                             }
                             
                             .form-container-product textarea {
-                                resize: vertical;  /* Allows the user to resize vertically */
+                                resize: vertical;  
                             }
                             
                             .error {
@@ -566,10 +638,68 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                              
                             
                                 <script>
-                                    document.getElementById('addProductForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the form from submitting normally
+                                  document.getElementById('addProductForm').addEventListener('submit', function(event) {
+    event.preventDefault(); 
 
-    const formData = new FormData(this); // Create a FormData object
+
+    const rawName = document.getElementById('name').value;
+    const rawDescription = document.getElementById('description').value;
+    const rawCategory = document.getElementById('category').value;
+
+
+    const sanitizedName = DOMPurify.sanitize(rawName, { FORBID_TAGS: ['img'] });
+    const sanitizedDescription = DOMPurify.sanitize(rawDescription, { FORBID_TAGS: ['img'] });
+    const sanitizedCategory = DOMPurify.sanitize(rawCategory, { FORBID_TAGS: ['img'] });
+
+
+    console.log("Sanitized Name:", sanitizedName);
+    console.log("Sanitized Description:", sanitizedDescription);
+    console.log("Sanitized Category:", sanitizedCategory);
+
+
+    const isMalicious = (rawName !== sanitizedName || rawDescription !== sanitizedDescription || rawCategory !== sanitizedCategory);
+
+    if (isMalicious) {
+        Swal.fire({
+            title: 'Invalid Input Detected!',
+            text: 'Some content has been removed because it was unsafe. Please check your input.',
+            icon: 'warning',
+            confirmButtonText: 'Okay'
+        }).then(() => {
+
+            document.getElementById('name').value = sanitizedName;
+            document.getElementById('description').value = sanitizedDescription;
+            document.getElementById('category').value = sanitizedCategory;
+        });
+        return;
+    }
+    
+    function containsSQLInjection(input) {
+        const sqlKeywords = /(\b(INSERT|UPDATE|DELETE|DROP|ALTER|TRUNCATE|EXEC|UNION|--|#|\*)\b)/gi;
+        return sqlKeywords.test(input);
+    }
+
+
+    if (containsSQLInjection(sanitizedName) || containsSQLInjection(sanitizedDescription) || containsSQLInjection(sanitizedCategory)) {
+        Swal.fire({
+            title: 'Invalid Input!',
+            text: 'Your input contains potentially harmful content. Please remove any SQL-related words or special characters.',
+            icon: 'error',
+            confirmButtonText: 'Okay'
+        }).then(() => {
+            // Fix the input fields with the sanitized values
+            document.getElementById('name').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('category').value = '';
+        });
+        return; 
+    }
+
+
+    const formData = new FormData(this);
+    formData.set('name', sanitizedName);
+    formData.set('description', sanitizedDescription);
+    formData.set('category', sanitizedCategory);
 
     const token = localStorage.getItem('token');
     if (!token) {
@@ -577,7 +707,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
         return;
     }
 
-    // SweetAlert confirmation
+
     Swal.fire({
         title: 'Are you sure?',
         text: "Do you want to add this product?",
@@ -587,8 +717,6 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
         cancelButtonText: 'No, cancel!'
     }).then((result) => {
         if (result.isConfirmed) {
-            
-            // **Show loading message before fetch**
             Swal.fire({
                 title: 'Adding Product...',
                 text: 'Please wait while the product is being added.',
@@ -600,34 +728,38 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                 }
             });
 
-            fetch('https://finalccspayment.onrender.com/api/auth/products/add/:organization_id', {
+            fetch(`https://finalccspayment.onrender.com/api/auth/products/add/:organization_id`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
                 },
-                body: formData // Send the form data with the file upload
+                body: formData
             })
             .then(response => response.json())
             .then(data => {
-                Swal.close(); // Close loading message after fetch response
-
+                Swal.close();
                 if (data.msg) {
-                    Swal.fire('Success!', data.msg, 'success') // SweetAlert success message
+                    Swal.fire('Success!', data.msg, 'success')
                     .then(() => {
-                        window.location.href = 'organization-products.html'; // Redirect to products page
+                        window.location.href = 'organization-products.html';
                     });
                 }
             })
             .catch(error => {
-                Swal.close(); // Ensure loading is closed if an error occurs
+                Swal.close();
                 console.error('Error:', error);
                 document.getElementById('errorMessages').innerText = 'An error occurred. Please try again.';
             });
         } else {
-            Swal.fire('Cancelled', 'Product addition was cancelled.', 'info'); // Cancellation message
+            Swal.fire('Cancelled', 'Product addition was cancelled.', 'info');
         }
     });
 });
+
+
+
+
+
 
                                 </script>
                                 </div>  
