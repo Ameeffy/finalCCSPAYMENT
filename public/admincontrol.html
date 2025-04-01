@@ -951,8 +951,14 @@
                                     <!-- Latest Semester Section -->
                                     <div class="position-relative">
                                         <!-- Ellipsis icon that triggers dropdown with animation -->
-                                        <i class="bi bi-three-dots-vertical position-absolute top-0 end-0 fs-4" style="cursor: pointer;" id="ellipsisIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                                        
+                                        <i class="bi bi-three-dots-vertical position-absolute top-0 end-0 fs-4" 
+                                        style="cursor: pointer;" 
+                                        id="ellipsisIcon" 
+                                        data-bs-toggle="dropdown" 
+                                        aria-expanded="false" 
+                                        title="More options">
+                                     </i>
+                                                                             
                                         <!-- Dropdown menu -->
                                         <ul class="dropdown-menu dropdown-menu-end" style="padding: 10px;">
                                             <li>
@@ -1471,11 +1477,13 @@ function fetchLatestSemester() {
            transition: background-color 0.3s;"              
     onmouseover="this.style.backgroundColor='${data.status === 'Activated' ? '#c82333' : '#1B3A28'}'" 
     onmouseout="this.style.backgroundColor='${data.status === 'Activated' ? '#dc3545' : '#218838'}'" 
-    onclick="toggleStatus(${data.id}, '${data.status}')">
+    onclick="toggleStatus(${data.id}, '${data.status}')"
+    title="${data.status === 'Activated' ? 'Deactivate User' : 'Activate User'}">
     
     <i class="${data.status === 'Activated' ? 'fas fa-ban' : 'fas fa-check-circle'}" 
        style="font-size: 20px;"></i> <!-- Adjust the size here -->
 </button>
+
 
 
                 `;
@@ -1496,24 +1504,27 @@ function fetchLatestSemester() {
            
 
             <!-- Delete Button -->
-            <button class="button-delete" 
-                style="background-color: #6c757d; 
-                       color: white; 
-                       border: none; 
-                       border-radius: 5px; 
-                       width: 33px; /* Fixed width */
-                       height: 35px; /* Fixed height */
-                       display: flex; 
-                       align-items: center; 
-                       justify-content: center; 
-                       cursor: pointer; 
-                       transition: background-color 0.3s;" 
-                onmouseover="this.style.backgroundColor='#5a6268'" 
-                onmouseout="this.style.backgroundColor='#6c757d'" 
-                onclick="deleteSemester(${data.id})" ${deleteButtonClass}>
-                
-                <i class="fas fa-trash" style="font-size: 20px;"></i>
-            </button>
+<button class="button-delete" 
+    style="background-color: #6c757d; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 33px; /* Fixed width */
+           height: 35px; /* Fixed height */
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#5a6268'" 
+    onmouseout="this.style.backgroundColor='#6c757d'" 
+    onclick="deleteSemester(${data.id})" 
+    ${deleteButtonClass}
+    title="Delete Semester">
+    
+    <i class="fas fa-trash" style="font-size: 20px;"></i>
+</button>
+
         </td>
     </tr>
 `;
