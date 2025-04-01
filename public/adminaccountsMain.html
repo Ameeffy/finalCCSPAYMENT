@@ -7,7 +7,7 @@
         <meta name="description" content="" />
         <link rel="icon" type="x-icon" href="img/logo.png">
         <meta name="author" content="" />
-        <title>Admin Accounts</title>
+        <title>Student Enrollment</title>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -606,6 +606,11 @@
                                                       <i class="fas fa-pen-to-square fa-fw me-2 fs-5"></i> Enroll Student
                                                     </a>
                                                   </li>
+                                                  <li>
+                                                    <a href="adminaccountsMainLogs.html" class="dropdown-item d-flex align-items-center" style="font-size: 14px;">
+                                                      <i class="fas fa-pen-to-square fa-fw me-2 fs-5"></i> Semester User Logs
+                                                    </a>
+                                                  </li>
                                                  
                                               </ul>
                                               
@@ -813,7 +818,7 @@ function exportAction(type) {
         text: 'Do you want to enroll the user this semester??',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Yes, Enrool!',
+        confirmButtonText: 'Yes, Enroll!',
         cancelButtonText: 'Cancel',
     }).then((result) => {
         if (result.isConfirmed) {
@@ -1064,8 +1069,7 @@ function exportAction(type) {
                                             <th>Section</th>
                                             <th>Action</th>
                                             <th>Date</th>
-                                            <th>Doc #</th>
-                                            
+                                            <th>DOC #</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1097,18 +1101,25 @@ function exportAction(type) {
                                 <script>
                                     
                                   function fetchUserData() {
-                                fetch('https://finalccspayment.onrender.com/api/auth/getsemesters_users')
+                                    fetch('https://finalccspayment.onrender.com/api/auth/getsemesters_users') 
+
                                     .then(response => response.json())
                                     .then(data => {
                                         const tableBody = document.getElementById('accountsTable').getElementsByTagName('tbody')[0];
                                         tableBody.innerHTML = ''; // Clear the table before populating it
                             
                                         // Loop through each user and insert a row in the table
-                                        const pendingUsers = data.filter(user => 
-                                            user.status === 'Pending' || user.status === 'Declined' || user.status === 'Active'
-                                        );
-                            
-                                        pendingUsers.forEach(user => {
+                                        if (data.length === 0) return; // Exit if no data is available
+
+            // Get the latest semester name dynamically
+            const semesterNames = [...new Set(data.map(user => user.semester_name))]; // Get unique semesters
+            semesterNames.sort(); // Sort semesters alphabetically or numerically if applicable
+            const latestSemester = semesterNames[semesterNames.length - 1]; // Get the most recent semester
+
+            // Filter users who belong only to the latest semester
+            const filteredUsers = data.filter(user => user.semester_name === latestSemester);
+
+            filteredUsers.forEach(user => {
                                             const row = tableBody.insertRow();
                                             
                                             row.insertCell(0).textContent = `${user.lastname} ${user.firstname} ${user.middlename}`;
@@ -1368,7 +1379,8 @@ row.insertCell(6).textContent = formattedDate;
                             setInterval(fetchUserData, 15000);
                             
                             function openUserModalReport(userId, semesterId, id) {
-    const declineReasons = [
+
+                                const declineReasons = [
     'Not latest Certificate of Registration',
     'Documents are not updated',
     'Not currently enrolled',
@@ -1377,6 +1389,8 @@ row.insertCell(6).textContent = formattedDate;
     
     'Image is blurred'
 ];
+
+
 
     Swal.fire({
         title: 'Report User Decline',
