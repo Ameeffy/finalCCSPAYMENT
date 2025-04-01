@@ -751,9 +751,11 @@
                     <td>${payment.payment_type}</td>
                     <td>${payment.organization_name}</td>
                     <td>${payment.status}</td>
-                    <td>${new Date(payment.created_at).toLocaleDateString('en-PH', {
-                    year: 'numeric', month: 'long', day: 'numeric'
-                })}</td>
+                  <td>${new Date(payment.created_at).toLocaleDateString('en-PH', {
+            year: 'numeric',
+            month: 'long',
+            day: '2-digit'
+        })}</td>
                    <td>
     <div style="display: flex; align-items: center; gap: 5px;"> <!-- Flex container with gap for spacing -->
         
@@ -855,24 +857,26 @@
 
         <!-- View More button -->
         <button 
-            class="btn btn-info btn-sm" 
-            onclick="viewMore(this)" 
-            data-payment='${JSON.stringify(payment).replace(/"/g, '&quot;')}'
-            style="background-color: #007bff; 
-                   color: white; 
-                   border: none; 
-                   border-radius: 5px; 
-                   width: 33px; 
-                   height: 35px; 
-                   display: flex; 
-                   align-items: center; 
-                   justify-content: center; 
-                   cursor: pointer; 
-                   transition: background-color 0.3s;" 
-            onmouseover="this.style.backgroundColor='#0056b3'" 
-            onmouseout="this.style.backgroundColor='#007bff'">
-            <i class="fas fa-eye" style="font-size: 20px;"></i>
-        </button>
+    class="btn btn-info btn-sm" 
+    onclick="viewMore(this)" 
+    data-payment='${JSON.stringify(payment).replace(/"/g, '&quot;')}'
+    style="background-color: #007bff; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 33px; 
+           height: 35px; 
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#0056b3'" 
+    onmouseout="this.style.backgroundColor='#007bff'"
+    title="View more details"> <!-- Tooltip added here -->
+    <i class="fas fa-eye" style="font-size: 20px;"></i>
+</button>
+
 
     </div>
 </td>
