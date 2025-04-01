@@ -693,6 +693,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <br>
                                                     <div class="mt-auto">
                                                         <div class="d-flex justify-content-between flex-wrap">
                                                             <span class="text-truncate">
@@ -713,41 +714,7 @@
 
                                         
                                         
-                                         <div class="col-lg-3 col-md-6 mb-3 d-flex">
-                                            <div class="card text-white bg-success w-100">
-                                                 <div class="card-header" style="background-color: #1B3A28; color: white; padding: 10px;">
-                                                             <i class="fas fa-building me-1" style="color: white;"></i>
-                                                            <span>Total Organizations</span>
-                                                                                                                    
-                                                        </div>
-                                                <div class="card-body d-flex flex-column h-50">
-                                                    <div class="d-flex align-items-center">
-                                                        
-                                                        <div>
-                                                            
-                                                            <div class="d-flex align-items-center justify-content-center" style="height: 80px;">
-                                                                <p id="totalOrganizations" class="card-text fw-bold" style="font-size: 80px;">Loading...</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mt-auto">
-                                                        <hr class="border-light">
-                                                        <div class="d-flex justify-content-between">
-                                                            <span>
-                                                                <i class="fas fa-check-circle"></i>
-                                                                <strong style="font-size: 14px;">Activated:</strong>
-                                                                <span id="totalOrganizationActive">Loading...</span>
-                                                            </span>
-                                                            <span>
-                                                                <i class="fas fa-times-circle"></i>
-                                                                <strong style="font-size: 14px;">Not Activated:</strong>
-                                                                <span id="totalOrganizationNotActive">Loading...</span>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                         
                                         
                                         
                                         <script>
@@ -816,6 +783,8 @@
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <br>
+                                                <br>
                                                 <div class="mt-auto pt-2">
                                                     <div class="d-flex justify-content-between flex-wrap">
                                                         <span class="text-truncate">
@@ -920,10 +889,10 @@
                                                 <div class="card-body d-flex flex-column h-50">
                                                     <div class="d-flex justify-content-between align-items-center mb-3 flex-grow-1">
                                                         <div class="d-flex align-items-center">
-                                                            <i class="fas fa-dollar-sign fa-3x me-3" style="color: #1B3A28;"></i>
+                                                           
                                                             <div>
                                                                 <h6 class="card-title mb-0" id="transactionTitle">Payments Transaction</h6>
-                                                                <p class="card-text mb-0" id="totalAmountDisplay" style="font-size: 25px;">₱0.00</p>
+                                                                <p class="card-text mb-0" id="totalAmountDisplay" style="font-size: 25px;">0.00</p>
                                                             </div>
                                                         </div>
                                                         <button class="btn btn-light d-flex align-items-center justify-content-center" id="toggleTransactionBtn" style="background-color: #1B3A28 !important;">
@@ -931,17 +900,19 @@
                                                             <i class="fas fa-angle-right" style="color: white;"></i>
                                                         </button>
                                                     </div>
+                                                  
+                                                    <br>
                                                     <div class="mt-auto pt-2">
                                                         <div class="d-flex justify-content-between flex-wrap">
                                                             <span class="text-truncate">
                                                                 <i class="fas fa-money-bill me-1"></i>
                                                                 <strong class="fs-6">Cash:</strong> 
-                                                                <span id="totalCashDisplay" class="fs-6 text-truncate">₱0.00</span>
+                                                                <span id="totalCashDisplay" class="fs-6 text-truncate">0.00</span>
                                                             </span>
                                                             <span class="text-truncate">
                                                                 <i class="fas fa-wallet me-1"></i>
                                                                 <strong class="fs-6">Gcash:</strong> 
-                                                                <span id="totalGcashDisplay" class="fs-6 text-truncate">₱0.00</span>
+                                                                <span id="totalGcashDisplay" class="fs-6 text-truncate">0.00</span>
                                                             </span>
                                                         </div>
                                                     </div>
@@ -1020,7 +991,42 @@
                                         
                                         </script>
                                         
-                                    
+                                        <div class="col-lg-3 col-md-6 mb-3 d-flex">
+                                            <div class="card text-white bg-success w-100">
+                                                 <div class="card-header" style="background-color: #1B3A28; color: white; padding: 10px;">
+                                                             <i class="fas fa-building me-1" style="color: white;"></i>
+                                                            <span>Total Organizations</span>
+                                                                                                                    
+                                                        </div>
+                                                <div class="card-body d-flex flex-column h-50">
+                                                    <div class="d-flex align-items-center">
+                                                        
+                                                        <div>
+                                                            
+                                                            <div class="d-flex align-items-center justify-content-center" style="height: 80px;">
+                                                                <p id="totalOrganizations" class="card-text fw-bold" style="font-size: 80px;">Loading...</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="mt-auto">
+                                                        <hr class="border-light">
+                                                        <div class="d-flex justify-content-between">
+                                                            <span>
+                                                                <i class="fas fa-check-circle"></i>
+                                                                <strong style="font-size: 14px;">Activated:</strong>
+                                                                <span id="totalOrganizationActive">Loading...</span>
+                                                            </span>
+                                                            <span>
+                                                                <i class="fas fa-times-circle"></i>
+                                                                <strong style="font-size: 14px;">Not Activated:</strong>
+                                                                <span id="totalOrganizationNotActive">Loading...</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     
                                     
                                 
