@@ -37,6 +37,196 @@
     font-size: 30px;
     text-transform: uppercase;
 }
+
+
+        .table-container{
+            width: auto;
+            background-color: white;
+            padding-top: 20px;
+            padding-left: 10px;
+            padding-right: 10px;   
+            border-radius: 3px;
+            padding-bottom: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+.dataTables_scroll {
+    border-radius: 5px 5px 0 0; /* 5px top border radius */
+}
+
+.dataTables_scrollBody {
+    border-radius: 0; /* Ensure no bottom border radius */
+}
+
+
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px; /* Adjusted to 5px */
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px; /* Adjusted to 5px */
+}
+
+/* Ensure no bottom border-radius */
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important; /* Light gray border */
+    padding: 8px 10px; /* Comfortable spacing */
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important; /* Remove border from last row */
+}
+
+/* Optional hover effect */
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important; /* Very subtle hover background */
+    border-bottom-color: #d0d0d0 !important; /* Slightly darker border on hover */
+}
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        justify-self: flex-end;
+    }
+
+    /* Optional: Adjust spacing between elements */
+    .dataTables_wrapper .dataTables_length {
+        margin-right: 15px;
+    }
+   
+    .dataTables_wrapper .dataTables_info {
+        margin: 0 15px;
+    }
+    .dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    text-decoration: none;
+    color: #555;
+    background-color: #f9f9f9;
+}
+
+.dataTables_wrapper .dataTables_paginate a:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Styling the search box */
+.dataTables_wrapper .dataTables_filter {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Custom table design */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
+    border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
+    margin-bottom: 50px;
+}
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 8px 10px;
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important;
+    border-bottom-color: #d0d0d0 !important;
+}
 </style>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex align-items-center justify-content-between px-3">
@@ -293,9 +483,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="orderDetails"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
             </div>
         </div>
     </div>
@@ -336,11 +523,25 @@
 <button 
     class="button-view-more" 
     onclick="viewMore('${JSON.stringify(order).replace(/"/g, '&quot;')}')" 
-    style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 5px 8px; cursor: pointer; transition: background-color 0.3s;" 
+    style="background-color: #007bff; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 33px; /* Fixed width */
+           height: 35px; /* Fixed height */
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;" 
     onmouseover="this.style.backgroundColor='#0056b3'" 
-    onmouseout="this.style.backgroundColor='#007bff'">
-    <i class="fas fa-eye"></i>
+    onmouseout="this.style.backgroundColor='#007bff'" 
+    data-bs-toggle="tooltip" 
+    title="View Order Details">
+    <i class="fas fa-eye" style="font-size: 20px;"></i>
 </button>
+
+
                         </td>
                     `;
                     tableBody.appendChild(row);
@@ -352,20 +553,21 @@
         });
 
         function viewMore(orderData) {
-            const order = JSON.parse(orderData);
-            const modalBody = `
-                <p><strong>Order ID:</strong> ${order.id}</p>
-                <p><strong>Organization:</strong> ${order.organization_name}</p>
-                <p><strong>Adviser Status:</strong> ${order.adviser_status}</p>
-                <p><strong>Status:</strong> ${order.status}</p>
-                <p><strong>Reported:</strong> ${order.is_reported ? 'Yes' : 'No'}</p>
-                ${order.qrcodepicture ? `<img src="${order.qrcodepicture}" alt="QR Code" class="img-fluid mt-3" />` : ''}
-            `;
+    const order = JSON.parse(orderData);
+    const modalBody = `
+        <p><strong>Order ID:</strong> ${order.id}</p>
+        <p><strong>Organization:</strong> ${order.organization_name}</p>
+        <p><strong>Adviser Status:</strong> ${order.adviser_status}</p>
+        <p><strong>Status:</strong> ${order.status}</p>
+        <p><strong>Reported:</strong> ${order.is_reported ? 'Yes' : 'No'}</p>
+        ${order.qrcodepicture ? `<div class="text-center"><img src="${order.qrcodepicture}" alt="QR Code" class="img-fluid mt-3" style="max-height: 300px; width: auto;" /></div>` : ''}
+    `;
 
-            document.getElementById('orderDetails').innerHTML = modalBody;
-            const viewMoreModal = new bootstrap.Modal(document.getElementById('viewMoreModal'));
-            viewMoreModal.show();
-        }
+    document.getElementById('orderDetails').innerHTML = modalBody;
+    const viewMoreModal = new bootstrap.Modal(document.getElementById('viewMoreModal'));
+    viewMoreModal.show();
+}
+
     </script>
 
 
