@@ -214,8 +214,8 @@
 }
 .export-container {
   position: absolute;
-  left: 20px;;
-  top:10px;
+  left: 280px;;
+  top:58px;
   z-index: 1;
 }
 
@@ -717,8 +717,8 @@
                                             
                                             </script>
                                             <div id="UsersModal" class="modal fade" tabindex="-1" aria-labelledby="UsersModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg">
-                                                  <div class="modal-content">
+                                                <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                    <div class="modal-content">
                                                     <form id="UsersForm">
                                                       <!-- Modal Header -->
                                                       <div class="modal-header">
@@ -757,12 +757,10 @@
                                               
                                                         <!-- Hidden User ID -->
                                                         <input type="hidden" id="userId" name="userId">
-                                              
                                                       </div>
                                               
                                                       <!-- Modal Footer -->
-                                                      <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                      <div class="modal-footer" style="padding: 10px;">
                                                         <button type="submit" class="btn btn-primary">Submit</button>
                                                       </div>
                                                     </form>
@@ -770,6 +768,7 @@
                                                   </div>
                                                 </div>
                                               </div>
+                                              
                                               
                                             
                                             
@@ -1300,8 +1299,9 @@ iconButton.onclick = function () {
 
 // Ensure created_at is a valid date before formatting
 const formattedDate = !isNaN(createdAtDate.getTime()) 
-    ? createdAtDate.toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' }) 
+    ? createdAtDate.toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: '2-digit' }) 
     : 'Invalid Date';
+
 
 // Insert formatted date into the table
 row.insertCell(6).textContent = formattedDate;
