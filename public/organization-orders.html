@@ -1278,19 +1278,20 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
            color: white; 
            border: none; 
            border-radius: 5px; 
-           width: 33px; /* Fixed width */
            height: 35px; /* Fixed height */
-           display: flex; 
+
            align-items: center; 
            justify-content: center; 
            cursor: pointer; 
            transition: background-color 0.3s;" 
     onmouseover="this.style.backgroundColor='#0056b3'" 
     onmouseout="this.style.backgroundColor='#007bff'" 
-    onclick="showGcashProofModal('${log.proof_of_payment}')">
+    onclick="showGcashProofModal('${log.proof_of_payment}')"
+    title="View Proof">
     
     <i class="fas fa-eye" style="font-size: 20px;"></i> <!-- Adjust the size here -->
 </button>
+
 ` : ''
                                                     }
                                                 </td>
@@ -2003,9 +2004,12 @@ function fetchProductTransactions() {
            cursor: pointer; 
            transition: background-color 0.3s;"
     onmouseover="this.style.backgroundColor='#0056b3'" 
-    onmouseout="this.style.backgroundColor='#007bff'">
+    onmouseout="this.style.backgroundColor='#007bff'"
+    title="View Proof">
+
     <i class="fas fa-eye" style="font-size: 20px;"></i> <!-- Icon with size -->
 </button>
+
 `
                 : '';
 
@@ -2051,9 +2055,12 @@ function fetchProductTransactions() {
            transition: background-color 0.3s;
            font-size: 16px;" 
     onmouseover="this.style.backgroundColor='#218838'" 
-    onmouseout="this.style.backgroundColor='#28a745'">
+    onmouseout="this.style.backgroundColor='#28a745'"
+    title="Accept Balance">
+
     <i class="fas fa-check" style="font-size: 20px;"></i>
 </button>
+
 
 <!-- Decline Button -->
 <button 
@@ -2071,16 +2078,19 @@ function fetchProductTransactions() {
            transition: background-color 0.3s;
            font-size: 16px;" 
     onmouseover="this.style.backgroundColor='#c82333'" 
-    onmouseout="this.style.backgroundColor='#dc3545'">
+    onmouseout="this.style.backgroundColor='#dc3545'"
+    title="Decline Balance">
+
     <i class="fas fa-times" style="font-size: 20px;"></i>
 </button>
+
 
         ` : ''}
 
 
 
                                             ${transaction.status === 'Pending' ? `
-                                                <button 
+<button 
     onclick="acceptOrder('${transaction.order_transaction_id}')"
     style="background-color: #28a745; 
            color: white; 
@@ -2094,7 +2104,8 @@ function fetchProductTransactions() {
            cursor: pointer; 
            transition: background-color 0.3s;" 
     onmouseover="this.style.backgroundColor='#218838'" 
-    onmouseout="this.style.backgroundColor='#28a745'">
+    onmouseout="this.style.backgroundColor='#28a745'"
+    title="Accept Order">
     <i class="fas fa-check" style="font-size: 16px;"></i> <!-- Adjust the size here -->
 </button>
 
@@ -2112,9 +2123,11 @@ function fetchProductTransactions() {
            cursor: pointer; 
            transition: background-color 0.3s;" 
     onmouseover="this.style.backgroundColor='#c82333'" 
-    onmouseout="this.style.backgroundColor='#dc3545'">
+    onmouseout="this.style.backgroundColor='#dc3545'"
+    title="Decline Order">
     <i class="fas fa-times" style="font-size: 16px;"></i> <!-- Adjust the size here -->
 </button>
+
 
                                             ` : ''}
 
@@ -2122,7 +2135,7 @@ function fetchProductTransactions() {
 
 
                                             ${transaction.status === 'Processing Balance' ? `
-                                                <button 
+                                               <button 
     onclick="showBalancePaymentModal('${transaction.order_transaction_id}', ${transaction.total_amount}, ${transaction.total_pay})"
     style="background-color: #ffc107; 
            color: black; 
@@ -2137,16 +2150,18 @@ function fetchProductTransactions() {
            transition: background-color 0.3s;
            font-size: 16px;" 
     onmouseover="this.style.backgroundColor='#e0a800'" 
-    onmouseout="this.style.backgroundColor='#ffc107'">
+    onmouseout="this.style.backgroundColor='#ffc107'"
+    title="View Balance Payment">
     <i class="fas fa-peso-sign" style="font-size: 20px;"></i>
 </button>
+
 
                                             ` : ''}
 
 
 
                                             ${transaction.status === 'Accepted' ? `
-                                                <button 
+                         <button 
     onclick="showPaymentModal('${transaction.order_transaction_id}', ${transaction.total_amount})"
     style="background-color: #17a2b8; 
            color: white; 
@@ -2161,9 +2176,11 @@ function fetchProductTransactions() {
            transition: background-color 0.3s;
            font-size: 16px;" 
     onmouseover="this.style.backgroundColor='#117a8b'" 
-    onmouseout="this.style.backgroundColor='#17a2b8'">
+    onmouseout="this.style.backgroundColor='#17a2b8'"
+    title="Make Payment">
     <i class="fas fa-credit-card" style="font-size: 20px;"></i> <!-- Adjusted size -->
 </button>
+
 
                                             ` : ''}
 
@@ -2184,9 +2201,12 @@ function fetchProductTransactions() {
            transition: background-color 0.3s;
            font-size: 16px;" 
     onmouseover="this.style.backgroundColor='#0056b3'" 
-    onmouseout="this.style.backgroundColor='#007bff'">
+    onmouseout="this.style.backgroundColor='#007bff'"
+    title="View Transaction Logs">
+
     <i class="fas fa-eye" style="font-size: 20px;"></i> <!-- Adjust the size here -->
 </button>
+
 
                                         </div>
                                                 </td>
