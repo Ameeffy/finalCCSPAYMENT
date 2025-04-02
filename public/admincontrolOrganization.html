@@ -428,7 +428,7 @@
     
                     const userData = await response.json();
                     document.getElementById("profile-item").innerHTML = 
-                        `<a style="color: #25330f; text-decoration: none;" href="admin-info.html">${userData.username} (${userData.email})</a>`;
+                        `<a style="color: white; text-decoration: none;" href="admin-info.html">${userData.username} (${userData.email})</a>`;
                 } catch (error) {
                     console.error('Error fetching user data:', error);
                     document.getElementById("profile-item").innerHTML = `<a href="#">Error loading profile</a>`;
@@ -647,8 +647,14 @@
                                     </ol>
                                     <div class="position-relative">
                                         <!-- Ellipsis icon that triggers dropdown with animation -->
-                                        <i class="bi bi-three-dots-vertical position-absolute top-0 end-0 fs-4" style="cursor: pointer;" id="ellipsisIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                                        
+                                        <i class="bi bi-three-dots-vertical position-absolute top-0 end-0 fs-4" 
+                                        style="cursor: pointer;" 
+                                        id="ellipsisIcon" 
+                                        data-bs-toggle="dropdown" 
+                                        aria-expanded="false" 
+                                        title="More options">
+                                    </i>
+                                                                            
                                         <!-- Dropdown menu -->
                                         <ul class="dropdown-menu dropdown-menu-end" style="padding: 10px;">
                                             <li>
@@ -741,7 +747,7 @@
 
 <!-- Organization Modal -->
 <div class="modal fade" id="organizationModal" tabindex="-1" aria-labelledby="organizationModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="organizationModalLabel">Organization Registration</h5>
@@ -767,6 +773,7 @@
         </div>
     </div>
 </div>
+
 
 
                              
@@ -1142,7 +1149,7 @@ function selectUser(userId, lastname,firstname, middlename) {
                        <td style="position: relative; display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top:10px;">
     ${org.status === 'Not Activated' ? `` : `
         <!-- Register Organization User Button -->
-      <button 
+<button 
     style="background-color: #6c757d; 
            color: white; 
            border: none; 
@@ -1158,12 +1165,13 @@ function selectUser(userId, lastname,firstname, middlename) {
     onmouseout="this.style.backgroundColor='#6c757d'" 
     data-bs-toggle="modal" 
     data-bs-target="#organizationUserModal"
-    onclick="prepareOrganizationModal(${org.id})">
+    onclick="prepareOrganizationModal(${org.id})"
+    title="Register Organization User">
     <i class="fas fa-user-plus" style="font-size: 16px;"></i>
 </button>
 
-        <!-- Register Organization Teacher Button -->
-       <button 
+<!-- Register Organization Teacher Button -->
+<button 
     style="background-color: #6c757d; 
            color: white; 
            border: none; 
@@ -1179,28 +1187,33 @@ function selectUser(userId, lastname,firstname, middlename) {
     onmouseout="this.style.backgroundColor='#6c757d'" 
     data-bs-toggle="modal" 
     data-bs-target="#organizationTeacherModal"
-    onclick="prepareOrganizationTeacherModal(${org.id})">
+    onclick="prepareOrganizationTeacherModal(${org.id})"
+    title="Register Organization Teacher">
     <i class="fas fa-chalkboard-teacher" style="font-size: 16px;"></i>
 </button>
 
+
         <!-- Toggle Dropdowns Button -->
         <button 
-            style="background-color: #6c757d; 
-                   color: white; 
-                   border: none; 
-                   border-radius: 5px; 
-                   width: 33px; /* Fixed width */
-                   height: 35px; /* Fixed height */
-                   display: flex; 
-                   align-items: center; 
-                   justify-content: center; 
-                   cursor: pointer; 
-                   transition: background-color 0.3s;" 
-            onmouseover="this.style.backgroundColor='#5a6268'" 
-            onmouseout="this.style.backgroundColor='#6c757d'" 
-            onclick="toggleDropdowns(event)" class="icon-button">
-            <i class="fas fa-ellipsis-v" style="font-size: 20px;"> </i>
-        </button>
+    style="background-color: #6c757d; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 33px; /* Fixed width */
+           height: 35px; /* Fixed height */
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#5a6268'" 
+    onmouseout="this.style.backgroundColor='#6c757d'" 
+    onclick="toggleDropdowns(event)" 
+    class="icon-button"
+    title="More options">
+    <i class="fas fa-ellipsis-v" style="font-size: 20px;"> </i>
+</button>
+
 
         <div class="dropdowns" style="display: none; position: absolute; bottom: 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15); z-index: 1000; font-size: 14px; font-weight: 600; right: 20px; padding: 8px; min-width: 180px;">
             <button onclick="showDetails(${org.id}, '${org.name}', '${org.email}', '${org.created_at}', '${org.created_by_firstname}', '${org.created_by_lastname}')" 
@@ -1226,22 +1239,24 @@ function selectUser(userId, lastname,firstname, middlename) {
 
     <!-- Toggle Organization Status Button -->
     <button 
-        style="background-color: #6c757d; 
-               color: white; 
-               border: none; 
-               border-radius: 5px; 
-               width: 33px; /* Fixed width */
-               height: 35px; /* Fixed height */
-               display: flex; 
-               align-items: center; 
-               justify-content: center; 
-               cursor: pointer; 
-               transition: background-color 0.3s;" 
-        onmouseover="this.style.backgroundColor='#5a6268'" 
-        onmouseout="this.style.backgroundColor='#6c757d'" 
-        onclick="toggleOrganizationStatus(${org.id}, '${org.status}')">
-        <i class="${org.status === 'Not Activated' ? 'fas fa-check-circle' : 'fas fa-times-circle'}" style="font-size: 20px;"></i>
-    </button>
+    style="background-color: #6c757d; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 33px; /* Fixed width */
+           height: 35px; /* Fixed height */
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#5a6268'" 
+    onmouseout="this.style.backgroundColor='#6c757d'" 
+    onclick="toggleOrganizationStatus(${org.id}, '${org.status}')"
+    title="${org.status === 'Not Activated' ? 'Activate Organization' : 'Deactivate Organization'}">
+    <i class="${org.status === 'Not Activated' ? 'fas fa-check-circle' : 'fas fa-times-circle'}" style="font-size: 20px;"></i>
+</button>
+
 
     <!-- Show Organization Logs Button 
     <button 
@@ -1732,14 +1747,3 @@ document.addEventListener('click', function () {
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     </body>
 </html>
-                                   
-              
-
-
-
-
-
-
-
-
-      
