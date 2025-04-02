@@ -401,41 +401,32 @@
                                                 <span id="step2">2</span>
                                                 <span id="step3">3</span>
                                             </div>
-                                        
-                                            <!-- Account Information (Step 1) -->
+                                    
+                                            <!-- Personal Information (Step 1) -->
                                             <div class="form-section" id="step1Form">
-                                                <h4>Account Information</h4>
+                                                <h4>Personal Information</h4>
                                                 <div class="form-group">
-                                                    <label for="username">Username:</label>
-                                                    <input type="text" id="username" class="form-control" name="username" required>
+                                                    <label for="firstname">First Name:</label>
+                                                    <input type="text" id="firstname" class="form-control" name="firstname" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="email">Email:</label>
-                                                    <input type="email" id="email" class="form-control" name="email" required>
+                                                    <label for="lastname">Last Name:</label>
+                                                    <input type="text" id="lastname" class="form-control" name="lastname" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="password">Password:</label>
-                                                    <input type="password" id="password" class="form-control" name="password" required>
+                                                    <label for="middlename">Middle Name:</label>
+                                                    <input type="text" id="middlename" class="form-control" name="middlename">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="confirmPassword">Confirm Password:</label>
-                                                    <input type="password" id="confirmPassword" class="form-control" name="confirmPassword" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="role">Role:</label>
-                                                    <select id="role" class="form-control" name="role" required>
-                                                        <option value="Student">Student</option>
-                                                        <option value="Teacher">Teacher</option>
-                                                    </select>
+                                                    <label for="contactnumber">Contact Number:</label>
+                                                    <input type="text" id="contactnumber" class="form-control" name="contactnumber" required>
                                                 </div>
                                                 <br>
-                                                
-                                               
                                                 <!-- Step 1 Next Button -->
                                                 <button type="button" class="btn-next" onclick="showNextStep(2)">Next</button>
                                             </div>
-                                        
-                                            <!-- Personal Information (Step 2) -->
+                                    
+                                            <!-- Additional Information (Step 2) -->
                                             <div class="form-section" id="step2Form" style="display:none;">
                                                 <h4>Additional Information</h4>
                                                 <div class="form-group">
@@ -450,13 +441,13 @@
                                                 <div class="form-group" id="position-container" style="display: none;">
                                                     <label for="position">Position:</label>
                                                     <select id="position" class="form-control" name="position">
-                                                        <option value="College Instructor">College Instructor</option>                                                       
+                                                        <option value="College Instructor">College Instructor</option>
                                                         <option value="Assistant Professor">Assistant Professor</option>
                                                         <option value="Associate Professor">Associate Professor</option>
                                                         <option value="Professor">Professor</option>
                                                     </select>
                                                 </div>
-                                                
+                                    
                                                 <div class="form-group" id="section-container">
                                                     <label for="section">Section:</label>
                                                     <select id="section" class="form-control" name="section" required>
@@ -485,39 +476,51 @@
                                                         <option value="Female">Female</option>
                                                     </select>
                                                 </div>
-                                               <br>
+                                                <br>
                                                 <!-- Step 2 Back Button -->
                                                 <button type="button" class="btn-back" onclick="showBackStep(1)">Back</button>
-
+                                    
                                                 <!-- Step 2 Next Button -->
                                                 <button type="button" class="btn-next" onclick="showNextStep(3)">Next</button>
                                             </div>
-                                        
-                                            <!-- Additional Information (Step 3) -->
+                                    
+                                            <!-- Account Information (Step 3) -->
                                             <div class="form-section" id="step3Form" style="display:none;">
-                                                <h4>Personal Information</h4>
+                                                <h4>Account Information</h4>
                                                 <div class="form-group">
-                                                    <label for="firstname">First Name:</label>
-                                                    <input type="text" id="firstname" class="form-control" name="firstname" required>
+                                                    <label for="username">Username:</label>
+                                                    <input type="text" id="username" class="form-control" name="username" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="lastname">Last Name:</label>
-                                                    <input type="text" id="lastname" class="form-control" name="lastname" required>
+                                                    <label for="email">Email:</label>
+                                                    <input type="email" id="email" class="form-control" name="email" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="middlename">Middle Name:</label>
-                                                    <input type="text" id="middlename" class="form-control" name="middlename">
+                                                    <label for="password">Password:</label>
+                                                    <input type="password" id="password" class="form-control" name="password" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="contactnumber">Contact Number:</label>
-                                                    <input type="text" id="contactnumber" class="form-control" name="contactnumber" required>
+                                                    <label for="confirmPassword">Confirm Password:</label>
+                                                    <input type="password" id="confirmPassword" class="form-control" name="confirmPassword" required>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label for="role">Role:</label>
+                                                    <select id="role" class="form-control" name="role" required>
+                                                        <option value="Student">Student</option>
+                                                        <option value="Teacher">Teacher</option>
+                                                    </select>
+                                                </div>
+                                                <br>
+                                    
                                                 <!-- Step 3 Back Button -->
                                                 <button type="button" class="btn-back" onclick="showBackStep(2)">Back</button>
+                                    
+                                                <!-- Step 3 Submit Button -->
                                                 <button type="submit" class="btn-submit">Submit</button>
                                             </div>
                                         </div>
-                                        </form>
+                                    </form>
+                                    
                                     </div>
                             
                                 </div>
