@@ -460,6 +460,61 @@
     background-color: #f8f9fa !important;
     border-bottom-color: #d0d0d0 !important;
 }
+.export-container {
+  position: absolute;
+left: 280px;
+  top: 218px;
+  z-index: 1;
+}
+
+.export-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.export-btn {
+  background-color: #1B3A28;
+  color: #ffffff;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 60px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+}
+
+.export-btn:hover {
+  background-color: #3e865c;
+}
+
+.export-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 83px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.export-content a {
+  color: #333;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.export-content a:hover {
+  background-color: #f8f9fa;
+}
+
+.export-dropdown:hover .export-content {
+  display: block;
+}
 
 
     </style>
@@ -841,8 +896,10 @@
                                             <label for="maxDate" class="fw-bold">End Date:</label>
                                             <input type="date" id="maxDate" class="form-control d-inline-block w-auto">
                                             
-                                            <button id="filterDateBtn" class="btn btn-primary btn-sm"><i class="fas fa-filter"></i></button>
-                                        </div>
+                                            <button id="filterDateBtn" class="btn btn-primary btn-sm" title="Filter by date">
+                                                <i class="fas fa-filter"></i>
+                                            </button>
+                                                                                    </div>
                                     
                                         <!-- Filter Container on Right -->
                                         <div id="acceptedByFilterContainer" style="flex: 0 0 auto;">
@@ -1097,13 +1154,15 @@ function populateTransactionsTable(transactions) {
             <td>${acceptedByText}</td>
             <td>${formattedDate}</td>
             <td>
-                <button 
-                    style="background-color: #007bff; color: white; border: none; border-radius: 5px; width: 33px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color 0.3s;" 
-                    onmouseover="this.style.backgroundColor='#0056b3'" 
-                    onmouseout="this.style.backgroundColor='#007bff'" 
-                    onclick="fetchLogs('${transaction.order_transaction_id}')">
-                    <i class="fas fa-history" style="font-size: 20px;"></i>
-                </button>
+               <button 
+    style="background-color: #007bff; color: white; border: none; border-radius: 5px; width: 33px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#0056b3'" 
+    onmouseout="this.style.backgroundColor='#007bff'" 
+    onclick="fetchLogs('${transaction.order_transaction_id}')"
+    title="View more Details">
+    <i class="fas fa-history" style="font-size: 20px;"></i>
+</button>
+
             </td>
         `;
         transactionsBody.appendChild(row);
