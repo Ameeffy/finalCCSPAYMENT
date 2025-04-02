@@ -630,7 +630,7 @@
 
                             
                                 <script>
-                     document.addEventListener('DOMContentLoaded', async () => {
+                  document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('token');
     const tableBody = document.querySelector('#reportedPaymentsTable tbody');
 
@@ -743,13 +743,20 @@
                 reportedBy += `<strong>Adviser:</strong> ${report.adviser_reported_by_name}`;
             }
 
+            // Format the date as "Month DD, YYYY"
+            const formattedDate = new Date(report.created_at).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: '2-digit',
+            });
+
             const row = `
                 <tr>
                     <td>${report.payment_name || 'N/A'}</td>
                     <td>${report.reason || 'N/A'}</td>
                     <td>${report.description || 'N/A'}</td>
                     <td>${reportedBy || ''}</td>
-                    <td>${new Date(report.created_at).toLocaleString()}</td>
+                    <td>${formattedDate}</td> <!-- Display formatted date -->
                 </tr>
             `;
             table.row.add($(row)).draw(); // Add row and redraw table
