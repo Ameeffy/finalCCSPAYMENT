@@ -648,7 +648,7 @@ function exportAction(type) {
     }
 }
 
-                                  document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('token');
     const tableBody = document.querySelector('#gcashOrderReportsTable tbody');
 
@@ -669,7 +669,6 @@ function exportAction(type) {
         // Initialize DataTable with buttons and configurations
         const table = $('#gcashOrderReportsTable').DataTable({
             dom: '<"top"f>rt<"bottom"lip>',
-
             buttons: [
                 {
                     extend: 'copy',
@@ -735,7 +734,11 @@ function exportAction(type) {
                     <td>${reportedBy}</td>
                     <td>${report.reason || 'N/A'}</td>
                     <td>${report.description || 'N/A'}</td>
-                    <td>${new Date(report.created_at).toLocaleString()}</td>
+                    <td>${new Date(report.created_at).toLocaleDateString('en-PH', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: '2-digit'
+                    })}</td> <!-- Changed this part -->
                 </tr>
             `;
             table.row.add($(row)).draw(); // Add row and redraw table
@@ -746,6 +749,7 @@ function exportAction(type) {
         tableBody.innerHTML = '<tr><td colspan="5" class="text-center">Failed to load Gcash order reports.</td></tr>';
     }
 });
+
                                 </script>
                                 </div>  
                             </div>
