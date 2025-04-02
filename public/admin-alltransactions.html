@@ -730,8 +730,10 @@
                                             <label for="maxDate" class="fw-bold">End Date:</label>
                                             <input type="date" id="maxDate" class="date-range form-control d-inline-block w-auto">
                                             
-                                            <button id="filterDateBtn" class="btn btn-primary btn-sm"><i class="fas fa-filter"></i></button>
-                                        </div>
+                                            <button id="filterDateBtn" class="btn btn-primary btn-sm" title="Filter by date">
+                                                <i class="fas fa-filter"></i>
+                                            </button>
+                                                                                    </div>
                                     
                                         <!-- https://finalccspayment.onrender.comter Container on Right -->
                                         <div id="receivedByFilterContainer" style="flex: 0 0 auto;">
@@ -989,14 +991,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 })}</td>
 
                 <td>
-                    <button class="button-history" 
-                        style="background-color: #007bff; color: white; border: none; border-radius: 5px; width: 33px; height: 35px;
-                        display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color 0.3s;" 
-                        onmouseover="this.style.backgroundColor='#0056b3'" 
-                        onmouseout="this.style.backgroundColor='#007bff'" 
-                        onclick="openTransactionModalHistory('${transaction.transaction_id}')">
-                        <i class="fas fa-history" style="font-size: 20px;"></i>
-                    </button>
+                  <button class="button-history" 
+        style="background-color: #007bff; color: white; border: none; border-radius: 5px; width: 33px; height: 35px;
+               display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color 0.3s;" 
+        onmouseover="this.style.backgroundColor='#0056b3'" 
+        onmouseout="this.style.backgroundColor='#007bff'" 
+        onclick="openTransactionModalHistory('${transaction.transaction_id}')"
+        title="View transaction history">
+    <i class="fas fa-history" style="font-size: 20px;"></i>
+</button>
+
                 </td>
             `;
             tableBody.appendChild(row);
