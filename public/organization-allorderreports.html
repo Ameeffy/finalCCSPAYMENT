@@ -275,9 +275,9 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         const fullName = `${user.firstname} ${user.lastname}`; 
 
         document.getElementById('profile-item').innerHTML = `
-           <a style="color: #25330f; text-decoration: none; " href="organization-users-info.html">
+           <a style="color: white; text-decoration: none; " href="organization-users-info.html">
    
-   <h3 style="color: #25330f; text-decoration: none; font-size: 18px; margin-top:10px;">${user.firstname} ${user.lastname}</h3>
+   <h3 style="color: white; text-decoration: none; font-size: 18px; margin-top:10px;">${user.firstname} ${user.lastname}</h3>
 </a>
 
 
@@ -499,7 +499,7 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
                                                             <td>${report.reason}</td>
                                                             <td>${report.description}</td>
                                                             <td>${reportedBy || ''}</td>
-                                                            <td>${new Date(report.report_created_at).toLocaleString()}</td>
+<td>${new Date(report.report_created_at).toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: '2-digit' })}</td>
                                                         </tr>
                                                     `;
                                                     tableBody.innerHTML += row;
