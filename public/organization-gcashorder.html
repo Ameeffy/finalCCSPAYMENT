@@ -781,8 +781,21 @@ document.getElementById('gcashOrderForm').addEventListener('submit', async funct
                     <td>${order.created_by}</td>
                     <td>
                          ${order.adviser_status === 'Pending' ? `<button class="btn btn-danger btn-sm" onclick="deleteOrder(${order.id})">Delete</button>` : ''}
-                        <button class="btn btn-info btn-sm" onclick="viewMore(${order.id}, '${order.qrcodepicture}', '${order.created_at}')">View More</button>
-                    </td>
+<button 
+    class="btn btn-info btn-sm" 
+    onclick="viewMore(${order.id}, '${order.qrcodepicture}', '${order.created_at}')"
+    style="background-color: #007bff; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           padding: 5px 5px; 
+           cursor: pointer; 
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#0056b3'" 
+    onmouseout="this.style.backgroundColor='#007bff'"
+    title="View More">
+    <i class="fas fa-eye" style="font-size: 20px;"></i>
+</button>                    </td>
                 `;
                 ordersTable.appendChild(row);
             });
