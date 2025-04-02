@@ -621,44 +621,47 @@ function populateAdminsTable(admins) {
         <div style="display: flex; gap: 5px; align-items: center;">
           <!-- Activate/Deactivate Button -->
           <button class="${admin.status === 'Activated' ? 'button-deactivate' : 'button-activate'}"
-            style="background-color: ${admin.status === 'Activated' ? '#dc3545' : '#218838'}; 
-                   color: white; 
-                   border: none; 
-                   border-radius: 5px; 
-                   width: 33px; 
-                   height: 35px; 
-                   display: flex; 
-                   align-items: center; 
-                   justify-content: center; 
-                   cursor: pointer; 
-                   transition: background-color 0.3s;" 
-            onmouseover="this.style.backgroundColor='${admin.status === 'Activated' ? '#c82333' : '#1B3A28'}'" 
-            onmouseout="this.style.backgroundColor='${admin.status === 'Activated' ? '#dc3545' : '#218838'}'" 
-            onclick="confirmToggleStatus(${admin.id}, this)">
-            <i class="${admin.status === 'Activated' ? 'fas fa-ban' : 'fas fa-check-circle'}" 
-               style="font-size: 20px;"></i>
-          </button>
+        style="background-color: ${admin.status === 'Activated' ? '#dc3545' : '#218838'}; 
+               color: white; 
+               border: none; 
+               border-radius: 5px; 
+               width: 33px; 
+               height: 35px; 
+               display: flex; 
+               align-items: center; 
+               justify-content: center; 
+               cursor: pointer; 
+               transition: background-color 0.3s;" 
+        onmouseover="this.style.backgroundColor='${admin.status === 'Activated' ? '#c82333' : '#1B3A28'}'" 
+        onmouseout="this.style.backgroundColor='${admin.status === 'Activated' ? '#dc3545' : '#218838'}'" 
+        onclick="confirmToggleStatus(${admin.id}, this)"
+        title="${admin.status === 'Activated' ? 'Deactivate Account' : 'Activate Account'}">
+    <i class="${admin.status === 'Activated' ? 'fas fa-ban' : 'fas fa-check-circle'}" 
+       style="font-size: 20px;"></i>
+</button>
 
-          <!-- Edit Button -->
-          <button class="change-role-btn"
-            style="background-color: #007bff; /* Blue color for edit */
-                   color: white; 
-                   border: none; 
-                   border-radius: 5px; 
-                   width: 33px; 
-                   height: 35px; 
-                   display: flex; 
-                   align-items: center; 
-                   justify-content: center; 
-                   cursor: pointer; 
-                   transition: background-color 0.3s;" 
-            onmouseover="this.style.backgroundColor='#0056b3'" 
-            onmouseout="this.style.backgroundColor='#007bff'"
-            data-bs-toggle="modal" 
-            data-bs-target="#roleModal" 
-            onclick="openRoleModal(${admin.id}, '${admin.role}')">
-            <i class="fas fa-edit" style="font-size: 20px;"></i>
-          </button>
+<!-- Edit Button -->
+<button class="change-role-btn"
+        style="background-color: #007bff; /* Blue color for edit */
+               color: white; 
+               border: none; 
+               border-radius: 5px; 
+               width: 33px; 
+               height: 35px; 
+               display: flex; 
+               align-items: center; 
+               justify-content: center; 
+               cursor: pointer; 
+               transition: background-color 0.3s;" 
+        onmouseover="this.style.backgroundColor='#0056b3'" 
+        onmouseout="this.style.backgroundColor='#007bff'"
+        data-bs-toggle="modal" 
+        data-bs-target="#roleModal" 
+        onclick="openRoleModal(${admin.id}, '${admin.role}')"
+        title="Edit Role">
+    <i class="fas fa-edit" style="font-size: 20px;"></i>
+</button>
+
         </div>
       </td>
     `;
