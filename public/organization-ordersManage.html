@@ -130,7 +130,195 @@
     height: auto;
     margin-bottom: 10px;
 }
+.table-container{
+            width: auto;
+            background-color: white;
+            padding-top: 20px;
+            padding-left: 10px;
+            padding-right: 10px;   
+            border-radius: 3px;
+            padding-bottom: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+.dataTables_scroll {
+    border-radius: 5px 5px 0 0; /* 5px top border radius */
+}
 
+.dataTables_scrollBody {
+    border-radius: 0; /* Ensure no bottom border radius */
+}
+
+
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px; /* Adjusted to 5px */
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px; /* Adjusted to 5px */
+}
+
+/* Ensure no bottom border-radius */
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important; /* Light gray border */
+    padding: 12px 16px; /* Comfortable spacing */
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important; /* Remove border from last row */
+}
+
+/* Optional hover effect */
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important; /* Very subtle hover background */
+    border-bottom-color: #d0d0d0 !important; /* Slightly darker border on hover */
+}
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        justify-self: flex-end;
+    }
+
+    /* Optional: Adjust spacing between elements */
+    .dataTables_wrapper .dataTables_length {
+        margin-right: 15px;
+    }
+   
+    .dataTables_wrapper .dataTables_info {
+        margin: 0 15px;
+    }
+    .dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    font-size: 14px;
+    color: #555;
+}
+
+.dataTables_wrapper .dataTables_paginate a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+    text-decoration: none;
+    color: #555;
+    background-color: #f9f9f9;
+}
+
+.dataTables_wrapper .dataTables_paginate a:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Styling the search box */
+.dataTables_wrapper .dataTables_filter {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Custom table design */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-left: 1px solid #e0e0e0; /* Soft gray border on the left */
+    border-right: 1px solid #e0e0e0; /* Soft gray border on the right */
+    border-bottom: 1px solid #e0e0e0; /* Soft gray border on the right */
+
+}
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0;
+}
+
+.custom-table tbody tr td {
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 12px 16px;
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.custom-table tbody tr:hover td {
+    background-color: #f8f9fa !important;
+    border-bottom-color: #d0d0d0 !important;
+}
 
 </style>
     <body class="sb-nav-fixed">
@@ -315,9 +503,9 @@ document.addEventListener('DOMContentLoaded', fetchOrganizationData);
         const fullName = `${user.firstname} ${user.lastname}`; 
 
         document.getElementById('profile-item').innerHTML = `
-           <a style="color: #25330f; text-decoration: none; " href="organization-users-info.html">
+           <a style="color: white; text-decoration: none; " href="organization-users-info.html">
    
-   <h3 style="color: #25330f; text-decoration: none; font-size: 18px; margin-top:10px;">${user.firstname} ${user.lastname}</h3>
+   <h3 style="color: white; text-decoration: none; font-size: 18px; margin-top:10px;">${user.firstname} ${user.lastname}</h3>
 </a>
 
 
@@ -479,39 +667,42 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
      
 
 <!-- Modal for Product Transaction Logs -->
-<div id="producttransactionlogsmodal" class="modal" 
-     style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; justify-content: center; align-items: center; z-index: 1000;">
-    
-     <div class="modal-content" 
-         style="background-color: #ffffff; width: 80%; max-width: 1000px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); overflow: hidden;justify-content: center; align-items: center; left: 0;">
-        <div style="padding: 20px; border-bottom: 1px solid #e0e0e0; text-align: center;">
-            <h4 style="margin: 0; font-size: 24px; color: #333;">Product Transaction Logs</h4>
-        </div>
-        <div style="padding: 20px; overflow-y: auto; max-height: 400px; width: 1000px;">
-            <table id="transaction-logs-table" style="width: 100%; border-collapse: collapse; font-size: 16px; color: #333;">
-                <thead>
-                    <tr style="background-color: #f8f9fa; text-align: left;">
-                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Action Message</th>
-                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Status</th>
-                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Payment Method</th>
-                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Total Amount</th>
-                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Total Pay</th>
-                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Accepted By</th>
-                    </tr>
-                </thead>
-                <tbody id="transaction-logs-body">
-                    <!-- Logs will be inserted here dynamically -->
-                </tbody>
-            </table>
-        </div>
-        <div style="padding: 20px; text-align: right; border-top: 1px solid #e0e0e0;">
-            <span style="position: absolute; right: 20px; cursor: pointer; margin-top: 20px;" class="close" onclick="closeModaltransaction() ">
-                <i class="fas fa-times-circle"></i>
-            </span> 
+<div id="producttransactionlogsmodal" class="modal fade" tabindex="-1" aria-labelledby="productTransactionLogsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="productTransactionLogsModalLabel">Product Transaction Logs</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                <table id="transaction-logs-table" class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Action Message</th>
+                            <th>Status</th>
+                            <th>Payment Method</th>
+                            <th>Total Amount</th>
+                            <th>Total Pay</th>
+                            <th>Accepted By</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transaction-logs-body">
+                        <!-- Logs will be inserted here dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal Footer -->
+           
         </div>
     </div>
 </div>
-<script>function showTransactionLogsModal(orderTransactionId) {
+
+<script>
+function showTransactionLogsModal(orderTransactionId) {
     const apiUrl = `https://finalccspayment.onrender.com/api/auth/product-transaction-logs/${orderTransactionId}`;
     const token = localStorage.getItem('token');
 
@@ -534,24 +725,21 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
         data.forEach(log => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                
                 <td>${log.action_message}</td>
                 <td>${log.status}</td>
                 <td>${log.payment_method}</td>
                 <td>${log.total_amount}</td>
                 <td>${log.total_pay}</td>
                 <td>
-    ${log.accepted_by === '0' || log.accepted_by === 0 ? 'There is no receiver yet' : `${log.accepted_by_firstname} ${log.accepted_by_middlename} ${log.accepted_by_lastname}`}
-</td>
-
-                
+                    ${log.accepted_by === '0' || log.accepted_by === 0 ? 'There is no receiver yet' : `${log.accepted_by_firstname} ${log.accepted_by_middlename} ${log.accepted_by_lastname}`}
+                </td>
             `;
             logsBody.appendChild(row);
         });
 
-        // Display the modal
-        const modal = document.getElementById('producttransactionlogsmodal');
-        modal.style.display = 'block';
+        // Display the Bootstrap modal
+        const modal = new bootstrap.Modal(document.getElementById('producttransactionlogsmodal'));
+        modal.show();
     })
     .catch(error => {
         console.error('Error fetching product transaction logs:', error);
@@ -559,9 +747,10 @@ document.addEventListener('DOMContentLoaded', fetchLoggedInUserDetails);
 }
 
 function closeModaltransaction() {
-    const modal = document.getElementById('producttransactionlogsmodal');
-    modal.style.display = 'none';
+    const modal = bootstrap.Modal.getInstance(document.getElementById('producttransactionlogsmodal'));
+    modal.hide();
 }
+
 </script>
 
 
@@ -569,104 +758,37 @@ function closeModaltransaction() {
 
 
 
-<style>
-    /* The modal's background overlay */
-    #messageModal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 1000;
-        overflow: auto;
-    }
-
-    /* The modal content box */
-    #messageModal > div {
-        background: white;
-        padding: 20px;
-        margin: 100px auto;
-        width: 400px;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        position: relative;
-    }
-
-    /* Modal header */
-    #messageModal h3 {
-        margin: 0;
-        font-size: 24px;
-        color: #333;
-        text-align: center;
-    }
-
-    /* Recipient name label */
-    #recipientName {
-        font-weight: bold;
-        font-size: 16px;
-        color: #444;
-        text-align: center;
-        margin-top: 10px;
-    }
-
-    /* Textarea for message input */
-    #messageText {
-        width: 100%;
-        padding: 10px;
-        border-radius: 5px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        resize: vertical;
-        font-size: 14px;
-    }
-
-    /* Button styling */
-    #messageModal button {
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        margin: 10px 5px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s;
-    }
-
-    #messageModal button:hover {
-        background-color: #45a049;
-    }
-
-    /* Cancel button with a red color */
-    #messageModal button.cancel {
-        background-color: #f44336;
-    }
-
-    #messageModal button.cancel:hover {
-        background-color: #e53935;
-    }
-
-</style>
-
-
 <!-- Modal for sending a message -->
-<div id="messageModal" style="display:none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 1000;">
-    <div style="background: white; padding: 20px; margin: 100px auto; width: 400px; border-radius: 8px;">
-        <h3>Send Message</h3>
-        <!-- Add this to your modal where you're collecting the message -->
-<!-- Add this to your modal where you're collecting the message -->
-<input type="text" id="orderTransactionId" placeholder="Enter Order Transaction ID" readonly>
+<!-- Modal -->
+<div id="messageModal" class="modal fade" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalLabel">Send Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <!-- Center the orderTransactionId input -->
+                <div class="mb-3 text-center">
+                    <input type="text" id="orderTransactionId" placeholder="Enter Order Transaction ID" readonly class="form-control" style="max-width: 300px; margin: 0 auto;">
+                </div>
 
-        <p id="recipientName" style="font-weight: bold;"></p>
-        <textarea id="messageText" placeholder="Enter your message" rows="4" style="width: 100%; padding: 10px; border-radius: 5px; margin-bottom: 15px;"></textarea>
-        <br>
-        <button onclick="sendMessage()" style="background-color: green;">Send</button>
-        <button onclick="closeModal()"  style="background-color: red;">Cancel</button>
+                <p id="recipientName" class="fw-bold"></p>
+                <textarea id="messageText" placeholder="Enter your message" rows="4" class="form-control mb-3"></textarea>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-between">
+                    <button onclick="sendMessage()" class="btn btn-success">Send</button>
+                    <button onclick="closeModal()" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
 
 
 
@@ -794,26 +916,29 @@ function fetchProductTransactions() {
                     <td>${transaction.order_status}</td>
                    <td>${transaction.updated_at}</td>
 
-                    <td>
-                        ${transaction.order_status === 'Order received' ? '' : ` 
-                            <button onclick="markOrderReceived('${transaction.order_transaction_id}')"
-                                style="background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px;">
-                                <i class="fas fa-check"></i>
-                            </button>
-                        `}
-                        ${transaction.order_status === 'Order received' ? '' : `
-                            <button onclick="sendMessageToUser('${transaction.user_id}', '${transaction.user_firstname}', '${transaction.user_lastname}', '${transaction.order_transaction_id}')"
-                                style="background-color: #17a2b8; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px;">
-                                <i class="fas fa-comment"></i>
-                            </button>
-                        `}
-                        <button 
-                            onclick="showTransactionLogsModal('${transaction.order_transaction_id}')"
-                            style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px;">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        
-                    </td>
+                   <td>
+    ${transaction.order_status === 'Order received' ? '' : ` 
+        <button onclick="markOrderReceived('${transaction.order_transaction_id}')"
+            style="background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px;"
+            title="Mark Order as Received">
+            <i class="fas fa-check"></i>
+        </button>
+    `}
+    ${transaction.order_status === 'Order received' ? '' : `
+        <button onclick="sendMessageToUser('${transaction.user_id}', '${transaction.user_firstname}', '${transaction.user_lastname}', '${transaction.order_transaction_id}')"
+            style="background-color: #17a2b8; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px;"
+            title="Send Message to User">
+            <i class="fas fa-comment"></i>
+        </button>
+    `}
+    <button 
+        onclick="showTransactionLogsModal('${transaction.order_transaction_id}')"
+        style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 8px; cursor: pointer; font-size: 16px;"
+        title="View Transaction Logs">
+        <i class="fas fa-eye"></i>
+    </button>
+</td>
+
                 `;
                 transactionsBody.appendChild(row);
             });
@@ -913,14 +1038,17 @@ function sendMessageToUser(user_id, first_name, last_name, orderTransactionId) {
     // Set the orderTransactionId automatically in the modal (dynamically from the clicked transaction)
     document.getElementById('orderTransactionId').value = orderTransactionId; // Populate the input field
 
-    // Show the message modal
-    document.getElementById('messageModal').style.display = 'block';
+    // Show the message modal using Bootstrap v5
+    const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+    messageModal.show();
 }
 
 // Function to close the modal
 function closeModal() {
-    document.getElementById('messageModal').style.display = 'none';
+    const messageModal = bootstrap.Modal.getInstance(document.getElementById('messageModal'));
+    messageModal.hide();
 }
+
 
 // Function to send the message with SweetAlert confirmation
 function sendMessage() {
