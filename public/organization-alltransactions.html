@@ -1018,9 +1018,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <td class="amount-cell">₱${amount.toFixed(2)}</td>
                 <td class="balance-cell">₱${balance.toLocaleString()}</td>
                 <td>${transaction.received_by_name || 'N/A'}</td>
-                <td>${new Date(transaction.created_at).toLocaleDateString('en-PH', {
-                    year: 'numeric', month: 'long', day: 'numeric'
-                })}</td>
+              <td>${new Date(transaction.created_at).toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: '2-digit' })}</td>
+
                 <td>
                    <button class="button-history" 
     style="background-color: #007bff; color: white; border: none; border-radius: 5px; width: 33px; height: 35px;
