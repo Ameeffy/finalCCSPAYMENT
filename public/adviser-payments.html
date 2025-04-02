@@ -517,17 +517,29 @@
                                 payments.forEach(payment => {
                                     // Build the "View More" button with a conditional "new!" indicator
                                     const viewMoreButton = `
-                                       <button 
+<button 
     class="button-view-more" 
     onclick="viewMore('${payment.id}', '${JSON.stringify(payment).replace(/"/g, '&quot;').replace(/'/g, "\\'")}')" 
-    style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 5px 8px; cursor: pointer; transition: background-color 0.3s;" 
+    style="background-color: #007bff; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 33px; 
+           height: 35px; 
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;" 
     onmouseover="this.style.backgroundColor='#0056b3'" 
-    onmouseout="this.style.backgroundColor='#007bff'">
-    <i class="fas fa-eye"></i>
+    onmouseout="this.style.backgroundColor='#007bff'" 
+    title="View More Details">
+    <i class="fas fa-eye" style="font-size: 20px;"></i>
     ${payment.priceandfees_status === "New prices and fees" 
         ? '<span style="color:red; font-size:0.75em; margin-left:5px;">new!</span>' 
         : ''}
 </button>
+
 
                                     `;
                         
