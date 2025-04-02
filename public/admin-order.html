@@ -842,12 +842,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         const table = $('#ordersTable').DataTable({
             dom: '<"top"f>rt<"bottom"lip>',
             buttons: [
-        { extend: 'copy', className: 'buttons-copy' },
-        { extend: 'print', className: 'buttons-print' },
-        { extend: 'pdf', className: 'buttons-pdf' },
-        { extend: 'csv', className: 'buttons-csv' },
-        { extend: 'excel', className: 'buttons-excel' }
-    ],
+                { extend: 'copy', className: 'buttons-copy' },
+                { extend: 'print', className: 'buttons-print' },
+                { extend: 'pdf', className: 'buttons-pdf' },
+                { extend: 'csv', className: 'buttons-csv' },
+                { extend: 'excel', className: 'buttons-excel' }
+            ],
 
             data: orders,
             columns: [
@@ -857,9 +857,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 { 
                     data: 'created_at',
                     render: function(data) {
-                        return new Date(data).toLocaleDateString('en-PH', {
-                            year: 'numeric', month: 'long', day: 'numeric'
-                        });
+                        const date = new Date(data);
+                        const day = String(date.getDate()).padStart(2, '0');  // Add leading zero to day
+                        const month = date.toLocaleString('default', { month: 'long' });
+                        const year = date.getFullYear();
+
+                        return `${month} ${day}, ${year}`;
                     }
                 },
                 {
@@ -878,7 +881,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 </button>`;
 
                         if (order.status === 'Pending') {
-                            actions += `
+                            actions += ` 
                                <button class="btn-success" 
         onclick="updateOrderStatus(${order.id}, 'Accepted')" 
         style="background-color: #28a745; color: white; border: none; border-radius: 5px; width: 33px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color 0.3s;" 
@@ -916,6 +919,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         $('#ordersTable').html('<tr><td colspan="6">Error fetching orders.</td></tr>');
     }
 });
+
                             function openGcashReportModal(orderId) {
                                 const modalElement = document.getElementById('gcashReportModal');
                                 const modal = new bootstrap.Modal(modalElement); // Initialize Bootstrap modal
