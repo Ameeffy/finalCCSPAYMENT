@@ -295,8 +295,8 @@
 }
 .export-container {
   position: absolute;
-  right: 30px;
-  top: 550px;
+  right: 35px;
+  top: 700px;
   z-index: 1;
 }
 
@@ -837,14 +837,26 @@
                 <td>${payment.semester_name}</td>
                 <td>₱${payment.total_transactions}</td>
                 <td>
-                    <button 
-                        class="button-view-more" 
-                        onclick="viewTransactions('${payment.payment_id}', '${payment.payment_name}')" 
-                        style="background-color: #007bff; color: white; border: none; border-radius: 5px; width: 33px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color 0.3s;" 
-                        onmouseover="this.style.backgroundColor='#0056b3'" 
-                        onmouseout="this.style.backgroundColor='#007bff'">
-                        <i class="fas fa-eye" style="font-size: 20px;"></i> <!-- Eye icon -->
-                    </button>
+               <button 
+    class="button-view-more" 
+    onclick="viewTransactions('${payment.payment_id}', '${payment.payment_name}')"
+    style="background-color: #007bff; 
+           color: white; 
+           border: none; 
+           border-radius: 5px; 
+           width: 33px; 
+           height: 35px; 
+           display: flex; 
+           align-items: center; 
+           justify-content: center; 
+           cursor: pointer; 
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#0056b3'" 
+    onmouseout="this.style.backgroundColor='#007bff'"
+    title="View transaction details"> <!-- Tooltip added here -->
+    <i class="fas fa-eye" style="font-size: 20px;"></i> <!-- Eye icon -->
+</button>
+
                 </td>
             `;
             tableBody.appendChild(row);
@@ -979,9 +991,9 @@ window.exportTransactionAction = function(type) {
 };
 
 // Function to fetch transactions and update the table with export functionality
-function viewTransactions(paymentId, paymentName) {loca
+function viewTransactions(paymentId, paymentName) {
     $.ajax({
-        url: 'https://finalccspayment.onrender.com/api/auth/payments/' + paymentId + '/transactions',
+        url: 'http://localhost:5000/api/auth/payments/' + paymentId + '/transactions',
         method: 'GET',
         headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -1028,8 +1040,15 @@ function viewTransactions(paymentId, paymentName) {loca
                 row.append($('<td>').text(tx.total_amount));
                 row.append($('<td>').text(tx.payment_status));
                 row.append($('<td>').text(tx.payment_method));
-                var date = new Date(tx.created_at).toLocaleString();
+                
+                // Format the date in 'March 02, 2025' format
+                var date = new Date(tx.created_at).toLocaleDateString('en-PH', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: '2-digit'
+                });
                 row.append($('<td>').text(date));
+
                 tbody.append(row);
             });
 
@@ -1052,52 +1071,51 @@ function viewTransactions(paymentId, paymentName) {loca
 
             // Reinitialize DataTable with export buttons
             $('#transactionsTable').DataTable({
-    dom: '<"top"f>rt<"bottom"lip>', // Add 'B' to include buttons
-    buttons: [
-        { extend: 'copyHtml5', text: 'Copy', titleAttr: 'Copy to clipboard' },
-        { extend: 'csvHtml5', text: 'CSV', titleAttr: 'Download as CSV' },
-        { extend: 'excelHtml5', text: 'Excel', titleAttr: 'Download as Excel' },
-        { extend: 'pdfHtml5', text: 'PDF', titleAttr: 'Download as PDF', orientation: 'landscape' },
-        { extend: 'print', text: 'Print', titleAttr: 'Print Table' }
-    ],
-    order: [[4, "desc"]]
-});
-   
+                dom: '<"top"f>rt<"bottom"lip>',
+                buttons: [
+                    { extend: 'copyHtml5', text: 'Copy', titleAttr: 'Copy to clipboard' },
+                    { extend: 'csvHtml5', text: 'CSV', titleAttr: 'Download as CSV' },
+                    { extend: 'excelHtml5', text: 'Excel', titleAttr: 'Download as Excel' },
+                    { extend: 'pdfHtml5', text: 'PDF', titleAttr: 'Download as PDF', orientation: 'landscape' },
+                    { extend: 'print', text: 'Print', titleAttr: 'Print Table' }
+                ],
+                order: [[4, "desc"]]
+            });
 
-                              
-                                    // Date range filter button handler
-                                    $('#filterDateBtn').off('click').on('click', function() {
-                                      var startDate = $('#startDate').val();
-                                      var endDate = $('#endDate').val();
-                                      if (startDate && endDate) {
-                                        $.fn.dataTable.ext.search.push(
-                                          function(settings, data, dataIndex) {
-                                            var date = new Date(data[4]); // The 5th column (Date)
-                                            var start = new Date(startDate);
-                                            var end = new Date(endDate);
-                                            return date >= start && date <= end;
-                                          }
-                                        );
-                                        $('#transactionsTable').DataTable().draw();
-                                        $.fn.dataTable.ext.search.pop();
-                                      } else {
-                                        alert("Please select both start and end dates.");
-                                      }
-                                    });
-                              
-                                    // Show the modal
-                                    $('#transactionsModal').modal('show');
-                                  },
-                                  error: function(err) {
-                                    alert('Error fetching transactions for this payment.');
-                                    console.error(err);
-                                  }
-                                });
-                              }
-                              
-                                $(document).ready(function() {
-                                  fetchActivePayments();
-                                });
+            // Date range filter button handler
+            $('#filterDateBtn').off('click').on('click', function() {
+                var startDate = $('#startDate').val();
+                var endDate = $('#endDate').val();
+                if (startDate && endDate) {
+                    $.fn.dataTable.ext.search.push(
+                        function(settings, data, dataIndex) {
+                            var date = new Date(data[4]); // The 5th column (Date)
+                            var start = new Date(startDate);
+                            var end = new Date(endDate);
+                            return date >= start && date <= end;
+                        }
+                    );
+                    $('#transactionsTable').DataTable().draw();
+                    $.fn.dataTable.ext.search.pop();
+                } else {
+                    alert("Please select both start and end dates.");
+                }
+            });
+
+            // Show the modal
+            $('#transactionsModal').modal('show');
+        },
+        error: function(err) {
+            alert('Error fetching transactions for this payment.');
+            console.error(err);
+        }
+    });
+}
+
+$(document).ready(function() {
+    fetchActivePayments();
+});
+
                               </script>
                               
                             </div>  
