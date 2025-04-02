@@ -1022,14 +1022,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                     year: 'numeric', month: 'long', day: 'numeric'
                 })}</td>
                 <td>
-                    <button class="button-history" 
-                        style="background-color: #007bff; color: white; border: none; border-radius: 5px; width: 33px; height: 35px;
-                        display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color 0.3s;" 
-                        onmouseover="this.style.backgroundColor='#0056b3'" 
-                        onmouseout="this.style.backgroundColor='#007bff'" 
-                        onclick="openTransactionModalHistory('${transaction.transaction_id}')">
-                        <i class="fas fa-history" style="font-size: 20px;"></i>
-                    </button>
+                   <button class="button-history" 
+    style="background-color: #007bff; color: white; border: none; border-radius: 5px; width: 33px; height: 35px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='#0056b3'" 
+    onmouseout="this.style.backgroundColor='#007bff'" 
+    onclick="openTransactionModalHistory('${transaction.transaction_id}')"
+    title="View Transaction History">
+    <i class="fas fa-history" style="font-size: 20px;"></i>
+</button>
                 </td>
             `;
             tableBody.appendChild(row);
