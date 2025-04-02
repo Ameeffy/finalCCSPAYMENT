@@ -389,52 +389,58 @@
         }
 
         $(document).ready(function() {
-            fetch('https://finalccspayment.onrender.com/api/auth/all-gcashorder-logs')
-                .then(response => response.json())
-                .then(data => {
-                    const logsData = data.logs.map(log => ({
-                        order_id: log.order_id,
-                        action: log.action,
-                        status: log.status,
-                        performed_by: [
-                            log.admin_name ? `${log.admin_name} (Admin)` : '',
-                            log.adviser_name ? `${log.adviser_name} (Adviser)` : ''
-                        ].filter(Boolean).join('<br>'),
-                        date: new Date(log.created_at).toLocaleString()
-                    }));
-
-                    // Initialize DataTable
-                    dataTable = $('#gcashOrderLogsTable').DataTable({
-                        data: logsData,
-                        columns: [
-                            { data: 'order_id' },
-                            { data: 'action' },
-                            { data: 'status' },
-                            { data: 'performed_by' },
-                            { 
-                                data: 'date',
-                                render: function(data, type, row) {
-                                    return type === 'sort' ? new Date(row.created_at).getTime() : data;
-                                }
-                            }
-                        ],
-                        dom: '<"top"f>rt<"bottom"lip>',
-                        pageLength: 10,
-                        buttons: [
-                            'copyHtml5', 'csvHtml5', 'excelHtml5', 
-                            { extend: 'pdfHtml5', orientation: 'landscape' }, 'print'
-                        ],
-                        order: [[4, 'desc']],
-                        language: {
-                            buttons: {
-                                copyTitle: 'Copied to clipboard',
-                                copyKeys: 'Press CTRL or Command + C to copy to clipboard'
-                            }
-                        }
-                    });
+    fetch('https://finalccspayment.onrender.com/api/auth/all-gcashorder-logs')
+        .then(response => response.json())
+        .then(data => {
+            const logsData = data.logs.map(log => ({
+                order_id: log.order_id,
+                action: log.action,
+                status: log.status,
+                performed_by: [
+                    log.admin_name ? `${log.admin_name} (Admin)` : '',
+                    log.adviser_name ? `${log.adviser_name} (Adviser)` : ''
+                ].filter(Boolean).join('<br>'),
+                // Apply the same date format here
+                date: new Date(log.created_at).toLocaleDateString('en-PH', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: '2-digit'
                 })
-                .catch(error => console.error('Error fetching logs:', error));
-        });
+            }));
+
+            // Initialize DataTable
+            dataTable = $('#gcashOrderLogsTable').DataTable({
+                data: logsData,
+                columns: [
+                    { data: 'order_id' },
+                    { data: 'action' },
+                    { data: 'status' },
+                    { data: 'performed_by' },
+                    { 
+                        data: 'date',
+                        render: function(data, type, row) {
+                            return type === 'sort' ? new Date(row.created_at).getTime() : data;
+                        }
+                    }
+                ],
+                dom: '<"top"f>rt<"bottom"lip>',
+                pageLength: 10,
+                buttons: [
+                    'copyHtml5', 'csvHtml5', 'excelHtml5', 
+                    { extend: 'pdfHtml5', orientation: 'landscape' }, 'print'
+                ],
+                order: [[4, 'desc']],
+                language: {
+                    buttons: {
+                        copyTitle: 'Copied to clipboard',
+                        copyKeys: 'Press CTRL or Command + C to copy to clipboard'
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching logs:', error));
+});
+
     </script>
             <link rel="stylesheet" href="/static/css/styles.css">
 
