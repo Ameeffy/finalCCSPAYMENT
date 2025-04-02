@@ -2493,7 +2493,7 @@ table.innerHTML = `
                                             ${hasPromissoryNotes ? `
                                 <td>
                                     ${tx.promissory_note && tx.promissory_note.trim() !== '' ? `
-  <button 
+ <button 
     type="button" 
     class="btn" 
     style="background-color: #007bff; 
@@ -2510,10 +2510,11 @@ table.innerHTML = `
            padding: 8px; 
            font-size: 16px;" 
     data-bs-toggle="modal" 
-    data-bs-target="#promissoryModal-${tx.transaction_id}">
-    
+    data-bs-target="#promissoryModal-${tx.transaction_id}"
+    title="View Details">
     <i class="fas fa-eye" style="font-size: 20px;"></i>
 </button>
+
 
 
                                    <div id="promissoryModal-${tx.transaction_id}" class="modal fade" tabindex="-1" aria-labelledby="promissoryModalLabel-${tx.transaction_id}" aria-hidden="true">
@@ -2555,9 +2556,11 @@ table.innerHTML = `
            font-size: 16px; 
            transition: background-color 0.3s;" 
     onmouseover="this.style.backgroundColor='#218838'" 
-    onmouseout="this.style.backgroundColor='#28a745'">
+    onmouseout="this.style.backgroundColor='#28a745'"
+    title="Accept Payment">
     <i class="fa-solid fa-check" style="font-size: 20px;"></i>
 </button>
+
             ${showDeclineButton ? `
         <button 
     onclick="confirmDeclinePayment('${tx.transaction_id}')"
@@ -2575,9 +2578,11 @@ table.innerHTML = `
            font-size: 16px; 
            transition: background-color 0.3s;" 
     onmouseover="this.style.backgroundColor='#c82333'" 
-    onmouseout="this.style.backgroundColor='#dc3545'">
+    onmouseout="this.style.backgroundColor='#dc3545'"
+    title="Decline Payment">
     <i class="fa-solid fa-times" style="font-size: 20px;"></i>
-</button>` : ''}
+</button>
+` : ''}
         ` : ''}
 
         ${tx.payment_status === 'Pending Balance' && tx.balance <= 0 ? `
@@ -2597,10 +2602,12 @@ table.innerHTML = `
            font-size: 16px; 
            transition: background-color 0.3s;" 
     onmouseover="this.style.backgroundColor='#218838'" 
-    onmouseout="this.style.backgroundColor='#28a745'">
+    onmouseout="this.style.backgroundColor='#28a745'"
+    title="Accept Payment">
     <i class="fas fa-check" style="font-size: 20px;"></i>
 </button>
-          <button 
+
+<button 
     onclick="confirmDeclinePaymentGcash('${tx.transaction_id}')"
     style="background-color: #dc3545; 
            color: white; 
@@ -2616,9 +2623,11 @@ table.innerHTML = `
            font-size: 16px; 
            transition: background-color 0.3s;" 
     onmouseover="this.style.backgroundColor='#c82333'" 
-    onmouseout="this.style.backgroundColor='#dc3545'">
+    onmouseout="this.style.backgroundColor='#dc3545'"
+    title="Decline Payment">
     <i class="fas fa-times" style="font-size: 20px;"></i>
 </button>
+
         ` : ''}
 
         ${tx.payment_status === 'Balance' || (tx.payment_status === 'Processing' && tx.total_amount > 0) ? `
@@ -2639,16 +2648,18 @@ table.innerHTML = `
            font-size: 16px; 
            transition: background-color 0.3s;" 
     onmouseover="this.style.backgroundColor='#ff3385'" 
-    onmouseout="this.style.backgroundColor='#ff69b4'">
+    onmouseout="this.style.backgroundColor='#ff69b4'"
+    title="Open Pending Transaction Modal">
     <i class="bi bi-credit-card" style="font-size: 20px;"></i>
 </button>
+
 
             ` : ''}
         ` : ''}
 
         ${tx.payment_status === 'Balance Gcash' || (tx.payment_status === 'Processing' && tx.total_amount > 0) ? `
             ${tx.payment_method === 'Gcash' && tx.promissory_note ? `
-                <button 
+               <button 
     style="background-color: #ff69b4; 
            color: white; 
            border: none; 
@@ -2664,9 +2675,11 @@ table.innerHTML = `
            transition: background-color 0.3s;" 
     onclick="openTransactionModal('${tx.transaction_id}', ${tx.balance})"
     onmouseover="this.style.backgroundColor='#e35c8a'" 
-    onmouseout="this.style.backgroundColor='#ff69b4'">
+    onmouseout="this.style.backgroundColor='#ff69b4'"
+    title="Open Transaction Modal">
     <i class="bi bi-credit-card" style="font-size: 20px;"></i>
 </button>
+
             ` : ''}
         ` : ''}
 
@@ -2686,14 +2699,16 @@ table.innerHTML = `
            cursor: pointer; 
            font-size: 16px; 
            transition: background-color 0.3s;" 
-    onmouseover="this.style.backgroundColor='#157a4bh'" 
-    onmouseout="this.style.backgroundColor='#198754'">
+    onmouseover="this.style.backgroundColor='#157a4b'" 
+    onmouseout="this.style.backgroundColor='#198754'"
+    title="Add Total Amount">
     <i class="fas fa-peso-sign" style="font-size: 20px;"></i>
 </button>
+
         ` : ''}
 
         ${tx.payment_status === 'Balance' || tx.payment_status === 'Balance Gcash' || tx.payment_status === 'Paid' || tx.payment_status === 'Processing' || tx.payment_status === 'Pending Balance' ? `
-          <button 
+        <button 
     style="background-color: #007bff; 
            color: white; 
            border: none; 
@@ -2709,9 +2724,11 @@ table.innerHTML = `
            transition: background-color 0.3s;" 
     onclick="openTransactionModalHistory('${tx.transaction_id}', '${tx.user_firstname}', '${tx.user_lastname}')"
     onmouseover="this.style.backgroundColor='#0056b3'" 
-    onmouseout="this.style.backgroundColor='#007bff'">
+    onmouseout="this.style.backgroundColor='#007bff'"
+    title="View Transaction History">
     <i class="fas fa-history" style="font-size: 20px;"></i>
 </button>
+
 
         ` : ''}
     </div>
