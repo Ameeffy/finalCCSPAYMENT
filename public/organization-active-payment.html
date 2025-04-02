@@ -1195,27 +1195,28 @@ function exportAction(type) {
 
                     // Create the View button
                     var viewButton = $('<button>')
-                        .addClass('button-view-more') // Add a custom class for additional styling
-                        .html('<i class="fas fa-eye"></i>') // Add the eye icon and text
-                        .attr('onclick', `viewTransactions('${payment.payment_id}', '${payment.payment_name}')`) // Call the viewTransactions function with dynamic parameters
-                        .css({
-                            'background-color': '#007bff',
-                            'color': 'white',
-                            'border': 'none',
-                            'border-radius': '5px',
-                            'padding': '5px 8px',
-                            'cursor': 'pointer',
-                            'transition': 'background-color 0.3s'
-                        })
-                        .on('mouseover', function () {
-                            $(this).css('background-color', '#0056b3'); // Change background on hover
-                        })
-                        .on('mouseout', function () {
-                            $(this).css('background-color', '#007bff'); // Reset to original background color
-                        });
+    .addClass('button-view-more') // Add a custom class for additional styling
+    .html('<i class="fas fa-eye"></i>') // Add the eye icon
+    .attr('title', 'View Payment Details') // Add tooltip
+    .attr('onclick', `viewTransactions('${payment.payment_id}', '${payment.payment_name}')`) // Call the viewTransactions function with dynamic parameters
+    .css({
+        'background-color': '#007bff',
+        'color': 'white',
+        'border': 'none',
+        'border-radius': '5px',
+        'padding': '5px 8px',
+        'cursor': 'pointer',
+        'transition': 'background-color 0.3s'
+    })
+    .on('mouseover', function () {
+        $(this).css('background-color', '#0056b3'); // Change background on hover
+    })
+    .on('mouseout', function () {
+        $(this).css('background-color', '#007bff'); // Reset to original background color
+    });
 
-                    // Append the View button to the row
-                    row.append($('<td>').append(viewButton));
+// Append the View button to the row
+row.append($('<td>').append(viewButton));
 
                     // Add the row to the DataTable
                     table.row.add(row[0]).draw();
